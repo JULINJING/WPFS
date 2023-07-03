@@ -5,21 +5,26 @@
     </div>
 </template>
 
-<script>
-import NavTop from '../baseComponents/NavTop'
+<script lang="ts">
 
-import MarsMap from './mars-work/mars-map.vue'
-import * as mars3d from 'mars3d'
+import Layout from "./subcomponents/layout/index.vue";
+import BaseField from './subcomponents/BaseField/index.vue'
+// import ControlPanel from './subcomponents/widgets/ControlPanel'
+// import ControlTurbine from './subcomponents/widgets/ControlTurbine'
 
-const Cesium = mars3d.Cesium
+import MarsMap from "./mars-work/mars-map.vue";
+import * as mars3d from "mars3d";
+
+const Cesium = mars3d.Cesium;
 
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
-    name: 'Index',
+    name: "Index",
 
     components: {
         MarsMap,
-        NavTop
+        Layout,
+        BaseField
     },
 
     data() {
@@ -199,7 +204,7 @@ export default {
 
 .mapcontainer {
     position: relative;
-    height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 </style>
