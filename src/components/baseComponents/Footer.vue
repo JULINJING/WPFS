@@ -6,25 +6,25 @@
             </div>
             <div id="functionTable">
                 <h1>功能</h1>
-                <p @click="routerpush('/upload')">上传</p>
-                <p @click="routerpush('/forecast')">预测</p>
-                <p @click="routerpush('/windfield')">风场</p>
-                <p @click="routerpush('/watch')">监测</p>
-                <p @click="routerpush('/turbine')">异常</p>
-                <p @click="routerpush('/windland')">three</p>
+                <p @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传</p>
+                <p @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 预测</p>
+                <p @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> 风场</p>
+                <p @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 监测</p>
+                <p @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常</p>
+                <p @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> three</p>
             </div>
             <div>
                 <h1>About</h1>
-                <p>武汉大学 结束乐队</p>
-                <p>杨可</p>
-                <p>吴斌文 李廷赟 黄梓涛</p>
+                <p><i class="iconfont">&#xe604;</i> 武汉大学 结束乐队</p>
+                <p><i class="iconfont">&#xe608;</i> 杨可</p>
+                <p><i class="iconfont">&#xe607;</i> 吴斌文 李廷赟 黄梓涛</p>
                 <h1>Address</h1>
-                <p>湖北省武汉市武昌区八一路299号</p>
-                <p>430072</p>
+                <p><i class="iconfont">&#xe652;</i> 湖北省武汉市武昌区八一路299号</p>
+                <p><i class="iconfont">&#xe60b;</i> 430072</p>
             </div>
             <div>
                 <h1>Contact</h1>
-                <p><a href="zitaohuang@whu.edu.cn">发送邮件给我们</a></p>
+                <p><i class="iconfont">&#xe66f;</i> <a href="mailto:zitaohuang@whu.edu.cn">发送邮件给我们</a></p>
             </div>
         </div>
         <div class="footerbottom _footerbottom">
@@ -64,7 +64,7 @@ export default {
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             margin:0 10%;
             div{
-                width: 180px;
+                width: 200px;
                 h1{
                     font-size: 16px;
                     font-weight:800;
