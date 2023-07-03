@@ -1,7 +1,8 @@
 <template>
     <div class="navcontainer _navcontainer">
+        <img id="imgNav" src="../Home/imgs/logo1.png" height="40px" @click="$router.push('/home')">
         <div class="navicon _navicon"><i class="iconfont" @click="openMenu()">&#xeaf1;</i></div>
-        <div class="appleicon _appleicon"><i class="iconfont" style="font-size: 24px;" @click="$router.push('/home')">&#xe6a3;</i></div>
+        <!-- <div class="turbineicon _turbineicon"><i class="iconfont" style="font-size: 24px;" @click="$router.push('/home')">&#xe6a3;</i></div> -->
         <div ref="navID" class="mainnavlist _mainnavlist">
             <div class="navlistclose"><i @click="closeMenu()" class="iconfont">&#xeaf2;</i></div>
             <div @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传</div>
@@ -55,6 +56,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+#imgNav:hover {
+    cursor: pointer;
+    background-color: rgba(58, 53, 53, 0.5);
+}
 
 // 大于800px
 @media only screen and (min-width: 800px){
@@ -73,11 +78,11 @@ export default {
     .navicon:hover{
         color:white;
     }
-    .appleicon{
+    .turbineicon{
         width: 100px;
         cursor: pointer;
     }
-    .appleicon:hover{
+    .turbineicon:hover{
         color:white;
         }
     .mainnavlist{
@@ -117,7 +122,7 @@ export default {
     ._navicon{
         width: 100px;
     }
-    ._appleicon{
+    ._turbineicon{
         width: 100px;
     }
     ._mainnavlist{

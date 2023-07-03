@@ -24,7 +24,6 @@ export default {
     methods: {
         routerpush (to) {
             this.$router.push(to)
-            console.log(1)
         }
     }
 }
@@ -58,7 +57,7 @@ export default {
         .blockGuide{
             div{
                 font-size: 1em;
-                color: rgb(40, 151, 255);
+                color: white;
             }
         }
     }
