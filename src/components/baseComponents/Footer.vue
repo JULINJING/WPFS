@@ -23,8 +23,18 @@
                 <p><i class="iconfont">&#xe60b;</i> 430072</p>
             </div>
             <div>
-                <h1>Contact</h1>
-                <p><i class="iconfont">&#xe66f;</i> <a href="mailto:zitaohuang@whu.edu.cn">发送邮件给我们</a></p>
+                <div class="contact">
+                    <h1 class="contact_title">联系我们</h1>
+                    <i class="icon iconfont" @click="showContact = !showContact">&#xe600;</i>
+                </div>
+                <transition name="fade">
+                    <div class="list" v-show="showContact">
+                        <h1>Email</h1>
+                        <p><i class="iconfont">&#xe66f;</i> <a href="mailto:zitaohuang@whu.edu.cn">发送邮件给我们</a></p>
+                        <h1 id="top">QQ</h1>
+                        <p><i class="iconfont">&#xe882;</i> <a>2454548089</a></p>
+                    </div>
+                </transition>
             </div>
         </div>
         <div class="footerbottom _footerbottom">
@@ -39,6 +49,11 @@
 export default {
     name: 'mainfooter',
     components: {
+    },
+    data() {
+        return {
+            showContact: false,
+        }
     },
     methods: {
         routerpush(to) {
@@ -95,7 +110,34 @@ export default {
             }
         }
     }
-
+    .contact {
+        display: flex;
+        .contact_title {
+            flex: 7;
+            padding-left: 20px;
+            font-size: 16px;
+            font-weight:800;
+            margin: 7px 0;
+        }
+        .icon {
+            flex: 1;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    }
+    .list {
+        padding-left: 30px;
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 1s;
+        background-color: rgba(233,231,239,0.4);
+    }
+    .fade-enter, .fade-leave-to{
+        opacity: 0;
+    }
+    #top {
+        margin-top: 10px;
+    }
 }
 
 @media only screen and (max-width: 800px){
@@ -104,6 +146,7 @@ export default {
         flex-direction: column;
         width: 100%;
         justify-content: start;
+        user-select: none;
         ._footerbody{
             width: 100%;
             display: flex;
@@ -113,13 +156,12 @@ export default {
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             // height: 500px;
-            display: flex;
             flex-direction: column;
             align-items: center;
             // margin:0 10%;
             div{
-                margin: 0 10px;
-                width: 95%;
+                // margin: 0 10px;
+                width: 90%;
                 h1{
                     display: block;
                     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -131,7 +173,7 @@ export default {
                     // margin: 7px 0;
                 }
                 p{
-                    display: none ;
+                    // display: none ;
                     font-size: 10px;
                     margin: 7px 0;
                 }
@@ -142,6 +184,30 @@ export default {
             p{
                 font-size: 10px;
             }
+        }
+        .contact {
+            display: flex;
+            justify-content: space-between;
+            .contact_title {
+                font-size: 10px;
+                // margin: 7px 0;
+                border: none;
+            }
+            .icon {
+                flex: 1;
+                font-size: 10px;
+                margin-top: 14px;
+            }
+        }
+        .list {
+            padding-left: 10px;
+        }
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 1s;
+            background-color: rgba(233,231,239,0.4);
+        }
+        .fade-enter, .fade-leave-to{
+            opacity: 0;
         }
         
     }
