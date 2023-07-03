@@ -25,7 +25,7 @@
             <div>
                 <div class="contact">
                     <h1 class="contact_title">联系我们</h1>
-                    <i class="icon iconfont" @click="showContact = !showContact">&#xe600;</i>
+                    <i class="icon iconfont" id="open" @click="showContact = !showContact">&#xe600;</i>
                 </div>
                 <transition name="fade">
                     <div class="list" v-show="showContact">
@@ -138,6 +138,9 @@ export default {
     #top {
         margin-top: 10px;
     }
+    #open:hover {
+        cursor: pointer;
+    } 
 }
 
 @media only screen and (max-width: 800px){
