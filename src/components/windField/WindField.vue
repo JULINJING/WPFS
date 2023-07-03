@@ -27,20 +27,20 @@ export default {
         const mapOptions = {
             scene: {
                 center: { lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -89 },
-                scene3Donly: true,
+                scene3Donly: false,
+                fxaa: true,
                 contextOptions: {
                     requestWebgl1: true
                 }
             },
-            control: {
-                sceneModePicker: false
-            }
         }
         const windLayer = new mars3d.layer.WindLayer()
+        const eventTarget = new mars3d.BaseClass()
         return {
             configUrl: basePathUrl + 'config/config.json',
             mapOptions: mapOptions,
-            windLayer
+            windLayer,
+            eventTarget
         }
     },
 
@@ -50,10 +50,12 @@ export default {
             // 以下为演示代码
             map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
 
+            this.addGraphic(map)
             this.addLayer(map)
 
         },
         addLayer(map) {
+            this.removeLayer(map)
             this.windLayer = new mars3d.layer.WindLayer({
                 particlesNumber: 9000,
                 fadeOpacity: 0.996,
@@ -119,29 +121,73 @@ export default {
                 }
                 request.send()
             })
+        },
+        addGraphic(map) {
+            const positions = [
+                { lng: 112.227630577, lat: 39.0613382363999, alt: 1815 },
+                { lng: 112.229302206, lat: 39.0579481036999, alt: 1827 },
+                { lng: 112.226596341, lat: 39.0584773033999, alt: 1849 },
+                { lng: 112.22511174, lat: 39.0574840383999, alt: 1866 },
+                { lng: 112.225476722, lat: 39.0550566812, alt: 1866 },
+                { lng: 112.225643865, lat: 39.0532631538, alt: 1899 },
+                { lng: 112.229228645, lat: 39.0525930380999, alt: 1880 },
+                { lng: 112.224976033, lat: 39.0502488098, alt: 1926 },
+                { lng: 112.225661372999, lat: 39.0484097539999, alt: 1948 },
+                { lng: 112.229409737, lat: 39.0474211486, alt: 1910 },
+                { lng: 112.224894212, lat: 39.0464248147999, alt: 1983 },
+                { lng: 112.224022809, lat: 39.0436919592999, alt: 2036 },
+                { lng: 112.224492463, lat: 39.0413040158, alt: 2036 },
+                { lng: 112.223470676999, lat: 39.0381470684, alt: 2038 },
+                { lng: 112.220336836, lat: 39.039450506, alt: 2071 },
+                { lng: 112.221019662, lat: 39.0367113260999, alt: 2063 },
+                { lng: 112.221282611, lat: 39.045567662, alt: 2026 },
+                { lng: 112.221147308, lat: 39.0439265946, alt: 2048 },
+                { lng: 112.2216533, lat: 39.041840792, alt: 2056 },
+                { lng: 112.222813848, lat: 39.0343489941, alt: 2075 },
+                { lng: 112.225573092, lat: 39.0307660108, alt: 2015 },
+                { lng: 112.220069655, lat: 39.0323883292, alt: 2022 },
+                { lng: 112.217448043999, lat: 39.0310627231, alt: 2021 },
+                { lng: 112.230322327, lat: 39.0281575923999, alt: 1965 }
+            ]
+            const arr = []
+            positions.forEach((item) => {
+                arr.push({
+                    type: "modelP",
+                    position: item,
+                    style: {
+                        url: "//data.mars3d.cn/gltf/mars/fengche.gltf",
+                        scale: 100,
+                        heading: 315,
+                        minimumPixelSize: 30,
+                        clampToGround: true
+                    }
+                })
+            })
+            // 创建gltf模型
+            let graphicLayer = new mars3d.layer.GraphicLayer({
+                name: "风力发电机",
+                data: arr,
+                center: { lat: 39.016487, lng: 112.262087, alt: 3500, heading: 313, pitch: -22, roll: 0 },
+                flyTo: true
+            })
+            map.addLayer(graphicLayer)
+
+            // 绑定事件
+            graphicLayer.on(mars3d.EventType.click,function(event){
+                console.log("单击了图层",event)
+            })
+        },
+        removeLayer(map) {
+            map.trackedEntity = null
+            if (graphicLayer) {
+                map.removeLayer(graphicLayer, true)
+                graphicLayer = null
+            }
         }
 
     }
 }
 
-// import MacBriefInfo from './subcomponents/MacBriefInfo'
-// import CompareMac from './subcomponents/CompareMac'
-// import MacosICloud from './subcomponents/MacosICloud'
-// import InnerAppinfo from './subcomponents/InnerAppinfo'
-// import ProfessAppinfo from './subcomponents/ProfessAppinfo'
-// import MacFinalInfo from './subcomponents/MacFinalInfo'
-// export default {
-//   name: 'windfield',
-//   components: {
-//     MacBriefInfo,
-//     CompareMac,
-//     MacosICloud,
-//     InnerAppinfo,
-//     ProfessAppinfo,
-//     MacFinalInfo,
-//     NavTop
-//   }
-// }
 </script>
 
 <style lang="less" scoped>
