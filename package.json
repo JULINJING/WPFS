@@ -21,6 +21,7 @@
     "lodash": "^4.17.21",
     "mars3d": "^3.5.13",
     "mars3d-cesium": "^1.106.1",
+    "mars3d-wind": "^3.5.13",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "nprogress": "^0.2.0",
     "path": "^0.12.7",
