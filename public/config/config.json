@@ -46,7 +46,7 @@
             "navigationHelpButton": true,
             "animation": false,
             "timeline": false,
-            "infoBox": true,
+            "infoBox": false,
             "geocoder": false,
             "selectionIndicator": false,
             "contextmenu": {

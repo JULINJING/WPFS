@@ -1,25 +1,24 @@
 <template>
     <div id="centerDiv" class="mapcontainer">
-        <NavTop />
         <mars-map :url="configUrl" @onload="onMapload" :options="mapOptions" />
     </div>
 </template>
 
-<script lang="ts">
+<script>
 
 import Layout from "./subcomponents/layout/index.vue";
 import BaseField from './subcomponents/BaseField/index.vue'
 // import ControlPanel from './subcomponents/widgets/ControlPanel'
 // import ControlTurbine from './subcomponents/widgets/ControlTurbine'
 
-import MarsMap from "./mars-work/mars-map.vue";
-import * as mars3d from "mars3d";
+import MarsMap from "./mars-work/mars-map.vue"
+import * as mars3d from 'mars3d'
 
-const Cesium = mars3d.Cesium;
+const Cesium = mars3d.Cesium
 
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
-    name: "Index",
+    name: 'Index',
 
     components: {
         MarsMap,
@@ -28,7 +27,7 @@ export default {
     },
 
     data() {
-        const basePathUrl = window.basePathUrl || ''
+        const basePathUrl = window.basePathUrl || ' '
         const mapOptions = {
             scene: {
                 center: { lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -89 },
@@ -40,23 +39,22 @@ export default {
             },
         }
         const windLayer = new mars3d.layer.WindLayer()
-        const eventTarget = new mars3d.BaseClass()
+        const graphicLayer = new mars3d.layer.GraphicLayer()
         return {
             configUrl: basePathUrl + 'config/config.json',
             mapOptions: mapOptions,
             windLayer,
-            eventTarget
+            graphicLayer
         }
     },
-
     methods: {
         // 地图构造完成回调
         onMapload(map) {
             // 以下为演示代码
-            map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
+            // map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
 
             this.addGraphic(map)
-            this.addLayer(map)
+            // this.addLayer(map)
 
         },
         addLayer(map) {
@@ -129,27 +127,27 @@ export default {
         },
         addGraphic(map) {
             const positions = [
-                { lng: 112.227630577, lat: 39.0613382363999, alt: 1815 },
-                { lng: 112.229302206, lat: 39.0579481036999, alt: 1827 },
+                { lng: 112.257630577, lat: 39.0613382363999, alt: 1815 },
+                { lng: 112.219302206, lat: 39.0579481036999, alt: 1827 },
                 { lng: 112.226596341, lat: 39.0584773033999, alt: 1849 },
-                { lng: 112.22511174, lat: 39.0574840383999, alt: 1866 },
-                { lng: 112.225476722, lat: 39.0550566812, alt: 1866 },
-                { lng: 112.225643865, lat: 39.0532631538, alt: 1899 },
-                { lng: 112.229228645, lat: 39.0525930380999, alt: 1880 },
-                { lng: 112.224976033, lat: 39.0502488098, alt: 1926 },
+                { lng: 112.22911174, lat: 39.0574840383999, alt: 1866 },
+                { lng: 112.215476722, lat: 39.0550566812, alt: 1866 },
+                { lng: 112.215643865, lat: 39.0532631538, alt: 1899 },
+                { lng: 112.219228645, lat: 39.0525930380999, alt: 1880 },
+                { lng: 112.234976033, lat: 39.0502488098, alt: 1926 },
                 { lng: 112.225661372999, lat: 39.0484097539999, alt: 1948 },
-                { lng: 112.229409737, lat: 39.0474211486, alt: 1910 },
-                { lng: 112.224894212, lat: 39.0464248147999, alt: 1983 },
-                { lng: 112.224022809, lat: 39.0436919592999, alt: 2036 },
-                { lng: 112.224492463, lat: 39.0413040158, alt: 2036 },
-                { lng: 112.223470676999, lat: 39.0381470684, alt: 2038 },
-                { lng: 112.220336836, lat: 39.039450506, alt: 2071 },
-                { lng: 112.221019662, lat: 39.0367113260999, alt: 2063 },
-                { lng: 112.221282611, lat: 39.045567662, alt: 2026 },
-                { lng: 112.221147308, lat: 39.0439265946, alt: 2048 },
-                { lng: 112.2216533, lat: 39.041840792, alt: 2056 },
-                { lng: 112.222813848, lat: 39.0343489941, alt: 2075 },
-                { lng: 112.225573092, lat: 39.0307660108, alt: 2015 },
+                { lng: 112.209409737, lat: 39.0474211486, alt: 1910 },
+                { lng: 112.214894212, lat: 39.0464248147999, alt: 1983 },
+                { lng: 112.214022809, lat: 39.0436919592999, alt: 2036 },
+                { lng: 112.234492463, lat: 39.0413040158, alt: 2036 },
+                { lng: 112.213470676999, lat: 39.0381470684, alt: 2038 },
+                { lng: 112.210336836, lat: 39.039450506, alt: 2071 },
+                { lng: 112.231019662, lat: 39.0367113260999, alt: 2063 },
+                { lng: 112.21282611, lat: 39.045567662, alt: 2026 },
+                { lng: 112.2321147308, lat: 39.0439265946, alt: 2048 },
+                { lng: 112.216533, lat: 39.041840792, alt: 2056 },
+                { lng: 112.2322813848, lat: 39.0343489941, alt: 2075 },
+                { lng: 112.215573092, lat: 39.0307660108, alt: 2015 },
                 { lng: 112.220069655, lat: 39.0323883292, alt: 2022 },
                 { lng: 112.217448043999, lat: 39.0310627231, alt: 2021 },
                 { lng: 112.230322327, lat: 39.0281575923999, alt: 1965 }
@@ -169,24 +167,24 @@ export default {
                 })
             })
             // 创建gltf模型
-            let graphicLayer = new mars3d.layer.GraphicLayer({
+            this.graphicLayer = new mars3d.layer.GraphicLayer({
                 name: "风力发电机",
                 data: arr,
                 center: { lat: 39.016487, lng: 112.262087, alt: 3500, heading: 313, pitch: -22, roll: 0 },
-                flyTo: true
+                flyTo: false
             })
-            map.addLayer(graphicLayer)
+            map.addLayer(this.graphicLayer)
 
             // 绑定事件
-            graphicLayer.on(mars3d.EventType.click,function(event){
-                console.log("单击了图层",event)
+            this.graphicLayer.on(mars3d.EventType.click,function(event){
+                map.setCameraView({"lat":39.066387,"lng":112.195926,"alt":3711.4,"heading":148.3,"pitch":-25.3})
             })
         },
         removeLayer(map) {
             map.trackedEntity = null
-            if (graphicLayer) {
-                map.removeLayer(graphicLayer, true)
-                graphicLayer = null
+            if (this.graphicLayer) {
+                map.removeLayer(this.graphicLayer, true)
+                this.graphicLayer = null
             }
         }
 

@@ -23,7 +23,6 @@ Vue.prototype.Cesium = mars3d.Cesium
 
 export default {
   name: 'mars3dViewer',
-
   props: {
     // 地图唯一性标识
     mapKey: {
@@ -38,6 +37,7 @@ export default {
 
   mounted() {
     mars3d.Resource.fetchJson({ url: this.url }).then((data) => {
+      console.log(this.url)
       // 构建地图
       this.initMars3d({
         ...data.map3d,
