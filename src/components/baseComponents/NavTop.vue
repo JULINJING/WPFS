@@ -4,10 +4,12 @@
         <div class="appleicon _appleicon"><i class="iconfont icon-pingguo" @click="$router.push('/home')"></i></div>
         <div ref="navID" class="mainnavlist _mainnavlist">
             <div class="navlistclose"><i @click="closeMenu()" class="iconfont icon-guanbi"></i></div>
-            <div @click="routerpush('/upload')">预测</div>
-            <div @click="routerpush('/windland')">Three.js</div>
+            <div @click="routerpush('/upload')">上传</div>
+            <div @click="routerpush('/forecast')">预测</div>
             <div @click="routerpush('/windfield')">Mars3D</div>
-            <div @click="routerpush('/turbine')">风机</div>
+            <div @click="routerpush('/watch')">监测</div>
+            <div @click="routerpush('/turbine')">异常</div>
+            <div @click="routerpush('/windland')">Three.js</div>
         </div>
     </div>
 </template>
