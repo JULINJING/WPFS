@@ -1,15 +1,15 @@
 <template>
     <div class="navcontainer _navcontainer">
-        <div class="navicon _navicon"><i class="iconfont icon-caidan" @click="openMenu()"></i></div>
-        <div class="appleicon _appleicon"><i class="iconfont icon-pingguo" @click="$router.push('/home')"></i></div>
+        <div class="navicon _navicon"><i class="iconfont" @click="openMenu()">&#xeaf1;</i></div>
+        <div class="appleicon _appleicon"><i class="iconfont" style="font-size: 24px;" @click="$router.push('/home')">&#xe6a3;</i></div>
         <div ref="navID" class="mainnavlist _mainnavlist">
-            <div class="navlistclose"><i @click="closeMenu()" class="iconfont icon-guanbi"></i></div>
-            <div @click="routerpush('/upload')">上传</div>
-            <div @click="routerpush('/forecast')">预测</div>
-            <div @click="routerpush('/windfield')">Mars3D</div>
-            <div @click="routerpush('/watch')">监测</div>
-            <div @click="routerpush('/turbine')">异常</div>
-            <div @click="routerpush('/windland')">Three.js</div>
+            <div class="navlistclose"><i @click="closeMenu()" class="iconfont">&#xeaf2;</i></div>
+            <div @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传</div>
+            <div @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 预测</div>
+            <div @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> Mars3D</div>
+            <div @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 监测</div>
+            <div @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常</div>
+            <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> Three.js</div>
         </div>
     </div>
 </template>
@@ -28,7 +28,7 @@ export default {
     methods: {
         routerpush(to) {
             this.$router.push(to)
-            // 跳转之后，记得关闭菜单（在屏幕宽度小于800的时候才生效）
+            // 跳转之后，关闭菜单（在屏幕宽度小于800的时候才生效）
             var dom = document.getElementById('navID')
             if (dom.classList.contains('navlistshow')) {
                 dom.classList.remove('navlistshow')
@@ -55,6 +55,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 // 大于800px
 @media only screen and (min-width: 800px){
 .navcontainer{
@@ -63,7 +64,7 @@ export default {
     align-items: center;
     justify-content: center;
     height: 40px;
-    background-color: rgb(51, 51, 51);
+    background-color: #000;
     color:rgb(214, 214, 214);
     .navicon{
         display:none;
@@ -110,7 +111,7 @@ export default {
     align-items: center;
     justify-content:space-between;
     height: 40px;
-    background-color: rgb(51, 51, 51);
+    background-color: #000;
     color:rgb(214, 214, 214);
     position: relative;
     ._navicon{
@@ -123,7 +124,7 @@ export default {
         display: flex;
         flex-direction: column;
         position: absolute;
-        //屏幕宽度小于800，默认清空下菜单是关闭的
+        //屏幕宽度小于800，默认情况下菜单是关闭的
         display: none;
         position:fixed;
         left: 0;

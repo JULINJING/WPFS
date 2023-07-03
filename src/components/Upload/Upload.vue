@@ -2,17 +2,21 @@
 <template>
     <div class="uploadContainer _uploadContainer">
         <NavTop/>
-        <MusicTotalinfo/>
-        <GoodsBriefInfo :isnew="'yes'" :goodinfo="'妙得不同凡响。'" :goodname="'AirPods Pro'" :imgsrc="require('./imgs/airpods_pro.jpg')"/>\
-        <Device/>
-        <ProfessApp/>
-        <FinalMusic/>
+        <UploadFile/>
+        <DataAnalysis/>
+        <!-- <MusicTotalinfo/> -->
+        <!-- <GoodsBriefInfo :isnew="'yes'" :goodinfo="'妙得不同凡响。'" :goodname="'AirPods Pro'" :imgsrc="require('./imgs/airpods_pro.jpg')"/>\ -->
+        <!-- <Device/> -->
+        <!-- <ProfessApp/> -->
+        <!-- <FinalMusic/> -->
+        
     </div>
 </template>
 
 <script>
 import NavTop from '../baseComponents/NavTop'
-
+import UploadFile from './subcomponents/UploadFile.vue'
+import DataAnalysis from './subcomponents/DataAnalysis.vue'
 import MusicTotalinfo from './subcomponents/MusicTotalinfo'
 import GoodsBriefInfo from './subcomponents/GoodsBriefInfo'
 import Device from './subcomponents/Device'
@@ -21,7 +25,7 @@ import FinalMusic from './subcomponents/FinalMusic'
 export default {
     name: 'upload',
     components: {
-        NavTop, MusicTotalinfo, GoodsBriefInfo, Device, ProfessApp, FinalMusic
+        NavTop, UploadFile, DataAnalysis, MusicTotalinfo, GoodsBriefInfo, Device, ProfessApp, FinalMusic
     }
 }
 </script>
