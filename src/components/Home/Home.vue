@@ -1,23 +1,33 @@
 <template>
     <div class="homeContainer _homeContainer">
+        <NavTop></NavTop>
         <div class="subdiv _subdiv">
-        <div class="left"><BlockBriefInfo :blockTitle="'上传 预测'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/airpodspro.jpg')" :blockName="'upload'" /></div>
-        <div class="right"><BlockBriefInfo :blockTitle="'风机 异常'" :blockInfo="'----------------------------------------------'" :fontColor="'white'" :backgroundColor="'rgb(19, 18, 25)'" :imgSrc="require('./imgs/macbookpro.jpg')" :blockName="'windland'" /></div>
+            <div class="left"><BlockBriefInfo :blockTitle="'上传 原始数据可视化'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/1.jpg')" :blockName="'upload'" /></div>
+            <div class="right"><BlockBriefInfo :blockTitle="'模型预测'" :blockInfo="'----------------------------------------------'" :fontColor="'white'" :backgroundColor="'rgb(19, 18, 25)'" :imgSrc="require('./imgs/6.jpg')" :blockName="'forecast'" /></div>
         </div>
         <div class="subdiv _subdiv">
-        <div class="left"><BlockBriefInfo :blockTitle="'风场 模型'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(0, 0, 0)'" :fontColor="'white'" :imgSrc="require('./imgs/wwdc20.jpg')" :blockName="'windfield'" /></div>
-        <div class="right"><BlockBriefInfo :blockTitle="'风机 建模'" :blockInfo="'----------------------------------------------'" :fontColor="'black'" :backgroundColor="'rgb(251, 251, 253)'" :imgSrc="require('./imgs/watch.jpg')" :blockName="'turbine'" /></div>
+            <div class="left"><BlockBriefInfo :blockTitle="'mars3d大屏'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(0, 0, 0)'" :fontColor="'white'" :imgSrc="require('./imgs/4.jpg')" :blockName="'windfield'" /></div>
+            <div class="right"><BlockBriefInfo :blockTitle="'监测大屏'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/5.jpg')" :blockName="'watch'" /></div>
         </div>
+        <div class="subdiv _subdiv">
+            <div class="left"><BlockBriefInfo :blockTitle="'风机异常大屏'" :blockInfo="'----------------------------------------------'" :fontColor="'black'" :backgroundColor="'rgb(251, 251, 253)'" :imgSrc="require('./imgs/3.jpg')" :blockName="'turbine'" /></div>
+            <div class="right"><BlockBriefInfo :blockTitle="'three风机'" :blockInfo="'----------------------------------------------'" :fontColor="'white'" :backgroundColor="'rgb(19, 18, 25)'" :imgSrc="require('./imgs/2.jpg')" :blockName="'windland'" /></div>
+        </div>
+        <Footer></Footer>
     </div>
 </template>
 
 <script>
 import BlockBriefInfo from './subcomponents/BlockBriefInfo'
+import NavTop from '../baseComponents/NavTop.vue';
+import Footer from '../baseComponents/Footer.vue'
 
 export default {
     name: 'home',
     components: {
-        BlockBriefInfo
+        BlockBriefInfo,
+        NavTop,
+        Footer
     }
 }
 </script>
