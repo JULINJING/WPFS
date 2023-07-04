@@ -1,17 +1,21 @@
 <template>
     <div id="forecastContainer" class="forecastContainer _forecastContainer" ref="forecast">
         <NavTop/>
+        <ParamsSettings/>
+        <ForecastDisplay/>
     </div>
 </template>
 
 <script>
 
-import NavTop from '../baseComponents/NavTop'
+import NavTop from '../baseComponents/NavTop';
+import ParamsSettings from './subcomponents/ParamsSettings.vue';
+import ForecastDisplay from './subcomponents/ForecastDisplay.vue';
 
 export default {
     name: 'forecast',
     components: {
-        NavTop
+        NavTop, ParamsSettings, ForecastDisplay
     },
     data() {
         return {
