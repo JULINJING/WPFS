@@ -31,8 +31,8 @@ export default {
         const mapOptions = {
             scene: {
                 center: { lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -89 },
-                scene3Donly: false,
-                fxaa: true,
+                scene3Donly: true,
+                fxaa: false,
                 contextOptions: {
                     requestWebgl1: true
                 }
@@ -51,7 +51,7 @@ export default {
         // 地图构造完成回调
         onMapload(map) {
             // 以下为演示代码
-            // map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
+            map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
 
             this.addGraphic(map)
             // this.addLayer(map)
@@ -127,30 +127,16 @@ export default {
         },
         addGraphic(map) {
             const positions = [
-                { lng: 112.257630577, lat: 39.0613382363999, alt: 1815 },
+                { lng: 112.217630577, lat: 39.0613382363999, alt: 1815 },
                 { lng: 112.219302206, lat: 39.0579481036999, alt: 1827 },
-                { lng: 112.226596341, lat: 39.0584773033999, alt: 1849 },
-                { lng: 112.22911174, lat: 39.0574840383999, alt: 1866 },
+                { lng: 112.216596341, lat: 39.0584773033999, alt: 1849 },
+                { lng: 112.21911174, lat: 39.0574840383999, alt: 1866 },
                 { lng: 112.215476722, lat: 39.0550566812, alt: 1866 },
                 { lng: 112.215643865, lat: 39.0532631538, alt: 1899 },
                 { lng: 112.219228645, lat: 39.0525930380999, alt: 1880 },
-                { lng: 112.234976033, lat: 39.0502488098, alt: 1926 },
-                { lng: 112.225661372999, lat: 39.0484097539999, alt: 1948 },
-                { lng: 112.209409737, lat: 39.0474211486, alt: 1910 },
-                { lng: 112.214894212, lat: 39.0464248147999, alt: 1983 },
-                { lng: 112.214022809, lat: 39.0436919592999, alt: 2036 },
-                { lng: 112.234492463, lat: 39.0413040158, alt: 2036 },
-                { lng: 112.213470676999, lat: 39.0381470684, alt: 2038 },
-                { lng: 112.210336836, lat: 39.039450506, alt: 2071 },
-                { lng: 112.231019662, lat: 39.0367113260999, alt: 2063 },
-                { lng: 112.21282611, lat: 39.045567662, alt: 2026 },
-                { lng: 112.2321147308, lat: 39.0439265946, alt: 2048 },
-                { lng: 112.216533, lat: 39.041840792, alt: 2056 },
-                { lng: 112.2322813848, lat: 39.0343489941, alt: 2075 },
-                { lng: 112.215573092, lat: 39.0307660108, alt: 2015 },
-                { lng: 112.220069655, lat: 39.0323883292, alt: 2022 },
-                { lng: 112.217448043999, lat: 39.0310627231, alt: 2021 },
-                { lng: 112.230322327, lat: 39.0281575923999, alt: 1965 }
+                { lng: 112.214976033, lat: 39.0502488098, alt: 1926 },
+                { lng: 112.215661372999, lat: 39.0484097539999, alt: 1948 },
+                { lng: 112.219409737, lat: 39.0474211486, alt: 1910 },
             ]
             const arr = []
             positions.forEach((item) => {
@@ -159,10 +145,9 @@ export default {
                     position: item,
                     style: {
                         url: "//data.mars3d.cn/gltf/mars/fengche.gltf",
-                        scale: 100,
+                        scale: 30,
                         heading: 315,
                         minimumPixelSize: 30,
-                        clampToGround: true
                     }
                 })
             })

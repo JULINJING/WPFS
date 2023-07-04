@@ -37,7 +37,6 @@ export default {
 
   mounted() {
     mars3d.Resource.fetchJson({ url: this.url }).then((data) => {
-      console.log(this.url)
       // 构建地图
       this.initMars3d({
         ...data.map3d,
