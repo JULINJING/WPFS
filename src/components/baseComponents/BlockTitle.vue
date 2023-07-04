@@ -1,6 +1,9 @@
 <template>
     <div class="blockTitleContainer" :style="'color:'+String(fontColor)">
-        <div class="blockTitle">{{blockTitle}}</div>
+        <div class="blockTitle">
+            <i class="iconfont" style="font-size: 1em;" v-html="blockIcon"></i>&nbsp;
+            {{blockTitle}}
+        </div>
         <div class="blockInfo">
             <h1>
                 <i class="iconfont" v-html="blockInfo"></i>
@@ -29,16 +32,24 @@
 </template>
 
 <script>
-
+import $ from 'jquery';
 export default {
     name: 'blocktitle',
     components: {
     },
-    props: ['blockTitle', 'blockInfo', 'fontColor', 'blockName'],
+    props: ['blockTitle', 'blockInfo', 'fontColor', 'blockName', 'blockIcon'],
     methods: {
         routerpush (to) {
             this.$router.push(to)
+        },
+        initAnimate() {
+            $(".blockTitle").addClass("animated zoomIn")
+            $(".blockInfo").addClass("animated zoomIn")
+            $(".blockGuide").addClass("animated zoomIn")
         }
+    },
+    mounted() {
+        this.initAnimate()
     }
 }
 </script>
@@ -61,7 +72,7 @@ export default {
         z-index: 999;
         .blockTitle{
             display: flex;
-            flex-direction: column;
+            // flex-direction: column;
             align-items: center;
             font-size: 2em;
             font-weight: 800;
@@ -98,7 +109,7 @@ export default {
         z-index: 999;
         .blockTitle{
             display: flex;
-            flex-direction: column;
+            // flex-direction: column;
             align-items: center;
             font-size: 2em;
             font-weight: 800;
