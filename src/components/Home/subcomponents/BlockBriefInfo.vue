@@ -30,8 +30,11 @@ export default {
     padding-top:10%;
     margin-bottom: 13px;
     img{
-        width:100%;
+        width:400px;
         height: auto;
+    }
+    img:hover {
+        cursor: pointer;
     }
 }
 </style>

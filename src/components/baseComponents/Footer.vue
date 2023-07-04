@@ -2,7 +2,7 @@
     <div class="mainfooter _mainfooter">
         <div class="footerbody _footerbody">
             <div>
-                <img src="../Home/imgs/logo.png">
+                <img src="../Home/imgs/logo2.png" width="250px">
             </div>
             <div id="functionTable">
                 <h1>功能</h1>
@@ -25,7 +25,7 @@
             <div>
                 <div class="contact">
                     <h1 class="contact_title">联系我们</h1>
-                    <i class="icon iconfont" @click="showContact = !showContact">&#xe600;</i>
+                    <i class="icon iconfont" id="open" @click="showContact = !showContact">&#xe600;</i>
                 </div>
                 <transition name="fade">
                     <div class="list" v-show="showContact">
@@ -72,12 +72,12 @@ export default {
         user-select: none;
         .footerbody{
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             text-align: left;
             padding: 20px 0;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            margin:0 10%;
+            margin:0 8%;
             div{
                 width: 200px;
                 h1{
@@ -126,7 +126,7 @@ export default {
         }
     }
     .list {
-        padding-left: 30px;
+        padding-left: 35px;
     }
     .fade-enter-active, .fade-leave-active {
         transition: opacity 1s;
@@ -138,6 +138,9 @@ export default {
     #top {
         margin-top: 10px;
     }
+    #open:hover {
+        cursor: pointer;
+    } 
 }
 
 @media only screen and (max-width: 800px){
