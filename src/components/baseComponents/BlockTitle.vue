@@ -2,14 +2,28 @@
     <div class="blockTitleContainer" :style="'color:'+String(fontColor)">
         <div class="blockTitle">{{blockTitle}}</div>
         <div class="blockInfo">
-            <h1>{{blockInfo}}</h1>
+            <h1>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont" v-html="blockInfo"></i>
+                <i class="iconfont other" v-html="blockInfo"></i>
+                <i class="iconfont other" v-html="blockInfo"></i>
+                <i class="iconfont other" v-html="blockInfo"></i>
+                <i class="iconfont other" v-html="blockInfo"></i>
+            </h1>
             <br/>
         </div>
         <div class="blockGuide">
             <div @click="routerpush('/'+ blockName)" id="pointTitle">
-                进一步了解 >
+                进一步了解
                 <br/>
-                查看{{ blockName }} ></div>
+                查看{{ blockName }} <i class="iconfont">&#xe6d6;</i>
+            </div>
         </div>
     </div>
 </template>
@@ -30,22 +44,26 @@ export default {
 </script>
 
 <style lang="less" scoped>
+*{
+    user-select: none;
+}
+@media only screen and (min-width: 800px) {
     .blockTitleContainer{
         position: absolute;
-        top: 10%;
+        top: 25%;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 20px 0;
-        font-size: 2em;
+        padding: 10px 0;
+        font-size: 2.5em;
         z-index: 999;
         .blockTitle{
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 2.5em;
+            font-size: 2em;
             font-weight: 800;
         }
         .blockInfo{
@@ -63,9 +81,43 @@ export default {
     }
     #pointTitle:hover{
         cursor: pointer;
+        color: rgba(0,255,255,0.8);
     }
-
+}
 @media only screen and (max-width: 800px){
-
+    .blockTitleContainer{
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+        font-size: 2.5em;
+        z-index: 999;
+        .blockTitle{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 2em;
+            font-weight: 800;
+        }
+        .blockInfo{
+            h1{
+                font-size: 1.5em ;
+                // color: white;
+            }
+            .other{
+                display: none;
+            }
+        }
+        .blockGuide{
+            div{
+                font-size: 1em;
+                color: white;
+            }
+        }
+    }
 }
 </style>

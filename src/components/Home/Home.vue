@@ -1,19 +1,26 @@
 <template>
     <div class="homeContainer _homeContainer">
-        <NavTop></NavTop>
-        <div class="subdiv _subdiv">
-            <div class="left"><BlockBriefInfo :blockTitle="'上传 原始数据可视化'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/1.jpg')" :blockName="'upload'" /></div>
-            <div class="right"><BlockBriefInfo :blockTitle="'模型预测'" :blockInfo="'----------------------------------------------'" :fontColor="'white'" :backgroundColor="'rgb(19, 18, 25)'" :imgSrc="require('./imgs/6.jpg')" :blockName="'forecast'" /></div>
+        <div class="page-overlay">
+            <h3 class="animated_text">w p f b o o s t</h3>
+            <h2 id="teamName" class="title opacity0" style="color: white;font-weight: 800;margin-top: 20px;">结束乐队</h2>
+            <div class="logo-list opacity0"><img src="./imgs/logo3.png"></div>
         </div>
-        <div class="subdiv _subdiv">
-            <div class="left"><BlockBriefInfo :blockTitle="'mars3d大屏'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(0, 0, 0)'" :fontColor="'white'" :imgSrc="require('./imgs/4.jpg')" :blockName="'windfield'" /></div>
-            <div class="right"><BlockBriefInfo :blockTitle="'监测大屏'" :blockInfo="'----------------------------------------------'" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/5.jpg')" :blockName="'watch'" /></div>
+        <div id="home">
+            <NavTop></NavTop>
+            <div class="subdiv _subdiv" style="margin-top: 1%;">
+                <div class="left" id="first"><BlockBriefInfo :blockTitle="'上传 原始数据可视化'" :blockInfo="'&#xec7f; '" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/1.jpg')" :blockName="'upload'"/></div>
+                <div class="right" id="second"><BlockBriefInfo :blockTitle="'模型预测'" :blockInfo="'&#xec7f; '" :fontColor="'white'" :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/6.jpg')" :blockName="'forecast'"/></div>
+            </div>
+            <div class="subdiv _subdiv">
+                <div class="left" id="third"><BlockBriefInfo :blockTitle="'mars3d大屏'" :blockInfo="'&#xec7f; '" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'white'" :imgSrc="require('./imgs/4.jpg')" :blockName="'windfield'"/></div>
+                <div class="right" id="fourth"><BlockBriefInfo :blockTitle="'监测大屏'" :blockInfo="'&#xec7f; '" :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/5.jpg')" :blockName="'watch'"/></div>
+            </div>
+            <div class="subdiv _subdiv">
+                <div class="left" id="fifth"><BlockBriefInfo :blockTitle="'风机异常大屏'" :blockInfo="'&#xec7f; '" :fontColor="'black'" :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/3.jpg')" :blockName="'turbine'"/></div>
+                <div class="right" id="sixth"><BlockBriefInfo :blockTitle="'three风机'" :blockInfo="'&#xec7f; '" :fontColor="'white'" :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/2.jpg')" :blockName="'windland'"/></div>
+            </div>
+            <Footer></Footer>
         </div>
-        <div class="subdiv _subdiv">
-            <div class="left"><BlockBriefInfo :blockTitle="'风机异常大屏'" :blockInfo="'----------------------------------------------'" :fontColor="'black'" :backgroundColor="'rgb(251, 251, 253)'" :imgSrc="require('./imgs/3.jpg')" :blockName="'turbine'" /></div>
-            <div class="right"><BlockBriefInfo :blockTitle="'three风机'" :blockInfo="'----------------------------------------------'" :fontColor="'white'" :backgroundColor="'rgb(19, 18, 25)'" :imgSrc="require('./imgs/2.jpg')" :blockName="'windland'" /></div>
-        </div>
-        <Footer></Footer>
     </div>
 </template>
 
@@ -21,6 +28,7 @@
 import BlockBriefInfo from './subcomponents/BlockBriefInfo'
 import NavTop from '../baseComponents/NavTop.vue';
 import Footer from '../baseComponents/Footer.vue'
+import $ from 'jquery'
 
 export default {
     name: 'home',
@@ -28,11 +36,114 @@ export default {
         BlockBriefInfo,
         NavTop,
         Footer
+    },
+    data() {
+        return {
+            
+        }
+    },
+    methods: {
+        initAnimate(){
+            var x = { size: 150, weight: 8, color: ["#177cb0", "#f8f8f8", "#f8f8f8", "#8d4bbb", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#E77826", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#E77826", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8", "#f8f8f8"], duration: 0.35, delay: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4], fade: 0.5, individualDelays: false, easing: d3_ease.easeSinInOut.ease };
+            var element = $(".animated_text")[0];
+            var z = new Letters(element, x);
+            z.show();
+            setTimeout(function () {
+                $(".title").addClass("animated bounceIn");
+                $(".logo-list").addClass("animated fadeInUp")
+            }, 3000);
+            setTimeout(function(){
+                !$(".page-overlay").hasClass("loaded") && $(".page-overlay").addClass('loaded')
+            }, 6000)
+            setTimeout(function () {
+                $(".page-overlay").hasClass("loaded") && $(".page-overlay").css("display", "none") && $("#home").css("display", "block")
+            }, 7000)
+        }
+    },
+    mounted() {
+        this.initAnimate()
     }
 }
 </script>
 
 <style lang="less" scoped>
+#home {
+    display: none;
+}
+/* LOGO */
+.logo-list {
+    margin-top: 20px; /* position: absolute;
+    bottom: 20px;
+    left: 45%;*/
+}
+.logo-list img {
+    height: 150px;
+}
+/* Loader */
+.page-overlay {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: #2c2e2f;
+    z-index: 10000;
+    zoom: 1;
+    filter: alpha(opacity=100);
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
+    -webkit-transition: all 800ms ease-in-out;
+    -moz-transition: all 800ms ease-in-out;
+    -o-transition: all 800ms ease-in-out;
+    transition: all 800ms ease-in-out;
+}
+.page-overlay.loaded {
+    zoom: 1;
+    filter: alpha(opacity=0);
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+.page-overlay.clear {
+    background: transparent;
+}
+
+/* AnimatedLetters */
+.animated_text {
+    position: relative;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    max-width: 100%;
+    color: transparent;
+    pointer-events: none;
+}
+.opacity0 {
+	filter: alpha(opacity=0);
+	-webkit-opacity: 0;
+	-moz-opacity: 0;
+	opacity: 0;
+}
 
 // 大于800px
 @media only screen and (min-width: 800px){
@@ -54,6 +165,27 @@ export default {
                 font-size: .8em;
             }
         }
+    }
+    #teamName {
+        font-size: 3em;
+    }
+    #first:hover+#second{
+        opacity: 0.7;
+    }
+    #second:hover+#first{
+        opacity: 0.7;
+    }
+    #third:hover+#fourth{
+        opacity: 0.7;
+    }
+    #fourth:hover+#third{
+        opacity: 0.7;
+    }
+    #fifth:hover+#sixth{
+        opacity: 0.7;
+    }
+    #sixth:hover+#fifth{
+        opacity: 0.7;
     }
 }
 
@@ -78,6 +210,9 @@ export default {
                 font-size: .8em;
             }
         }
+    }
+    #teamName {
+        font-size: 8em;
     }
 }
 </style>
