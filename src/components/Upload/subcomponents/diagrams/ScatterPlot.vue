@@ -3,7 +3,7 @@
         <div id="chart"></div>
     </div>
 </template>
-  
+
 <script>
 import * as echarts from 'echarts';
 

@@ -1,30 +1,28 @@
 <template>
     <div id="centerDiv" class="mapcontainer">
-        <Layout/>
+        <Layout />
         <mars-map :url="configUrl" @onload="onMapload" :options="mapOptions" />
         <div id="leftBar" class="sideBar left opacity0">
-            <i id="leftClickSpan" class="iconfont opration-handler"
-				aria-hidden="true" @click="hideLeftPanel">&#xe653;</i>
-			<div class="bar-content" id="leftContent">
-                
-			</div>
-		</div>
+            <i id="leftClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideLeftPanel">&#xe653;</i>
+            <div class="bar-content" id="leftContent">
 
-		<div id="RightBar" class="sideBar right opacity0">
-			<i id="rightClickSpan" class="iconfont opration-handler"
-				aria-hidden="true" @click="hideRightPanel">&#xe653;</i>
-			<div class="bar-content" id="rightContent">
-                
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<div id="BottomBar" class="bottomBar opacity0">
-			<i id="bottomClickSpan" class="iconfont opration-handler"
-				aria-hidden="true" @click="hideBottomPanel">&#xe601;</i>
-			<div class="bar-content-bottom" id="bottomContent">
-                
-			</div>
-		</div>
+        <div id="RightBar" class="sideBar right opacity0">
+            <i id="rightClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideRightPanel">&#xe653;</i>
+            <div class="bar-content" id="rightContent">
+
+            </div>
+        </div>
+
+        <div id="BottomBar" class="bottomBar opacity0">
+            <i id="bottomClickSpan" class="iconfont opration-handler" aria-hidden="true"
+                @click="hideBottomPanel">&#xe601;</i>
+            <div class="bar-content-bottom" id="bottomContent">
+
+            </div>
+        </div>
     </div>
 </template>
 
@@ -55,8 +53,8 @@ export default {
         const mapOptions = {
             scene: {
                 center: { lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -89 },
-                scene3Donly: false,
-                fxaa: true,
+                scene3Donly: true,
+                fxaa: false,
                 contextOptions: {
                     requestWebgl1: true
                 }
@@ -79,7 +77,8 @@ export default {
         // 地图构造完成回调
         onMapload(map) {
             // 以下为演示代码
-            // map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
+            map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
+
             this.addGraphic(map)
             // this.addLayer(map)
             setTimeout(function () {
@@ -158,42 +157,25 @@ export default {
         },
         addGraphic(map) {
             const positions = [
-                { lng: 112.257630577, lat: 39.0613382363999, alt: 1815 },
-                // { lng: 112.219302206, lat: 39.0579481036999, alt: 1827 },
-                // { lng: 112.226596341, lat: 39.0584773033999, alt: 1849 },
-                // { lng: 112.22911174, lat: 39.0574840383999, alt: 1866 },
-                // { lng: 112.215476722, lat: 39.0550566812, alt: 1866 },
-                // { lng: 112.215643865, lat: 39.0532631538, alt: 1899 },
-                // { lng: 112.219228645, lat: 39.0525930380999, alt: 1880 },
-                // { lng: 112.234976033, lat: 39.0502488098, alt: 1926 },
-                // { lng: 112.225661372999, lat: 39.0484097539999, alt: 1948 },
-                // { lng: 112.209409737, lat: 39.0474211486, alt: 1910 },
-                // { lng: 112.214894212, lat: 39.0464248147999, alt: 1983 },
-                // { lng: 112.214022809, lat: 39.0436919592999, alt: 2036 },
-                // { lng: 112.234492463, lat: 39.0413040158, alt: 2036 },
-                // { lng: 112.213470676999, lat: 39.0381470684, alt: 2038 },
-                // { lng: 112.210336836, lat: 39.039450506, alt: 2071 },
-                // { lng: 112.231019662, lat: 39.0367113260999, alt: 2063 },
-                // { lng: 112.21282611, lat: 39.045567662, alt: 2026 },
-                // { lng: 112.2321147308, lat: 39.0439265946, alt: 2048 },
-                // { lng: 112.216533, lat: 39.041840792, alt: 2056 },
-                // { lng: 112.2322813848, lat: 39.0343489941, alt: 2075 },
-                // { lng: 112.215573092, lat: 39.0307660108, alt: 2015 },
-                // { lng: 112.220069655, lat: 39.0323883292, alt: 2022 },
-                // { lng: 112.217448043999, lat: 39.0310627231, alt: 2021 },
-                // { lng: 112.230322327, lat: 39.0281575923999, alt: 1965 }
+                { lng: 112.219302206, lat: 39.0579481036999, alt: 1827 },
+                { lng: 112.226596341, lat: 39.0584773033999, alt: 1849 },
+                { lng: 112.22911174, lat: 39.0574840383999, alt: 1866 },
+                { lng: 112.215476722, lat: 39.0550566812, alt: 1866 },
+                { lng: 112.215643865, lat: 39.0532631538, alt: 1899 },
+                { lng: 112.219228645, lat: 39.0525930380999, alt: 1880 },
             ]
             const arr = []
             positions.forEach((item) => {
                 arr.push({
                     type: "modelP",
                     position: item,
+                    maximumScreenSpaceError: 16,
+                    maximumMemoryUsage: 1024,
                     style: {
                         url: "//data.mars3d.cn/gltf/mars/fengche.gltf",
-                        scale: 100,
+                        scale: 30,
                         heading: 315,
                         minimumPixelSize: 30,
-                        clampToGround: true
                     }
                 })
             })
@@ -201,14 +183,14 @@ export default {
             this.graphicLayer = new mars3d.layer.GraphicLayer({
                 name: "风力发电机",
                 data: arr,
-                center: { lat: 39.016487, lng: 112.262087, alt: 3500, heading: 313, pitch: -22, roll: 0 },
+                center: { "lat": 39.087905, "lng": 112.193672, "alt": 3719.2, "heading": 148.3, "pitch": -25.3 },
                 flyTo: false
             })
             map.addLayer(this.graphicLayer)
 
             // 绑定事件
-            this.graphicLayer.on(mars3d.EventType.click,function(event){
-                map.setCameraView({"lat":39.066387,"lng":112.195926,"alt":3711.4,"heading":148.3,"pitch":-25.3})
+            this.graphicLayer.on(mars3d.EventType.click, function (event) {
+                map.setCameraView({ "lat": 39.091073, "lng": 112.19958, "alt": 3720.4, "heading": 148.3, "pitch": -25.3 })
             })
         },
         removeLayer(map) {
@@ -306,12 +288,14 @@ export default {
     width: 100%;
     overflow: hidden;
 }
+
 .opacity0 {
-	filter: alpha(opacity=0);
-	-webkit-opacity: 0;
-	-moz-opacity: 0;
-	opacity: 0;
+    filter: alpha(opacity=0);
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    opacity: 0;
 }
+
 /* Bar */
 .sideBar {
     position: absolute;
@@ -328,12 +312,15 @@ export default {
     -o-transition: all 1000ms ease-in-out;
     transition: all 1000ms ease-in-out;
 }
+
 .sideBar.left {
     left: 0;
 }
+
 .sideBar.right {
     right: 0;
 }
+
 .bottomBar {
     position: absolute;
     bottom: 0;
@@ -349,7 +336,8 @@ export default {
     -o-transition: all 1000ms ease-in-out;
     transition: all 1000ms ease-in-out;
 }
-.sideBar.left > .opration-handler {
+
+.sideBar.left>.opration-handler {
     color: #20B0CB;
     right: -4px;
     position: absolute;
@@ -358,7 +346,8 @@ export default {
     z-index: 9999;
     font-size: 24px;
 }
-.sideBar.right > .opration-handler {
+
+.sideBar.right>.opration-handler {
     color: #20B0CB;
     left: -4px;
     position: absolute;
@@ -367,7 +356,8 @@ export default {
     z-index: 9999;
     font-size: 24px;
 }
-.bottomBar > .opration-handler {
+
+.bottomBar>.opration-handler {
     color: #20B0CB;
     top: -5px;
     position: absolute;
@@ -376,13 +366,19 @@ export default {
     z-index: 9999;
     font-size: 24px;
 }
-.sideBar.left > .opration-handler:focus, .sideBar.left > .opration-handler:hover {
+
+.sideBar.left>.opration-handler:focus,
+.sideBar.left>.opration-handler:hover {
     color: rgba(255, 255, 255, 1.0);
 }
-.sideBar.right > .opration-handler:focus, .sideBar.right > .opration-handler:hover {
+
+.sideBar.right>.opration-handler:focus,
+.sideBar.right>.opration-handler:hover {
     color: rgba(255, 255, 255, 1.0);
 }
-.bottomBar > .opration-handler:focus, .bottomBar > .opration-handler:hover {
+
+.bottomBar>.opration-handler:focus,
+.bottomBar>.opration-handler:hover {
     color: rgba(255, 255, 255, 1.0);
 }
 </style>

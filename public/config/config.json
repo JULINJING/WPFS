@@ -1405,7 +1405,7 @@
                 "type": "3dtiles",
                 "name": "上海市区",
                 "url": "{dataServer}/3dtiles/jzw-shanghai/tileset.json",
-                "maximumScreenSpaceError": 4,
+                "maximumScreenSpaceError": 10,
                 "maximumMemoryUsage": 1024,
                 "style": {
                     "color": {
