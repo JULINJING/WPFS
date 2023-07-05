@@ -23,9 +23,9 @@
                 <p><i class="iconfont">&#xe60b;</i> 430072</p>
             </div>
             <div>
-                <div class="contact">
+                <div class="contact" @click="showContact = !showContact" id="open">
                     <h1 class="contact_title">联系我们</h1>
-                    <i class="icon iconfont" id="open" @click="showContact = !showContact">&#xe600;</i>
+                    <i class="icon iconfont">&#xe600;</i>
                 </div>
                 <transition name="fade">
                     <div class="list" v-show="showContact">
@@ -213,6 +213,9 @@ export default {
             opacity: 0;
         }
         
+    }
+    img {
+        padding-left: 25%;
     }
 }
 
