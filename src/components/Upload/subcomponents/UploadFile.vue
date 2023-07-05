@@ -83,7 +83,7 @@
 export default {
   data() {
     return {
-      dialogFormVisible: false,
+      dialogFormVisible: true,
       showTable: false,
       fileList: [],
       outlierRadio: '',
@@ -109,7 +109,6 @@ export default {
     handleUploadSuccess(response, file, fileList) {
       console.log(response);
       this.dialogFormVisible = true;
-      this.showTable = true;
 
       // TODO: 处理返回的数据，渲染表格
 
@@ -122,6 +121,9 @@ export default {
     },
     handleDialogConfirm() {
       if (this.outlierRadio !== '' && this.missingRadio !== '') {
+        this.dialogFormVisible = false;
+        this.showTable = true;
+
         console.log(this.outlierRadio); // 获取选中的复选框的值
         // TODO
       } else {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="chart"></div>
+        <div id="scatterChart"></div>
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     },
     methods: {
         renderChart() {
-            const chartDom = document.getElementById('chart');
+            const chartDom = document.getElementById('scatterChart');
             const myChart = echarts.init(chartDom);
 
             const option = {
@@ -96,7 +96,10 @@ export default {
 };
 </script>
   
-<style scoped>
-/* 样式可根据需要自定义 */
+<style>
+.scatterChart {
+    width: 100%;
+    height: 400px;
+}
 </style>
   
