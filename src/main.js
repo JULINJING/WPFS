@@ -5,8 +5,11 @@ import App from './App'
 import router from './router'
 import dataV from '@jiaminghi/data-view'
 import { createPinia, PiniaVuePlugin } from 'pinia'
+import Valid from './utils/valid'
 import * as echarts from 'echarts'
 import './assets/styles/scss/style.scss'
+
+Vue.prototype.$Valid = Valid;
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts

@@ -28,7 +28,6 @@
 
 <script>
 import Layout from "./subcomponents/Header/index";
-// import BaseField from './subcomponents/BaseField/index.vue'
 // import ControlPanel from './subcomponents/widgets/ControlPanel'
 // import ControlTurbine from './subcomponents/widgets/ControlTurbine'
 
@@ -85,7 +84,7 @@ export default {
                 $(".sideBar.left").removeClass("opacity0").removeClass("fadeOutLeft").addClass("animated fadeInLeft")
                 $(".sideBar.right").removeClass("opacity0").removeClass("fadeOutRight").addClass("animated fadeInRight")
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
-            }, 2000)
+            }, 3000)
         },
         addLayer(map) {
             this.removeLayer(map)
