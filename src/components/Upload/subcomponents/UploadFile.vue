@@ -1,22 +1,31 @@
 <template>
   <div class="totalinfocontainer _totalinfocontainer">
     <div>
-      <div>
+      <div v-if="!showTable">
         <!-- Form -->
-        <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
-          :on-success="handleUploadSuccess" :before-remove="handleBeforeRemove">
+        <el-upload 
+          class="upload-demo" 
+          drag 
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-success="handleUploadSuccess" 
+          :on-error="handleUploadError" 
+          :before-remove="handleBeforeRemove" 
+          multiple
+          :limit="10" 
+          :on-exceed="handleExceed" 
+          :file-list="fileList">
+
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         </el-upload>
       </div>
-
 
       <div class="input-container">
         <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" class="dialog-box">
 
           <div class="form-row">
             <el-tag>选择异常检测方法</el-tag>
-            <el-radio-group v-model="radio1">
+            <el-radio-group v-model="outlierRadio">
               <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
               <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
               <el-radio-button label="DBSCAN" class="bordered-checkbox" border></el-radio-button>
@@ -26,7 +35,7 @@
 
           <div class="form-row">
             <el-tag>缺失值处理方法</el-tag>
-            <el-radio-group v-model="radio2">
+            <el-radio-group v-model="missingRadio">
               <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
               <el-radio-button label="线性插值" class="bordered-checkbox" border></el-radio-button>
               <el-radio-button label="Lightgbm" class="bordered-checkbox" border></el-radio-button>
@@ -41,6 +50,31 @@
         </el-dialog>
       </div>
 
+      <div v-if="showTable" class="form-container">
+        <el-table :data="tableData" stripe style="width: 100%" max-height="300">
+          <el-table-column fixed prop="datatime" label="DATATIME" width="150">
+          </el-table-column>
+          <el-table-column prop="windspeed" label="WINDSPEED" width="150">
+          </el-table-column>
+          <el-table-column prop="prepower" label="PREPOWER" width="150">
+          </el-table-column>
+          <el-table-column prop="winddirection" label="WINDDIRECTION" width="150">
+          </el-table-column>
+          <el-table-column prop="temperature" label="TEMPERATURE" width="150">
+          </el-table-column>
+          <el-table-column prop="humidity" label="HUMIDITY" width="150">
+          </el-table-column>
+          <el-table-column prop="pressure" label="PRESSURE" width="150">
+          </el-table-column>
+          <el-table-column prop="ws" label="ROUND(A.WS,1)" width="150">
+          </el-table-column>
+          <el-table-column prop="power" label="ROUND(A.POWER,0)" width="150">
+          </el-table-column>
+          <el-table-column prop="YD15" label="YD15" width="150">
+          </el-table-column>
+        </el-table>
+      </div>
+
     </div>
   </div>
 </template>
@@ -49,10 +83,23 @@
 export default {
   data() {
     return {
-      // TODO
-      dialogFormVisible: true,
-      radio1: '',
-      radio2: ''
+      dialogFormVisible: false,
+      showTable: false,
+      fileList: [],
+      outlierRadio: '',
+      missingRadio: '',
+      tableData: [{
+        datatime: '2021/11/1  0:00:00',
+        windspeed: 6,
+        prepower: 44224,
+        winddirection: 270,
+        temperature: 3.9,
+        humidity: 45,
+        pressure: 842,
+        ws: 3.3,
+        power: 17959,
+        YD15: 12914
+      }]
     };
   },
   methods: {
@@ -60,15 +107,28 @@ export default {
       console.log('文件上传前', file, fileList);
     },
     handleUploadSuccess(response, file, fileList) {
-      console.log('文件上传成功', response, file, fileList);
+      console.log(response);
       this.dialogFormVisible = true;
+      this.showTable = true;
+
+      // TODO: 处理返回的数据，渲染表格
+
+    },
+    handleUploadError(err, file, fileList) {
+      console.log(err);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     handleDialogConfirm() {
-      if (this.radio1 !== '' && this.radio2 !== '') {
-        console.log(this.radio1); // 获取选中的复选框的值
+      if (this.outlierRadio !== '' && this.missingRadio !== '') {
+        console.log(this.outlierRadio); // 获取选中的复选框的值
         // TODO
       } else {
-        console.log('请至少选择一个预处理方法');
+        this.$message({
+          message: '请至少选择一个预处理方法',
+          type: 'warning'
+        });
       }
     },
 
@@ -88,10 +148,11 @@ export default {
   margin: 10px;
 }
 
-.el-tag{
+.el-tag {
   font-size: 15px;
   margin-right: 10px;
 }
+
 .checkbox-container {
   /* margin-top: 10px; */
   margin: 10px;
@@ -438,4 +499,5 @@ export default {
 .cancelButton:hover:after,
 .cancelButton:hover:before {
   --progress: 0;
-}</style>
+}
+</style>
