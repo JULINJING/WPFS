@@ -8,7 +8,7 @@
                     <div class="d-flex jc-center">
                         <dv-decoration-8 class="dv-dec-8" :color="decorationColor" />
                         <div class="title">
-                            <span class="title-text">大数据可视化平台</span>
+                            <span class="title-text">风力能源监控</span>
                             <dv-decoration-6 class="dv-dec-6" :reverse="true" :color="['#50e3c2', '#67a1e5']" />
                         </div>
                         <dv-decoration-8 class="dv-dec-8" :reverse="true" :color="decorationColor" />
@@ -29,7 +29,7 @@
                     </div>
                     <div class="d-flex aside-width">
                         <div class="react-right bg-color-blue mr-3">
-                            <span class="text fw-b">vue-big-sreen</span>
+                            <span class="text fw-b">wpfboost</span>
                         </div>
                         <div class="react-right mr-4 react-l-s">
                             <span class="react-after"></span>
@@ -45,16 +45,6 @@
                                 <centerLeft1 />
                             </dv-border-box-12>
                         </div>
-                        <div>
-                            <dv-border-box-12>
-                                <centerLeft2 />
-                            </dv-border-box-12>
-                        </div>
-                        <!-- 中间 -->
-                        <div>
-                            <center />
-                        </div>
-                        <!-- 中间 -->
                         <div>
                             <centerRight2 />
                         </div>
@@ -84,10 +74,11 @@ import { formatTime } from '@/utils/index.js'
 import centerLeft1 from './centerLeft1'
 // import centerLeft2 from './centerLeft2'
 import centerRight1 from './centerRight1'
+import centerRight2 from './centerRight2'
 
 // import center from './center'
 import bottomLeft from './bottomLeft'
-// import bottomRight from './bottomRight'
+import bottomRight from './bottomRight'
 import NavTop from '../baseComponents/NavTop'
 
 export default {
@@ -97,7 +88,9 @@ export default {
         NavTop,
         centerLeft1,
         bottomLeft,
-        centerRight1
+        centerRight1,
+        centerRight2,
+        bottomRight
     },
     data() {
         return {

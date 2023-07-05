@@ -6,9 +6,7 @@
     overflow: hidden;
 
     .bg {
-        width: 100%;
-        height: 100%;
-        padding: 16px 16px 0 16px;
+        padding: 16px 0px;
         background-image: url("/public/imgs/pageBg.png");
         background-size: cover;
         background-position: center center;
@@ -19,7 +17,7 @@
         .dv-dec-10,
         .dv-dec-10-s {
             width: 33.3%;
-            height: 5px;
+            height: 2px;
         }
 
         .dv-dec-10-s {
@@ -28,7 +26,7 @@
 
         .dv-dec-8 {
             width: 200px;
-            height: 50px;
+            height: 40px;
         }
 
         .title {
@@ -126,19 +124,19 @@
         }
 
         .body-box {
-            margin-top: 16px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
 
             //下方区域的布局
             .content-box {
                 display: grid;
-                grid-template-columns: 2fr 3fr 5fr 3fr 2fr;
+                grid-template-columns: 3fr 6fr 3fr;
             }
 
             // 底部数据
             .bottom-box {
-                margin-top: 10px;
+                margin-top: 5px;
                 display: grid;
                 grid-template-columns: repeat(2, 50%);
             }
