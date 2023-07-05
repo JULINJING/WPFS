@@ -1,5 +1,6 @@
 <template>
-  <div :id="`mars3d-container${mapKey}`" class="mars3d-container"></div>
+  <div :id="`mars3d-container${mapKey}`" class="mars3d-container">
+  </div>
 </template>
 
 <script>
@@ -23,6 +24,9 @@ Vue.prototype.Cesium = mars3d.Cesium
 
 export default {
   name: 'mars3dViewer',
+  components: {
+    
+  },
   props: {
     // 地图唯一性标识
     mapKey: {
@@ -90,7 +94,8 @@ export default {
 
 <style>
 .mars3d-container {
-  height: 100%;
+  width: 100%;
+  height: calc(100vh - 1px);
   overflow: hidden;
 }
 
@@ -100,6 +105,12 @@ export default {
   bottom: 35px !important;
   left: 12px !important;
   right: auto !important;
+  z-index: 999;
+  display: none;
+}
+
+.mars3d-compass {
+  display: none;
 }
 
 .cesium-toolbar-button img {

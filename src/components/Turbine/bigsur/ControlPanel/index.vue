@@ -65,7 +65,7 @@ $width: 10.4vw;
 $height: 4.16vh;
 .container {
 	position: absolute;
-	top: 2vh;
+	top: 6vh;
 	right: 2vh;
 }
 .control_panel {

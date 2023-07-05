@@ -1,6 +1,6 @@
 <template>
 	<div id="turbine">
-		<NavTop id="navtopTurbine"/>
+		<NavTop/>
 		<HeaderLogo></HeaderLogo>
 		<Histogram></Histogram>
 		<AngleGuage style="margin-top:10px"></AngleGuage>
@@ -37,9 +37,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#navtopTurbine {
-	z-index: 9999999;
-}
 #turbine {
 	width: 100%;
 	height: 100%;
