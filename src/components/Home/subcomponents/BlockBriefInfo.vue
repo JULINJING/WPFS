@@ -49,7 +49,7 @@ export default {
     content: "";
     position: absolute;
     width: 100%;
-    height: 11px;
+    height: 16px;
     background: linear-gradient(to right, transparent, rgba(233,231,239,0.4), #fff);
     left: 0;
     top: -5px;
@@ -70,7 +70,7 @@ export default {
 .line-right::before {
     content: "";
     position: absolute;
-    width: 11px;
+    width: 16px;
     height: 100%;
     background: linear-gradient(to bottom, transparent, rgba(233,231,239,0.4), #fff);
     left: -5px;
@@ -94,7 +94,7 @@ export default {
     content: "";
     position: absolute;
     width: 100%;
-    height: 11px;
+    height: 16px;
     background: linear-gradient(to left, transparent, rgba(233,231,239,0.4), #fff);
     left: 0;
     top: -5px;
@@ -115,7 +115,7 @@ export default {
 .line-left::before {
     content: "";
     position: absolute;
-    width: 11px;
+    width: 16px;
     height: 100%;
     background: linear-gradient(to top, transparent, rgba(233,231,239,0.4), #fff);
     left: -5px;
@@ -232,10 +232,10 @@ export default {
             // 渐变
             transition: all 0.5s linear;
             // border: 1px rgb(134, 134, 134) solid;
-            box-shadow:-8px 0px 8px rgba(134, 134, 134, 0.8),   /*左边阴影*/
-            0px -8px 8px rgba(134, 134, 134, 0.8),  /*上边阴影*/
-            8px 0px 8px rgba(134, 134, 134, 0.8),  /*右边阴影*/
-            0px 8px 8px rgba(134, 134, 134, 0.8); /*下边阴影*/
+            box-shadow:-10px 0px 10px rgba(134, 134, 134, 0.8),   /*左边阴影*/
+            0px -10px 10px rgba(134, 134, 134, 0.8),  /*上边阴影*/
+            10px 0px 10px rgba(134, 134, 134, 0.8),  /*右边阴影*/
+            0px 10px 10px rgba(134, 134, 134, 0.8); /*下边阴影*/
         }
     }
 }

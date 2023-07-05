@@ -1,9 +1,11 @@
 <template>
     <div class="blockTitleContainer" :style="'color:'+String(fontColor)">
-        <div class="blockTitle">
-            <i class="iconfont" style="font-size: 1em;" v-html="blockIcon"></i>&nbsp;
-            {{blockTitle}}
-        </div>
+        <el-tooltip class="item" effect="light" content="点击图片或下方进一步查看" placement="top">
+            <div class="blockTitle">
+                <i class="iconfont" style="font-size: 1em;" v-html="blockIcon"></i>&nbsp;
+                {{blockTitle}}
+            </div>
+        </el-tooltip>
         <div class="blockInfo">
             <h1>
                 <i class="iconfont" v-html="blockInfo"></i>
@@ -70,6 +72,9 @@ export default {
         padding: 10px 0;
         font-size: 2.5em;
         z-index: 999;
+        .item {
+            margin: 4px;
+        }
         .blockTitle{
             display: flex;
             // flex-direction: column;
