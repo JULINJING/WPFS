@@ -20,7 +20,7 @@ $imgwidth: calc(10vh - 1.6rem);
 	display: flex;
 	align-items: center;
 	position: absolute;
-	top: 2vh;
+	top: 6vh;
 	left: 2vh;
 	img {
 		width: $imgwidth;

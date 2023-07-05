@@ -1,18 +1,16 @@
 <template>
     <div class="layout">
         <div class="layout-header">{{ appName }}</div>
-        <div class="layout-main">
-            <slot></slot>
-        </div>
     </div>
 </template>
 <script setup lang="ts">
-const appName = '风力发电机监控平台'
+const appName = '风场风机可视化平台'
 </script>
 <style lang="scss" scoped>
 .layout {
     width: 100vw;
-    height: 100vh;
+    // height: 100vh;
+    height: 1px;
     background-color: #000;
 
     .layout-header {
@@ -28,17 +26,9 @@ const appName = '风力发电机监控平台'
         font-size: 24px;
         font-weight: bold;
         color: #fff;
-        background: url('@/assets/images/header_bg.png');
+        background: url('@/assets/images/largeTitle.png');
         background-repeat: no-repeat;
         background-size: 100% 64px;
-    }
-
-    .layout-main {
-        width: 100vw;
-        height: 100vh;
-        background-image: linear-gradient(90deg, #01355059 1px, transparent 1px),
-        linear-gradient(0deg, #01355059 1px, transparent 1px);
-        background-size: 30px 30px, 30px 30px;
     }
 }
 </style>
