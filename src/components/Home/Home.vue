@@ -174,39 +174,39 @@ export default {
     // 每块
     #first:hover+#second{
         // opacity: 0.8;
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     #first:has(~ #second:hover) { 
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     #third:hover+#fourth{
         // opacity: 0.7;
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     #third:has(~ #fourth:hover) { 
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     #fifth:hover+#sixth{
         // opacity: 0.7;
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     #fifth:has(~ #sixth:hover) { 
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     // 每两块
     .subdiv:hover+.subdiv{
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
     .subdiv:has(~ .subdiv:hover) { 
-        -webkit-filter: brightness(20%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
-        filter: brightness(20%);
+        -webkit-filter: blur(5px) brightness(90%); /*考虑浏览器兼容性：兼容 Chrome, Safari, Opera */
+        filter: blur(5px) brightness(90%);
     }
 }
 

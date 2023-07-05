@@ -64,7 +64,7 @@ export default {
     top: 0;
     right: -1px;
     background: linear-gradient(rgba(233,231,239,0.4), #fff);
-    animation: top_to_bottom 4s 3s linear infinite;
+    animation: top_to_bottom 4s 0s linear infinite;
 }
 
 .line-right::before {
@@ -87,7 +87,7 @@ export default {
     right: 0;
     background: linear-gradient(to left, rgba(233,231,239,0.4), #fff);
     border-radius: 50%;
-    animation: right_to_left 4s 6s linear infinite;
+    animation: right_to_left 4s 0s linear infinite;
 }
 
 .line-bottom::before {
@@ -109,7 +109,7 @@ export default {
     bottom: 0;
     left: -1px;
     background: linear-gradient(to top, rgba(233,231,239,0.4), #fff);
-    animation: bottom_to_top 4s 9s linear infinite;
+    animation: bottom_to_top 4s 0s linear infinite;
 }
 
 .line-left::before {
@@ -229,6 +229,7 @@ export default {
         }
         img:hover {
             cursor: pointer;
+            // 渐变
             transition: all 0.5s linear;
             // border: 1px rgb(134, 134, 134) solid;
             box-shadow:-8px 0px 8px rgba(134, 134, 134, 0.8),   /*左边阴影*/
