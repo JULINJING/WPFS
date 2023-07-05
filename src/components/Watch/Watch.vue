@@ -80,21 +80,24 @@
 
 <script>
 import drawMixin from '@/utils/drawMixin'
-import { formatTime } from 'path'
+import { formatTime } from '@/utils/index.js'
 import centerLeft1 from './centerLeft1'
-import centerLeft2 from './centerLeft2'
+// import centerLeft2 from './centerLeft2'
 import centerRight1 from './centerRight1'
-import centerRight2 from './centerRight2'
-import center from './center'
+
+// import center from './center'
 import bottomLeft from './bottomLeft'
-import bottomRight from './bottomRight'
+// import bottomRight from './bottomRight'
 import NavTop from '../baseComponents/NavTop'
 
 export default {
     name: 'watch',
     mixins: [drawMixin],
     components: {
-        NavTop
+        NavTop,
+        centerLeft1,
+        bottomLeft,
+        centerRight1
     },
     data() {
         return {
@@ -110,9 +113,9 @@ export default {
     methods: {
         timeFn() {
             this.timing = setInterval(() => {
-                this.dateDay = formatTime(new Date(), 'HH: mm: ss')
+                this.dateDay = formatTime(new Date(), 'HH:mm:ss')
                 this.dateYear = formatTime(new Date(), 'yyyy-MM-dd')
-                this.dateWeek = this.weekday
+                this.dateWeek = this.weekday[new Date().getDay()]
             })
         },
         cancelLoading() {
@@ -131,21 +134,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-#watchContainer {
-    margin: 0;
-    padding: 0;
-    overscroll-behavior: none;
-    overflow: hidden;
-}
 
-// 大于800px
-@media only screen and (min-width: 800px) {
-    .watchContainer {}
-}
-
-// 小于800px
-@media only screen and (max-width: 800px) {
-    ._watchContainer {}
-}
+<style lang="scss" scoped>
+@import '../../assets/styles/scss/index.scss';
 </style>

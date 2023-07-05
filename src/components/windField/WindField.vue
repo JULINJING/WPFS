@@ -143,6 +143,8 @@ export default {
                 arr.push({
                     type: "modelP",
                     position: item,
+                    maximumScreenSpaceError: 16,
+                    maximumMemoryUsage: 1024,
                     style: {
                         url: "//data.mars3d.cn/gltf/mars/fengche.gltf",
                         scale: 30,

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import CenterLeft2Chart from "@/components/echart/centerLeft/centerLeft2Chart";
+import CenterLeft2Chart from "@/components/Watch/subcomponents/centerLeft2";
 export default {
     components: {
         CenterLeft2Chart
