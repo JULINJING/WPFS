@@ -161,8 +161,8 @@ export default {
             map.addLayer(this.graphicLayer)
 
             // 绑定事件
-            this.graphicLayer.on(mars3d.EventType.click,function(event){
-                map.setCameraView({"lat":39.066387,"lng":112.195926,"alt":3711.4,"heading":148.3,"pitch":-25.3})
+            this.graphicLayer.on(mars3d.EventType.click, function (event) {
+                map.setCameraView({ "lat": 39.066387, "lng": 112.195926, "alt": 3711.4, "heading": 148.3, "pitch": -25.3 })
             })
         },
         removeLayer(map) {
