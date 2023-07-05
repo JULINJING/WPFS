@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div ref="chart"></div>
+        <div id="chart"></div>
     </div>
 </template>
   
 <script>
-import echarts from 'echarts';
+import * as echarts from 'echarts';
 
 export default {
     mounted() {
@@ -13,8 +13,9 @@ export default {
     },
     methods: {
         renderChart() {
-            const chartContainer = this.$refs.chart;
-            const chart = echarts.init(chartContainer);
+            const chartDom = document.getElementById('chart');
+            const myChart = echarts.init(chartDom);
+
             const option = {
                 xAxis: {
                     scale: true
@@ -89,7 +90,7 @@ export default {
                     }
                 ]
             };
-            chart.setOption(option);
+            option && myChart.setOption(option);
         }
     }
 };
