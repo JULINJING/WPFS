@@ -41,7 +41,7 @@
                 </Button>
 
                 <div class="option">
-                    <el-checkbox size="mini" v-model="checked" class="checked remember">记住我</el-checkbox>
+                    <el-checkbox size="mini" v-model="checked" class="checked remember">记住密码</el-checkbox>
                     <span class="forget-pwd" @click.stop="forgetPwd">忘记密码?</span>
                 </div>
             </div>
@@ -138,9 +138,10 @@
 
 <script>
 import { 
-  login,
-  register
+    login,
+    register
 } from '@/utils/api';
+import $ from 'jquery'
 
 export default {
     name: 'login',
@@ -184,8 +185,17 @@ export default {
     },
     mounted() {
         this.getCookie();
+        this.initAnimate();
     },
     methods: {
+        initAnimate() {
+            setTimeout(function () { 
+                $(".pageHeader").css("visibility", "visible")
+                $(".login-box").css("visibility", "visible")
+                $(".pageHeader").addClass("animated fadeInUp");
+                $(".login-box").addClass("animated rollIn")
+            }, 2000)
+        },
         // 登录/注册tab切换
         handleTab(type) {
             this.typeView = type;
@@ -229,6 +239,7 @@ export default {
             }
 
             this.isLoading = true;
+            this.$router.push('/home')
 
             let form = {
                 username: this.formLogin.userName,
@@ -354,7 +365,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 1000px) {
     .login-container {
         background-image: url('@/assets/images/GIF.gif');
         background-position: center;
@@ -367,6 +378,7 @@ export default {
             padding-top: 5%;
             padding-left: 5%;
             display: flex;
+            visibility: hidden;
             /*上下居中*/
             align-items: center;
 
@@ -392,11 +404,12 @@ export default {
         }
 
         .login-box {
+            visibility: hidden;
             position: absolute;
             left: 60vw;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
+            // top: 50%;
+            // -webkit-transform: translateY(-50%);
+            // transform: translateY(-50%);
             box-sizing: border-box;
             text-align: center;
             box-shadow: 0 1px 11px rgba(0, 0, 0, 0.3);
@@ -518,7 +531,7 @@ export default {
         }
     }
 }
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 1000px) {
     .login-container {
         background-image: url('@/assets/images/GIF.gif');
             background-position: center;
@@ -532,6 +545,7 @@ export default {
 
             .pageHeader {
                 display: flex;
+                visibility: hidden;
                 /*上下居中*/
                 align-items: center;
                 /*左右居中*/
@@ -541,7 +555,7 @@ export default {
                     vertical-align: middle;
                     margin-right: 3%;
                     height: auto;
-                    width: 20%;
+                    width: 30%;
                 }
 
                 span {
@@ -559,17 +573,12 @@ export default {
             }
 
             .login-box {
-                // position: absolute;
-                // left: 60vw;
-                // top: 50%;
-                // -webkit-transform: translateY(-50%);
-                // transform: translateY(-50%);
+                visibility: hidden;
                 box-sizing: border-box;
                 text-align: center;
                 box-shadow: 0 1px 11px rgba(0, 0, 0, 0.3);
-                border-radius: 20px;
-                /*margin: 100px auto 0;*/
-                width: 25vw;
+                border-radius: 10px;
+                width: 75vw;
                 background: #fff;
                 padding: 2.5vh 1.5vw;
                 .option {
