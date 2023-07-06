@@ -14,8 +14,8 @@
                 <h1>实际风速和实际功率相关图</h1>
                 <p>家的新声。</p>
                 <span>进一步了解 ></span>
-                <img src="../imgs/ROUOND(A.WS,1)_YD15.png" alt="">
-                <!-- <ScatterPlot class="ScatterPlot" /> -->
+                <!-- <img src="../imgs/ROUOND(A.WS,1)_YD15.png" alt=""> -->
+                <ScatterPlot class="ScatterPlot" />
             </div>
         </div>
         <div class="diagrambody">
