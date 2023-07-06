@@ -368,7 +368,7 @@ export default {
 <style lang="scss" scoped>
 @media only screen and (min-width: 1000px) {
     .login-container {
-        background-image: url('@/assets/images/GIF.gif');
+        background-image: url('@/assets/images/login.gif');
         background-position: center;
         background-size: cover;
         // position: relative;
@@ -540,7 +540,7 @@ export default {
 }
 @media only screen and (max-width: 1000px) {
     .login-container {
-        background-image: url('@/assets/images/GIF.gif');
+        background-image: url('@/assets/images/login.gif');
             background-position: center;
             background-size: cover;
             width: 100vw;

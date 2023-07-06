@@ -28,8 +28,6 @@
 
 <script>
 import Layout from "./subcomponents/Header/index";
-// import ControlPanel from './subcomponents/widgets/ControlPanel'
-// import ControlTurbine from './subcomponents/widgets/ControlTurbine'
 
 import MarsMap from "./mars-work/mars-map.vue"
 import * as mars3d from 'mars3d'
@@ -67,6 +65,7 @@ export default {
             windLayer,
             graphicLayer,
 
+            // 记录面板展开状态
             isLeftOpen: true,
             isRightOpen: true,
             isBottomOpen: true
