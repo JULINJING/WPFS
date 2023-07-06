@@ -74,7 +74,7 @@ export default {
       console.log('>>>>> 地图创建成功 >>>>', map)
 
       // 挂载到全局对象下，所有组件通过 this.map 访问
-      // Vue.prototype[`map${this.mapKey}`] = map
+      Vue.prototype[`map${this.mapKey}`] = map
 
       // 绑定对alert的处理，右键弹出信息更美观。
       // window.haoutil = window.haoutil || {}

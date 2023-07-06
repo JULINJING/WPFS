@@ -5,7 +5,21 @@
         <div id="leftBar" class="sideBar left opacity0">
             <i id="leftClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideLeftPanel">&#xe653;</i>
             <div class="bar-content" id="leftContent">
-
+                <el-row>
+                    <el-button plain @click="chargeWindField">显示/关闭风场</el-button>
+                </el-row>
+                <el-row>
+                    <el-button plain @click="addTurbineLayer(1)">东部</el-button>
+                </el-row>
+                <el-row>
+                    <el-button plain @click="addTurbineLayer(2)">西部</el-button>
+                </el-row>
+                <el-row>
+                    <el-button plain @click="addTurbineLayer(3)">南部</el-button>
+                </el-row>
+                <el-row>
+                    <el-button plain @click="addTurbineLayer(4)">北部</el-button>
+                </el-row>
             </div>
         </div>
 
@@ -58,12 +72,12 @@ export default {
             },
         }
         const windLayer = new mars3d.layer.WindLayer()
-        const graphicLayer = new mars3d.layer.GraphicLayer()
+        const turbineLayer = new mars3d.layer.GraphicLayer()
         return {
             configUrl: basePathUrl + 'config/config.json',
             mapOptions: mapOptions,
             windLayer,
-            graphicLayer,
+            turbineLayer,
 
             // 记录面板展开状态
             isLeftOpen: true,
@@ -73,21 +87,19 @@ export default {
     },
     methods: {
         // 地图构造完成回调
-        onMapload(map) {
-            // 以下为演示代码
-            map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
+        onMapload() {
+            this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
 
-            this.addGraphic(map)
-            // this.addLayer(map)
+            this.addWindLayer()
             setTimeout(function () {
                 $(".sideBar.left").removeClass("opacity0").removeClass("fadeOutLeft").addClass("animated fadeInLeft")
                 $(".sideBar.right").removeClass("opacity0").removeClass("fadeOutRight").addClass("animated fadeInRight")
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
             }, 3000)
         },
-        addLayer(map) {
-            this.removeLayer(map)
+        addWindLayer() {
             this.windLayer = new mars3d.layer.WindLayer({
+                name: '风场',
                 particlesNumber: 9000,
                 fadeOpacity: 0.996,
                 dropRate: 0.003,
@@ -99,7 +111,7 @@ export default {
                     "rgb(4,14,216)"
                 ]
             })
-            map.addLayer(this.windLayer)
+            this.map.addLayer(this.windLayer)
             this.loadNetCDF("/weather/wind.nc").then((data) => {
                 this.windLayer.setData(data)
             })
@@ -153,15 +165,55 @@ export default {
                 request.send()
             })
         },
-        addGraphic(map) {
-            const positions = [
-                { lng: 112.219302206, lat: 39.0579481036999, alt: 1827 },
-                { lng: 112.226596341, lat: 39.0584773033999, alt: 1849 },
-                { lng: 112.22911174, lat: 39.0574840383999, alt: 1866 },
-                { lng: 112.215476722, lat: 39.0550566812, alt: 1866 },
-                { lng: 112.215643865, lat: 39.0532631538, alt: 1899 },
-                { lng: 112.219228645, lat: 39.0525930380999, alt: 1880 },
-            ]
+        addTurbineLayer(id) {
+            // 移除其余风机
+            if (this.turbineLayer) {
+                this.map.removeLayer(this.turbineLayer, true)
+                this.turbineLayer = null
+            }
+            // id 东西南北分别为1 2 3 4
+            var positions = []
+            switch (id) {
+                case 1:
+                    positions = [
+                        { lng: 122.124753 + (Math.random() - 0.5) / 1000, lat: 30.035441 + (Math.random() - 0.5) / 1000, alt: 1716.4 + (Math.random() - 0.5) },
+                        { lng: 122.124753 + (Math.random() - 0.5) / 1000, lat: 30.035441 + (Math.random() - 0.5) / 1000, alt: 1716.4 + (Math.random() - 0.5) },
+                        { lng: 122.124753 + (Math.random() - 0.5) / 1000, lat: 30.035441 + (Math.random() - 0.5) / 1000, alt: 1716.4 + (Math.random() - 0.5) },
+                        { lng: 122.124753 + (Math.random() - 0.5) / 1000, lat: 30.035441 + (Math.random() - 0.5) / 1000, alt: 1716.4 + (Math.random() - 0.5) },
+                        { lng: 122.124753 + (Math.random() - 0.5) / 1000, lat: 30.035441 + (Math.random() - 0.5) / 1000, alt: 1716.4 + (Math.random() - 0.5) },
+                        { lng: 122.124753 + (Math.random() - 0.5) / 1000, lat: 30.035441 + (Math.random() - 0.5) / 1000, alt: 1716.4 + (Math.random() - 0.5) }
+                    ]
+                    break;
+                case 2:
+                    positions = [
+                        { lng: 115.453 + (Math.random() - 0.5) / 1000, lat: 22.757 + (Math.random() - 0.5) / 1000, alt: 1676.8 + (Math.random() - 0.5) },
+                        { lng: 115.453 + (Math.random() - 0.5) / 1000, lat: 22.757 + (Math.random() - 0.5) / 1000, alt: 1676.8 + (Math.random() - 0.5) },
+                        { lng: 115.453 + (Math.random() - 0.5) / 1000, lat: 22.757 + (Math.random() - 0.5) / 1000, alt: 1676.8 + (Math.random() - 0.5) },
+                        { lng: 115.453 + (Math.random() - 0.5) / 1000, lat: 22.757 + (Math.random() - 0.5) / 1000, alt: 1676.8 + (Math.random() - 0.5) },
+                        { lng: 115.453 + (Math.random() - 0.5) / 1000, lat: 22.757 + (Math.random() - 0.5) / 1000, alt: 1676.8 + (Math.random() - 0.5) },
+                        { lng: 115.453 + (Math.random() - 0.5) / 1000, lat: 22.757 + (Math.random() - 0.5) / 1000, alt: 1676.8 + (Math.random() - 0.5) }
+                    ]
+                    break;
+                case 3:
+                    positions = [
+                        { lng: 102.597 + (Math.random() - 0.5) / 1000, lat: 37.316 + (Math.random() - 0.5) / 1000, alt: 3919.8 + (Math.random() - 0.5) },
+                        { lng: 102.597 + (Math.random() - 0.5) / 1000, lat: 37.316 + (Math.random() - 0.5) / 1000, alt: 3919.8 + (Math.random() - 0.5) },
+                        { lng: 102.597 + (Math.random() - 0.5) / 1000, lat: 37.316 + (Math.random() - 0.5) / 1000, alt: 3919.8 + (Math.random() - 0.5) },
+                        { lng: 102.597 + (Math.random() - 0.5) / 1000, lat: 37.316 + (Math.random() - 0.5) / 1000, alt: 3919.8 + (Math.random() - 0.5) },
+                        { lng: 102.597 + (Math.random() - 0.5) / 1000, lat: 37.316 + (Math.random() - 0.5) / 1000, alt: 3919.8 + (Math.random() - 0.5) },
+                        { lng: 102.597 + (Math.random() - 0.5) / 1000, lat: 37.316 + (Math.random() - 0.5) / 1000, alt: 3919.8 + (Math.random() - 0.5) },
+                    ]
+                    break;
+                default:
+                    positions = [
+                        { lng: 112.219 + (Math.random() - 0.5) / 1000, lat: 39.057 + (Math.random() - 0.5) / 1000, alt: 1827 + (Math.random() - 0.5) },
+                        { lng: 112.219 + (Math.random() - 0.5) / 1000, lat: 39.057 + (Math.random() - 0.5) / 1000, alt: 1827 + (Math.random() - 0.5) },
+                        { lng: 112.219 + (Math.random() - 0.5) / 1000, lat: 39.057 + (Math.random() - 0.5) / 1000, alt: 1827 + (Math.random() - 0.5) },
+                        { lng: 112.219 + (Math.random() - 0.5) / 1000, lat: 39.057 + (Math.random() - 0.5) / 1000, alt: 1827 + (Math.random() - 0.5) },
+                        { lng: 112.219 + (Math.random() - 0.5) / 1000, lat: 39.057 + (Math.random() - 0.5) / 1000, alt: 1827 + (Math.random() - 0.5) },
+                        { lng: 112.219 + (Math.random() - 0.5) / 1000, lat: 39.057 + (Math.random() - 0.5) / 1000, alt: 1827 + (Math.random() - 0.5) }
+                    ]
+            }
             const arr = []
             positions.forEach((item) => {
                 arr.push({
@@ -171,33 +223,62 @@ export default {
                     maximumMemoryUsage: 1024,
                     style: {
                         url: "//data.mars3d.cn/gltf/mars/fengche.gltf",
-                        scale: 30,
-                        heading: 315,
+                        scale: 100,
+                        heading: Math.random() * 360,
                         minimumPixelSize: 30,
+                        clampToGround: true
                     }
                 })
             })
             // 创建gltf模型
-            this.graphicLayer = new mars3d.layer.GraphicLayer({
+            this.turbineLayer = new mars3d.layer.GraphicLayer({
                 name: "风力发电机",
                 data: arr,
-                center: { "lat": 39.087905, "lng": 112.193672, "alt": 3719.2, "heading": 148.3, "pitch": -25.3 },
+                // center: { "lat": 39.087905, "lng": 112.193672, "alt": 3719.2, "heading": 148.3, "pitch": -25.3 },
                 flyTo: false
             })
-            map.addLayer(this.graphicLayer)
+            this.map.addLayer(this.turbineLayer)
 
+            // 根据各部位置飞行
+            switch (id) {
+                case 1:
+                    this.map.setCameraView({ "lat": 30.035441, "lng": 122.124753, "alt": 2716.4, "heading": 148.3, "pitch": -25.3 })
+                    break;
+                case 2:
+                    this.map.setCameraView({ "lat": 22.757, "lng": 115.453, "alt": 2676.8, "heading": 148.3, "pitch": -25.3 })
+                    break;
+                case 3:
+                    this.map.setCameraView({ "lat": 37.316, "lng": 102.597, "alt": 4919.8, "heading": 148.3, "pitch": -25.3 })
+                    break;
+                default:
+                    this.map.setCameraView({ "lat": 39.057, "lng": 112.219, "alt": 1827, "heading": 148.3, "pitch": -25.3 })
+            }
             // 绑定事件
-            this.graphicLayer.on(mars3d.EventType.click, function (event) {
-                map.setCameraView({ "lat": 39.091073, "lng": 112.19958, "alt": 3720.4, "heading": 148.3, "pitch": -25.3 })
+            this.turbineLayer.on(mars3d.EventType.click, () => {
+                // 相机视角定位至风机群
+                this.map.setCameraView({ "lat": 39.091073, "lng": 112.19958, "alt": 3720.4, "heading": 148.3, "pitch": -25.3 })
+                // 删除风场图层
+                // 跟踪相机实例
+                this.map.trackedEntity = null
+                if (this.windLayer) {
+                    this.map.removeLayer(this.windLayer, true)
+                    this.windLayer = null
+                }
             })
         },
-        removeLayer(map) {
-            map.trackedEntity = null
-            if (this.graphicLayer) {
-                map.removeLayer(this.graphicLayer, true)
-                this.graphicLayer = null
+        chargeWindField() {
+            if (!this.windLayer) {
+                this.addWindLayer()
+            }
+            else {
+                this.map.removeLayer(this.windLayer, true)
+                this.windLayer = null
             }
         },
+        showEasternTurbine() {
+            
+        },
+
         hideLeftPanel() {
             this.isLeftOpen = !this.isLeftOpen
             if (this.isLeftOpen == false) {
@@ -279,7 +360,6 @@ export default {
 
 // 小于800px
 @media only screen and (max-width: 800px) {}
-
 .mapcontainer {
     position: relative;
     height: 100%;
@@ -301,10 +381,11 @@ export default {
     bottom: 0px;
     max-width: 320px;
     width: 20%;
+    height: 100%;
     border: 1px rgba(255, 255, 255, 0.5) solid;
     border-radius: 5px;
     // background-color: transparent;
-    box-shadow: 0 10px 100px 0 rgba(1, 48, 102, 0.8) inset;
+    box-shadow: 0 10px 100px 0 rgba(23, 49, 71, 0.8) inset;
     -webkit-transition: all 1000ms ease-in-out;
     -moz-transition: all 1000ms ease-in-out;
     -o-transition: all 1000ms ease-in-out;
@@ -319,16 +400,24 @@ export default {
     right: 0;
 }
 
+.bar-content {
+    display: flex;
+    flex-direction: column;
+    height: 94%;
+    justify-content: space-around;
+}
+
 .bottomBar {
     position: absolute;
     bottom: 0;
     left: 22%;
     right: 22%;
+    width: 56%;
     height: 30%;
     border: 1px rgba(255, 255, 255, 0.5) solid;
     border-radius: 5px;
     // background-color: transparent;
-    box-shadow: 0 10px 100px 0 rgba(1, 48, 102, 0.8) inset;
+    box-shadow: 0 10px 100px 0 rgba(23, 49, 71, 0.8) inset;
     -webkit-transition: all 1000ms ease-in-out;
     -moz-transition: all 1000ms ease-in-out;
     -o-transition: all 1000ms ease-in-out;
@@ -378,5 +467,24 @@ export default {
 .bottomBar>.opration-handler:focus,
 .bottomBar>.opration-handler:hover {
     color: rgba(255, 255, 255, 1.0);
+}
+
+
+.el-button {
+    width: 70%;
+    background-color: rgba(0,183,254,0.5);
+    border: none;
+    font-size: 16px;
+    font-weight: 800;
+    color: white;
+}
+.el-button:hover,
+.el-button:active {
+    background-color: #20B0CB;
+    color: white
+}
+.el-button:focus {
+    background-color: rgba(0,183,254,0.5);
+    color: white;
 }
 </style>
