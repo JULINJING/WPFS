@@ -5,8 +5,8 @@
         <!-- Form -->
         <el-upload 
           class="upload-demo" 
-          drag 
-          action="https://jsonplaceholder.typicode.com/posts/"
+          drag
+          :action="'http://' + serverIp + ':7070/file/upload'"
           :on-success="handleUploadSuccess" 
           :on-error="handleUploadError" 
           :before-remove="handleBeforeRemove" 
@@ -80,10 +80,13 @@
 </template>
   
 <script>
+import {serverIp} from "../../../../public/config.js"
+
 export default {
   data() {
     return {
-      dialogFormVisible: true,
+      serverIp: serverIp,
+      dialogFormVisible: false,
       showTable: false,
       fileList: [],
       outlierRadio: '',
@@ -107,8 +110,10 @@ export default {
       console.log('文件上传前', file, fileList);
     },
     handleUploadSuccess(response, file, fileList) {
-      console.log(response);
+
+      
       this.dialogFormVisible = true;
+      this.showTable = true;
 
       // TODO: 处理返回的数据，渲染表格
 
@@ -121,9 +126,6 @@ export default {
     },
     handleDialogConfirm() {
       if (this.outlierRadio !== '' && this.missingRadio !== '') {
-        this.dialogFormVisible = false;
-        this.showTable = true;
-
         console.log(this.outlierRadio); // 获取选中的复选框的值
         // TODO
       } else {
