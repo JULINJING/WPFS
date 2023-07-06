@@ -111,14 +111,19 @@ export default {
     },
     handleUploadSuccess(response, file, fileList) {
 
-      
-      this.dialogFormVisible = true;
-      this.showTable = true;
+      this.$message.success("上传成功")
+     
+      // 上传成功后，1.5秒后显示表格
+      setTimeout(() => {
+        this.dialogFormVisible = true;
+        this.showTable = true;
+      }, 1500)
 
       // TODO: 处理返回的数据，渲染表格
 
     },
     handleUploadError(err, file, fileList) {
+      this.$message.error("上传失败")
       console.log(err);
     },
     handleExceed(files, fileList) {
