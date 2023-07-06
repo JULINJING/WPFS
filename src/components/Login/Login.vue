@@ -188,13 +188,14 @@ export default {
         this.initAnimate();
     },
     methods: {
+        // 设置开场动画
         initAnimate() {
             setTimeout(function () { 
                 $(".pageHeader").css("visibility", "visible")
                 $(".login-box").css("visibility", "visible")
                 $(".pageHeader").addClass("animated fadeInUp");
                 $(".login-box").addClass("animated rollIn")
-            }, 2000)
+            }, 1500)
         },
         // 登录/注册tab切换
         handleTab(type) {
@@ -417,7 +418,7 @@ export default {
             /*margin: 100px auto 0;*/
             width: 25vw;
             background: #fff;
-            padding: 2.5vh 1.5vw;
+            padding: 4vh 1.5vw;
             .option {
                 text-align: left;
                 margin-top: 15px;
@@ -487,6 +488,12 @@ export default {
                 height: 40px;
                 margin-top: 30px;
                 font-size: 14px;
+                font-weight: 900;
+                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+            }
+            .loginBtn:hover {
+                cursor: pointer;
             }
 
             .input {
@@ -580,7 +587,7 @@ export default {
                 border-radius: 10px;
                 width: 75vw;
                 background: #fff;
-                padding: 2.5vh 1.5vw;
+                padding: 4vh 1.5vw;
                 .option {
                     text-align: left;
                     margin-top: 15px;
@@ -650,6 +657,10 @@ export default {
                     height: 40px;
                     margin-top: 30px;
                     font-size: 14px;
+                    font-weight: 900;
+                    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+                    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
                 }
 
                 .input {
