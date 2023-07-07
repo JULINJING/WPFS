@@ -274,7 +274,12 @@ export default {
               localStorage.setItem("user", JSON.stringify(res.data)); // 存储用户信息到浏览器
               localStorage.setItem("menus", JSON.stringify(res.data.menus)); // 存储用户信息到浏览器
 
-              this.$message.success("登录成功");
+              this.$message({
+                message: "登录成功",
+                type: 'success',
+                offset: '50',
+                duration: '8000'
+              });
 
               if (res.data.role === "ROLE_NORMAL") {
                 this.$router.push("/home");
