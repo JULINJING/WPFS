@@ -49,6 +49,16 @@ export default {
             var element = $(".animated_text")[0];
             var z = new Letters(element, x);
             z.show();
+            // 遮罩层点击事件被触发 跳过动画
+            $(".page-overlay").on("click", function () {
+                console.log("跳过动画")
+                $(".title").addClass("animated rollIn");
+                // $(".schoolTitle").addClass("animated bounceIn")
+                $(".logo-list").addClass("animated fadeInUp")
+                !$(".page-overlay").hasClass("loaded") && $(".page-overlay").addClass('loaded')
+                $(".page-overlay").hasClass("loaded") && $(".page-overlay").css("display", "none") && $("#home").css("display", "block")
+            });
+            // 动画
             setTimeout(function () {
                 $(".title").addClass("animated rollIn");
                 // $(".schoolTitle").addClass("animated bounceIn")

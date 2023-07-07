@@ -22,41 +22,11 @@
         >
       </div>
       <!-- 登录模块 -->
-      <!-- <div class="right-content" v-show="typeView == 0">
-        <div class="input-box">
-          <input
-            autocomplete="off"
-            type="text"
-            class="input"
-            v-model="formLogin.userName"
-            placeholder="请输入登录邮箱/手机号"
-          />
-          <input
-            autocomplete="off"
-            type="password"
-            class="input"
-            v-model="formLogin.userPwd"
-            maxlength="20"
-            @keyup.enter="login"
-            placeholder="请输入登录密码"
-          />
-        </div>
-        <Button
-          class="loginBtn"
-          type="primary"
-          :disabled="isDisabled"
-          :loading="isLoading"
-          @click.stop="login"
+      <!-- <div class="option">
+        <el-checkbox size="mini" v-model="checked" class="checked remember"
+          >记住密码</el-checkbox
         >
-          立即登录
-        </Button>
-
-        <div class="option">
-          <el-checkbox size="mini" v-model="checked" class="checked remember"
-            >记住密码</el-checkbox
-          >
-          <span class="forget-pwd" @click.stop="forgetPwd">忘记密码?</span>
-        </div>
+        <span class="forget-pwd" @click.stop="forgetPwd">忘记密码?</span>
       </div> -->
       <el-form
         :model="user"
@@ -64,7 +34,7 @@
         ref="userForm1"
         v-show="typeView == 0"
       >
-        <el-form-item prop="username">
+        <el-form-item class="mobileInput" prop="username">
           <el-input
             placeholder="请输入账号"
             size="medium"
@@ -72,7 +42,7 @@
             v-model="user.username"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="password">
+        <el-form-item class="mobileInput" prop="password">
           <el-input
             placeholder="请输入密码"
             size="medium"
@@ -82,7 +52,7 @@
             @keyup.native.enter="login"
           ></el-input>
         </el-form-item>
-        <el-form-item style="margin: 1vh 0; text-align: right">
+        <el-form-item class="bottomTool" style="text-align: right">
           <el-button
             type="info"
             size="small"
@@ -101,57 +71,13 @@
       </el-form>
 
       <!-- 注册模块 -->
-      <!-- <div class="right_content" v-show="typeView == 1">
-        <div class="input-box">
-          <input
-            autocomplete="off"
-            type="text"
-            class="input"
-            v-model="formRegister.userName"
-            placeholder="请输入注册邮箱/手机号"
-          />
-          <input
-            autocomplete="off"
-            type="password"
-            class="input"
-            v-model="formRegister.userPwd"
-            maxlength="20"
-            @keyup.enter="register"
-            placeholder="请输入密码"
-          />
-          <input
-            autocomplete="off"
-            type="password"
-            class="input"
-            v-model="formRegister.userPwd2"
-            maxlength="20"
-            @keyup.enter="register"
-            placeholder="请再次确认密码"
-          />
-        </div>
-        <Button
-          class="loginBtn"
-          type="primary"
-          :disabled="isRegAble"
-          :loading="isLoading"
-          @click.stop="register"
-        >
-          立即注册
-        </Button>
-        <div class="option">
-          <el-checkbox size="mini" v-model="checked" class="checked remember"
-            >我已阅读并接受</el-checkbox
-          >
-          <label class="protocol">《用户协议》</label>
-        </div>
-      </div> -->
       <el-form
         :model="user"
         :rules="registerRules"
         ref="userForm2"
         v-show="typeView == 1"
       >
-        <el-form-item prop="username">
+        <el-form-item class="mobileInput" prop="username">
           <el-input
             placeholder="请输入账号"
             size="medium"
@@ -159,7 +85,7 @@
             v-model="user.username"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="password">
+        <el-form-item class="mobileInput" prop="password">
           <el-input
             placeholder="请输入密码"
             size="medium"
@@ -168,7 +94,7 @@
             v-model="user.password"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="confirmPassword">
+        <el-form-item class="mobileInput" prop="confirmPassword">
           <el-input
             placeholder="请确认密码"
             size="medium"
@@ -178,7 +104,7 @@
             @keyup.native.enter="register"
           ></el-input>
         </el-form-item>
-        <el-form-item style="margin: 1vh 0; text-align: right">
+        <el-form-item class="bottomTool" style="text-align: right">
           <el-button
             type="primary"
             size="small"
@@ -243,9 +169,7 @@
 </template>
 
 <script>
-import { login, register } from "@/utils/api";
 import $ from "jquery";
-import { setRoutes } from "@/router";
 
 export default {
   name: "login",
@@ -266,9 +190,9 @@ export default {
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {
-            min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
+            min: 6,
+            max: 18,
+            message: "长度在 6 到 18 个字符",
             trigger: "blur",
           },
         ],
@@ -286,30 +210,21 @@ export default {
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {
-            min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
+            min: 6,
+            max: 18,
+            message: "长度在 6 到 18 个字符",
             trigger: "blur",
           },
         ],
         confirmPassword: [
-          { required: true, message: "请输入密码", trigger: "blur" },
+          { required: true, message: "请确认密码", trigger: "blur" },
           {
-            min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
+            min: 6,
+            max: 18,
+            message: "长度在 6 到 18 个字符",
             trigger: "blur",
           },
         ],
-      },
-      formLogin: {
-        userName: "",
-        userPwd: "",
-      },
-      formRegister: {
-        userName: "",
-        userPwd2: "",
-        userPwd: "",
       },
       // formReset: {
       //   userName: '',
@@ -317,30 +232,15 @@ export default {
       //   userPwd: '',
       // },
       typeView: 0, //显示不同的view
-      checked: false, // 记住登录
-      isLoading: false,
     };
   },
   computed: {
-    // 登陆按钮状态
-    isDisabled() {
-      return !(this.formLogin.userName && this.formLogin.userPwd);
-    },
-    // 注册按钮状态
-    isRegAble() {
-      return !(
-        this.formRegister.userName &&
-        this.formRegister.userPwd &&
-        this.formRegister.userPwd2
-      );
-    },
     // 重置密码按钮状态
     // isResetAble() {
     //   return !(this.formReset.userName && this.formReset.userPwd && this.formReset.userPwd2);
     // }
   },
   mounted() {
-    this.getCookie();
     this.initAnimate();
   },
   methods: {
@@ -356,13 +256,7 @@ export default {
     // 登录/注册tab切换
     handleTab(type) {
       this.typeView = type;
-      this.clearInput();
     },
-    //   // 返回登录界面
-    //   selectLogin() {
-    //     this.typeView = 0;
-    //     this.clearInput();
-    //   },
     //   // 忘记密码界面
     //   forgetPwd() {
     //     this.$message.info('忘记密码，请联系客服');
@@ -372,53 +266,6 @@ export default {
 
     // 立即登录
     login() {
-      //   if (this.isDisabled || this.isLoading) {
-      //     return false;
-      //   }
-
-      //   if (!this.$Valid.validUserName(this.formLogin.userName)) {
-      //     this.$message.error("请输入正确的邮箱/手机号");
-      //     return false;
-      //   }
-
-      //   if (!this.$Valid.validPass(this.formLogin.userPwd)) {
-      //     this.$message.error("密码应为8到20位字母或数字！");
-      //     return false;
-      //   }
-
-      //   // 判断复选框是否被勾选，勾选则调用配置cookie方法
-      //   if (this.checked) {
-      //     // 传入账号名，密码，和保存天数3个参数
-      //     this.setCookie(this.formLogin.userName, this.formLogin.userPwd, 7);
-      //   } else {
-      //     // 清空Cookie
-      //     this.clearCookie();
-      //   }
-
-      //   this.isLoading = true;
-      //   this.$router.push("/home");
-
-      //   let form = {
-      //     username: this.formLogin.userName,
-      //     password: this.formLogin.userPwd,
-      //   };
-
-      //   login(form)
-      //     .then((res) => {
-      //       console.log("登录===", res);
-      //       this.isLoading = false;
-      //       if (res.code == 0) {
-      //         this.clearInput();
-      //         this.$message.success("登录成功");
-      //         this.$store.dispatch("userInfo/saveInfo", res.data);
-      //         this.$router.push("/home");
-      //       } else {
-      //         this.$message.error(res.msg);
-      //       }
-      //     })
-      //     .catch(() => {
-      //       this.isLoading = false;
-      //     });
       this.$refs["userForm1"].validate((valid) => {
         if (valid) {
           // 表单校验合法
@@ -430,7 +277,6 @@ export default {
               this.$message.success("登录成功");
 
               if (res.data.role === "ROLE_NORMAL") {
-                //this.$router.push("/front/home")
                 this.$router.push("/home");
               } else {
                 this.$router.push("/home");
@@ -445,43 +291,6 @@ export default {
 
     // 立即注册
     register() {
-      //   if (this.isRegAble || this.isLoading) {
-      //     return false;
-      //   }
-      //   if (!this.$Valid.validUserName(this.formRegister.userName)) {
-      //     this.$message.error("请输入正确的邮箱/手机号");
-      //     return false;
-      //   } else if (!this.$Valid.validPass(this.formRegister.userPwd)) {
-      //     this.$message.error("密码应为8到20位字母或数字！");
-      //     return false;
-      //   } else if (!this.$Valid.validPass(this.formRegister.userPwd2)) {
-      //     this.$message.error("确认密码有误");
-      //     return false;
-      //   } else if (this.formRegister.userPwd2 !== this.formRegister.userPwd) {
-      //     this.$message.error("两次密码不一致");
-      //     return false;
-      //   }
-      //   this.isLoading = true;
-      //   let data = {
-      //     username: this.formRegister.userName,
-      //     password: this.formRegister.userPwd2,
-      //   };
-      //   register(data)
-      //     .then((res) => {
-      //       this.isLoading = false;
-      //       console.log("注册===", res);
-      //       if (res.code == 0) {
-      //         this.clearInput();
-      //         this.$message.success("注册成功");
-      //         this.$store.dispatch("userInfo/saveInfo", res.data);
-      //         this.$router.push("/home");
-      //       } else {
-      //         this.$message.error(res.msg);
-      //       }
-      //     })
-      //     .catch(() => {
-      //       this.isLoading = false;
-      //     });
       this.$refs['userForm2'].validate((valid) => {
         if (valid) {  // 表单校验合法
           if (this.user.password !== this.user.confirmPassword) {
@@ -499,67 +308,15 @@ export default {
         }
       });
     },
-
-    // 设置cookie
-    setCookie(user_name, user_pwd, exdays) {
-      // 获取时间
-      let exdate = new Date();
-      // 保存的天数
-      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays);
-      // 字符串拼接cookie
-      window.document.cookie =
-        "userName" +
-        "=" +
-        user_name +
-        ";path=/;expires=" +
-        exdate.toUTCString();
-      window.document.cookie =
-        "userPwd" + "=" + user_pwd + ";path=/;expires=" + exdate.toUTCString();
-    },
-
-    // 读取cookie
-    getCookie() {
-      if (document.cookie.length > 0) {
-        // 这里显示的格式需要切割一下自己可输出看下
-        let arr = document.cookie.split("; ");
-        console.log(arr);
-        for (let i = 0; i < arr.length; i++) {
-          // 再次切割
-          let arr2 = arr[i].split("=");
-          // 判断查找相对应的值
-          if (arr2[0] == "userName") {
-            // 保存数据并赋值
-            this.formLogin.userName = arr2[1];
-          } else if (arr2[0] == "userPwd") {
-            this.formLogin.userPwd = arr2[1];
-          }
-        }
-      }
-    },
-
-    //清除cookie
-    clearCookie() {
-      // 修改前2个值都为空，天数为负1天就好了
-      this.setCookie("", "", -1);
-    },
-
-    // 清空输入框
-    clearInput() {
-      this.formLogin = {
-        userName: "",
-        userPwd: "",
-      };
-      this.formRegister = {
-        userName: "",
-        userPwd2: "",
-        userPwd: "",
-      };
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.bottomTool {
+  margin: 0;
+  padding: 0;
+}
 @media only screen and (min-width: 1000px) {
   .login-container {
     background-image: url("@/assets/images/login.gif");
@@ -585,7 +342,7 @@ export default {
       }
 
       span {
-        font-size: 2em;
+        font-size: 3em;
         font-weight: 800;
         vertical-align: middle;
         color: #fefefe;
@@ -610,35 +367,14 @@ export default {
       /*margin: 100px auto 0;*/
       width: 25vw;
       background: #fff;
-      padding: 4vh 1.5vw;
-      .option {
-        text-align: left;
-        margin-top: 15px;
-        .checked {
-          padding-left: 15px;
-        }
-        .forget-pwd,
-        .goback {
-          float: right;
-          font-size: 14px;
-          font-weight: 400;
-          color: #4981f2;
-          line-height: 20px;
-          cursor: pointer;
-        }
-        .protocol {
-          font-size: 14px;
-          color: #4981f2;
-          cursor: pointer;
-        }
-      }
+      padding: 4vh 2.5vw;
 
       .login-text {
         width: 100%;
         text-align: center;
-        padding: 0 0 30px;
+        padding: 0 0 40px;
         font-size: 18px;
-        letter-spacing: 1px;
+        letter-spacing: 6px;
         user-select: none;
         a {
           padding: 10px;
@@ -655,78 +391,6 @@ export default {
         b {
           padding: 10px;
         }
-      }
-      .title {
-        font-weight: 800;
-        padding: 0 0 30px;
-        font-size: 24px;
-        letter-spacing: 1px;
-        color: rgba(73, 129, 242, 1);
-      }
-
-      .input-box {
-        .input {
-          &:nth-child(1) {
-            // margin-top: 10px;
-          }
-          &:nth-child(2),
-          &:nth-child(3) {
-            margin-top: 20px;
-          }
-        }
-      }
-
-      .loginBtn {
-        width: 90%;
-        height: 40px;
-        margin-top: 30px;
-        font-size: 14px;
-        font-weight: 900;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-          Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif;
-      }
-      .loginBtn:hover {
-        cursor: pointer;
-      }
-
-      .input {
-        padding: 10px 0px;
-        font-size: 16px;
-        width: 90%;
-        color: #2c2e33;
-        outline: none; // 去除选中状态边框
-        border: 1px solid #fff;
-        border-bottom-color: #e7e7e7;
-        background-color: rgba(0, 0, 0, 0); // 透明背景
-      }
-      input::-webkit-input-placeholder {
-        /* placeholder颜色  */
-        color: #aab2bd;
-        /* placeholder字体大小  */
-        font-size: 12px;
-      }
-
-      ::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: #bebebe;
-        font-size: 16px;
-      }
-
-      :-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: #bebebe;
-        font-size: 16px;
-      }
-
-      input:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 1) inset;
-        -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 1) inset;
-        -webkit-text-fill-color: #2c2e33;
-      }
-
-      input:focus {
-        border-bottom-color: #0f52e0;
-        outline: none;
       }
     }
   }
@@ -778,35 +442,14 @@ export default {
       border-radius: 10px;
       width: 75vw;
       background: #fff;
-      padding: 4vh 1.5vw;
-      .option {
-        text-align: left;
-        margin-top: 15px;
-        .checked {
-          padding-left: 15px;
-        }
-        .forget-pwd,
-        .goback {
-          float: right;
-          font-size: 14px;
-          font-weight: 400;
-          color: #4981f2;
-          line-height: 20px;
-          cursor: pointer;
-        }
-        .protocol {
-          font-size: 14px;
-          color: #4981f2;
-          cursor: pointer;
-        }
-      }
+      padding: 4vh 8vw;
 
       .login-text {
         width: 100%;
         text-align: center;
         padding: 0 0 30px;
-        font-size: 18px;
-        letter-spacing: 1px;
+        font-size: 14px;
+        letter-spacing: 4px;
         user-select: none;
         a {
           padding: 10px;
@@ -824,76 +467,9 @@ export default {
           padding: 10px;
         }
       }
-      .title {
-        font-weight: 800;
-        padding: 0 0 30px;
-        font-size: 24px;
-        letter-spacing: 1px;
-        color: rgba(73, 129, 242, 1);
-      }
-
-      .input-box {
-        .input {
-          &:nth-child(1) {
-            // margin-top: 10px;
-          }
-          &:nth-child(2),
-          &:nth-child(3) {
-            margin-top: 20px;
-          }
-        }
-      }
-
-      .loginBtn {
-        width: 90%;
-        height: 40px;
-        margin-top: 30px;
-        font-size: 14px;
-        font-weight: 900;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-          Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
-          Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-      }
-
-      .input {
-        padding: 10px 0px;
-        font-size: 16px;
-        width: 90%;
-        color: #2c2e33;
-        outline: none; // 去除选中状态边框
-        border: 1px solid #fff;
-        border-bottom-color: #e7e7e7;
-        background-color: rgba(0, 0, 0, 0); // 透明背景
-      }
-      input::-webkit-input-placeholder {
-        /* placeholder颜色  */
-        color: #aab2bd;
-        /* placeholder字体大小  */
-        font-size: 12px;
-      }
-
-      ::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: #bebebe;
-        font-size: 16px;
-      }
-
-      :-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: #bebebe;
-        font-size: 16px;
-      }
-
-      input:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 1) inset;
-        -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 1) inset;
-        -webkit-text-fill-color: #2c2e33;
-      }
-
-      input:focus {
-        border-bottom-color: #0f52e0;
-        outline: none;
-      }
+    }
+    .mobileInput {
+      margin-bottom: 10px;
     }
   }
 }

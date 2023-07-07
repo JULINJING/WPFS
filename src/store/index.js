@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import path from 'path-browserify' // 使用适用于浏览器的path替代方案
-import userInfo from './modules/userInfo'
-import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -18,15 +16,9 @@ contexts.keys().forEach(key => {
 })
 export default new Vuex.Store({
     modules: {
-        userInfo
+
     },
     getters: {
-        isLogined: state => {
-            return state.userInfo.isLogined
-        }
-    },
-    plugins: [createPersistedState({
-        key: 'store',
-        storage: window.localStorage,
-    })]
+
+    }
 })
