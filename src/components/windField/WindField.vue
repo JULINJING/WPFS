@@ -84,13 +84,12 @@ export default {
                 }
             },
         }
-        const windLayer = new mars3d.layer.WindLayer()
-        const turbineLayer = new mars3d.layer.GraphicLayer()
+        var windLayer = new mars3d.layer.WindLayer()
+        
         return {
             configUrl: basePathUrl + 'config/config.json',
             mapOptions: mapOptions,
             windLayer,
-            turbineLayer,
 
             // 记录面板展开状态
             isLeftOpen: true,
@@ -102,6 +101,7 @@ export default {
         // 地图构造完成回调
         onMapload() {
             this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
+            this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
 
             this.addWindLayer()
             setTimeout(function () {
@@ -179,26 +179,37 @@ export default {
             })
         },
         addTurbineLayer(id) {
-            // 移除其余风机
-            if (this.turbineLayer) {
-                this.map.removeLayer(this.turbineLayer, true)
-                this.turbineLayer = null
-            }
+            // 移除其余风机 舍弃
+            // if (this.turbineLayer) {
+            //     var turbineLayerTemp = this.turbineLayer
+            //     this.map.removeLayer(turbineLayerTemp, true)
+            //     this.turbineLayer = null
+            // }
+
             // id 东南西北分别为1 2 3 4
+            // 确定风机位置
             var positions = []
             switch (id) {
                 case 1:
                     positions = [
-                        { lng: 122.173944 + ( Math.random() - 0.5 ) / 20, lat: 30.025773 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.173944 + ( Math.random() - 0.5 ) / 20, lat: 30.025773 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.173944 + ( Math.random() - 0.5 ) / 20, lat: 30.025773 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.173944 + ( Math.random() - 0.5 ) / 20, lat: 30.025773 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.173944 + ( Math.random() - 0.5 ) / 20, lat: 30.025773 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.173944 + ( Math.random() - 0.5 ) / 20, lat: 30.025773 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() }
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
                     ]
                     break;
                 case 2:
                     positions = [
+                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
+                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
+                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
+                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
                         { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
                         { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
                         { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
@@ -215,6 +226,10 @@ export default {
                         { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
                         { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
                         { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
+                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
+                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
+                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
+                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
                     ]
                     break;
                 default:
@@ -224,38 +239,38 @@ export default {
                         { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
                         { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
                         { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
+                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
+                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
+                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
+                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
                         { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() }
                     ]
             }
-            const arr = []
+
+            //创建矢量数据图层
+            let turbineLayer = new mars3d.layer.GraphicLayer()
+            this.map.addLayer(turbineLayer)
+
             positions.forEach((item) => {
-                arr.push({
-                    type: "modelP",
+                var graphic = new mars3d.graphic.ModelPrimitive({
                     position: item,
-                    maximumScreenSpaceError: 16,
-                    maximumMemoryUsage: 1024,
                     style: {
-                        url: "//data.mars3d.cn/gltf/mars/fengche.gltf",
-                        scale: 100,
+                        url: '//data.mars3d.cn/gltf/mars/fengche.gltf',
                         heading: Math.random() * 360,
+                        scale: 100,
                         minimumPixelSize: 30,
+                        fill: true,
+                        color: 'white',
                         clampToGround: true
-                    }
+                    },
                 })
+                turbineLayer.addGraphic(graphic)
             })
-            // 创建gltf模型
-            this.turbineLayer = new mars3d.layer.GraphicLayer({
-                name: "风力发电机",
-                data: arr,
-                // center: { "lat": 39.087905, "lng": 112.193672, "alt": 3719.2, "heading": 148.3, "pitch": -25.3 },
-                flyTo: false
-            })
-            this.map.addLayer(this.turbineLayer)
 
             // 根据各部位置飞行
             switch (id) {
                 case 1:
-                    this.map.setCameraView({"lat":30.03457,"lng":122.224079,"alt":1630.7,"heading":268.8,"pitch":-15.9})
+                    this.map.setCameraView({"lat":30.040608,"lng":122.307801,"alt":1772.8,"heading":268.8,"pitch":-15.9})
                     break;
                 case 2:
                     this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
@@ -267,11 +282,11 @@ export default {
                     this.map.setCameraView({"lat":39.100007,"lng":112.173169,"alt":3451.2,"heading":138,"pitch":-17.2})
             }
             // 绑定点击风机事件
-            this.turbineLayer.on(mars3d.EventType.click, () => {
+            turbineLayer.on(mars3d.EventType.click, () => {
                 // 相机视角定位至风机群
                 switch (id) {
                     case 1:
-                        this.map.setCameraView({"lat":30.03457,"lng":122.224079,"alt":1630.7,"heading":268.8,"pitch":-15.9})
+                        this.map.setCameraView({"lat":30.040608,"lng":122.307801,"alt":1772.8,"heading":268.8,"pitch":-15.9})
                         break;
                     case 2:
                         this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
@@ -294,6 +309,7 @@ export default {
         chargeWindField() {
             if (!this.windLayer) {
                 this.addWindLayer()
+                this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
             }
             else {
                 this.map.removeLayer(this.windLayer, true)
@@ -384,6 +400,12 @@ export default {
                 },1000)
             }
         },
+    },
+    mounted() {
+        // webgl渲染失败后，刷新页面
+        // this.map.on(mars3d.EventType.renderError, function () {
+        //     window.location.reload();
+        // });
     }
 }
 
