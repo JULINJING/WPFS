@@ -59,6 +59,7 @@ import Layout from "./subcomponents/Header/index";
 import MarsMap from "./mars-work/mars-map.vue"
 import * as mars3d from 'mars3d'
 import $ from 'jquery'
+import { CanvasBillboard } from "../../../public/lib/custom/CanvasBillboard.js"
 
 const Cesium = mars3d.Cesium
 
@@ -91,6 +92,9 @@ export default {
             mapOptions: mapOptions,
             windLayer,
 
+            // 记录计时器ID
+            intervalId: null,
+
             // 记录面板展开状态
             isLeftOpen: true,
             isRightOpen: true,
@@ -100,6 +104,8 @@ export default {
     methods: {
         // 地图构造完成回调
         onMapload() {
+            // 开场
+            this.map.openFlyAnimation()
             this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
             this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
 
@@ -108,11 +114,11 @@ export default {
                 $(".sideBar.left").removeClass("opacity0").removeClass("fadeOutLeft").addClass("animated fadeInLeft")
                 $(".sideBar.right").removeClass("opacity0").removeClass("fadeOutRight").addClass("animated fadeInRight")
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
-            }, 3000)
+            }, 2000)
         },
         addWindLayer() {
             this.windLayer = new mars3d.layer.WindLayer({
-                name: '风场',
+                id: '风场',
                 particlesNumber: 9000,
                 fadeOpacity: 0.996,
                 dropRate: 0.003,
@@ -179,16 +185,38 @@ export default {
             })
         },
         addTurbineLayer(id) {
-            // 移除其余风机 舍弃
-            // if (this.turbineLayer) {
-            //     var turbineLayerTemp = this.turbineLayer
-            //     this.map.removeLayer(turbineLayerTemp, true)
-            //     this.turbineLayer = null
+            // 清除计时器
+            if (this.intervalId !== null) {
+                // 如果已经有一个正在运行的定时器，停止它
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
+
+            // 移除其余风机
+            if (this.map.getLayerById("风机") && this.map.getLayerById("功率")) {
+                this.map.removeLayer(this.map.getLayerById("风机"), true)
+                this.map.removeLayer(this.map.getLayerById("功率"), true)
+            }
+
+            // // 根据各部位置飞行
+            // switch (id) {
+            //     case 1:
+            //         this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
+            //         break;
+            //     case 2:
+            //         this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
+            //         break;
+            //     case 3:
+            //         this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
+            //         break;
+            //     default:
+            //         this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
             // }
 
             // id 东南西北分别为1 2 3 4
-            // 确定风机位置
+            // 确定风机位置以及视点飞行路径
             var positions = []
+            var viewPoints = []
             switch (id) {
                 case 1:
                     positions = [
@@ -202,6 +230,12 @@ export default {
                         { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
                         { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
                         { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                    ]
+                    viewPoints = [
+                        { "lat": 30.041168, "lng": 122.314148, "alt": 2119.8, "heading": 268.8, "pitch": -15.9, duration: 3 },
+                        { "lat": 30.029833, "lng": 122.178014, "alt": 2100.6, "heading": 75.6, "pitch": -17.5, duration: 6 },
+                        { "lat": 30.021059, "lng": 122.304282, "alt": 2110.5, "heading": 282.3, "pitch": -14.9, duration: 6 },
+                        { "lat": 30.041168, "lng": 122.314148, "alt": 2119.8, "heading": 268.8, "pitch": -15.9, duration: 6 }
                     ]
                     break;
                 case 2:
@@ -217,6 +251,12 @@ export default {
                         { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
                         { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() }
                     ]
+                    viewPoints = [
+                        { "lat": 22.744186, "lng": 115.511764, "alt": 1452.2, "heading": 333.2, "pitch": -11.8, duration: 3 },
+                        { "lat": 22.777821, "lng": 115.541255, "alt": 1454.2, "heading": 288.7, "pitch": -13.4, duration: 6 },
+                        { "lat": 22.823162, "lng": 115.541673, "alt": 1456.6, "heading": 250.6, "pitch": -12.8, duration: 6 },
+                        { "lat": 22.744186, "lng": 115.511764, "alt": 1452.2, "heading": 333.2, "pitch": -11.8, duration: 6 }
+                    ]
                     break;
                 case 3:
                     positions = [
@@ -230,6 +270,12 @@ export default {
                         { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
                         { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
                         { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
+                    ]
+                    viewPoints = [
+                        { "lat": 37.344724, "lng": 102.669323, "alt": 9359.2, "heading": 242.8, "pitch": -19.5, duration: 3 },
+                        { "lat": 37.370147, "lng": 102.583486, "alt": 9357.4, "heading": 171.1, "pitch": -16, duration: 6 },
+                        { "lat": 37.260906, "lng": 102.578152, "alt": 9353.4, "heading": 18.1, "pitch": -30.1, duration: 6 },
+                        { "lat": 37.344724, "lng": 102.669323, "alt": 9359.2, "heading": 242.8, "pitch": -19.5, duration: 6 }
                     ]
                     break;
                 default:
@@ -245,14 +291,26 @@ export default {
                         { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
                         { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() }
                     ]
+                    viewPoints = [
+                        { "lat": 39.101415, "lng": 112.188214, "alt": 5648, "heading": 148.1, "pitch": -24, duration: 3 },
+                        { "lat": 39.031555, "lng": 112.154211, "alt": 5642.6, "heading": 71.6, "pitch": -21.7, duration: 6 },
+                        { "lat": 38.994278, "lng": 112.246046, "alt": 5647.8, "heading": 340.3, "pitch": -20.1, duration: 6 },
+                        { "lat": 39.101415, "lng": 112.188214, "alt": 5648, "heading": 148.1, "pitch": -24, duration: 6 }
+                    ]
             }
 
-            //创建矢量数据图层
-            let turbineLayer = new mars3d.layer.GraphicLayer()
+            //创建风机数据图层
+            let turbineLayer = new mars3d.layer.GraphicLayer({ id: '风机' })
             this.map.addLayer(turbineLayer)
+            // 创建功率数据图层
+            let powerLayer = new mars3d.layer.GraphicLayer({ id: '功率' })
+            this.map.addLayer(powerLayer)
 
-            positions.forEach((item) => {
-                var graphic = new mars3d.graphic.ModelPrimitive({
+            // 添加单个矢量数据
+            positions.forEach((item, index) => {
+                // 风机
+                var turbineGraphic = new mars3d.graphic.ModelPrimitive({
+                    id: index,
                     position: item,
                     style: {
                         url: '//data.mars3d.cn/gltf/mars/fengche.gltf',
@@ -264,38 +322,49 @@ export default {
                         clampToGround: true
                     },
                 })
-                turbineLayer.addGraphic(graphic)
+                turbineLayer.addGraphic(turbineGraphic)
+
+                // 功率
+                var powerGraphic = new mars3d.graphic.CanvasBillboard({
+                    id: index + 10,
+                    position: item,
+                    style: {
+                        text: ' ↻',
+                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                        scaleByDistance: new Cesium.NearFarScalar(6000, 0.25,10000, 0.15),
+                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000),
+                        clampToGround: true
+                    }
+                })
+                powerLayer.addGraphic(powerGraphic)
             })
 
-            // 根据各部位置飞行
-            switch (id) {
-                case 1:
-                    this.map.setCameraView({"lat":30.040608,"lng":122.307801,"alt":1772.8,"heading":268.8,"pitch":-15.9})
-                    break;
-                case 2:
-                    this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
-                    break;
-                case 3:
-                    this.map.setCameraView({"lat":37.282789,"lng":102.688775,"alt":5042.8,"heading":295.9,"pitch":-6.6})
-                    break;
-                default:
-                    this.map.setCameraView({"lat":39.100007,"lng":112.173169,"alt":3451.2,"heading":138,"pitch":-17.2})
-            }
+            // 视角切换（分步执行）
+            this.map.setCameraViewList(viewPoints)
+
+            // 随机更新功率文本
+            this.intervalId = setInterval(() => {
+                powerLayer.eachGraphic((graphic) => {
+                    graphic.text = Math.random().toFixed(3) * 1000 // 更新文本
+                })
+            }, 2000)
+
             // 绑定点击风机事件
             turbineLayer.on(mars3d.EventType.click, () => {
                 // 相机视角定位至风机群
                 switch (id) {
                     case 1:
-                        this.map.setCameraView({"lat":30.040608,"lng":122.307801,"alt":1772.8,"heading":268.8,"pitch":-15.9})
+                        this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
                         break;
                     case 2:
                         this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
                         break;
                     case 3:
-                        this.map.setCameraView({"lat":37.282789,"lng":102.688775,"alt":5042.8,"heading":295.9,"pitch":-6.6})
+                        this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
                         break;
                     default:
-                        this.map.setCameraView({"lat":39.100007,"lng":112.173169,"alt":3451.2,"heading":138,"pitch":-17.2})
+                        this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
                 }
                 // 删除风场图层
                 // 跟踪相机实例
@@ -401,12 +470,10 @@ export default {
             }
         },
     },
-    mounted() {
-        // webgl渲染失败后，刷新页面
-        // this.map.on(mars3d.EventType.renderError, function () {
-        //     window.location.reload();
-        // });
+    watch: {
+
     }
+
 }
 
 </script>
