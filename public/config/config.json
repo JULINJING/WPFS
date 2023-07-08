@@ -89,7 +89,6 @@
                 "id": 2021,
                 "pid": 10,
                 "name": "谷歌影像",
-                "icon": "/img/basemaps/google_img.png",
                 "type": "google",
                 "layer": "img_d",
                 "show": true
@@ -97,7 +96,6 @@
             {
                 "pid": 10,
                 "name": "天地图影像",
-                "icon": "/img/basemaps/tdt_img.png",
                 "type": "group",
                 "layers": [
                     {
@@ -116,7 +114,6 @@
             {
                 "pid": 10,
                 "name": "天地图电子",
-                "icon": "/img/basemaps/tdt_vec.png",
                 "type": "group",
                 "layers": [
                     {
@@ -135,7 +132,6 @@
                 "pid": 10,
                 "name": "高德影像",
                 "type": "group",
-                "icon": "/img/basemaps/gaode_img.png",
                 "layers": [
                     {
                         "name": "底图",
@@ -153,14 +149,12 @@
                 "pid": 10,
                 "name": "高德电子",
                 "type": "gaode",
-                "icon": "/img/basemaps/gaode_vec.png",
                 "layer": "vec"
             },
             {
                 "pid": 10,
                 "name": "百度影像",
                 "type": "group",
-                "icon": "/img/basemaps/bd-img.png",
                 "layers": [
                     {
                         "name": "底图",
@@ -177,14 +171,12 @@
             {
                 "pid": 10,
                 "name": "百度电子",
-                "icon": "/img/basemaps/bd-vec.png",
                 "type": "baidu",
                 "layer": "vec"
             },
             {
                 "pid": 10,
                 "name": "腾讯影像",
-                "icon": "/img/basemaps/tencent_img.png",
                 "type": "group",
                 "layers": [
                     {
@@ -202,14 +194,12 @@
             {
                 "pid": 10,
                 "name": "腾讯电子",
-                "icon": "/img/basemaps/tencent_vec.png",
                 "type": "tencent",
                 "layer": "vec"
             },
             {
                 "pid": 10,
                 "name": "ArcGIS影像",
-                "icon": "/img/basemaps/esriWorldImagery.png",
                 "type": "xyz",
                 "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                 "enablePickFeatures": false
@@ -217,7 +207,6 @@
             {
                 "pid": 10,
                 "name": "微软影像",
-                "icon": "/img/basemaps/bingAerial.png",
                 "type": "bing",
                 "layer": "Aerial"
             },
@@ -226,7 +215,6 @@
                 "pid": 10,
                 "name": "暗色底图",
                 "type": "gaode",
-                "icon": "/img/basemaps/blackMarble.png",
                 "layer": "vec",
                 "invertColor": true,
                 "filterColor": "#4e70a6",
@@ -239,7 +227,6 @@
             {
                 "pid": 10,
                 "name": "蓝色底图",
-                "icon": "/img/basemaps/bd-c-midnight.png",
                 "type": "xyz",
                 "url": "http://map.geoq.cn/arcgis/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}",
                 "chinaCRS": "GCJ02",
@@ -248,7 +235,6 @@
             {
                 "pid": 10,
                 "name": "黑色底图",
-                "icon": "/img/basemaps/bd-c-dark.png",
                 "type": "tencent",
                 "layer": "custom",
                 "style": "4"
@@ -257,7 +243,6 @@
                 "pid": 10,
                 "name": "离线地图 (供参考)",
                 "type": "group",
-                "icon": "/img/basemaps/google_img.png",
                 "layers": [
                     {
                         "name": "全球",
@@ -299,7 +284,6 @@
             {
                 "pid": 10,
                 "name": "单张图片 (本地离线)",
-                "icon": "/img/basemaps/offline.png",
                 "type": "image",
                 "url": "//data.mars3d.cn/file/img/world/world.jpg"
             },
@@ -307,7 +291,6 @@
                 "id": 2023,
                 "pid": 10,
                 "name": "无底图",
-                "icon": "/img/basemaps/null.png",
                 "type": "grid",
                 "color": "#ffffff",
                 "alpha": 0.03,

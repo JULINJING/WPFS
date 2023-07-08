@@ -1,19 +1,21 @@
 <template>
   <div class="totalinfocontainer _totalinfocontainer">
     <div>
-      <div v-if="!showTable">
+      <!-- <div v-if="!showTable"> -->
+      <div>
         <!-- Form -->
-        <el-upload 
-          class="upload-demo" 
-          drag 
-          action="https://jsonplaceholder.typicode.com/posts/"
+        <el-upload class="upload-demo" 
+          drag multiple 
+          :action="'http://' + serverIp + ':7070/file/upload'"
           :on-success="handleUploadSuccess" 
           :on-error="handleUploadError" 
-          :before-remove="handleBeforeRemove" 
-          multiple
-          :limit="10" 
+          :before-upload="beforeUpload" 
+          :limit="10"
           :on-exceed="handleExceed" 
-          :file-list="fileList">
+          :file-list="fileList" 
+          :on-preview="handlePreview" 
+          accept=".csv"
+        >
 
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -51,24 +53,24 @@
       </div>
 
       <div v-if="showTable" class="form-container">
-        <el-table :data="tableData" stripe style="width: 100%" max-height="300">
-          <el-table-column fixed prop="datatime" label="DATATIME" width="150">
+        <el-table :data="originData" stripe style="width: 100%" max-height="300">
+          <el-table-column fixed prop="DATATIME" label="DATATIME" width="150">
           </el-table-column>
-          <el-table-column prop="windspeed" label="WINDSPEED" width="150">
+          <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150">
           </el-table-column>
-          <el-table-column prop="prepower" label="PREPOWER" width="150">
+          <el-table-column prop="PREPOWER" label="PREPOWER" width="150">
           </el-table-column>
-          <el-table-column prop="winddirection" label="WINDDIRECTION" width="150">
+          <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150">
           </el-table-column>
-          <el-table-column prop="temperature" label="TEMPERATURE" width="150">
+          <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150">
           </el-table-column>
-          <el-table-column prop="humidity" label="HUMIDITY" width="150">
+          <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150">
           </el-table-column>
-          <el-table-column prop="pressure" label="PRESSURE" width="150">
+          <el-table-column prop="PRESSURE" label="PRESSURE" width="150">
           </el-table-column>
-          <el-table-column prop="ws" label="ROUND(A.WS,1)" width="150">
+          <el-table-column prop="WS" label="ROUND(A.WS,1)" width="150">
           </el-table-column>
-          <el-table-column prop="power" label="ROUND(A.POWER,0)" width="150">
+          <el-table-column prop="POWER" label="ROUND(A.POWER,0)" width="150">
           </el-table-column>
           <el-table-column prop="YD15" label="YD15" width="150">
           </el-table-column>
@@ -80,50 +82,82 @@
 </template>
   
 <script>
+import { serverIp } from "../../../../public/config.js"
+import axios from 'axios';
+
 export default {
   data() {
     return {
+      serverIp: serverIp,
       dialogFormVisible: false,
       showTable: false,
       fileList: [],
       outlierRadio: '',
       missingRadio: '',
-      tableData: [{
-        datatime: '2021/11/1  0:00:00',
-        windspeed: 6,
-        prepower: 44224,
-        winddirection: 270,
-        temperature: 3.9,
-        humidity: 45,
-        pressure: 842,
-        ws: 3.3,
-        power: 17959,
-        YD15: 12914
-      }]
+      originData: []
     };
   },
   methods: {
-    handleBeforeRemove(file, fileList) {
-      console.log('文件上传前', file, fileList);
-    },
+    // 上传文件成功
     handleUploadSuccess(response, file, fileList) {
-      console.log(response);
-      this.dialogFormVisible = true;
-      this.showTable = true;
+      this.$message.success("上传成功")
+
+      // 上传成功后，1.5秒后显示对话
+      setTimeout(() => {
+        this.dialogFormVisible = true;
+      }, 1500)
 
       // TODO: 处理返回的数据，渲染表格
-
+      this.fetchData(file);
     },
+
+    // 上传文件之前的钩子
+    beforeUpload(file) {
+      console.log(file.type);
+      const isCSV = file.type === 'text/csv';
+
+      if (!isCSV) {
+        this.$message.error('上传的数据只能是 csv 格式!');
+      }
+
+      return isCSV;
+    },
+
+
+    fetchData(file) {
+      const fileResponse = file.response;
+      const dotIndex = fileResponse.lastIndexOf('.');
+      const filePrefix = fileResponse.substring(0, dotIndex);
+      const jsonFile = filePrefix + ".json";
+
+      axios.get(jsonFile)
+        .then(response => {
+          this.originData = response.data;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    // 上传文件失败
     handleUploadError(err, file, fileList) {
+      this.$message.error("上传失败")
       console.log(err);
     },
+
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
+    handlePreview(file) {
+      this.fetchData(file);
+    },
+
     handleDialogConfirm() {
       if (this.outlierRadio !== '' && this.missingRadio !== '') {
         console.log(this.outlierRadio); // 获取选中的复选框的值
-        // TODO
+        this.dialogFormVisible = false;
+        this.sendPreprocessParams();
+
       } else {
         this.$message({
           message: '请至少选择一个预处理方法',
@@ -132,6 +166,10 @@ export default {
       }
     },
 
+    // TODO: 发送预处理参数
+    sendPreprocessParams() {
+
+    },
   },
 };
 </script>

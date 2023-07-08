@@ -1,5 +1,5 @@
 <template>
-    <div id="chart"></div>
+    <div id="boxplotChart"></div>
 </template>
   
 <script>
@@ -47,7 +47,7 @@ export default {
             const legendData = ['PM2.5', 'PM10', 'NO2', 'SO2', 'CO', 'O3'];
             const { xAxisData, seriesDatas } = this.transformData(selected, legendData);
 
-            const chartDom = document.getElementById('chart');
+            const chartDom = document.getElementById('boxplotChart');
             const myChart = echarts.init(chartDom);
 
             const option = {
@@ -100,7 +100,7 @@ export default {
 </script>
   
 <style>
-#chart {
+.boxplotChart {
     width: 100%;
     height: 400px;
 }

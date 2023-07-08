@@ -8,11 +8,6 @@
                 </div>
 
                 <div class="form-row">
-                    <el-tag>指定时间列</el-tag>
-                    <el-input v-model="form.timeCol" placeholder="DATATIME"></el-input>
-                </div>
-
-                <div class="form-row">
                     <el-tag>模型类型选择</el-tag>
                     <el-radio-group v-model="form.modelType" @change="handleModelTypeChange">
                         <el-radio-button label="single">单模型预测</el-radio-button>
@@ -22,7 +17,7 @@
 
                 <div class="form-row">
                     <el-tag>具体模型选择</el-tag>
-                    <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" collapse-tags>
+                    <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="minModelNum" collapse-tags>
                         <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
                             :value="model.value"></el-option>
                     </el-select>
@@ -68,7 +63,6 @@ export default {
     data() {
         return {
             form: {
-                timeCol: '',
                 modelType: 'single',
                 selectedModels: [],
                 selectedCovariates: [],
@@ -93,10 +87,9 @@ export default {
     computed: {
         calculateProgress() {
             let filledFields = 0;
-            const totalFields = 6; // 总字段数
+            const totalFields = 5; // 总字段数
 
             // 根据表单字段的填写情况计算已填写字段数
-            if (this.form.timeCol !== '') filledFields++;
             if (this.form.modelType !== '') filledFields++;
             if (this.form.selectedModels.length > 0) filledFields++;
             if (this.form.selectedCovariates.length > 0) filledFields++;
@@ -128,7 +121,7 @@ export default {
             console.log(this.form.inputPeriod);
         },
         setParams() {
-            if (this.form.timeCol === "" || this.form.modelType === "" || this.form.selectedModels.length === 0 || this.form.selectedCovariates.length === 0 || this.form.inputPeriod === null || this.form.forecastPeriod === null) {
+            if (this.form.modelType === "" || this.form.selectedModels.length === 0 || this.form.selectedCovariates.length === 0 || this.form.inputPeriod === null || this.form.forecastPeriod === null) {
                 this.$message({
                     message: '请完整填写表单',
                     type: 'warning'
@@ -149,4 +142,5 @@ export default {
     margin-left: 30%;
     margin-right: 30%;
 }
+
 </style>

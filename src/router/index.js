@@ -8,6 +8,7 @@ import WindLand from '../components/windLand/WindLand'
 import Turbine from '../components/Turbine/Turbine'
 import Watch from '../components/Watch/Watch'
 import Forecast from '../components/Forecast/Forecast'
+import Login from '../components/Login/Login'
 
 // import store from '@/store'
 import NProgress from 'nprogress'
@@ -25,7 +26,7 @@ var router = new VueRouter({
     routes: [
         {
             path: '/',
-            redirect: '/home'
+            redirect: '/login'
         },
         {
             path: '/home',
@@ -54,6 +55,10 @@ var router = new VueRouter({
         {
             path: '/forecast',
             component: Forecast
+        },
+        {
+            path: '/login',
+            component: Login
         }
     ],
     mode: 'history'
@@ -72,4 +77,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
     NProgress.done()
 })
+
+
+
 export default router

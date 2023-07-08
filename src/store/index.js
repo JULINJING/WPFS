@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import path from 'path-browserify' // 使用适用于浏览器的path替代方案
+
 Vue.use(Vuex)
 
 //自动导入
@@ -14,5 +15,10 @@ contexts.keys().forEach(key => {
     }
 })
 export default new Vuex.Store({
-    modules
+    modules: {
+
+    },
+    getters: {
+
+    }
 })

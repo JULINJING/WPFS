@@ -7,9 +7,12 @@ import dataV from '@jiaminghi/data-view'
 import { createPinia, PiniaVuePlugin } from 'pinia'
 import * as echarts from 'echarts'
 import './assets/styles/scss/style.scss'
+import request from "@/utils/request";
+
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
+Vue.prototype.request = request
 // 创建 Pinia
 const pinia = createPinia()
 
