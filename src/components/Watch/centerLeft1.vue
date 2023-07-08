@@ -17,7 +17,7 @@
             <div class="bottom-data">
                 <div class="item-box mt-2" v-for="(item, index) in numberData" :key="index">
                     <div class="d-flex">
-                        <span class="coin">￥</span>
+                        <span class="coin">km/h</span>
                         <dv-digital-flop class="dv-digital-flop" :config="item.number" />
                     </div>
                     <p class="text" style="text-align: center;">
@@ -108,9 +108,9 @@ export default {
     }
 }
 </script>
-  
+
 <style lang="scss" scoped>
-$box-width: 300px;
+$box-width: 100%;
 $box-height: 410px;
 
 #centerLeft1 {
