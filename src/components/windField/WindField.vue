@@ -92,6 +92,12 @@ export default {
             mapOptions: mapOptions,
             windLayer,
 
+            // 记录视点飞行状态
+            isEasternFly: false,
+            isSouthernFly: false,
+            isWesternFly: false,
+            isNorthernFly: false,
+
             // 记录计时器ID
             intervalId: null,
 
@@ -198,23 +204,9 @@ export default {
                 this.map.removeLayer(this.map.getLayerById("功率"), true)
             }
 
-            // // 根据各部位置飞行
-            // switch (id) {
-            //     case 1:
-            //         this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
-            //         break;
-            //     case 2:
-            //         this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
-            //         break;
-            //     case 3:
-            //         this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
-            //         break;
-            //     default:
-            //         this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
-            // }
-
             // id 东南西北分别为1 2 3 4
             // 确定风机位置以及视点飞行路径
+            // 更改飞行状态
             var positions = []
             var viewPoints = []
             switch (id) {
@@ -237,6 +229,12 @@ export default {
                         { "lat": 30.021059, "lng": 122.304282, "alt": 2110.5, "heading": 282.3, "pitch": -14.9, duration: 6 },
                         { "lat": 30.041168, "lng": 122.314148, "alt": 2119.8, "heading": 268.8, "pitch": -15.9, duration: 6 }
                     ]
+                    if (this.isEasternFly)
+                        this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
+                    else
+                        // 视角切换（分步执行）
+                        this.map.setCameraViewList(viewPoints)
+                    this.isEasternFly = true
                     break;
                 case 2:
                     positions = [
@@ -257,6 +255,12 @@ export default {
                         { "lat": 22.823162, "lng": 115.541673, "alt": 1456.6, "heading": 250.6, "pitch": -12.8, duration: 6 },
                         { "lat": 22.744186, "lng": 115.511764, "alt": 1452.2, "heading": 333.2, "pitch": -11.8, duration: 6 }
                     ]
+                    if (this.isSouthernFly)
+                        this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
+                    else
+                        // 视角切换（分步执行）
+                        this.map.setCameraViewList(viewPoints)
+                    this.isSouthernFly = true
                     break;
                 case 3:
                     positions = [
@@ -277,6 +281,12 @@ export default {
                         { "lat": 37.260906, "lng": 102.578152, "alt": 9353.4, "heading": 18.1, "pitch": -30.1, duration: 6 },
                         { "lat": 37.344724, "lng": 102.669323, "alt": 9359.2, "heading": 242.8, "pitch": -19.5, duration: 6 }
                     ]
+                    if (this.isWesternFly)
+                        this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
+                    else
+                        // 视角切换（分步执行）
+                        this.map.setCameraViewList(viewPoints)
+                    this.isWesternFly = true
                     break;
                 default:
                     positions = [
@@ -297,6 +307,12 @@ export default {
                         { "lat": 38.994278, "lng": 112.246046, "alt": 5647.8, "heading": 340.3, "pitch": -20.1, duration: 6 },
                         { "lat": 39.101415, "lng": 112.188214, "alt": 5648, "heading": 148.1, "pitch": -24, duration: 6 }
                     ]
+                    if (this.isNorthernFly)
+                        this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
+                    else
+                        // 视角切换（分步执行）
+                        this.map.setCameraViewList(viewPoints)
+                    this.isNorthernFly = true
             }
 
             //创建风机数据图层
@@ -310,7 +326,7 @@ export default {
             positions.forEach((item, index) => {
                 // 风机
                 var turbineGraphic = new mars3d.graphic.ModelPrimitive({
-                    id: index,
+                    id: index + 1,
                     position: item,
                     style: {
                         url: '//data.mars3d.cn/gltf/mars/fengche.gltf',
@@ -324,56 +340,109 @@ export default {
                 })
                 turbineLayer.addGraphic(turbineGraphic)
 
-                // 功率
-                var powerGraphic = new mars3d.graphic.CanvasBillboard({
-                    id: index + 10,
+                // 功率 普通贴图
+                // var powerGraphic = new mars3d.graphic.CanvasBillboard({
+                //     id: index + 11,
+                //     position: item,
+                //     style: {
+                //         text: ' ↻',
+                //         horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                //         verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                //         scaleByDistance: new Cesium.NearFarScalar(6000, 0.25,10000, 0.15),
+                //         distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000),
+                //         clampToGround: true
+                //     }
+                // })
+                // powerLayer.addGraphic(powerGraphic)
+
+                // 功率 动态图
+                var powerGraphicLight = new mars3d.graphic.DivBoderLabel({
                     position: item,
                     style: {
-                        text: ' ↻',
-                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                        scaleByDistance: new Cesium.NearFarScalar(6000, 0.25,10000, 0.15),
-                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000),
-                        clampToGround: true
-                    }
+                        text: `预测功率：加载中`,
+                        font_size: 14,
+                        font_family: "楷体",
+                        color: "#ccc",
+                        boderColor: "#15d1f2",
+                        addHeight: 100,
+                        clampToGround: true,
+                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+                    },
+                    pointerEvents: false
                 })
-                powerLayer.addGraphic(powerGraphic)
+                powerLayer.addGraphic(powerGraphicLight)
             })
 
-            // 视角切换（分步执行）
-            this.map.setCameraViewList(viewPoints)
+            // 功率 普通贴图
+            // 随机更新功率文本
+            // this.intervalId = setInterval(() => {
+            //     powerLayer.eachGraphic((graphic) => {
+            //         graphic.text = Math.random().toFixed(3) * 1000 // 更新文本
+            //     })
+            // }, 2000)
 
+            // 功率 动态图
             // 随机更新功率文本
             this.intervalId = setInterval(() => {
                 powerLayer.eachGraphic((graphic) => {
-                    graphic.text = Math.random().toFixed(3) * 1000 // 更新文本
+                    var power = Math.random().toFixed(3) * 1000 // 更新文本
+                    var powerGraphicLightVar = new mars3d.graphic.DivBoderLabel({
+                        position: graphic.position,
+                        style: {
+                            text: `预测功率：${power} W`,
+                            font_size: 14,
+                            font_family: "楷体",
+                            color: "#ccc",
+                            boderColor: "#15d1f2",
+                            addHeight: 100,
+                            clampToGround: true,
+                            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+                        },
+                        pointerEvents: false
+                    })
+                    powerLayer.removeGraphic(graphic, true)
+                    powerLayer.addGraphic(powerGraphicLightVar)
                 })
-            }, 2000)
+            }, 5000)
 
-            // 绑定点击风机事件
-            turbineLayer.on(mars3d.EventType.click, () => {
-                // 相机视角定位至风机群
-                switch (id) {
-                    case 1:
-                        this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
-                        break;
-                    case 2:
-                        this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
-                        break;
-                    case 3:
-                        this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
-                        break;
-                    default:
-                        this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
-                }
-                // 删除风场图层
-                // 跟踪相机实例
-                this.map.trackedEntity = null
-                if (this.windLayer) {
-                    this.map.removeLayer(this.windLayer, true)
-                    this.windLayer = null
-                }
+            // 在turbineLayer图层绑定Popup弹窗
+            turbineLayer.bindPopup(function (event) {
+                console.log(event.graphic)
+                const attr = {}
+                attr["时间"] = "2022/1/2  0:00:00"
+                attr["实际风速"] = Math.random().toFixed(3) * 1000
+                attr["预测功率"] = Math.random().toFixed(3) * 1000
+
+                return mars3d.Util.getTemplateHtml({ title: event.graphic.id + ' 号 风 机', template: "all", attr: attr })
             })
+
+            if (this.map.camera.positionCartographic.height >= 100000) {
+                // 绑定点击风机事件
+                turbineLayer.on(mars3d.EventType.click, () => {
+                    console.log(this.map.camera.positionCartographic.height)
+                    // 相机视角定位至风机群
+                    switch (id) {
+                        case 1:
+                            this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
+                            break;
+                        case 2:
+                            this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
+                            break;
+                        case 3:
+                            this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
+                            break;
+                        default:
+                            this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
+                    }
+                    // 删除风场图层
+                    // 跟踪相机实例
+                    this.map.trackedEntity = null
+                    if (this.windLayer) {
+                        this.map.removeLayer(this.windLayer, true)
+                        this.windLayer = null
+                    }
+                })
+            }
         },
         chargeWindField() {
             if (!this.windLayer) {
@@ -388,6 +457,12 @@ export default {
 
         backToHome() {
             this.$router.push('/home')
+            // 清除计时器
+            if (this.intervalId !== null) {
+                // 如果已经有一个正在运行的定时器，停止它
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
         },
         hideLeftPanel() {
             this.isLeftOpen = !this.isLeftOpen
