@@ -1,18 +1,44 @@
 <template>
-    <div>
-        <div id="heatmapChart"></div>
+    <div class="heatmapBox" style="width: 400px; height: 400px;">
+        <div id="heatmapChart" class="chartContainer"></div>
     </div>
 </template>
   
 <script>
 import * as echarts from 'echarts';
-import jsonData from '@/assets/testJson/11.json';
+
 
 export default {
+    props: {
+        tableData: Array,
+    },
+    data() {
+        return {
+            heatmapData: []
+        };
+    },
+    watch: {
+        tableData: {
+            handler(newTableData) {
+                if (newTableData !== null) {
+                    this.heatmapData = []; // 清空之前的数据
+                    this.processData();
+                    this.renderChart(); // 重新渲染
+                }
+            },
+            immediate: true, // 立即执行watch处理函数
+        },
+    },
     mounted() {
+        this.processData();
         this.renderChart();
     },
     methods: {
+        processData() {
+            if (this.tableData && this.tableData.length > 0) {
+                this.heatmapData = this.tableData;
+            }
+        },
         calculateCorrelation(data) {
             // 提取需要计算相关性的数值序列
             const windspeed = data.map(item => parseFloat(item.WINDSPEED));
@@ -44,95 +70,93 @@ export default {
                     const correlation = (n * sumXiXj - sumXi * sumXj) /
                         Math.sqrt((n * sumXiSquared - sumXi * sumXi) * (n * sumXjSquared - sumXj * sumXj));
 
-                    row.push(correlation);
+                    row.push(parseFloat(correlation.toFixed(2)));
                 }
                 correlationMatrix.push(row);
             }
 
-            return correlationMatrix;
+            const correlationArray = [];
+
+            for (let i = 0; i < correlationMatrix.length; i++) {
+                for (let j = 0; j < correlationMatrix[i].length; j++) {
+                    correlationArray.push([i, j, correlationMatrix[i][j]]);
+                }
+            }
+            return correlationArray;
         },
         renderChart() {
-            const chartDom = document.getElementById('heatmapChart');
-            const myChart = echarts.init(chartDom);
+            this.$nextTick(() => {
 
-            const X = [
-                'WINDSPEED', 'PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'HUMIDITY',
-                'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'
-            ];
+                if (!this.chartInstance) {
+                    this.chartInstance = echarts.init(document.getElementById('heatmapChart'));
+                }
 
-            const Y = [
-                'YD15', 'ROUD(A.POWER,0)', 'ROUDN(A.WS,1)', 'PRESSURE', 'HUMIDITY',
-                'WINDSPEED', 'TEMPERATURE', 'WINDDIRECTION', 'PREPOWER'
-            ];
-            const data = [[0, 0, 5], [0, 1, 1], [0, 2, 0], [0, 3, 0], [0, 4, 0], [0, 5, 0], [0, 6, 0], [0, 7, 0], [0, 8, 0],
-            [1, 0, 7], [1, 1, 0], [1, 2, 0], [1, 3, 0], [1, 4, 0], [1, 5, 0], [1, 6, 0], [1, 7, 0], [1, 8, 0],
-            [2, 0, 1], [2, 1, 1], [2, 2, 0], [2, 3, 0], [2, 4, 0], [2, 5, 0], [2, 6, 0], [2, 7, 0], [2, 9, 0],
-            [3, 0, 7], [3, 1, 3], [3, 2, 0], [3, 3, 0], [3, 4, 0], [3, 5, 0], [3, 6, 0], [3, 7, 0], [3, 8, 1],
-            [4, 0, 1], [4, 1, 3], [4, 2, 0], [4, 3, 0], [4, 4, 0], [4, 5, 1], [4, 6, 0], [4, 7, 0], [4, 8, 0],
-            [5, 0, 2], [5, 1, 1], [5, 2, 0], [5, 3, 3], [5, 4, 0], [5, 5, 0], [5, 6, 0], [5, 7, 0], [5, 8, 2],
-            [6, 0, 1], [6, 1, 0], [6, 2, 0], [6, 3, 0], [6, 4, 0], [6, 5, 0], [6, 6, 0], [6, 7, 0], [6, 8, 0],
-            [7, 0, 2], [7, 1, 3], [7, 2, 0], [7, 3, 0], [7, 4, 0], [7, 5, 0], [7, 6, 0], [7, 7, 0], [7, 8, 1],
-            [8, 0, 2], [8, 1, 3], [8, 2, 0], [8, 3, 0], [8, 4, 0], [8, 5, 0], [8, 6, 0], [8, 7, 0], [8, 8, 1]
-            ].map(function (item) {
-                return [item[1], item[0], item[2] || '-'];
+                if (this.heatmapData && this.heatmapData.length > 0) {
+
+                    const X = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
+                                 'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
+                    const Y = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
+                                 'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
+
+                    const data = this.calculateCorrelation(this.heatmapData)
+                    const option = {
+                        tooltip: {
+                            position: 'top'
+                        },
+                        grid: {
+                            height: '60%',
+                            top: '10%'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: X,
+                            splitArea: {
+                                show: true
+                            }
+                        },
+                        yAxis: {
+                            type: 'category',
+                            data: Y,
+                            splitArea: {
+                                show: true
+                            }
+                        },
+                        visualMap: {
+                            min: -1,
+                            max: 1,
+                            calculable: true,
+                            orient: 'horizontal',
+                            left: 'center',
+                            bottom: '15%'
+                        },
+                        series: [{
+                            name: 'Correlation Coefficient',
+                            type: 'heatmap',
+                            data: data,
+                            label: {
+                                show: true
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }]
+                    };
+
+                    option && this.chartInstance.setOption(option);
+                }
             });
-
-            const option = {
-                tooltip: {
-                    position: 'top'
-                },
-                grid: {
-                    height: '50%',
-                    top: '10%'
-                },
-                xAxis: {
-                    type: 'category',
-                    data: X,
-                    splitArea: {
-                        show: true
-                    }
-                },
-                yAxis: {
-                    type: 'category',
-                    data: Y,
-                    splitArea: {
-                        show: true
-                    }
-                },
-                visualMap: {
-                    min: 0,
-                    max: 10,
-                    calculable: true,
-                    orient: 'horizontal',
-                    left: 'center',
-                    bottom: '15%'
-                },
-                series: [{
-                    name: 'Punch Card',
-                    type: 'heatmap',
-                    data: data,
-                    label: {
-                        show: true
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }]
-            };
-
-            option && myChart.setOption(option);
         }
     }
 }
 </script>
   
 <style>
-.heatmapChart {
+.chartContainer {
     width: 100%;
-    height: 400px;
+    height: 100%;
 }
 </style>
   

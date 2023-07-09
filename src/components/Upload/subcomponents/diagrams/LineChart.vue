@@ -1,114 +1,102 @@
 <template>
-  <div id="linechart"></div>
+  <div class="lineBox" style="width: 480px; height: 300px;" v-if="tableData !== null">
+    <div id="linechart" class="chartContainer"></div>
+  </div>
 </template>
-  
+
 <script>
 import * as echarts from 'echarts';
-import $ from 'jquery';
 
 export default {
+  props: {
+    tableData: Array,
+  },
+  data() {
+    return {
+      lineData: []
+    };
+  },
   mounted() {
-    this.renderChart();
+    if (this.lineData !== null) {
+      this.processData();
+      this.renderChart();
+    }
+  },
+  watch: {
+    tableData: {
+      handler(newTableData) {
+        if (newTableData !== null) {
+          this.lineData = [];
+          this.processData();
+          this.renderChart();
+        }
+      },
+      immediate: true, // 立即执行watch处理函数
+    },
   },
   methods: {
-    renderChart() {
-      var ROOT_PATH = 'https://echarts.apache.org/examples';
-      const chartDom = document.getElementById('linechart');
-      const myChart = echarts.init(chartDom);
-      var option;
+    processData() {
+      if (this.tableData && this.tableData.length > 0) {
 
-      $.get(ROOT_PATH + '/data/asset/data/life-expectancy-table.json', function (_rawData) {
-        run(_rawData);
-      });
-
-      function run(_rawData) {
-        const countries = ['Finland', 'France', 'Germany', 'Iceland', 'Norway', 'Poland', 'Russia', 'United Kingdom'];
-        const datasetWithFilters = [];
-        const seriesList = [];
-
-        console.log(_rawData);
-
-        echarts.util.each(countries, function (country) {
-          var datasetId = 'dataset_' + country;
-          datasetWithFilters.push({
-            id: datasetId,
-            fromDatasetId: 'dataset_raw',
-            transform: {
-              type: 'filter',
-              config: {
-                and: [
-                  { dimension: 'Year', gte: 1950 },
-                  { dimension: 'Country', '=': country }
-                ]
-              }
-            }
-          });
-          seriesList.push({
-            type: 'line',
-            datasetId: datasetId,
-            showSymbol: false,
-            name: country,
-            endLabel: {
-              show: true,
-              formatter: function (params) {
-                return params.value[3] + ': ' + params.value[0];
-              }
-            },
-            labelLayout: {
-              moveOverlap: 'shiftY'
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            encode: {
-              x: 'Year',
-              y: 'Income',
-              label: ['Country', 'Income'],
-              itemName: 'Year',
-              tooltip: ['Income']
-            }
-          });
-        });
-
-        option = {
-          animationDuration: 10000,
-          dataset: [
-            {
-              id: 'dataset_raw',
-              source: _rawData
-            },
-            ...datasetWithFilters
-          ],
-          title: {
-            text: 'Income of Germany and France since 1950'
-          },
-          tooltip: {
-            order: 'valueDesc',
-            trigger: 'axis'
-          },
-          xAxis: {
-            type: 'category',
-            nameLocation: 'middle'
-          },
-          yAxis: {
-            name: 'Income'
-          },
-          grid: {
-            right: 140
-          },
-          series: seriesList
-        };
-
-        myChart.setOption(option);
+        this.lineData = this.tableData.map(item => ({
+          DATATIME: item.DATATIME,
+          PREPOWER: item.PREPOWER,
+          POWER: item.POWER,
+          YD15: item.YD15
+        }));
       }
+    },
+
+    renderChart() {
+      this.$nextTick(() => {
+        if (!this.chartInstance) {
+          this.chartInstance = echarts.init(document.getElementById('linechart'));
+        }
+
+        if (this.lineData && this.lineData.length > 0) {
+          const xAxisData = this.lineData.map(item => item.DATATIME);
+          const seriesData = [];
+          for (const key in this.lineData[0]) {
+            if (key !== 'DATATIME') {
+              seriesData.push({
+                name: key,
+                type: 'line',
+                data: this.lineData.map(item => item[key])
+              });
+            }
+          }
+
+          const option = {
+            animationDuration: 1000,
+            legend: {
+              data: Object.keys(this.lineData[0]).filter(key => key !== 'DATATIME')
+            },
+            xAxis: {
+              type: 'category',
+              data: xAxisData
+            },
+            yAxis: {
+              type: 'value'
+            },
+            tooltip: {
+              order: 'valueDesc',
+              trigger: 'axis'
+            },
+            series: seriesData
+          };
+
+          option && this.chartInstance.setOption(option);
+        }
+
+      });
     }
   }
 };
 </script>
-  
+
 <style>
-.linechart {
+.chartContainer {
   width: 100%;
-  height: 400px;
+  height: 100%;
 }
 </style>

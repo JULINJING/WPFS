@@ -1,108 +1,175 @@
 <template>
-    <div id="boxplotChart"></div>
+    <div class="boxplotBox" style="width: 480px; height: 300px;">
+        <div id="boxplotChart" class="chartContainer"></div>
+    </div>
 </template>
   
 <script>
 import * as echarts from 'echarts';
 
 export default {
+    props: {
+        tableData: Array,
+    },
+    data() {
+        return {
+            boxData: []
+        };
+    },
     mounted() {
+        this.processData();
         this.renderChart();
     },
-    methods: {
-        getRandom(n, m) {
-            return Math.round(Math.random() * (m - n) + n);
-        },
-        getRandonData(length) {
-            const seriesData = [];
-            for (let i = 0; i < length; i++) {
-                const cate = [];
-                for (let j = 0; j < 20; j++) {
-                    cate.push(this.getRandom(1, 50));
-                }
-                seriesData.push(cate.sort((a, b) => a - b));
-            }
-            return seriesData;
-        },
-        transformData(xData, factor) {
-            const xAxisData = xData.map((v) => v.name);
-            const seriesDatas = factor.map(() => this.getRandonData(xAxisData.length));
-            return {
-                xAxisData,
-                seriesDatas,
-            };
-        },
-        renderChart() {
-            const selected = [
-                { code: '320505001', name: '横塘街道' },
-                { code: '320505002', name: '狮山街道' },
-                { code: '320505003', name: '枫桥街道' },
-                { code: '320505004', name: '镇湖街道' },
-                { code: '320505005', name: '东渚街道' },
-                { code: '320505100', name: '浒墅关镇' },
-                { code: '320505101', name: '通安镇' },
-                { code: '320505407', name: '苏州科技城' },
-            ];
-
-            const legendData = ['PM2.5', 'PM10', 'NO2', 'SO2', 'CO', 'O3'];
-            const { xAxisData, seriesDatas } = this.transformData(selected, legendData);
-
-            const chartDom = document.getElementById('boxplotChart');
-            const myChart = echarts.init(chartDom);
-
-            const option = {
-                legend: {
-                    bottom: 0,
-                },
-                tooltip: {
-                    trigger: 'item',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
-                },
-                grid: {
-                    left: 50,
-                    top: 15,
-                    right: 15,
-                    bottom: 65,
-                },
-                xAxis: {
-                    type: 'category',
-                    nameGap: 30,
-                    splitArea: {
-                        show: false,
-                    },
-                    splitLine: {
-                        show: false,
-                    },
-                    axisLabel: {
-                        interval: 0,
-                    },
-                    data: xAxisData,
-                },
-                yAxis: {
-                    type: 'value',
-                    splitArea: {
-                        show: false,
-                    },
-                },
-                series: legendData.map((v, i) => ({
-                    name: v,
-                    type: 'boxplot',
-                    data: seriesDatas[i],
-                })),
-            };
-
-            option && myChart.setOption(option);
+    watch: {
+        tableData: {
+            handler(newTableData) {
+                this.boxData = [];
+                this.processData();
+                this.renderChart();
+            },
+            immediate: true, // 立即执行watch处理函数
         },
     },
+    methods: {
+        processData() {
+            if (this.tableData && this.tableData.length > 0) {
+                this.boxData = this.tableData.map(item => ({
+                    DATATIME: item.DATATIME,
+                    PREPOWER: item.PREPOWER,
+                    POWER: item.POWER,
+                    YD15: item.YD15
+                }));
+            }
+        },
+        getBoxplotData(){
+            const groupedData = new Array(3).fill(0).map(() => new Array(12).fill(0).map(() => new Array(this.boxData.length).fill(0)));
+
+            this.boxData.forEach((item, index) => {
+                const month = new Date(item.DATATIME).getMonth();
+                groupedData[0][month][index] = item.PREPOWER;
+                groupedData[1][month][index] = item.POWER;
+                groupedData[2][month][index] = item.YD15;
+            });
+
+            return groupedData;
+        },
+        renderChart() {
+            this.$nextTick(() => {
+                if (!this.chartInstance) {
+                    this.chartInstance = echarts.init(document.getElementById('boxplotChart'));
+                }
+
+                if (this.boxData && this.boxData.length > 0) {
+                    const data = this.getBoxplotData();
+
+                    const option = {
+                        title: {
+                            text: 'Multiple Categories',
+                            left: 'center'
+                        },
+                        dataset: [
+                            {
+                                source: data[0]
+                            },
+                            {
+                                source: data[1]
+                            },
+                            {
+                                source: data[2]
+                            },
+                            {
+                                fromDatasetIndex: 0,
+                                transform: { type: 'boxplot' }
+                            },
+                            {
+                                fromDatasetIndex: 1,
+                                transform: { type: 'boxplot' }
+                            },
+                            {
+                                fromDatasetIndex: 2,
+                                transform: { type: 'boxplot' }
+                            }
+                        ],
+                        legend: {
+                            top: '10%'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '10%',
+                            top: '20%',
+                            right: '10%',
+                            bottom: '15%'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: true,
+                            nameGap: 30,
+                            splitArea: {
+                                show: true
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: 'Value',
+                            min: -1000,
+                            max: 50000,
+                            splitArea: {
+                                show: false
+                            }
+                        },
+                        dataZoom: [
+                            {
+                                type: 'inside',
+                                start: 0,
+                                end: 20
+                            },
+                            {
+                                show: true,
+                                type: 'slider',
+                                top: '90%',
+                                xAxisIndex: [0],
+                                start: 0,
+                                end: 20
+                            }
+                        ],
+                        series: [
+                            {
+                                name: 'PREPOWER',
+                                type: 'boxplot',
+                                datasetIndex: 3
+                            },
+                            {
+                                name: 'ROUND(A.POWER,1)',
+                                type: 'boxplot',
+                                datasetIndex: 4
+                            },
+                            {
+                                name: 'YD15',
+                                type: 'boxplot',
+                                datasetIndex: 5
+                            }
+                        ]
+                    };
+
+                    option && this.chartInstance.setOption(option);
+                }
+            });
+        }
+    }
 };
 </script>
-  
+
 <style>
-.boxplotChart {
+.chartContainer {
     width: 100%;
-    height: 400px;
+    height: 100%;
 }
 </style>
-  
