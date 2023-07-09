@@ -29,24 +29,31 @@
                 <i id="bottomClickSpan" class="iconfont opration-handler" aria-hidden="true"
                     @click="hideBottomPanel">&#xe601;</i>
                 <div class="bar-content-bottom" id="bottomContent">
-                    <el-row>
-                        <el-button plain @click="backToHome">返回主页</el-button>
-                    </el-row>
-                    <el-row>
-                        <el-button plain @click="chargeWindField">显示 / 关闭风场</el-button>
-                    </el-row>
-                    <el-row>
-                        <el-button plain @click="addTurbineLayer(1)">东部</el-button>
-                    </el-row>
-                    <el-row>
-                        <el-button plain @click="addTurbineLayer(2)">南部</el-button>
-                    </el-row>
-                    <el-row>
-                        <el-button plain @click="addTurbineLayer(3)">西部</el-button>
-                    </el-row>
-                    <el-row>
-                        <el-button plain @click="addTurbineLayer(4)">北部</el-button>
-                    </el-row>
+                    <el-col>
+                        <el-row>
+                            <el-button plain @click="backToHome">返回主页</el-button>
+                        </el-row>
+                        <el-row>
+                            <el-button plain @click="turnToBuilding">检视风电场</el-button>
+                        </el-row>
+                        <el-row>
+                            <el-button plain @click="chargeWindField">显示 / 关闭风场</el-button>
+                        </el-row>
+                    </el-col>
+                    <el-col>
+                        <el-row>
+                            <el-button plain @click="addTurbineLayer(1)">东部：浙江括苍山风电场</el-button>
+                        </el-row>
+                        <el-row>
+                            <el-button plain @click="addTurbineLayer(2)">南部：广东汕头南澳岛风电场</el-button>
+                        </el-row>
+                        <el-row>
+                            <el-button plain @click="addTurbineLayer(3)">西部：新疆达坂城风电场</el-button>
+                        </el-row>
+                        <el-row>
+                            <el-button plain @click="addTurbineLayer(4)">北部：内蒙古辉腾锡勒风电场</el-button>
+                        </el-row>
+                    </el-col>
                 </div>
             </div>
         </div>
@@ -85,6 +92,16 @@ export default {
                     requestWebgl1: true
                 }
             },
+            layers: [{
+                id: "风电场办公楼",
+                type: "3dtiles",
+                url: "//data.mars3d.cn/3dtiles/bim-daxue/tileset.json",
+                position: { lng: 87.932892, lat: 43.573134, alt: 1153.7 },
+                maximumScreenSpaceError: 16,
+                tooltip: "新疆达坂城风电场办公楼",
+                scale: 10,
+                show: true
+            }]
         }
         var windLayer = new mars3d.layer.WindLayer()
         var chinaLayer = new mars3d.layer.GeoJsonLayer()
@@ -125,6 +142,17 @@ export default {
                 $(".sideBar.right").removeClass("opacity0").removeClass("fadeOutRight").addClass("animated fadeInRight")
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
             }, 2000)
+
+            // 开启键盘漫游
+            this.map.keyboardRoam.enabled = true
+            this.map.keyboardRoam.minHeight = 80
+            this.map.keyboardRoam.setOptions({
+                moveStep: 10, // 平移步长 (米)。
+                dirStep: 25, // 相机原地旋转步长，值越大步长越小。
+                rotateStep: 1.0, // 相机围绕目标点旋转速率，0.3-2.0
+                minPitch: 0.1, // 最小仰角  0-1
+                maxPitch: 0.95 // 最大仰角  0-1
+            })
 
             //webgl渲染失败后，刷新页面
             this.map.on(mars3d.EventType.renderError, function () {
@@ -252,64 +280,78 @@ export default {
             // 更改飞行状态
             var positions = []
             var viewPoints = []
-            var factoryTitle = '内蒙古辉腾锡勒风电场'
-            var factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
+            var factoryTitle = ''
+            var factoryPosition = {}
             switch (id) {
                 case 1:
                     positions = [
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
-                        { lng: 122.243398 + ( Math.random() - 0.5 ) / 20, lat: 30.037948 + ( Math.random() - 0.5 ) / 20, alt: 1716.4 + Math.random() },
+                        { lng: 120.935595, lat: 28.816111, alt: 1282.3 },
+                        { lng: 120.935475, lat: 28.818617, alt: 1220.3 },
+                        { lng: 120.931715, lat: 28.813515, alt: 1335.4 },
+                        { lng: 120.92851, lat: 28.812498, alt: 1349.7 },
+                        { lng: 120.927039, lat: 28.812325, alt: 1378 },
+                        { lng: 120.924696, lat: 28.810802, alt: 1345.3 },
+                        { lng: 120.922887, lat: 28.81043, alt: 1378.3 },
+                        { lng: 120.921624, lat: 28.81019, alt: 1387.5 },
+                        { lng: 120.918119, lat: 28.807413, alt: 1327.3 },
+                        { lng: 120.91864, lat: 28.805663, alt: 1312.8 },
+                        { lng: 120.916948, lat: 28.808792, alt: 1300.3 },
+                        { lng: 120.916376, lat: 28.803348, alt: 1244.2 },
+                        { lng: 120.9126, lat: 28.810853, alt: 1183.9 },
+                        { lng: 120.909243, lat: 28.813867, alt: 1011.4 },
+                        { lng: 120.919192, lat: 28.813804, alt: 1213.1 },
+                        { lng: 120.916721, lat: 28.820411, alt: 1015.8 },
+                        { lng: 120.936704, lat: 28.811973, alt: 1154.6 },
+                        { lng: 120.924538, lat: 28.815428, alt: 1270.4 },
+                        { lng: 120.915811, lat: 28.827058, alt: 936.9 },
+                        { lng: 120.932343, lat: 28.823411, alt: 1088.6 }
                     ]
                     viewPoints = [
-                        { "lat": 30.041168, "lng": 122.314148, "alt": 2119.8, "heading": 268.8, "pitch": -15.9, duration: 3 },
-                        { "lat": 30.029833, "lng": 122.178014, "alt": 2100.6, "heading": 75.6, "pitch": -17.5, duration: 6 },
-                        { "lat": 30.021059, "lng": 122.304282, "alt": 2110.5, "heading": 282.3, "pitch": -14.9, duration: 6 },
-                        { "lat": 30.041168, "lng": 122.314148, "alt": 2119.8, "heading": 268.8, "pitch": -15.9, duration: 6 }
+                        { "lat": 28.843931, "lng": 120.882302, "alt": 2803.8, "heading": 131.2, "pitch": -20.8, duration: 5 },
+                        { "lat": 28.78197, "lng": 120.89736, "alt": 2895, "heading": 34.3, "pitch": -23.1, duration: 3 },
+                        { "lat": 28.784143, "lng": 120.949173, "alt": 2817.7, "heading": 321.4, "pitch": -21.8, duration: 3 },
+                        { "lat": 28.827739, "lng": 120.968225, "alt": 2866.4, "heading": 253.6, "pitch": -22.4, duration: 3 },
+                        { "lat": 28.843931, "lng": 120.882302, "alt": 2803.8, "heading": 131.2, "pitch": -20.8, duration: 3 }
                     ]
                     if (this.isEasternFly)
-                        this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
+                        this.map.setCameraView({"lat":28.843931,"lng":120.882302,"alt":2803.8,"heading":131.2,"pitch":-20.8})
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
                     this.isEasternFly = true
                     factoryTitle = '浙江括苍山风电场'
-                    factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
+                    factoryPosition = { lng: 120.913288, lat: 28.819988, alt: 823.2}
                     break;
                 case 2:
-                    positions = [
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() },
-                        { lng: 115.473181 + ( Math.random() - 0.5 ) / 20, lat: 22.807014 + ( Math.random() - 0.5 ) / 20, alt: 1676.8 + Math.random() }
-                    ]
+                    for (var k = 1; k <= 20; k++){
+                        if (k <= 5) {
+                            positions.push({ lng: 117.200756, lat: 23.38885 + k * 0.01, alt: 6.6})
+                        }
+                        else if(k <= 10){
+                            positions.push({ lng: 117.210756, lat: 23.38885 + ( k - 5 ) * 0.01, alt: 6.6})
+                        }
+                        else if(k <= 15){
+                            positions.push({ lng: 117.220756, lat: 23.38885 + ( k - 10 ) * 0.01, alt: 6.6})
+                        }
+                        else {
+                            positions.push({ lng: 117.230756, lat: 23.38885 + ( k - 15 ) * 0.01, alt: 6.6})
+                        }
+                    }
                     viewPoints = [
-                        { "lat": 22.744186, "lng": 115.511764, "alt": 1452.2, "heading": 333.2, "pitch": -11.8, duration: 3 },
-                        { "lat": 22.777821, "lng": 115.541255, "alt": 1454.2, "heading": 288.7, "pitch": -13.4, duration: 6 },
-                        { "lat": 22.823162, "lng": 115.541673, "alt": 1456.6, "heading": 250.6, "pitch": -12.8, duration: 6 },
-                        { "lat": 22.744186, "lng": 115.511764, "alt": 1452.2, "heading": 333.2, "pitch": -11.8, duration: 6 }
+                        { "lat": 23.419527, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3, duration: 5 },
+                        { "lat": 23.37117, "lng": 117.213158, "alt": 1821, "heading": 4.6, "pitch": -21, duration: 3 },
+                        { "lat": 23.416306, "lng": 117.269615, "alt": 1833.6, "heading": 273.3, "pitch": -19, duration: 3 },
+                        { "lat": 23.472185, "lng": 117.218578, "alt": 1872.8, "heading": 183.4, "pitch": -19.4, duration: 3 },
+                        { "lat": 23.419527, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3, duration: 3 },
                     ]
                     if (this.isSouthernFly)
-                        this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
+                        this.map.setCameraView({ "lat": 23.419334, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3 })
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
                     this.isSouthernFly = true
                     factoryTitle = '广东汕头南澳岛风电场'
-                    factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
+                    factoryPosition = { lng: 117.250791, lat: 23.419054, alt: 7}
                     break;
                 case 3:
                     for (var j = 1; j <= 20; j++){
@@ -327,9 +369,10 @@ export default {
                         }
                     }
                     viewPoints = [
-                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 },
-                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 },
-                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 },
+                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 5 },
+                        { "lat": 43.524646, "lng": 87.973567, "alt": 4888.6, "heading": 6, "pitch": -38.1, duration: 3 },
+                        { "lat": 43.573178, "lng": 88.045264, "alt": 4891, "heading": 271.5, "pitch": -32.9, duration: 3 },
+                        { "lat": 43.624864, "lng": 87.980843, "alt": 4903.2, "heading": 183.2, "pitch": -38.4, duration: 3 },
                         { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 }
                     ]
                     if (this.isWesternFly)
@@ -357,7 +400,7 @@ export default {
                         }
                     }
                     viewPoints = [
-                        { "lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5, duration: 3 },
+                        { "lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5, duration: 5 },
                         { "lat": 41.241012, "lng": 112.95336, "alt": 5001.4, "heading": 357.5, "pitch": -29.5, duration: 3 } ,
                         { "lat": 41.293692, "lng": 113.022992, "alt": 5010.9, "heading": 275.6, "pitch": -31.1, duration: 3 },
                         { "lat": 41.358879, "lng": 112.957203, "alt": 5022.1, "heading": 184.3, "pitch": -32.4, duration: 3 },
@@ -387,7 +430,7 @@ export default {
                     outline: true,
                     outlineColor: "#ffffff",
                     outlineWidth: 2,
-                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000),
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 1000000),
                     clampToGround: true,
 
                     // 高亮时的样式（默认为鼠标移入，也可以指定type:'click'单击高亮），构造后也可以openHighlight、closeHighlight方法来手动调用
@@ -490,7 +533,7 @@ export default {
 
             // 在turbineLayer图层绑定Popup弹窗
             turbineLayer.bindPopup(function (event) {
-                console.log(event.graphic)
+                // console.log(event.graphic)
                 const attr = {}
                 attr["时间"] = "2022/1/2  0:00:00"
                 attr["风速"] = Math.random().toFixed(3) * 1000
@@ -508,13 +551,13 @@ export default {
                     // 相机视角定位至风机群
                     switch (id) {
                         case 1:
-                            this.map.setCameraView({"lat":30.041168,"lng":122.314148,"alt":2119.8,"heading":268.8,"pitch":-15.9})
+                            this.map.setCameraView({ "lat": 28.843931, "lng": 120.882302, "alt": 2803.8, "heading": 131.2, "pitch": -20.8})
                             break;
                         case 2:
-                            this.map.setCameraView({"lat":22.744186,"lng":115.511764,"alt":1452.2,"heading":333.2,"pitch":-11.8})
+                            this.map.setCameraView({ "lat": 23.419527, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3})
                             break;
                         case 3:
-                            this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
+                            this.map.setCameraView({ "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1 })
                             break;
                         default:
                             this.map.setCameraView({"lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5})
@@ -540,7 +583,7 @@ export default {
                 this.windLayer = null
             }
         },
-
+        // 返回首页 
         backToHome() {
             this.$router.push('/home')
             // 清除计时器
@@ -550,6 +593,13 @@ export default {
                 this.intervalId = null;
             }
         },
+        // 检视风电场
+        turnToBuilding() {
+            // this.map.setCameraView({ "lat": 43.571205, "lng": 87.938571, "alt": 1220.9, "heading": 1.6, "pitch": -5.2 })
+            this.map.setCameraView({ "lat": 43.576993, "lng": 87.958406, "alt": 1568.8, "heading": 256.1, "pitch": -12 })
+        },
+
+
         hideLeftPanel() {
             this.isLeftOpen = !this.isLeftOpen
             if (this.isLeftOpen == false) {
@@ -781,8 +831,15 @@ export default {
     }
 
     // 底栏按钮
+    .el-col-24 {
+        width: 40% !important;
+        height: 100% !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
     .bar-content-bottom .el-button {
-        width: 100%;
+        width: 80%;
         background-color: rgba(0,183,254,0.5);
         border: none;
         font-size: 16px;
