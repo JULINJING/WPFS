@@ -40,7 +40,7 @@ export default {
                 oddRowBGC: '#0f1325', //奇数行
                 evenRowBGC: '#171c33', //偶数行
                 index: true,
-                columnWidth: [50],
+                columnWidth: [50,100,100,100],
                 align: ['center']
             }
         }
@@ -73,7 +73,7 @@ $box-width: 100%;
         overflow: hidden;
 
         .dv-scr-board {
-            width: 270px;
+            width: 500px;
             height: 340px;
         }
     }
