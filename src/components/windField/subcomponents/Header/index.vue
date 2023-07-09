@@ -8,7 +8,7 @@ import $ from 'jquery'
 export default {
     data() {
         return{
-            appName:'风 场 风 机 可 视 化 平 台'
+            appName:'风 力 发 电 数 字 孪 生 仿 真 平 台'
         }
     },
     methods: {

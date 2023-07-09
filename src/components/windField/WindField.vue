@@ -59,6 +59,7 @@ import Layout from "./subcomponents/Header/index";
 import MarsMap from "./mars-work/mars-map.vue"
 import * as mars3d from 'mars3d'
 import $ from 'jquery'
+import * as turf from '@turf/turf'
 import { CanvasBillboard } from "../../../public/lib/custom/CanvasBillboard.js"
 
 const Cesium = mars3d.Cesium
@@ -86,11 +87,13 @@ export default {
             },
         }
         var windLayer = new mars3d.layer.WindLayer()
+        var chinaLayer = new mars3d.layer.GeoJsonLayer()
         
         return {
             configUrl: basePathUrl + 'config/config.json',
             mapOptions: mapOptions,
             windLayer,
+            chinaLayer,
 
             // 记录视点飞行状态
             isEasternFly: false,
@@ -113,14 +116,53 @@ export default {
             // 开场
             this.map.openFlyAnimation()
             this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
-            this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
+            // this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
 
             this.addWindLayer()
+            // this.addChinaMap()
             setTimeout(function () {
                 $(".sideBar.left").removeClass("opacity0").removeClass("fadeOutLeft").addClass("animated fadeInLeft")
                 $(".sideBar.right").removeClass("opacity0").removeClass("fadeOutRight").addClass("animated fadeInRight")
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
             }, 2000)
+
+            //webgl渲染失败后，刷新页面
+            this.map.on(mars3d.EventType.renderError, function () {
+                window.location.reload();
+            });
+        },
+        addChinaMap() {
+            this.chinaLayer = new mars3d.layer.GeoJsonLayer({
+                name: "全国省界",
+                url: "../../../chinaData/中国行政区划.json",
+                format: this.simplifyGeoJSON, // 用于自定义处理geojson
+                symbol: {
+                    type: "polylineC",
+                    styleOptions: {
+                        width: 2,
+                        materialType: mars3d.MaterialType.LineFlow,
+                        materialOptions: {
+                            color: "#00ffff",
+                            image: "imgs/fence-line.png",
+                            speed: 10,
+                            repeat_x: 10
+                        },
+                        distanceDisplayCondition: true,
+                        distanceDisplayCondition_far: 30000000,
+                        distanceDisplayCondition_near: 2000000
+                    }
+                },
+            })
+            this.map.addLayer(this.chinaLayer)
+        },
+        // 简化geojson的坐标
+        simplifyGeoJSON(geojson) {
+            try {
+                geojson = turf.simplify(geojson, { tolerance: 0.0001, highQuality: true, mutate: true })
+            } catch (e) {
+                //
+            }
+            return geojson
         },
         addWindLayer() {
             this.windLayer = new mars3d.layer.WindLayer({
@@ -206,9 +248,12 @@ export default {
 
             // id 东南西北分别为1 2 3 4
             // 确定风机位置以及视点飞行路径
+            // 确定风力发电场名称和位置
             // 更改飞行状态
             var positions = []
             var viewPoints = []
+            var factoryTitle = '内蒙古辉腾锡勒风电场'
+            var factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
             switch (id) {
                 case 1:
                     positions = [
@@ -235,6 +280,8 @@ export default {
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
                     this.isEasternFly = true
+                    factoryTitle = '浙江括苍山风电场'
+                    factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
                     break;
                 case 2:
                     positions = [
@@ -261,59 +308,95 @@ export default {
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
                     this.isSouthernFly = true
+                    factoryTitle = '广东汕头南澳岛风电场'
+                    factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
                     break;
                 case 3:
-                    positions = [
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                        { lng: 102.597753 + ( Math.random() - 0.5 ) / 20, lat: 37.316441 + ( Math.random() - 0.5 ) / 20, alt: 3919.8 + Math.random() },
-                    ]
+                    for (var j = 1; j <= 20; j++){
+                        if (j <= 5) {
+                            positions.push({ lng: 87.964237, lat: 43.544667 + j * 0.01, alt: 1138.6})
+                        }
+                        else if(j <= 10){
+                            positions.push({ lng: 87.974237, lat: 43.544667 + ( j - 5 ) * 0.01, alt: 1138.6})
+                        }
+                        else if(j <= 15){
+                            positions.push({ lng: 87.984237, lat: 43.544667 + ( j - 10 ) * 0.01, alt: 1138.6})
+                        }
+                        else {
+                            positions.push({ lng: 87.994237, lat: 43.544667 + ( j - 15 ) * 0.01, alt: 1138.6})
+                        }
+                    }
                     viewPoints = [
-                        { "lat": 37.344724, "lng": 102.669323, "alt": 9359.2, "heading": 242.8, "pitch": -19.5, duration: 3 },
-                        { "lat": 37.370147, "lng": 102.583486, "alt": 9357.4, "heading": 171.1, "pitch": -16, duration: 6 },
-                        { "lat": 37.260906, "lng": 102.578152, "alt": 9353.4, "heading": 18.1, "pitch": -30.1, duration: 6 },
-                        { "lat": 37.344724, "lng": 102.669323, "alt": 9359.2, "heading": 242.8, "pitch": -19.5, duration: 6 }
+                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 },
+                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 },
+                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 },
+                        { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 }
                     ]
                     if (this.isWesternFly)
-                        this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
+                        this.map.setCameraView({ "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1 })
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
                     this.isWesternFly = true
+                    factoryTitle = '新疆达坂城风电场'
+                    factoryPosition = { lng: 88.007588, lat: 43.574361, alt: 1713.9}
                     break;
                 default:
-                    positions = [
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() },
-                        { lng: 112.219753 + ( Math.random() - 0.5 ) / 20, lat: 39.057 + ( Math.random() - 0.5 ) / 20, alt: 1827 + Math.random() }
-                    ]
+                    for (var i = 1; i <= 20; i++){
+                        if (i <= 5) {
+                            positions.push({ lng: 112.937053, lat: 41.270271 + i * 0.01, alt: 3319.4})
+                        }
+                        else if(i <= 10){
+                            positions.push({ lng: 112.947053, lat: 41.270271 + ( i - 5 ) * 0.01, alt: 3319.4})
+                        }
+                        else if(i <= 15){
+                            positions.push({ lng: 112.957053, lat: 41.270271 + ( i - 10 ) * 0.01, alt: 3319.4})
+                        }
+                        else {
+                            positions.push({ lng: 112.967053, lat: 41.270271 + ( i - 15 ) * 0.01, alt: 3319.4})
+                        }
+                    }
                     viewPoints = [
-                        { "lat": 39.101415, "lng": 112.188214, "alt": 5648, "heading": 148.1, "pitch": -24, duration: 3 },
-                        { "lat": 39.031555, "lng": 112.154211, "alt": 5642.6, "heading": 71.6, "pitch": -21.7, duration: 6 },
-                        { "lat": 38.994278, "lng": 112.246046, "alt": 5647.8, "heading": 340.3, "pitch": -20.1, duration: 6 },
-                        { "lat": 39.101415, "lng": 112.188214, "alt": 5648, "heading": 148.1, "pitch": -24, duration: 6 }
+                        { "lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5, duration: 3 },
+                        { "lat": 41.241012, "lng": 112.95336, "alt": 5001.4, "heading": 357.5, "pitch": -29.5, duration: 3 } ,
+                        { "lat": 41.293692, "lng": 113.022992, "alt": 5010.9, "heading": 275.6, "pitch": -31.1, duration: 3 },
+                        { "lat": 41.358879, "lng": 112.957203, "alt": 5022.1, "heading": 184.3, "pitch": -32.4, duration: 3 },
+                        { "lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5, duration: 3 }
                     ]
                     if (this.isNorthernFly)
-                        this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
+                        this.map.setCameraView({"lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5})
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
                     this.isNorthernFly = true
+                    factoryTitle = '内蒙古辉腾锡勒风电场'
+                    factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
             }
+
+            //创建风电场数据图层
+            let titleLayer = new mars3d.layer.GraphicLayer({ id: '风电场名称' })
+            this.map.addLayer(titleLayer)
+            // 添加风电场名称
+            var titleGraphic = new mars3d.graphic.LabelEntity({
+                position: new mars3d.LngLatPoint(factoryPosition.lng, factoryPosition.lat, factoryPosition.lat),
+                style: {
+                    text: factoryTitle,
+                    font_size: 30,
+                    font_family: "楷体",
+                    color: "#0081c2",
+                    outline: true,
+                    outlineColor: "#ffffff",
+                    outlineWidth: 2,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000),
+                    clampToGround: true,
+
+                    // 高亮时的样式（默认为鼠标移入，也可以指定type:'click'单击高亮），构造后也可以openHighlight、closeHighlight方法来手动调用
+                    highlight: {
+                        font_size: 40
+                    }
+                },
+            })
+            titleLayer.addGraphic(titleGraphic)
 
             //创建风机数据图层
             let turbineLayer = new mars3d.layer.GraphicLayer({ id: '风机' })
@@ -330,7 +413,7 @@ export default {
                     position: item,
                     style: {
                         url: '//data.mars3d.cn/gltf/mars/fengche.gltf',
-                        heading: Math.random() * 360,
+                        heading: 90,
                         scale: 100,
                         minimumPixelSize: 30,
                         fill: true,
@@ -359,12 +442,12 @@ export default {
                 var powerGraphicLight = new mars3d.graphic.DivBoderLabel({
                     position: item,
                     style: {
-                        text: `预测功率：加载中`,
+                        text: `预测功率：加载中↻`,
                         font_size: 14,
                         font_family: "楷体",
                         color: "#ccc",
                         boderColor: "#15d1f2",
-                        addHeight: 100,
+                        addHeight: 0,
                         clampToGround: true,
                         distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
                     },
@@ -403,19 +486,21 @@ export default {
                     powerLayer.removeGraphic(graphic, true)
                     powerLayer.addGraphic(powerGraphicLightVar)
                 })
-            }, 5000)
+            }, 10000)
 
             // 在turbineLayer图层绑定Popup弹窗
             turbineLayer.bindPopup(function (event) {
                 console.log(event.graphic)
                 const attr = {}
                 attr["时间"] = "2022/1/2  0:00:00"
-                attr["实际风速"] = Math.random().toFixed(3) * 1000
+                attr["风速"] = Math.random().toFixed(3) * 1000
+                attr["实际功率"] = Math.random().toFixed(3) * 1000
                 attr["预测功率"] = Math.random().toFixed(3) * 1000
 
                 return mars3d.Util.getTemplateHtml({ title: event.graphic.id + ' 号 风 机', template: "all", attr: attr })
             })
 
+            // 一定高度点击风机跳转视角 并删除风场
             if (this.map.camera.positionCartographic.height >= 100000) {
                 // 绑定点击风机事件
                 turbineLayer.on(mars3d.EventType.click, () => {
@@ -432,7 +517,7 @@ export default {
                             this.map.setCameraView({"lat":37.344724,"lng":102.669323,"alt":9359.2,"heading":242.8,"pitch":-19.5})
                             break;
                         default:
-                            this.map.setCameraView({"lat":39.101415,"lng":112.188214,"alt":5648,"heading":148.1,"pitch":-24})
+                            this.map.setCameraView({"lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5})
                     }
                     // 删除风场图层
                     // 跟踪相机实例
@@ -444,6 +529,7 @@ export default {
                 })
             }
         },
+        // 控制风场
         chargeWindField() {
             if (!this.windLayer) {
                 this.addWindLayer()
