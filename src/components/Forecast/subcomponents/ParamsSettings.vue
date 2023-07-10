@@ -181,13 +181,12 @@ export default {
         console.log(this.form);
         // TODO
         // 调用后端预测接口，传入表单数据
-        this.request.post("/file/forecast").then((res) => {
+        var fileName = "test.csv"
+        this.request.post("/file/forecast",fileName).then((res) => {
           if (res.code === "200") {
             this.$message.success("操作成功");
           }
         });
-
-
       }
     },
   },
