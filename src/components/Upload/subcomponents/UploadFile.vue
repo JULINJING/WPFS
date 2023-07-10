@@ -147,7 +147,7 @@ export default {
         // const newTableData = this.jsonData;
 
         const jsonData = require('@/assets/testJson/11.json');
-        this.$emit('update-table-data', jsonData);
+        this.$emit('update-table-data', jsonData);  
     },
 
     // 上传文件失败
