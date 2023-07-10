@@ -56,6 +56,10 @@
                     </el-col>
                 </div>
             </div>
+            <div id="explanatoryPicture">
+                <img src="./imgs/keyboard.png" alt="" />
+                <span class="closeButton" @click="closeImgPanel">关闭</span>
+            </div>
         </div>
     </div>
 </template>
@@ -96,7 +100,7 @@ export default {
                 id: "风电场办公楼",
                 type: "3dtiles",
                 url: "//data.mars3d.cn/3dtiles/bim-daxue/tileset.json",
-                position: { lng: 87.932892, lat: 43.573134, alt: 1153.7 },
+                position: { lng: 87.881843, lat: 43.584772, alt: 1139.8 },
                 maximumScreenSpaceError: 16,
                 tooltip: "新疆达坂城风电场办公楼",
                 scale: 10,
@@ -136,6 +140,7 @@ export default {
             // this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
 
             this.addWindLayer()
+            this.addOtherFactoryLayer()
             // this.addChinaMap()
             setTimeout(function () {
                 $(".sideBar.left").removeClass("opacity0").removeClass("fadeOutLeft").addClass("animated fadeInLeft")
@@ -143,21 +148,276 @@ export default {
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
             }, 2000)
 
-            // 开启键盘漫游
-            this.map.keyboardRoam.enabled = true
-            this.map.keyboardRoam.minHeight = 80
-            this.map.keyboardRoam.setOptions({
-                moveStep: 10, // 平移步长 (米)。
-                dirStep: 25, // 相机原地旋转步长，值越大步长越小。
-                rotateStep: 1.0, // 相机围绕目标点旋转速率，0.3-2.0
-                minPitch: 0.1, // 最小仰角  0-1
-                maxPitch: 0.95 // 最大仰角  0-1
-            })
-
             //webgl渲染失败后，刷新页面
             this.map.on(mars3d.EventType.renderError, function () {
                 window.location.reload();
             });
+        },
+        addOtherFactoryLayer() {
+            // 添加道路
+            var otherFactoryLayer = new mars3d.layer.GraphicLayer()
+            this.map.addLayer(otherFactoryLayer)
+            const roadGraphic1 = new mars3d.graphic.Road({
+                positions: [
+                    [87.937602, 43.556519, 1100.1],
+                    [87.83576, 43.596981, 1126.1]
+                ],
+                style: {
+                    image: "../../../imgs/road.jpg",
+                    width: 50,
+                    height: 1
+                }
+            })
+            const roadGraphic2 = new mars3d.graphic.Road({
+                positions: [
+                    [87.89991, 43.566763, 1102],
+                    [87.867252, 43.579576, 1118.6],
+                    [87.861179, 43.582624, 1121.1],
+                    [87.860132, 43.583037, 1121.7],
+                    [87.855952, 43.584103, 1121.8],
+                    [87.834496, 43.595468, 1116.9]
+                ],
+                style: {
+                    image: "../../../imgs/road.jpg",
+                    width: 50,
+                    height: 1
+                }
+            })
+            otherFactoryLayer.addGraphic(roadGraphic1)
+            otherFactoryLayer.addGraphic(roadGraphic2)
+
+            // 添加车辆
+            var carGraphic1 = new mars3d.graphic.ModelPrimitive({
+                position: [87.872971, 43.582348, 1116.1],
+                style: {
+                    url: '//data.mars3d.cn/gltf/mars/car/kache3.gltf',
+                    heading: 210,
+                    scale: 5,
+                    minimumPixelSize: 1,
+                },
+            })
+            var carGraphic2 = new mars3d.graphic.ModelPrimitive({
+                position: [87.869916, 43.578403, 1118.1],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/d8cb721fdc3642a085533583da944c79/gltf/gltf2.gltf',
+                    heading: 30,
+                    scale: 5,
+                    minimumPixelSize: 1,
+                },
+            })
+            var carGraphic3 = new mars3d.graphic.ModelPrimitive({
+                position: [87.882719, 43.578459, 1113.4],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/1d4f63111fc9499dac5cee2286ad7bb3/gltf/gltf2.gltf',
+                    heading: 120,
+                    scale: 5,
+                    minimumPixelSize: 1,
+                },
+            })
+            var carGraphic4 = new mars3d.graphic.ModelPrimitive({
+                position: [87.873501, 43.576978, 1116.3],
+                style: {
+                    url: '//data.mars3d.cn/gltf/mars/car/kache1.gltf',
+                    heading: 30,
+                    scale: 5,
+                    minimumPixelSize: 1,
+                },
+            })
+            otherFactoryLayer.addGraphic(carGraphic1)
+            otherFactoryLayer.addGraphic(carGraphic2)
+            otherFactoryLayer.addGraphic(carGraphic3)
+            otherFactoryLayer.addGraphic(carGraphic4)
+
+            // 添加厂房
+            var houseGraphic1 = new mars3d.graphic.ModelPrimitive({
+                position: [87.878189, 43.577725, 1118.5],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/9d3a5ca27bad426b81b05bca10aac9bd/gltf/gltf2.gltf',
+                    heading: 210,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            var houseGraphic2 = new mars3d.graphic.ModelPrimitive({
+                position: [87.875837, 43.578815, 1120],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/9d3a5ca27bad426b81b05bca10aac9bd/gltf/gltf2.gltf',
+                    heading: 210,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            var houseGraphic3 = new mars3d.graphic.ModelPrimitive({
+                position: [87.876017, 43.577012, 1116.4],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/b04575a269e74d309d80fb4aa504c307/gltf/gltf2.gltf',
+                    heading: 120,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            var houseGraphic4 = new mars3d.graphic.ModelPrimitive({
+                position: [87.87317, 43.579765, 1122.8],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/4f99992dc26a43c2975038003879a8c2/gltf/gltf2.gltf',
+                    heading: 210,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            otherFactoryLayer.addGraphic(houseGraphic1)
+            otherFactoryLayer.addGraphic(houseGraphic2)
+            otherFactoryLayer.addGraphic(houseGraphic3)
+            otherFactoryLayer.addGraphic(houseGraphic4)
+
+            // 添加人
+            var peopleGraphic1 = new mars3d.graphic.ModelPrimitive({
+                position: [87.872559, 43.579678, 1121.1],
+                style: {
+                    url: '//data.mars3d.cn/gltf/mars/man/walk.gltf',
+                    heading: 210,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            otherFactoryLayer.addGraphic(peopleGraphic1)
+
+            // 添加电力设备
+            var electricityGraphic1 = new mars3d.graphic.ModelPrimitive({
+                position: [87.890183, 43.573563, 1117.5],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/029020c24f604b9e8a5621306889965e/gltf/default.gltf',
+                    heading: 210,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            var electricityGraphic2 = new mars3d.graphic.ModelPrimitive({
+                position: [87.888943, 43.571967, 1109.9],
+                style: {
+                    url: '//data.mars3d.cn/gltf/imap/64b2b420d1564777bb68c771f9c9e57e/gltf/gltf2.gltf',
+                    heading: 210,
+                    scale: 10,
+                    minimumPixelSize: 1,
+                },
+            })
+            otherFactoryLayer.addGraphic(electricityGraphic1)
+            otherFactoryLayer.addGraphic(electricityGraphic2)
+
+            // 添加输电线路
+            var transportGraphic1 = new mars3d.graphic.ModelPrimitive({
+                position: [87.901237, 43.572966, 1119],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
+            var transportGraphic2 = new mars3d.graphic.ModelPrimitive({
+                position: [87.918563, 43.571499, 1134.6],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
+            var transportGraphic3 = new mars3d.graphic.ModelPrimitive({
+                position: [87.935538, 43.570906, 1150.8],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
+            var transportGraphic4 = new mars3d.graphic.ModelPrimitive({
+                position: [87.955726, 43.570854, 1155.9],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
+            // 自动计算与绘制高压电线
+            let polylines1 = []
+            let polylines2 = []
+            let polylines3 = []
+            const polylinesTB = []
+            const transportGraphicPositions = [
+                [87.901237, 43.572966, 1288],
+                [87.918563, 43.571499, 1303.6],
+                [87.935538, 43.570906, 1319.8],
+                [87.955726, 43.570854, 1324.9]
+            ]
+            for (let i = 0; i < 4; i++) {
+                const item = transportGraphicPositions[i]
+
+                // 所在经纬度坐标及海拔高度
+                const longitude = item[0]
+                const latitude = item[1]
+                const height = item[2]
+
+                const originPoint = {
+                    longitude: longitude,
+                    latitude: latitude,
+                    height: height
+                }
+                const position = Cesium.Cartesian3.fromDegrees(originPoint.longitude, originPoint.latitude, originPoint.height)
+
+                // 计算电线塔转角角度
+                const degree = 210
+
+                // 3条线路坐标
+                const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(degree), 0, 0)
+                const newPoint1 = mars3d.PointUtil.getPositionByHprAndOffset(position, new Cesium.Cartesian3(0.341789, 16.837972, 50.717621), hpr)
+                const newPoint2 = mars3d.PointUtil.getPositionByHprAndOffset(position, new Cesium.Cartesian3(0.34241, -16.838163, 50.717617), hpr)
+                const newPoint3 = mars3d.PointUtil.getPositionByHprAndOffset(position, new Cesium.Cartesian3(-0.025005, 0.022878, 39.540545), hpr)
+
+                polylinesTB.push(newPoint2) // 图标显示的点
+
+                if (i === 0) {
+                    polylines1.push(newPoint1)
+                    polylines2.push(newPoint2)
+                    polylines3.push(newPoint3)
+                } else {
+                    // 曲率
+                    const angularityFactor = -5000
+                    // 点集数量
+                    const num = 50
+                    let positions = mars3d.PolyUtil.getLinkedPointList(polylines1[polylines1.length - 1], newPoint1, angularityFactor, num) // 计算曲线点
+                    polylines1 = polylines1.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines2[polylines2.length - 1], newPoint2, angularityFactor, num) // 计算曲线点
+                    polylines2 = polylines2.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines3[polylines3.length - 1], newPoint3, angularityFactor, num) // 计算曲线点
+                    polylines3 = polylines3.concat(positions)
+                }
+            }
+            function drawGuideLine(positions, color) {
+                const lineGraphic = new mars3d.graphic.PolylinePrimitive({
+                    positions: positions,
+                    style: {
+                        width: 2,
+                        color: color
+                    }
+                })
+                otherFactoryLayer.addGraphic(lineGraphic)
+            }
+            drawGuideLine(polylines1, "#BDC3CC")
+            drawGuideLine(polylines2, "#BDC3CC")
+            drawGuideLine(polylines3, "#BDC3CC")
+            otherFactoryLayer.addGraphic(transportGraphic1)
+            otherFactoryLayer.addGraphic(transportGraphic2)
+            otherFactoryLayer.addGraphic(transportGraphic3)
+            otherFactoryLayer.addGraphic(transportGraphic4)
         },
         addChinaMap() {
             this.chinaLayer = new mars3d.layer.GeoJsonLayer({
@@ -266,6 +526,12 @@ export default {
                 // 如果已经有一个正在运行的定时器，停止它
                 clearInterval(this.intervalId);
                 this.intervalId = null;
+            }
+
+            // 移除风场
+            if (this.windLayer) {
+                this.map.removeLayer(this.windLayer, true)
+                this.windLayer = null
             }
 
             // 移除其余风机
@@ -544,33 +810,33 @@ export default {
             })
 
             // 一定高度点击风机跳转视角 并删除风场
-            if (this.map.camera.positionCartographic.height >= 100000) {
-                // 绑定点击风机事件
-                turbineLayer.on(mars3d.EventType.click, () => {
-                    console.log(this.map.camera.positionCartographic.height)
-                    // 相机视角定位至风机群
-                    switch (id) {
-                        case 1:
-                            this.map.setCameraView({ "lat": 28.843931, "lng": 120.882302, "alt": 2803.8, "heading": 131.2, "pitch": -20.8})
-                            break;
-                        case 2:
-                            this.map.setCameraView({ "lat": 23.419527, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3})
-                            break;
-                        case 3:
-                            this.map.setCameraView({ "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1 })
-                            break;
-                        default:
-                            this.map.setCameraView({"lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5})
-                    }
-                    // 删除风场图层
-                    // 跟踪相机实例
-                    this.map.trackedEntity = null
-                    if (this.windLayer) {
-                        this.map.removeLayer(this.windLayer, true)
-                        this.windLayer = null
-                    }
-                })
-            }
+            // if (this.map.camera.positionCartographic.height >= 100000) {
+            //     // 绑定点击风机事件
+            //     turbineLayer.on(mars3d.EventType.click, () => {
+            //         console.log(this.map.camera.positionCartographic.height)
+            //         // 相机视角定位至风机群
+            //         switch (id) {
+            //             case 1:
+            //                 this.map.setCameraView({ "lat": 28.843931, "lng": 120.882302, "alt": 2803.8, "heading": 131.2, "pitch": -20.8})
+            //                 break;
+            //             case 2:
+            //                 this.map.setCameraView({ "lat": 23.419527, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3})
+            //                 break;
+            //             case 3:
+            //                 this.map.setCameraView({ "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1 })
+            //                 break;
+            //             default:
+            //                 this.map.setCameraView({"lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5})
+            //         }
+            //         // 删除风场图层
+            //         // 跟踪相机实例
+            //         this.map.trackedEntity = null
+            //         if (this.windLayer) {
+            //             this.map.removeLayer(this.windLayer, true)
+            //             this.windLayer = null
+            //         }
+            //     })
+            // }
         },
         // 控制风场
         chargeWindField() {
@@ -595,8 +861,34 @@ export default {
         },
         // 检视风电场
         turnToBuilding() {
-            // this.map.setCameraView({ "lat": 43.571205, "lng": 87.938571, "alt": 1220.9, "heading": 1.6, "pitch": -5.2 })
-            this.map.setCameraView({ "lat": 43.576993, "lng": 87.958406, "alt": 1568.8, "heading": 256.1, "pitch": -12 })
+            // 移除风场
+            if (this.windLayer) {
+                this.map.removeLayer(this.windLayer, true)
+                this.windLayer = null
+            }
+
+            // this.map.setCameraView({"lat":43.573973,"lng":87.903254,"alt":1262.6,"heading":134.6,"pitch":-3.4})
+            this.map.setCameraView({ "lat": 43.581253, "lng": 87.857363, "alt": 1484, "heading": 94, "pitch": -6.3 })
+            // 开启键盘漫游
+            this.map.keyboardRoam.enabled = true
+            this.map.keyboardRoam.minHeight = 80
+            this.map.keyboardRoam.setOptions({
+                moveStep: 0.5, // 平移步长 (米)。
+                dirStep: 5, // 相机原地旋转步长，值越大步长越小。
+                rotateStep: 2.0, // 相机围绕目标点旋转速率，0.3-2.0
+                minPitch: 0.1, // 最小仰角  0-1
+                maxPitch: 0.95 // 最大仰角  0-1
+            })
+            this.hideBottomPanel()
+            $("#explanatoryPicture").css({
+                "display": "block",
+                "position": "absolute",
+                "top": "10%",
+                "left": "22%",
+                "right": "22%",
+                "width": "56%"
+            })
+            $("#explanatoryPicture").addClass("animated fadeInDown")
         },
 
 
@@ -680,6 +972,9 @@ export default {
                 },1000)
             }
         },
+        closeImgPanel() {
+            $("#explanatoryPicture").css("display","none")
+        }
     },
     watch: {
 
@@ -749,7 +1044,7 @@ export default {
         left: 22%;
         right: 22%;
         width: 56%;
-        height: 30%;
+        height: 35%;
         border: 1px rgba(255, 255, 255, 0.5) solid;
         border-radius: 5px;
         // background-color: transparent;
@@ -850,6 +1145,20 @@ export default {
     .bar-content-bottom .el-button:active {
         background-color: #20B0CB;
         color: white
+    }
+
+    #explanatoryPicture {
+        display: none;
+    }
+    .closeButton {
+        position: absolute;
+        top:0%;
+        right:20%;
+        font-size: 12px;
+        color: white;
+    }
+    .closeButton:hover {
+        cursor: pointer;
     }
 }
 
