@@ -53,7 +53,7 @@
       </div>
 
       <div v-if="showTable" class="form-container">
-        <el-table :data="originData" stripe style="width: 100%" max-height="300">
+        <el-table :data="tableData" stripe style="width: 100%" max-height="300">
           <el-table-column fixed prop="DATATIME" label="DATATIME" width="150">
           </el-table-column>
           <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150">
@@ -86,6 +86,9 @@ import { serverIp } from "../../../../public/config.js"
 import axios from 'axios';
 
 export default {
+  props: {
+    tableData: Array,
+  },
   data() {
     return {
       serverIp: serverIp,
@@ -94,7 +97,6 @@ export default {
       fileList: [],
       outlierRadio: '',
       missingRadio: '',
-      originData: []
     };
   },
   methods: {
@@ -125,18 +127,27 @@ export default {
 
 
     fetchData(file) {
-      const fileResponse = file.response;
-      const dotIndex = fileResponse.lastIndexOf('.');
-      const filePrefix = fileResponse.substring(0, dotIndex);
-      const jsonFile = filePrefix + ".json";
+      // const fileResponse = JSON.stringify(file.response);
+      // console.log(typeof fileResponse);
+      // const dotIndex = fileResponse.lastIndexOf('/');
+      // const jsonFolder = fileResponse.substring(0, dotIndex) + "/origin/json/";
+      // const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
+      // const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+      // const jsonFile = jsonFolder + fileNameWithoutExtension + ".json";
 
-      axios.get(jsonFile)
-        .then(response => {
-          this.originData = response.data;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+
+      // axios.get(jsonFile)
+      //   .then(response => {
+      //     const newTableData = response.data;
+      //     this.$emit('update-table-data', newTableData);
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
+        // const newTableData = this.jsonData;
+
+        const jsonData = require('@/assets/testJson/11.json');
+        this.$emit('update-table-data', jsonData);  
     },
 
     // 上传文件失败
@@ -157,7 +168,7 @@ export default {
         console.log(this.outlierRadio); // 获取选中的复选框的值
         this.dialogFormVisible = false;
         this.sendPreprocessParams();
-
+        
       } else {
         this.$message({
           message: '请至少选择一个预处理方法',

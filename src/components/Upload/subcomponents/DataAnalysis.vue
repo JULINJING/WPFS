@@ -6,8 +6,8 @@
                 <p>无线，无繁琐，<br>
                     只有妙不可言。</p>
                 <span>进一步了解 ></span>
-                <img src="../imgs/CorrelationMatrix.png" alt="">
-                <!-- <HeatMap class="HeatMap"/> -->
+                <!-- <img src="../imgs/CorrelationMatrix.png" alt=""> -->
+                <HeatMap :tableData="tableData" class="HeatMap"/>
 
             </div>
             <div>
@@ -15,7 +15,7 @@
                 <p>家的新声。</p>
                 <span>进一步了解 ></span>
                 <!-- <img src="../imgs/ROUOND(A.WS,1)_YD15.png" alt=""> -->
-                <ScatterPlot class="ScatterPlot" />
+                <ScatterPlot :tableData="tableData" class="ScatterPlot" />
             </div>
         </div>
         <div class="diagrambody">
@@ -24,16 +24,16 @@
                 <p>你喜爱的音乐，<br>
                     随身带着走。</p>
                 <span>进一步了解 ></span>
-                <img src="../imgs/Boxplot.png" alt="">
-                <!-- <BoxPlot class="BoxPlot"/> -->
+                <!-- <img src="../imgs/Boxplot.png" alt=""> -->
+                <BoxPlot :tableData="tableData" class="BoxPlot"/>
             </div>
             <div>
                 <h1>时序图</h1>
                 <p>给好听的歌曲，<br>
                     搭个好看的装备。</p>
                 <span>进一步了解 ></span>
-                <img src="../imgs/SequenceDiagram.png" alt="">
-                <!-- <LineChart class="LineChart"/> -->
+                <!-- <img src="../imgs/SequenceDiagram.png" alt=""> -->
+                <LineChart :tableData="tableData" class="LineChart"/>
             </div>
         </div>
     </div>
@@ -46,6 +46,9 @@ import LineChart from './diagrams/LineChart.vue';
 import BoxPlot from './diagrams/BoxPlot.vue';
 
 export default {
+    props: {
+        tableData: Array,
+    },
     name: 'dataanalysis',
     components: {
         HeatMap, LineChart, BoxPlot, ScatterPlot

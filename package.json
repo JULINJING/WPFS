@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@jiaminghi/data-view": "^2.10.0",
+    "@turf/turf": "^6.5.0",
     "@tweenjs/tween.js": "^18.6.4",
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",

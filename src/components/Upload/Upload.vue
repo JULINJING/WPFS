@@ -2,8 +2,8 @@
 <template>
     <div class="uploadContainer _uploadContainer">
         <NavTop/>
-        <UploadFile/>
-        <DataAnalysis/>
+        <UploadFile :tableData="tableData" @update-table-data="updateTableData"/>
+        <DataAnalysis :tableData="tableData"/>
         <!-- <MusicTotalinfo/> -->
         <!-- <GoodsBriefInfo :isnew="'yes'" :goodinfo="'妙得不同凡响。'" :goodname="'AirPods Pro'" :imgsrc="require('./imgs/airpods_pro.jpg')"/>\ -->
         <!-- <Device/> -->
@@ -22,10 +22,23 @@ import GoodsBriefInfo from './subcomponents/GoodsBriefInfo'
 import Device from './subcomponents/Device'
 import ProfessApp from './subcomponents/ProfessApp'
 import FinalMusic from './subcomponents/FinalMusic'
+
 export default {
+    data(){
+        return {
+            tableData: [],
+        }
+    },
     name: 'upload',
     components: {
         NavTop, UploadFile, DataAnalysis, MusicTotalinfo, GoodsBriefInfo, Device, ProfessApp, FinalMusic
+    },
+
+    methods: {
+        updateTableData(data){
+            this.tableData = data;
+            // console.log(this.tableData);
+        }
     }
 }
 </script>
