@@ -21,7 +21,25 @@
             <div id="RightBar" class="sideBar right opacity0">
                 <i id="rightClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideRightPanel">&#xe653;</i>
                 <div class="bar-content" id="rightContent">
-
+                    <div class="chartbox">
+                        <h5>四大风力发电场</h5>
+                        <ul class="chartList">
+                            <li :key="item" v-for="item in fieldData">
+                                <span>{{ item.name }}</span>
+                                <span :class="{'typeA': item.type === '荒原风场', 'typeB': item.type === '海滨风场', 'typeC': item.type === '高山风场'}">
+                                    {{ item.type }}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="chartbox">
+                        <h5>风机运行状态统计</h5>
+                        <div id="state"></div>
+                    </div>
+                    <div class="chartbox">
+                        <h5>各风电场预测功率总计</h5>
+                        <div id="powerSum"></div>
+                    </div>
                 </div>
             </div>
 
@@ -71,6 +89,7 @@ import MarsMap from "./mars-work/mars-map.vue"
 import * as mars3d from 'mars3d'
 import $ from 'jquery'
 import * as turf from '@turf/turf'
+import * as echarts from "echarts"
 import { CanvasBillboard } from "../../../public/lib/custom/CanvasBillboard.js"
 
 const Cesium = mars3d.Cesium
@@ -103,7 +122,7 @@ export default {
                 position: { lng: 87.881843, lat: 43.584772, alt: 1139.8 },
                 maximumScreenSpaceError: 16,
                 tooltip: "新疆达坂城风电场办公楼",
-                scale: 10,
+                scale: 8,
                 show: true
             }]
         }
@@ -128,7 +147,48 @@ export default {
             // 记录面板展开状态
             isLeftOpen: true,
             isRightOpen: true,
-            isBottomOpen: true
+            isBottomOpen: true,
+
+            // 风点场名
+            fieldData: [
+                { name: "东部：浙江括苍山风电场", type: "高山风场" },
+                { name: "南部：广东汕头南澳岛风电场", type: "海滨风场" },
+                { name: "西部：新疆达坂城风电场", type: "荒原风场" },
+                { name: "北部：内蒙古辉腾锡勒风电场", type: "荒原风场" }
+            ],
+
+            // 统计图表
+            chartsDataState: [
+                { name: "并网", value: 0 },
+                { name: "待机", value: 0 },
+                { name: "故障", value: 0 },
+                { name: "维护", value: 0 }
+            ],
+            myChartState: null,
+            myOptionState: {},
+
+            chartsDataPower: [
+                { name: "东部", value: 0 },
+                { name: "南部", value: 0 },
+                { name: "西部", value: 0 },
+                { name: "北部", value: 0 }
+            ],
+            myChartPower: null,
+            myOptionPower: {},
+
+            // 记录风机状态数
+            // 故障 维护 待机 并网个数
+            gzNum: 0,
+            whNum: 0,
+            djNum: 0,
+            bwNum: 0,
+
+            // 记录风电场预测总功率
+            // 东部 南部 西部 北部
+            eSum: 0,
+            sSum: 0,
+            wSum: 0,
+            nSum: 0
         }
     },
     methods: {
@@ -136,6 +196,7 @@ export default {
         onMapload() {
             // 开场
             this.map.openFlyAnimation()
+            this.map.fixedLight = true // 固定光照，避免gltf模型随时间存在亮度不一致。
             this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
             // this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
 
@@ -152,6 +213,10 @@ export default {
             this.map.on(mars3d.EventType.renderError, function () {
                 window.location.reload();
             });
+
+            let state = document.getElementById("state")
+            let powerSum = document.getElementById("powerSum")
+            this.initCharts(this.chartsDataState, this.chartsDataPower, state, powerSum)
         },
         addOtherFactoryLayer() {
             // 添加道路
@@ -272,7 +337,7 @@ export default {
 
             // 添加人
             var peopleGraphic1 = new mars3d.graphic.ModelPrimitive({
-                position: [87.872559, 43.579678, 1121.1],
+                position: [87.872396, 43.579394, 1120.4],
                 style: {
                     url: '//data.mars3d.cn/gltf/mars/man/walk.gltf',
                     heading: 210,
@@ -345,18 +410,57 @@ export default {
                     distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
                 },
             })
+            var transportGraphic5 = new mars3d.graphic.ModelPrimitive({
+                position: [87.889205, 43.567413, 1097.8],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
+            var transportGraphic6 = new mars3d.graphic.ModelPrimitive({
+                position: [87.958552, 43.591722, 1240.1],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
+            var transportGraphic7 = new mars3d.graphic.ModelPrimitive({
+                position: [87.961935, 43.615723, 1338.4],
+                style: {
+                    url: '../../../mars3dModels/Electric_Towers_Blend.gltf',
+                    heading: 210,
+                    scale: 4,
+                    minimumPixelSize: 1,
+                    distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+                },
+            })
             // 自动计算与绘制高压电线
             let polylines1 = []
             let polylines2 = []
             let polylines3 = []
+            let polylines4 = []
+            let polylines5 = []
+            let polylines6 = []
+            let polylines7 = []
+            let polylines8 = []
+            let polylines9 = []
             const polylinesTB = []
             const transportGraphicPositions = [
+                [87.889205, 43.567413, 1266.8],
                 [87.901237, 43.572966, 1288],
                 [87.918563, 43.571499, 1303.6],
                 [87.935538, 43.570906, 1319.8],
-                [87.955726, 43.570854, 1324.9]
+                [87.955726, 43.570854, 1324.9],
+                [87.958552, 43.591722, 1409.1],
+                [87.961935, 43.615723, 1507.4]
             ]
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < transportGraphicPositions.length; i++) {
                 const item = transportGraphicPositions[i]
 
                 // 所在经纬度坐标及海拔高度
@@ -364,21 +468,41 @@ export default {
                 const latitude = item[1]
                 const height = item[2]
 
-                const originPoint = {
+                const originPoint1 = {
                     longitude: longitude,
                     latitude: latitude,
                     height: height
                 }
-                const position = Cesium.Cartesian3.fromDegrees(originPoint.longitude, originPoint.latitude, originPoint.height)
+                const originPoint2 = {
+                    longitude: longitude,
+                    latitude: latitude,
+                    height: height - 40
+                }
+                const originPoint3 = {
+                    longitude: longitude,
+                    latitude: latitude,
+                    height: height - 80
+                }
+                const position1 = Cesium.Cartesian3.fromDegrees(originPoint1.longitude, originPoint1.latitude, originPoint1.height)
+                const position2 = Cesium.Cartesian3.fromDegrees(originPoint2.longitude, originPoint2.latitude, originPoint2.height)
+                const position3 = Cesium.Cartesian3.fromDegrees(originPoint3.longitude, originPoint3.latitude, originPoint3.height)
 
                 // 计算电线塔转角角度
                 const degree = 210
 
-                // 3条线路坐标
+                // 3条线路坐标 上中下三段
                 const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(degree), 0, 0)
-                const newPoint1 = mars3d.PointUtil.getPositionByHprAndOffset(position, new Cesium.Cartesian3(0.341789, 16.837972, 50.717621), hpr)
-                const newPoint2 = mars3d.PointUtil.getPositionByHprAndOffset(position, new Cesium.Cartesian3(0.34241, -16.838163, 50.717617), hpr)
-                const newPoint3 = mars3d.PointUtil.getPositionByHprAndOffset(position, new Cesium.Cartesian3(-0.025005, 0.022878, 39.540545), hpr)
+                const newPoint1 = mars3d.PointUtil.getPositionByHprAndOffset(position1, new Cesium.Cartesian3(0.341789, 16.837972, 50.717621), hpr)
+                const newPoint2 = mars3d.PointUtil.getPositionByHprAndOffset(position1, new Cesium.Cartesian3(0.34241, -16.838163, 50.717617), hpr)
+                const newPoint3 = mars3d.PointUtil.getPositionByHprAndOffset(position1, new Cesium.Cartesian3(-0.025005, 0.022878, 39.540545), hpr)
+
+                const newPoint4 = mars3d.PointUtil.getPositionByHprAndOffset(position2, new Cesium.Cartesian3(0.341789, 16.837972, 50.717621), hpr)
+                const newPoint5 = mars3d.PointUtil.getPositionByHprAndOffset(position2, new Cesium.Cartesian3(0.34241, -16.838163, 50.717617), hpr)
+                const newPoint6 = mars3d.PointUtil.getPositionByHprAndOffset(position2, new Cesium.Cartesian3(-0.025005, 0.022878, 39.540545), hpr)
+
+                const newPoint7 = mars3d.PointUtil.getPositionByHprAndOffset(position3, new Cesium.Cartesian3(0.341789, 16.837972, 50.717621), hpr)
+                const newPoint8 = mars3d.PointUtil.getPositionByHprAndOffset(position3, new Cesium.Cartesian3(0.34241, -16.838163, 50.717617), hpr)
+                const newPoint9 = mars3d.PointUtil.getPositionByHprAndOffset(position3, new Cesium.Cartesian3(-0.025005, 0.022878, 39.540545), hpr)
 
                 polylinesTB.push(newPoint2) // 图标显示的点
 
@@ -386,9 +510,15 @@ export default {
                     polylines1.push(newPoint1)
                     polylines2.push(newPoint2)
                     polylines3.push(newPoint3)
+                    polylines4.push(newPoint4)
+                    polylines5.push(newPoint5)
+                    polylines6.push(newPoint6)
+                    polylines7.push(newPoint7)
+                    polylines8.push(newPoint8)
+                    polylines9.push(newPoint9)
                 } else {
                     // 曲率
-                    const angularityFactor = -5000
+                    const angularityFactor = -2500
                     // 点集数量
                     const num = 50
                     let positions = mars3d.PolyUtil.getLinkedPointList(polylines1[polylines1.length - 1], newPoint1, angularityFactor, num) // 计算曲线点
@@ -399,25 +529,91 @@ export default {
 
                     positions = mars3d.PolyUtil.getLinkedPointList(polylines3[polylines3.length - 1], newPoint3, angularityFactor, num) // 计算曲线点
                     polylines3 = polylines3.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines4[polylines4.length - 1], newPoint4, angularityFactor, num) // 计算曲线点
+                    polylines4 = polylines4.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines5[polylines5.length - 1], newPoint5, angularityFactor, num) // 计算曲线点
+                    polylines5 = polylines5.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines6[polylines6.length - 1], newPoint6, angularityFactor, num) // 计算曲线点
+                    polylines6 = polylines6.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines7[polylines7.length - 1], newPoint7, angularityFactor, num) // 计算曲线点
+                    polylines7 = polylines7.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines3[polylines8.length - 1], newPoint8, angularityFactor, num) // 计算曲线点
+                    polylines8 = polylines8.concat(positions)
+
+                    positions = mars3d.PolyUtil.getLinkedPointList(polylines9[polylines9.length - 1], newPoint9, angularityFactor, num) // 计算曲线点
+                    polylines9 = polylines9.concat(positions)
                 }
             }
             function drawGuideLine(positions, color) {
                 const lineGraphic = new mars3d.graphic.PolylinePrimitive({
                     positions: positions,
                     style: {
-                        width: 2,
+                        width: 1,
                         color: color
                     }
                 })
                 otherFactoryLayer.addGraphic(lineGraphic)
             }
-            drawGuideLine(polylines1, "#BDC3CC")
-            drawGuideLine(polylines2, "#BDC3CC")
-            drawGuideLine(polylines3, "#BDC3CC")
+            drawGuideLine(polylines1, "#2C2F36")
+            drawGuideLine(polylines2, "#2C2F36")
+            drawGuideLine(polylines3, "#2C2F36")
+            drawGuideLine(polylines4, "#2C2F36")
+            drawGuideLine(polylines5, "#2C2F36")
+            drawGuideLine(polylines6, "#2C2F36")
+            drawGuideLine(polylines7, "#2C2F36")
+            drawGuideLine(polylines8, "#2C2F36")
+            drawGuideLine(polylines9, "#2C2F36")
             otherFactoryLayer.addGraphic(transportGraphic1)
             otherFactoryLayer.addGraphic(transportGraphic2)
             otherFactoryLayer.addGraphic(transportGraphic3)
             otherFactoryLayer.addGraphic(transportGraphic4)
+            otherFactoryLayer.addGraphic(transportGraphic5)
+            otherFactoryLayer.addGraphic(transportGraphic6)
+            otherFactoryLayer.addGraphic(transportGraphic7)
+
+            // 添加变电站
+            // var transformerGraphic1 = new mars3d.graphic.ModelPrimitive({
+            //     position: [87.884667, 43.574988, 1116.7],
+            //     style: {
+            //         url: '../../../mars3dModels/变电站.gltf',
+            //         heading: 210,
+            //         scale: 4,
+            //         minimumPixelSize: 1,
+            //         distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
+            //     },
+            // })
+            // otherFactoryLayer.addGraphic(transformerGraphic1)
+            var transformerLayer = new mars3d.layer.TilesetLayer({
+                name: "变电站",
+                url: "//data.mars3d.cn/3dtiles/max-shihua/tileset.json",
+                position: { lng: 87.91969, lat: 43.585619, alt: 1150.3 },
+                maximumScreenSpaceError: 16,
+                rotation: {
+                    z: 70
+                },
+                scale: 3,
+
+                // 以下参数可以参考用于3dtiles总数据大，清晰度过高情况下进行性能优化。这不是一个通用的解决方案，但可以以此为参考。
+                skipLevelOfDetail: true,
+                loadSiblings: true,
+                cullRequestsWhileMoving: true,
+                cullRequestsWhileMovingMultiplier: 10,
+                preferLeaves: true,
+                dynamicScreenSpaceError: true,
+                preloadWhenHidden: true,
+                enableDebugWireframe: true, // 是否可以进行三角网的切换显示
+                // 以上为优化的参数
+            })
+            this.map.addLayer(transformerLayer)
+
+            this.map.getLayerById("风电场办公楼").on(mars3d.EventType.click, ()=> {
+                this.map.setCameraView({ "lat": 43.585478, "lng": 87.875422, "alt": 1223.4, "heading": 127, "pitch": 0.8 })
+            })
         },
         addChinaMap() {
             this.chinaLayer = new mars3d.layer.GeoJsonLayer({
@@ -749,6 +945,7 @@ export default {
 
                 // 功率 动态图
                 var powerGraphicLight = new mars3d.graphic.DivBoderLabel({
+                    id: index + 1,
                     position: item,
                     style: {
                         text: `预测功率：加载中↻`,
@@ -776,26 +973,170 @@ export default {
             // 功率 动态图
             // 随机更新功率文本
             this.intervalId = setInterval(() => {
+                // 统计量置零
+                this.gzNum = 0
+                this.whNum = 0
+                this.djNum = 0
+                this.bwNum = 0
+
+                // this.eSum = 0
+                // this.sSum = 0
+                // this.wSum = 0
+                // this.nSum = 0
+
+                var tempSum = 0
                 powerLayer.eachGraphic((graphic) => {
-                    var power = Math.random().toFixed(3) * 1000 // 更新文本
-                    var powerGraphicLightVar = new mars3d.graphic.DivBoderLabel({
-                        position: graphic.position,
-                        style: {
-                            text: `预测功率：${power} W`,
-                            font_size: 14,
-                            font_family: "楷体",
-                            color: "#ccc",
-                            boderColor: "#15d1f2",
-                            addHeight: 100,
-                            clampToGround: true,
-                            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
-                        },
-                        pointerEvents: false
+                    var power = (Math.random() - 0.2).toFixed(3) * 1000 // 随机数据文本
+                    // 故障 维护 待机 并网
+                    if (power < 0) {
+                        power = 0
+                        graphic.setStyle({
+                            boderColor: "red"
+                        })
+                        this.gzNum += 1
+                    }
+                    else if (power < 50) {
+                        graphic.setStyle({
+                            boderColor: "yellow"
+                        })
+                        this.whNum += 1
+                    }
+                    else if (power < 100) {
+                        graphic.setStyle({
+                            boderColor: "#37A2DA"
+                        })
+                        this.djNum += 1
+                    }
+                    else {
+                        graphic.setStyle({
+                            boderColor: "#15d1f2"
+                        })
+                        this.bwNum += 1
+                    }
+
+                    tempSum += power
+                    // 更新预测功率
+                    graphic.setStyle({
+                        text: `预测功率：${power} W`
                     })
-                    powerLayer.removeGraphic(graphic, true)
-                    powerLayer.addGraphic(powerGraphicLightVar)
                 })
-            }, 10000)
+                // 更新风机状态图表数据
+                this.chartsDataState = [
+                    { name: "并网", value: this.bwNum },
+                    { name: "待机", value: this.djNum },
+                    { name: "故障", value: this.gzNum },
+                    { name: "维护", value: this.whNum }
+                ]
+                this.myOptionState = {
+                    tooltip: {
+                        trigger: "item",
+                        formatter: "{b}<br/>{c} 占{d}%",
+                    },
+                    // 图例 的相关设置
+                    legend: {
+                        orient: "vertical",
+                        left: "right",
+                        textStyle: {
+                            color: "#fff"
+                        }
+                    },
+                    // 图形的设置
+                    series: [
+                        {
+                            // name: '访问来源',
+                            type: "pie",
+                            radius: "80%",
+                            right: "20%",
+                            // 图形上文本标签的样式设置
+                            label: {
+                                show: true,
+                                position: "inside",
+                                formatter: "{c}",
+                                fontWeight: "bold"
+                            },
+                            color: [
+                                "#15d1f2",
+                                "#37A2DA",
+                                "red",
+                                "yellow"
+                            ],
+                            center: ["45%", "55%"],
+                            data: this.chartsDataState, // 使用for循环添加
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: "rgba(0, 0, 0, 0.5)"
+                                }
+                            }
+                        }
+                    ]
+                }
+                // 更新各风电场总预测功率
+                switch (id) {
+                    case 1:
+                        this.eSum = tempSum
+                        break;
+                    case 2:
+                        this.sSum = tempSum
+                        break;
+                    case 3:
+                        this.wSum = tempSum
+                        break;
+                    default:
+                        this.nSum = tempSum
+                }
+                this.myOptionPower = {
+                    // xAxis和yAxis的nameTextStyle不起作用
+                    // 因此设置了字体的全局样式
+                    textStyle: {
+                        color: "#ccc"
+                    },
+                    title: {
+                        text: "单位:" + "w",
+                        // 全局样式对此不生效，
+                        textStyle: {
+                            color: "#fff",
+                            fontSize: 12
+                        }
+                    },
+                    // 移入柱子时的阴影
+                    tooltip: {
+                        trigger: "axis",
+                        formatter: "{b}<br/>{c}" + "w",
+                        axisPointer: {
+                            type: "shadow"
+                        }
+                    },
+                    grid: {
+                        left: "5px",
+                        right: "0",
+                        bottom: "5px",
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: "category",
+                        data: ["东部","南部","西部","北部"]
+                    },
+                    yAxis: {
+                        type: "value"
+                    },
+                    series: [
+                    {
+                        // 柱子的相关设置
+                        itemStyle: {
+                            color: "rgb(0, 174, 255)"
+                        },
+                        barWidth: "20px",
+                        type: "bar",
+                        emphasis: {
+                            focus: "series"
+                        },
+                        data: [this.eSum,this.sSum,this.wSum,this.nSum]
+                    }
+                    ]
+                }
+            }, 5000)
 
             // 在turbineLayer图层绑定Popup弹窗
             turbineLayer.bindPopup(function (event) {
@@ -890,6 +1231,125 @@ export default {
             })
             $("#explanatoryPicture").addClass("animated fadeInDown")
         },
+        // 添加Echarts图形
+        // chart Echart圆形
+        // chart Echart柱状
+        // 参数为前数据 后dom
+        initCharts(arrState, arrPowerSum, state, powerSum) {
+            // 风机状态统计图
+            this.myChartState = echarts.init(state)
+            this.myOptionState = {
+                tooltip: {
+                    trigger: "item",
+                    formatter: "{b}<br/>{c} 占{d}%",
+                },
+                // 图例 的相关设置
+                legend: {
+                    orient: "vertical",
+                    left: "right",
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                // 图形的设置
+                series: [
+                    {
+                        // name: '访问来源',
+                        type: "pie",
+                        radius: "80%",
+                        right: "20%",
+                        // 图形上文本标签的样式设置
+                        label: {
+                            show: true,
+                            position: "inside",
+                            formatter: "{c}",
+                            fontWeight: "bold"
+                        },
+                        color: [
+                            "#15d1f2",
+                            "#37A2DA",
+                            "red",
+                            "yellow"
+                        ],
+                        center: ["45%", "55%"],
+                        data: arrState, // 使用for循环添加
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: "rgba(0, 0, 0, 0.5)"
+                            }
+                        }
+                    }
+                ]
+            }
+            this.myChartState.setOption(this.myOptionState)
+
+            // 各风电场预测总功率统计图
+            const arrName = []
+            const arrValue = []
+            for (let i = 0; i < arrPowerSum.length; i++) {
+                arrName[i] = arrPowerSum[i].name
+                arrValue[i] = arrPowerSum[i].value
+            }
+            this.myChartPower = echarts.init(powerSum)
+            this.myOptionPower = {
+                // xAxis和yAxis的nameTextStyle不起作用
+                // 因此设置了字体的全局样式
+                textStyle: {
+                    color: "#ccc"
+                },
+                title: {
+                    text: "单位:" + "w",
+                    // 全局样式对此不生效，
+                    textStyle: {
+                        color: "#fff",
+                        fontSize: 12
+                    }
+                },
+                // 移入柱子时的阴影
+                tooltip: {
+                    trigger: "axis",
+                    formatter: "{b}<br/>{c}" + "w",
+                    axisPointer: {
+                        type: "shadow"
+                    }
+                },
+                grid: {
+                    left: "5px",
+                    right: "0",
+                    bottom: "5px",
+                    containLabel: true
+                },
+                xAxis: {
+                    type: "category",
+                    data: arrName
+                },
+                yAxis: {
+                    type: "value"
+                },
+                series: [
+                {
+                    // 柱子的相关设置
+                    itemStyle: {
+                        color: "rgb(0, 174, 255)"
+                    },
+                    barWidth: "20px",
+                    type: "bar",
+                    emphasis: {
+                        focus: "series"
+                    },
+                    data: arrValue
+                }
+                ]
+            }
+            this.myChartPower.setOption(this.myOptionPower)
+
+            window.addEventListener("resize", ()=> {
+                this.myChartState.resize()
+                this.myChartPower.resize()
+            })
+        },
 
 
         hideLeftPanel() {
@@ -929,6 +1389,7 @@ export default {
                     "box-shadow": "none",
                     "background-color": "rgba(1, 48, 102, 0.8)"
                 })
+                $(".bar-content").css("display","none")
             }
             else {
                 $(".sideBar.right").addClass("fadeInRight")
@@ -938,6 +1399,9 @@ export default {
                     "box-shadow": "0 10px 100px 0 rgba(1, 48, 102, 0.8) inset",
                     "background-color": "transparent"
                 })
+                setTimeout(function () {
+                    $(".bar-content").css("display","flex")
+                },1000)
             }
         },
         hideBottomPanel() {
@@ -977,7 +1441,17 @@ export default {
         }
     },
     watch: {
-
+        myOptionState: {
+            handler: function () {
+                this.myChartState.setOption(this.myOptionState)
+            },
+            deep: true
+        },
+        myOptionPower: {
+            handler: function () {
+                this.myChartPower.setOption(this.myOptionPower)
+            }
+        }
     }
 
 }
@@ -990,6 +1464,7 @@ export default {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    user-select: none;
 }
 // 大于800px
 @media only screen and (min-width: 800px) {
@@ -1035,9 +1510,61 @@ export default {
         display: flex;
         flex-direction: column;
         height: 94%;
+        width: 100%;
         justify-content: space-around;
+        align-items: center;
     }
 
+    // 侧栏图表
+    .chartList {
+        font-size: 14px;
+        color: #ffffff;
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        li{
+            border-bottom: white 0.5px dashed;
+            padding-bottom: 5px;
+        }
+        li:hover {
+            padding: 10px;
+            background-color: rgba(32, 176 ,203, 0.4);
+        }
+        .typeA{
+            color: #CD6F43;
+        }
+        .typeB{
+            color: #328D98;
+        }
+        .typeC{
+            color: #E0B041;
+        }
+    }
+    .chartbox {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        height: 28.5%;
+        border: 1px solid #17366c;
+        background: linear-gradient(to left, #3897cf, #3897cf) left top no-repeat, linear-gradient(to bottom, #3897cf, #3897cf) left top no-repeat,
+            linear-gradient(to left, #3897cf, #3897cf) right top no-repeat, linear-gradient(to bottom, #3897cf, #3897cf) right top no-repeat,
+            linear-gradient(to left, #3897cf, #3897cf) left bottom no-repeat, linear-gradient(to bottom, #3897cf, #3897cf) left bottom no-repeat,
+            linear-gradient(to left, #3897cf, #3897cf) right bottom no-repeat, linear-gradient(to left, #3897cf, #3897cf) right bottom no-repeat;
+        background-size: 1px 20px, 20px 1px, 1px 20px, 20px 1px;
+        background-color: rgba(0, 0, 0, 0.1);
+        h5 {
+            color: #ffffff;
+            letter-spacing: 3px;
+        }
+    }
+    #state,
+    #powerSum {
+        width: 100%;
+        height: 100%;
+    }
+
+    // 底部 
     .bottomBar {
         position: absolute;
         bottom: 0;
@@ -1107,24 +1634,6 @@ export default {
         color: rgba(255, 255, 255, 1.0);
     }
 
-    // 侧栏按钮
-    .bar-content .el-button {
-        width: 70%;
-        background-color: rgba(0,183,254,0.5);
-        border: none;
-        font-size: 16px;
-        font-weight: 800;
-        color: white;
-    }
-    .bar-content .el-button:hover,
-    .bar-content .el-button:active {
-        background-color: #20B0CB;
-        color: white
-    }
-    .bar-content .el-button:focus {
-        // border: 1px white solid;
-    }
-
     // 底栏按钮
     .el-col-24 {
         width: 40% !important;
@@ -1147,9 +1656,11 @@ export default {
         color: white
     }
 
+    // 按键图
     #explanatoryPicture {
         display: none;
     }
+    // 关闭按键按钮
     .closeButton {
         position: absolute;
         top:0%;
