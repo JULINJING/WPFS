@@ -6,7 +6,7 @@
                     <icon name="chart-bar" class="text-icon"></icon>
                 </span>
                 <div class="d-flex">
-                    <span class="fs-xl text mx-2">任务通过率</span>
+                    <span class="fs-xl text mx-2">设备运行统计</span>
                     <dv-decoration-3 class="dv-dec-3" />
                 </div>
             </div>

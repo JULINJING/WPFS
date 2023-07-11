@@ -24,99 +24,41 @@ export default {
     watch: {
         cdata: {
             handler(newData) {
-                // 固定样式数据
-                let lineStyle = {
-                    normal: {
-                        width: 1,
-                        opacity: 0.5
-                    }
-                };
 
                 this.options = {
-                    radar: {
-                        indicator: newData.indicatorData,
-                        shape: "circle",
-                        splitNumber: 5,
-                        radius: ["0%", "65%"],
-                        name: {
-                            textStyle: {
-                                color: "rgb(238, 197, 102)"
-                            }
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: [
-                                    "rgba(238, 197, 102, 0.1)",
-                                    "rgba(238, 197, 102, 0.2)",
-                                    "rgba(238, 197, 102, 0.4)",
-                                    "rgba(238, 197, 102, 0.6)",
-                                    "rgba(238, 197, 102, 0.8)",
-                                    "rgba(238, 197, 102, 1)"
-                                ].reverse()
-                            }
-                        },
-                        splitArea: {
-                            show: false
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: "rgba(238, 197, 102, 0.5)"
-                            }
-                        }
+                    xAxis: {
+                        max: 'dataMax'
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: [],
+                        inverse: true,
+                        animationDuration: 300,
+                        animationDurationUpdate: 300,
+                        max: 4 //only the largest 5 bars will be displayed
                     },
                     series: [
                         {
-                            name: "北京",
-                            type: "radar",
-                            lineStyle: lineStyle,
+                            realtimeSort: true,
+                            name: "X",
+                            type: "bar",
                             data: newData.dataBJ,
-                            symbol: "none",
-                            itemStyle: {
-                                normal: {
-                                    color: "#F9713C"
-                                }
+                            label: {
+                                show: true,
+                                position: 'right',
+                                valueAnimation: true
                             },
-                            areaStyle: {
-                                normal: {
-                                    opacity: 0.1
-                                }
-                            }
-                        },
-                        {
-                            name: "上海",
-                            type: "radar",
-                            lineStyle: lineStyle,
-                            data: newData.dataSH,
-                            symbol: "none",
                             itemStyle: {
-                                normal: {
-                                    color: "#B3E4A1"
-                                }
+                                color: "#F9713C"
                             },
-                            areaStyle: {
-                                normal: {
-                                    opacity: 0.05
-                                }
-                            }
-                        },
-                        {
-                            name: "广州",
-                            type: "radar",
-                            lineStyle: lineStyle,
-                            data: newData.dataGZ,
-                            symbol: "none",
-                            itemStyle: {
-                                normal: {
-                                    color: "rgb(238, 197, 102)"
-                                }
-                            },
-                            areaStyle: {
-                                normal: {
-                                    opacity: 0.05
-                                }
-                            }
-                        } //end
-                    ]
+                        }],
+                    legend: {
+                        show: true
+                    },
+                    animationDuration: 0,
+                    animationDurationUpdate: 3000,
+                    animationEasing: 'linear',
+                    animationEasingUpdate: 'linear'
                 }
             },
             immediate: true,

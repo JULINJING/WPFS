@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Echart :options="options" id="centreLeft1Chart" height="300px" width="300px"></Echart>
+        <Echart :options="options" id="centreLeft1Chart" height="400px" width="400px"></Echart>
     </div>
 </template>
   
@@ -25,44 +25,144 @@ export default {
         cdata: {
             handler(newData) {
                 this.options = {
-                    color: [
-                        "#37a2da",
-                        "#32c5e9",
-                        "#9fe6b8",
-                        "#ffdb5c",
-                        "#ff9f7f",
-                        "#fb7293",
-                        "#e7bcf3",
-                        "#8378ea"
-                    ],
+                    title: {
+                        show: false
+                    },
                     tooltip: {
-                        trigger: "item",
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        trigger: 'axis'
                     },
-                    toolbox: {
-                        show: true
-                    },
-                    calculable: true,
                     legend: {
-                        orient: "horizontal",
-                        icon: "circle",
-                        bottom: 0,
-                        x: "center",
-                        data: newData.xData,
+                        right: '15%',
+                        top: 10,
+                        icon: 'circle',
+                        itemWidth: 8,
+                        itemHeight: 8,
+                        itemGap: 37,
                         textStyle: {
-                            color: "#fff"
+                            fontSize: 12,
+                            fontFamily: 'Microsoft YaHei',
+                            fontWeight: 'normal',
+                            color: '#82DAF7'
                         }
                     },
-                    series: [
-                        {
-                            name: "通过率统计",
-                            type: "pie",
-                            radius: [10, 50],
-                            roseType: "area",
-                            center: ["50%", "40%"],
-                            data: newData.seriesData
+                    grid: {
+                        x: '5%',
+                        y: '15%',
+                        x2: '5%',
+                        y2: '15%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            interval: 0,
+                            textStyle: {
+                                fontSize: 18,
+                                fontFamily: 'Alibaba PuHuiTi',
+                                fontWeight: 400,
+                                color: '#82DAF7',
+                                padding: [5, 0, 0, 0]
+                            }
+                        },
+                        axisLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#294462',
+                                opacity: 0.3
+                            }
+                        },
+                        data: ['1月', '2月', '3月', '4月', '5月']
+                    },
+                    yAxis: {
+                        type: 'value',
+                        minInterval: 5,
+                        name: '',
+                        nameTextStyle: {
+                            fontSize: 18,
+                            fontFamily: 'CenturyGothic',
+                            color: '#ffffff',
+                            padding: [0, 0, 0, 30]
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#06304C'
+                            }
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                fontSize: 14,
+                                fontFamily: 'CenturyGothic',
+                                fontWeight: 'normal',
+                                color: '#82DAF7',
+                                padding: [0, 5, 0, 0]
+                            }
                         }
-                    ]
+                    },
+                    dataZoom: [
+                        {
+                            // x轴没有具体的数值
+                            type: 'inside', // 图形内部的滚动条
+                            xAxisIndex: [0], // 明确指定滚动的轴
+                            minValueSpan: 1, // x轴最小的index
+                            maxValueSpan: 3, // x轴最大的index
+                            zoomOnMouseWheel: false // 关闭鼠标滚轮缩放
+                        }
+                    ],
+                    series: [{
+                        name: '运行设备',
+                        type: 'bar',
+                        barWidth: 10,
+                        barGap: '80%',
+                        itemStyle: {
+                            borderWidth: 1,
+                            borderRadius: [3, 3, 0, 0],
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0, color: '#A5ADFF' // 0% 处的颜色
+                                }, {
+                                    offset: 1, color: '#9B69EC' // 100% 处的颜色
+                                }]
+                            }
+                        },
+                        data: [87, 60, 124, 20, 432]
+                    }, {
+                        name: '新增设备',
+                        type: 'bar',
+                        barWidth: 10,
+                        barGap: '80%',
+                        itemStyle: {
+                            borderWidth: 1,
+                            borderRadius: [3, 3, 0, 0],
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0, color: '#E1B031' // 0% 处的颜色
+                                }, {
+                                    offset: 1, color: '#FF8143' // 100% 处的颜色
+                                }]
+                            }
+                        },
+                        data: [90, 66, 174, 100, 430]
+                    }]
                 }
             },
             immediate: true,
