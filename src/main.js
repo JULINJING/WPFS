@@ -25,6 +25,6 @@ new Vue({
     router,
     components: { App },
     template: '<App/>',
+    store,
     // pinia
-    store
 })
