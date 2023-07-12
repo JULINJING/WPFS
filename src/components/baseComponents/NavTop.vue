@@ -18,7 +18,7 @@
     >
       <div style="display: inline-block">
         <span class="el-dropdown-link" style="margin-left: 35px">
-          <i class="el-icon-user-solid" style="margin-right: 10px"></i>结束乐队<i
+          <i class="el-icon-user-solid" style="margin-right: 10px"></i>{{user.nickname}}<i
             class="el-icon-arrow-down el-icon--right"
         ></i>
         </span>
@@ -41,14 +41,15 @@
 export default {
   name: 'navtop',
   components: {},
-  props: {
-    collapseBtnClass: String,
-    user: Object,
-  },
   data() {
     return {
-      nalistshowflag: false
+      nalistshowflag: false,
+      user: {},
     }
+  },
+  created() {
+    // 从后台获取最新的User数据
+    this.getUser()
   },
   computed: {
     currentPathName() {
@@ -84,6 +85,16 @@ export default {
       this.$store.commit("logout");
       this.$message.success("退出成功");
     },
+    getUser() {
+      let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
+      if (username) {
+        // 从后台获取User数据
+        this.request.get("/user/username/" + username).then(res => {
+          // 重新赋值后台的最新User数据
+          this.user = res.data
+        })
+      }
+    }
   }
 }
 </script>
