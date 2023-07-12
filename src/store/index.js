@@ -16,9 +16,24 @@ contexts.keys().forEach(key => {
 })
 export default new Vuex.Store({
     modules: {
-
+      global: {
+        namespaced: true, // 确保命名空间设置为 true
+        state: {
+          uploadedFileName: null
+        },
+        mutations: {
+          setUploadedFileName(state, fileName) {
+            state.uploadedFileName = fileName;
+          }
+        },
+        getters: {
+          getUploadedFileName(state) {
+            return state.uploadedFileName;
+          }
+        }
+      }
     },
     getters: {
-
+  
     }
-})
+  })
