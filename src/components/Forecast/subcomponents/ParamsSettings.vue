@@ -95,7 +95,7 @@
     </div>
   </div>
 </template>
-  
+
 <script>
 import { mapState } from 'vuex';
 
@@ -185,7 +185,7 @@ export default {
       } else {
         // console.log(this.form);
         const fileName = this.$store.state.global.uploadedFileName;
-
+        console.log(fileName);
         // 调用后端预测接口，传入表单数据
         this.request.post("/file/forecast", fileName).then((res) => {
           if (res.code === "200") {

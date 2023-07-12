@@ -152,11 +152,11 @@
                 placeholder="请再次确认密码"
             />
             </div>
-            <Button 
-            class="loginBtn" 
-            type="primary" 
-            :disabled="isResetAble" 
-            :loading="isLoading" 
+            <Button
+            class="loginBtn"
+            type="primary"
+            :disabled="isResetAble"
+            :loading="isLoading"
             @click.stop="reset">
             确认重置
             </Button>
@@ -277,8 +277,8 @@ export default {
               this.$message({
                 message: "登录成功",
                 type: 'success',
-                offset: '50',
-                duration: '8000'
+                offset: '50',//距离顶部的位置
+                duration: '8000'//持续的时间
               });
 
               if (res.data.role === "ROLE_NORMAL") {

@@ -83,8 +83,13 @@ export default {
       }
     },
     logout() {
+      this.$message({
+        message: '退出成功',
+        type: 'success'
+      });
       this.$store.commit("logout");
-      this.$message.success("退出成功");
+      // this.$message.success("退出成功");
+
     },
     getUser() {
       let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
