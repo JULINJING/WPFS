@@ -197,9 +197,15 @@ export default {
 
             myChartWeather2: null,
             myOptionWeather2: {},
+            chartsDataWeather2: [
+                {"DATATIME":"2022/3/26 12:00","WINDDIRECTION":"135","TurbID":"18","WINDSPEED":"0.6","PRESSURE":"1013","HUMIDITY":"19","TEMPERATURE":"16.3","PREPOWER":"5423.664291","YD15":"3338","ROUND(A.POWER,0)":"3622","AWS":"3.7"},{"DATATIME":"2022/3/26 12:15","WINDDIRECTION":"167","TurbID":"18","WINDSPEED":"0.9","PRESSURE":"1013","HUMIDITY":"19","TEMPERATURE":"16.7","PREPOWER":"5393.043637","YD15":"3539","ROUND(A.POWER,0)":"4293","AWS":"3.7"},{"DATATIME":"2022/3/26 12:30","WINDDIRECTION":"184","TurbID":"18","WINDSPEED":"1.3","PRESSURE":"1013","HUMIDITY":"18","TEMPERATURE":"17","PREPOWER":"5386.377587","YD15":"10185","ROUND(A.POWER,0)":"8480","AWS":"5"},{"DATATIME":"2022/3/26 12:45","WINDDIRECTION":"193","TurbID":"18","WINDSPEED":"1.7","PRESSURE":"1012","HUMIDITY":"17","TEMPERATURE":"17.3","PREPOWER":"5504.582102","YD15":"16032","ROUND(A.POWER,0)":"14243","AWS":"5.7"},{"DATATIME":"2022/3/26 13:00","WINDDIRECTION":"201","TurbID":"18","WINDSPEED":"2.2","PRESSURE":"1012","HUMIDITY":"16","TEMPERATURE":"17.6","PREPOWER":"5422.402582","YD15":"23043","ROUND(A.POWER,0)":"24667","AWS":"7.2"},{"DATATIME":"2022/3/26 13:15","WINDDIRECTION":"206","TurbID":"18","WINDSPEED":"2.8","PRESSURE":"1012","HUMIDITY":"16","TEMPERATURE":"17.9","PREPOWER":"5384.134899","YD15":"27501","ROUND(A.POWER,0)":"26488","AWS":"7.6"},{"DATATIME":"2022/3/26 13:30","WINDDIRECTION":"210","TurbID":"18","WINDSPEED":"3.4","PRESSURE":"1011","HUMIDITY":"16","TEMPERATURE":"18.2","PREPOWER":"5429.203811","YD15":"32914","ROUND(A.POWER,0)":"29174","AWS":"7.8"},{"DATATIME":"2022/3/26 13:45","WINDDIRECTION":"213","TurbID":"18","WINDSPEED":"3.8","PRESSURE":"1011","HUMIDITY":"15","TEMPERATURE":"18.4","PREPOWER":"5483.465929","YD15":"26735","ROUND(A.POWER,0)":"24703","AWS":"7.1"},{"DATATIME":"2022/3/26 14:00","WINDDIRECTION":"216","TurbID":"18","WINDSPEED":"4.4","PRESSURE":"1010","HUMIDITY":"15","TEMPERATURE":"18.7","PREPOWER":"5854","YD15":"23881","ROUND(A.POWER,0)":"26448","AWS":"7.4"}
+            ],
 
             myChartWeather3: null,
             myOptionWeather3: {},
+            chartsDataWeather3: [
+                {"DATATIME":"2022/3/26 12:00","WINDDIRECTION":"135","TurbID":"18","WINDSPEED":"0.6","PRESSURE":"1013","HUMIDITY":"19","TEMPERATURE":"16.3","PREPOWER":"5423.664291","YD15":"3338","ROUND(A.POWER,0)":"3622","AWS":"3.7"},{"DATATIME":"2022/3/26 12:15","WINDDIRECTION":"167","TurbID":"18","WINDSPEED":"0.9","PRESSURE":"1013","HUMIDITY":"19","TEMPERATURE":"16.7","PREPOWER":"5393.043637","YD15":"3539","ROUND(A.POWER,0)":"4293","AWS":"3.7"},{"DATATIME":"2022/3/26 12:30","WINDDIRECTION":"184","TurbID":"18","WINDSPEED":"1.3","PRESSURE":"1013","HUMIDITY":"18","TEMPERATURE":"17","PREPOWER":"5386.377587","YD15":"10185","ROUND(A.POWER,0)":"8480","AWS":"5"},{"DATATIME":"2022/3/26 12:45","WINDDIRECTION":"193","TurbID":"18","WINDSPEED":"1.7","PRESSURE":"1012","HUMIDITY":"17","TEMPERATURE":"17.3","PREPOWER":"5504.582102","YD15":"16032","ROUND(A.POWER,0)":"14243","AWS":"5.7"},{"DATATIME":"2022/3/26 13:00","WINDDIRECTION":"201","TurbID":"18","WINDSPEED":"2.2","PRESSURE":"1012","HUMIDITY":"16","TEMPERATURE":"17.6","PREPOWER":"5422.402582","YD15":"23043","ROUND(A.POWER,0)":"24667","AWS":"7.2"},{"DATATIME":"2022/3/26 13:15","WINDDIRECTION":"206","TurbID":"18","WINDSPEED":"2.8","PRESSURE":"1012","HUMIDITY":"16","TEMPERATURE":"17.9","PREPOWER":"5384.134899","YD15":"27501","ROUND(A.POWER,0)":"26488","AWS":"7.6"},{"DATATIME":"2022/3/26 13:30","WINDDIRECTION":"210","TurbID":"18","WINDSPEED":"3.4","PRESSURE":"1011","HUMIDITY":"16","TEMPERATURE":"18.2","PREPOWER":"5429.203811","YD15":"32914","ROUND(A.POWER,0)":"29174","AWS":"7.8"},{"DATATIME":"2022/3/26 13:45","WINDDIRECTION":"213","TurbID":"18","WINDSPEED":"3.8","PRESSURE":"1011","HUMIDITY":"15","TEMPERATURE":"18.4","PREPOWER":"5483.465929","YD15":"26735","ROUND(A.POWER,0)":"24703","AWS":"7.1"},{"DATATIME":"2022/3/26 14:00","WINDDIRECTION":"216","TurbID":"18","WINDSPEED":"4.4","PRESSURE":"1010","HUMIDITY":"15","TEMPERATURE":"18.7","PREPOWER":"5854","YD15":"23881","ROUND(A.POWER,0)":"26448","AWS":"7.4"}
+            ],
 
             // 记录风机状态数
             // 故障 维护 待机 并网个数
@@ -239,7 +245,10 @@ export default {
             let powerSum = document.getElementById("powerSum")
             // 左侧
             let weather1 = document.getElementById("weather1")
-            this.initCharts(this.chartsDataState, this.chartsDataPower, this.chartsDataWeather1, state, powerSum, weather1)
+            let weather2 = document.getElementById("weather2")
+            let weather3 = document.getElementById("weather3")
+            this.initCharts(this.chartsDataState, this.chartsDataPower, this.chartsDataWeather1,
+                this.chartsDataWeather2, this.chartsDataWeather3, state, powerSum, weather1, weather2, weather3)
 
             //webgl渲染失败后，刷新页面
             this.map.on(mars3d.EventType.renderError, function () {
@@ -1264,7 +1273,7 @@ export default {
         // chart Echart柱状
         // chart Echart其他
         // 参数为前数据 后dom
-        initCharts(arrState, arrPowerSum, arrWeather1, state, powerSum, weather1) {
+        initCharts(arrState, arrPowerSum, arrWeather1, arrWeather2, arrWeather3, state, powerSum, weather1, weather2, weather3) {
             // 风机状态统计图
             this.myChartState = echarts.init(state)
             this.myOptionState = {
@@ -1476,7 +1485,7 @@ export default {
                         },
                         splitLine: {
                             lineStyle: {
-                                olor: '#ddd'
+                                color: '#ddd'
                             }
                         }
                     },
@@ -1624,10 +1633,310 @@ export default {
             };
             this.myChartWeather1.setOption(this.myOptionWeather1)
 
+            // 温度图
+            this.myChartWeather2 = echarts.init(weather2)
+            this.myOptionWeather2 = {
+                series: [
+                    {
+                        type: 'gauge',
+                        center: ['50%', '65%'],
+                        startAngle: 200,
+                        endAngle: -20,
+                        min: 0,
+                        max: 60,
+                        splitNumber: 12,
+                        itemStyle: {
+                            color: '#FFAB91'
+                        },
+                        progress: {
+                            show: true,
+                            width: 20
+                        },
+                        pointer: {
+                            show: false
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                width: 20
+                            }
+                        },
+                        axisTick: {
+                            distance: -30,
+                            splitNumber: 5,
+                            lineStyle: {
+                                width: 1,
+                                color: '#999'
+                            }
+                        },
+                        splitLine: {
+                            distance: -37,
+                            length: 14,
+                            lineStyle: {
+                                width: 2,
+                                color: '#999'
+                            }
+                        },
+                        axisLabel: {
+                            distance: -10,
+                            color: '#999',
+                            fontSize: 14
+                        },
+                        anchor: {
+                            show: false
+                        },
+                        title: {
+                            show: false
+                        },
+                        detail: {
+                            valueAnimation: true,
+                            width: '60%',
+                            lineHeight: 40,
+                            borderRadius: 8,
+                            offsetCenter: [0, '-5%'],
+                            fontSize: 20,
+                            fontWeight: 'bolder',
+                            formatter: '{value} °C',
+                            color: 'inherit'
+                        },
+                        data: [
+                            {
+                                value: null
+                            }
+                        ]
+                    },
+                    {
+                        type: 'gauge',
+                        center: ['50%', '65%'],
+                        startAngle: 200,
+                        endAngle: -20,
+                        min: 0,
+                        max: 60,
+                        itemStyle: {
+                            color: '#FD7347'
+                        },
+                        progress: {
+                            show: true,
+                            width: 6
+                        },
+                        pointer: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false
+                        },
+                        detail: {
+                            show: false
+                        },
+                        data: [
+                            {
+                                value: null
+                            }
+                        ]
+                    }
+                ]
+            }
+            this.myChartWeather2.setOption(this.myOptionWeather2)
+            let index = 0; // 创建一个索引变量
+            let len = arrWeather2.length; // 获取数据的长度
+            setInterval(()=> {
+                this.myChartWeather2.setOption({
+                    series: [
+                    {
+                        data: [
+                            {
+                                value: Number(arrWeather2[index]["TEMPERATURE"])
+                            }
+                        ]
+                    },
+                    {
+                        data: [
+                            {
+                                value: Number(arrWeather2[index]["TEMPERATURE"])
+                            }
+                        ]
+                    }
+                    ]
+                });
+                index++; // 更新索引
+
+                // 如果索引超过数组长度，重置为0
+                if(index == len) {
+                    index = 0;
+                }
+            }, 2000);
+
+            // 气压 湿度图
+            this.myChartWeather3 = echarts.init(weather3)
+            // 取前1/2数据
+            let halfLength = Math.floor(arrWeather3.length / 2);
+            let firstHalf = arrWeather3.slice(0, halfLength);
+            // 序号
+            const order = (function () {
+                let res = [];
+                let len = halfLength;
+                while (len--) {
+                    res.push(halfLength - len - 1);
+                }
+                return res;
+            })();
+            // 时间
+            let firstElements = firstHalf.map(function(item) {
+                return item.DATATIME; // 返回每个数组的第一个元素
+            });
+            // 气压
+            let secondElements = firstHalf.map(function(item) {
+                return Number(item.PRESSURE); // 返回每个数组的第二个元素
+            });
+            // 湿度
+            let thirdElements = firstHalf.map(function(item) {
+                return Number(item.HUMIDITY); // 返回每个数组的第三个元素
+            });
+            // 取后1/2数据
+            // 剩余部分
+            let remainingPart = arrWeather3.slice(halfLength);
+            // 时间
+            let firstRemainingElements = remainingPart.map(function(item) {
+                return item.DATATIME; // 返回每个数组的第一个元素
+            });
+            // 气压
+            let secondRemainingElements = remainingPart.map(function(item) {
+                return Number(item.PRESSURE); // 返回每个数组的第二个元素
+            });
+            // 湿度
+            let thirdRemainingElements = remainingPart.map(function(item) {
+                return Number(item.HUMIDITY); // 返回每个数组的第三个元素
+            });
+            this.myOptionWeather3 = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#283b56'
+                        }
+                    }
+                },
+                grid: {
+                    top: '20%',
+                    bottom: '15%',
+                    left: '15%',
+                    right: '15%'
+                },
+                legend: {
+                    textStyle: {
+                        color:"#fff"
+                    }
+                },
+                dataZoom: {
+                    show: false,
+                    start: 0,
+                    end: 100
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: true,
+                        data: firstElements
+                    },
+                    {
+                        type: 'category',
+                        boundaryGap: true,
+                        data: order,
+                        show: false
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        scale: true,
+                        name: '气压',
+                        nameTextStyle: {
+                            color: "#fff"
+                        }
+                    },
+                    {
+                        type: 'value',
+                        scale: true,
+                        name: '湿度',
+                        max: 100,
+                        min: 0,
+                        nameTextStyle: {
+                            color: "#fff"
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '气压',
+                        type: 'bar',
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        data: secondElements,
+                        barWidth: '40%'
+                    },
+                    {
+                        name: '湿度',
+                        type: 'line',
+                        data: thirdElements
+                    }
+                ]
+            }
+            this.myChartWeather3.setOption(this.myOptionWeather3)
+            var count = 0
+            var temp = halfLength
+            var tempSecond = secondElements.slice()
+            var tempThird = thirdElements.slice()
+            var tempFirst = firstElements.slice()
+            var tempOrder = order.slice()
+            setInterval(() => {
+                tempSecond.shift();
+                tempSecond.push(secondRemainingElements[count]);
+                tempThird.shift();
+                tempThird.push(thirdRemainingElements[count]);
+                tempFirst.shift();
+                tempFirst.push(firstRemainingElements[count]);
+                tempOrder.shift();
+                temp += 1
+                tempOrder.push(temp);
+                this.myChartWeather3.setOption({
+                    xAxis: [
+                        {
+                            data: tempFirst
+                        },
+                        {
+                            data: tempOrder
+                        }
+                    ],
+                    series: [
+                        {
+                            data: tempSecond
+                        },
+                        {
+                            data: tempThird
+                        }
+                    ]
+                })
+                count++
+                if (count == remainingPart.length) {
+                    count = 0
+                }
+            }, 2000);
+
             window.addEventListener("resize", ()=> {
                 this.myChartState.resize()
                 this.myChartPower.resize()
                 this.myChartWeather1.resize()
+                this.myChartWeather2.resize()
+                this.myChartWeather3.resize()
             })
         },
 

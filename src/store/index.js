@@ -37,7 +37,7 @@ const store = new Vuex.Store({
         global: {
             namespaced: true, // 确保命名空间设置为 true
             state: {
-                uploadedFileName: null
+                uploadedFileName: "1.csv"
             },
             mutations: {
                 setUploadedFileName(state, fileName) {
