@@ -47,8 +47,8 @@ export default {
             const temperature = data.map(item => parseFloat(item.TEMPERATURE));
             const humidity = data.map(item => parseFloat(item.HUMIDITY));
             const pressure = data.map(item => parseFloat(item.PRESSURE));
-            const ws = data.map(item => parseFloat(item.WS));
-            const power = data.map(item => parseFloat(item.POWER));
+            const ws = data.map(item => parseFloat(item.AWS));
+            const power = data.map(item => parseFloat(item.APOWER));
             const yd15 = data.map(item => parseFloat(item.YD15));
 
             // 计算相关性矩阵
@@ -85,69 +85,70 @@ export default {
             return correlationArray;
         },
         renderChart() {
-            this.$nextTick(() => {
+            if (this.tableData && this.tableData.length > 0) {
+                this.$nextTick(() => {
+                    if (!this.chartInstance) {
+                        this.chartInstance = echarts.init(document.getElementById('heatmapChart'));
+                    }
 
-                if (!this.chartInstance) {
-                    this.chartInstance = echarts.init(document.getElementById('heatmapChart'));
-                }
+                    if (this.heatmapData && this.heatmapData.length > 0) {
 
-                if (this.heatmapData && this.heatmapData.length > 0) {
+                        const X = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
+                            'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
+                        const Y = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
+                            'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
 
-                    const X = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
-                                 'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
-                    const Y = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
-                                 'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
-
-                    const data = this.calculateCorrelation(this.heatmapData)
-                    const option = {
-                        tooltip: {
-                            position: 'top'
-                        },
-                        grid: {
-                            height: '60%',
-                            top: '10%'
-                        },
-                        xAxis: {
-                            type: 'category',
-                            data: X,
-                            splitArea: {
-                                show: true
-                            }
-                        },
-                        yAxis: {
-                            type: 'category',
-                            data: Y,
-                            splitArea: {
-                                show: true
-                            }
-                        },
-                        visualMap: {
-                            min: -1,
-                            max: 1,
-                            calculable: true,
-                            orient: 'horizontal',
-                            left: 'center',
-                            bottom: '15%'
-                        },
-                        series: [{
-                            name: 'Correlation Coefficient',
-                            type: 'heatmap',
-                            data: data,
-                            label: {
-                                show: true
+                        const data = this.calculateCorrelation(this.heatmapData)
+                        const option = {
+                            tooltip: {
+                                position: 'top'
                             },
-                            emphasis: {
-                                itemStyle: {
-                                    shadowBlur: 10,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            grid: {
+                                height: '60%',
+                                top: '10%'
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: X,
+                                splitArea: {
+                                    show: true
                                 }
-                            }
-                        }]
-                    };
+                            },
+                            yAxis: {
+                                type: 'category',
+                                data: Y,
+                                splitArea: {
+                                    show: true
+                                }
+                            },
+                            visualMap: {
+                                min: -1,
+                                max: 1,
+                                calculable: true,
+                                orient: 'horizontal',
+                                left: 'center',
+                                bottom: '15%'
+                            },
+                            series: [{
+                                name: 'Correlation Coefficient',
+                                type: 'heatmap',
+                                data: data,
+                                label: {
+                                    show: true
+                                },
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }]
+                        };
 
-                    option && this.chartInstance.setOption(option);
-                }
-            });
+                        option && this.chartInstance.setOption(option);
+                    }
+                });
+            }
         }
     }
 }

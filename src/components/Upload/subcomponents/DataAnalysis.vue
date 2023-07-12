@@ -18,6 +18,7 @@
                 <ScatterPlot :tableData="tableData" class="ScatterPlot" />
             </div>
         </div>
+
         <div class="diagrambody">
             <div>
                 <h1>箱线图</h1>
@@ -36,6 +37,43 @@
                 <LineChart :tableData="tableData" class="LineChart"/>
             </div>
         </div>
+
+        <div class="diagrambody">
+            <div>
+                <h1>平行坐标系图</h1>
+                <p>无线，无繁琐，<br>
+                    只有妙不可言。</p>
+                <span>进一步了解 ></span>
+                <!-- <img src="../imgs/CorrelationMatrix.png" alt=""> -->
+                <ParallelChart :tableData="tableData" class="ParallelChart"/>
+            </div>
+            <div>
+                <h1>实际风速和实际功率相关图</h1>
+                <p>家的新声。</p>
+                <span>进一步了解 ></span>
+                <!-- <img src="../imgs/ROUOND(A.WS,1)_YD15.png" alt=""> -->
+                <DynamicHistogram :tableData="tableData" class="DynamicHistogram" />
+            </div>
+        </div>
+
+        <div class="diagrambody">
+            <div>
+                <h1>风向 风速 湿度</h1>
+                <p>你喜爱的音乐，<br>
+                    随身带着走。</p>
+                <span>进一步了解 ></span>
+                <!-- <img src="../imgs/Boxplot.png" alt=""> -->
+                <WeatherChart :tableData="tableData" class="WeatherChart"/>
+            </div>
+            <div>
+                <h1>时序图</h1>
+                <p>给好听的歌曲，<br>
+                    搭个好看的装备。</p>
+                <span>进一步了解 ></span>
+                <!-- <img src="../imgs/SequenceDiagram.png" alt=""> -->
+                <SolidHistogram :tableData="tableData" class="SolidHistogram"/>
+            </div>
+        </div>
     </div>
 </template>
   
@@ -44,6 +82,10 @@ import ScatterPlot from './diagrams/ScatterPlot.vue';
 import HeatMap from './diagrams/HeatMap.vue';
 import LineChart from './diagrams/LineChart.vue';
 import BoxPlot from './diagrams/BoxPlot.vue';
+import ParallelChart from './diagrams/ParallelChart.vue';
+import DynamicHistogram from './diagrams/DynamicHistogram.vue';
+import WeatherChart from './diagrams/WeatherChart.vue';
+import SolidHistogram from './diagrams/SolidHistogram.vue';
 
 export default {
     props: {
@@ -51,7 +93,7 @@ export default {
     },
     name: 'dataanalysis',
     components: {
-        HeatMap, LineChart, BoxPlot, ScatterPlot
+        HeatMap, LineChart, BoxPlot, ScatterPlot, ParallelChart, DynamicHistogram, WeatherChart, SolidHistogram
     }
 }
 </script>

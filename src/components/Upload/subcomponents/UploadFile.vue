@@ -134,25 +134,23 @@ export default {
 
 
     fetchData(file) {
-      const fileResponse = JSON.stringify(file.response);
-      console.log(typeof fileResponse);
-      const dotIndex = fileResponse.lastIndexOf('/');
-      const jsonFolder = fileResponse.substring(0, dotIndex) + "/origin/json/";
-      const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
-      const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-      const jsonFile = jsonFolder + fileNameWithoutExtension + ".json";
+      // const fileResponse = JSON.stringify(file.response);
+      // const dotIndex = fileResponse.lastIndexOf('/');
+      // const jsonFolder = fileResponse.substring(0, dotIndex) + "/origin/json/";
+      // const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
+      // const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+      // const jsonFile = jsonFolder + fileNameWithoutExtension + ".json";
+      // console.log(jsonFile);
 
-
-      axios.get(jsonFile)
-        .then(response => {
-          const newTableData = response.data;
-          this.$emit('update-table-data', newTableData);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-        const newTableData = this.jsonData;
-        console.log(newTableData);
+      // axios.get(jsonFile)
+      //   .then(response => {
+      //     const newTableData = response.data;
+      //     console.log(newTableData);
+      //     this.$emit('update-table-data', newTableData);
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
 
         const jsonData = require('@/assets/testJson/11.json');
         this.$emit('update-table-data', jsonData);  
