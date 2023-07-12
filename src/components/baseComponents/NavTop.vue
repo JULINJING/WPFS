@@ -11,28 +11,29 @@
       <div @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 监测</div>
       <div @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常</div>
       <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> Three.js</div>
-    </div>
-
-    <el-dropdown
-        style="width: 150px; cursor: pointer; text-align: right; color: white"
-    >
-      <div style="display: inline-block">
-        <span class="el-dropdown-link" style="margin-left: 35px">
-          <i class="el-icon-user-solid" style="margin-right: 10px"></i>{{user.nickname}}<i
-            class="el-icon-arrow-down el-icon--right"
-        ></i>
-        </span>
+      <div class="logout _logout">
+        <el-dropdown
+          class="logout _logout" style="cursor: pointer; text-align: right; color: white"
+        >
+          <div class="logout _logout">
+            <span class="el-dropdown-link" style="margin-left: 35px; width: 200px;">
+              <i class="el-icon-user-solid" style="margin-right: 10px"></i>{{user.nickname}}<i
+                class="el-icon-arrow-down el-icon--right"
+            ></i>
+            </span>
+          </div>
+          <el-dropdown-menu slot="dropdown" style="width: 120px; text-align: center">
+            <el-dropdown-item icon="el-icon-user">
+              <router-link to="/person">个人信息</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item icon="el-icon-edit-outline">
+              <router-link to="/password">修改密码</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item divided icon="el-icon-switch-button"><span @click="logout">退出登录</span></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
-      <el-dropdown-menu slot="dropdown" style="width: 120px; text-align: center">
-        <el-dropdown-item icon="el-icon-user">
-          <router-link to="/person">个人信息</router-link>
-        </el-dropdown-item>
-        <el-dropdown-item icon="el-icon-edit-outline">
-          <router-link to="/password">修改密码</router-link>
-        </el-dropdown-item>
-        <el-dropdown-item divided icon="el-icon-switch-button"><span @click="logout">退出登录</span></el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    </div>
   </div>
 </template>
 
@@ -159,6 +160,9 @@ export default {
       }
     }
   }
+  .logout {
+    width: 150px !important
+  }
 }
 
 // 小于800px
@@ -212,6 +216,14 @@ export default {
 
   .navlistshow {
     display: block !important;
+  }
+
+  .el-dropdown-link {
+    margin-left: 0 !important;
+  }
+
+  .el-dropdown-menu {
+    left: 45px !important;
   }
 }
 </style>

@@ -14,7 +14,18 @@
             <div id="leftBar" class="sideBar left opacity0">
                 <i id="leftClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideLeftPanel">&#xe653;</i>
                 <div class="bar-content bar-content-left" id="leftContent">
-
+                    <div class="chartbox">
+                        <h5>风向 风速</h5>
+                        <div id="weather1"></div>
+                    </div>
+                    <div class="chartbox">
+                        <h5>气温</h5>
+                        <div id="weather2"></div>
+                    </div>
+                    <div class="chartbox">
+                        <h5>气压 湿度</h5>
+                        <div id="weather3"></div>
+                    </div>
                 </div>
             </div>
 
@@ -24,7 +35,7 @@
                     <div class="chartbox">
                         <h5>四大风力发电场</h5>
                         <ul class="chartList">
-                            <li :key="item" v-for="item in fieldData">
+                            <li :key="index" v-for="(item, index) in fieldData">
                                 <span>{{ item.name }}</span>
                                 <span :class="{'typeA': item.type === '荒原风场', 'typeB': item.type === '海滨风场', 'typeC': item.type === '高山风场'}">
                                     {{ item.type }}
@@ -158,6 +169,7 @@ export default {
             ],
 
             // 统计图表
+            // 右侧
             chartsDataState: [
                 { name: "并网", value: 0 },
                 { name: "待机", value: 0 },
@@ -175,6 +187,19 @@ export default {
             ],
             myChartPower: null,
             myOptionPower: {},
+
+            // 左侧
+            myChartWeather1: null,
+            myOptionWeather1: {},
+            chartsDataWeather1: [
+                {"DATATIME":"2022/3/26 12:00","WINDDIRECTION":"135","TurbID":"18","WINDSPEED":"0.6","PRESSURE":"1013","HUMIDITY":"19","TEMPERATURE":"16.3","PREPOWER":"5423.664291","YD15":"3338","ROUND(A.POWER,0)":"3622","AWS":"3.7"},{"DATATIME":"2022/3/26 12:15","WINDDIRECTION":"167","TurbID":"18","WINDSPEED":"0.9","PRESSURE":"1013","HUMIDITY":"19","TEMPERATURE":"16.7","PREPOWER":"5393.043637","YD15":"3539","ROUND(A.POWER,0)":"4293","AWS":"3.7"},{"DATATIME":"2022/3/26 12:30","WINDDIRECTION":"184","TurbID":"18","WINDSPEED":"1.3","PRESSURE":"1013","HUMIDITY":"18","TEMPERATURE":"17","PREPOWER":"5386.377587","YD15":"10185","ROUND(A.POWER,0)":"8480","AWS":"5"},{"DATATIME":"2022/3/26 12:45","WINDDIRECTION":"193","TurbID":"18","WINDSPEED":"1.7","PRESSURE":"1012","HUMIDITY":"17","TEMPERATURE":"17.3","PREPOWER":"5504.582102","YD15":"16032","ROUND(A.POWER,0)":"14243","AWS":"5.7"},{"DATATIME":"2022/3/26 13:00","WINDDIRECTION":"201","TurbID":"18","WINDSPEED":"2.2","PRESSURE":"1012","HUMIDITY":"16","TEMPERATURE":"17.6","PREPOWER":"5422.402582","YD15":"23043","ROUND(A.POWER,0)":"24667","AWS":"7.2"},{"DATATIME":"2022/3/26 13:15","WINDDIRECTION":"206","TurbID":"18","WINDSPEED":"2.8","PRESSURE":"1012","HUMIDITY":"16","TEMPERATURE":"17.9","PREPOWER":"5384.134899","YD15":"27501","ROUND(A.POWER,0)":"26488","AWS":"7.6"},{"DATATIME":"2022/3/26 13:30","WINDDIRECTION":"210","TurbID":"18","WINDSPEED":"3.4","PRESSURE":"1011","HUMIDITY":"16","TEMPERATURE":"18.2","PREPOWER":"5429.203811","YD15":"32914","ROUND(A.POWER,0)":"29174","AWS":"7.8"},{"DATATIME":"2022/3/26 13:45","WINDDIRECTION":"213","TurbID":"18","WINDSPEED":"3.8","PRESSURE":"1011","HUMIDITY":"15","TEMPERATURE":"18.4","PREPOWER":"5483.465929","YD15":"26735","ROUND(A.POWER,0)":"24703","AWS":"7.1"},{"DATATIME":"2022/3/26 14:00","WINDDIRECTION":"216","TurbID":"18","WINDSPEED":"4.4","PRESSURE":"1010","HUMIDITY":"15","TEMPERATURE":"18.7","PREPOWER":"5854","YD15":"23881","ROUND(A.POWER,0)":"26448","AWS":"7.4"}
+            ],
+
+            myChartWeather2: null,
+            myOptionWeather2: {},
+
+            myChartWeather3: null,
+            myOptionWeather3: {},
 
             // 记录风机状态数
             // 故障 维护 待机 并网个数
@@ -209,14 +234,17 @@ export default {
                 $(".bottomBar").removeClass("opacity0").removeClass("fadeOutDown").addClass("animated fadeInUp")
             }, 2000)
 
+            // 右侧
+            let state = document.getElementById("state")
+            let powerSum = document.getElementById("powerSum")
+            // 左侧
+            let weather1 = document.getElementById("weather1")
+            this.initCharts(this.chartsDataState, this.chartsDataPower, this.chartsDataWeather1, state, powerSum, weather1)
+
             //webgl渲染失败后，刷新页面
             this.map.on(mars3d.EventType.renderError, function () {
                 window.location.reload();
             });
-
-            let state = document.getElementById("state")
-            let powerSum = document.getElementById("powerSum")
-            this.initCharts(this.chartsDataState, this.chartsDataPower, state, powerSum)
         },
         addOtherFactoryLayer() {
             // 添加道路
@@ -1234,8 +1262,9 @@ export default {
         // 添加Echarts图形
         // chart Echart圆形
         // chart Echart柱状
+        // chart Echart其他
         // 参数为前数据 后dom
-        initCharts(arrState, arrPowerSum, state, powerSum) {
+        initCharts(arrState, arrPowerSum, arrWeather1, state, powerSum, weather1) {
             // 风机状态统计图
             this.myChartState = echarts.init(state)
             this.myOptionState = {
@@ -1345,9 +1374,260 @@ export default {
             }
             this.myChartPower.setOption(this.myOptionPower)
 
+            // 风向 风速图
+            const directionMap = {};
+            // 风向对象
+            const windDirection = ['W', 'WSW', 'SW', 'SSW', 'S', 'SSE', 'SE', 'ESE', 'E', 'ENE', 'NE', 'NNE', 'N', 'NNW', 'NW', 'WNW']
+            windDirection.forEach(function (name, index) {
+                directionMap[name] = Math.PI / 8 * index;
+            });
+            const data = arrWeather1.map(function (entry) {
+                // 找出与风向数值最接近的方向
+                let closestDirection = 'W'; // 默认值
+                let smallestDifference = Math.abs(Number(entry.WINDDIRECTION) - directionMap[closestDirection] / Math.PI * 180);
+                for (var direction in directionMap) {
+                    let difference = Math.abs(Number(entry.WINDDIRECTION) - directionMap[direction] / Math.PI * 180);
+                    if (difference < smallestDifference) {
+                        smallestDifference = difference;
+                        closestDirection = direction;
+                    }
+                }
+                // 时间转换
+                let date = new Date(entry.DATATIME);
+                let isoFormat = date.toISOString();
+                return [isoFormat, closestDirection, Number(entry.WINDSPEED), Number(entry.AWS)];
+            });
+            // 索引
+            const dims = {
+                DATATIME: 0,
+                WINDDIRECTION: 1,
+                WINDSPEED: 2,
+                AWS: 3
+            };
+            // 箭头图标大小
+            const arrowSize = 18;
+            const renderArrow = function (param, api) {
+                const point = api.coord([
+                    api.value(dims.DATATIME),
+                    api.value(dims.AWS)
+                ]);
+                return {
+                    type: 'path',
+                    shape: {
+                        pathData: 'M31 16l-15-15v9h-26v12h26v9z',
+                        x: -arrowSize / 2,
+                        y: -arrowSize / 2,
+                        width: arrowSize,
+                        height: arrowSize
+                    },
+                    rotation: directionMap[api.value(dims.WINDDIRECTION)],
+                    position: point,
+                    style: api.style({
+                        stroke: '#555',
+                        lineWidth: 1
+                    })
+                };
+            };
+            this.myChartWeather1 = echarts.init(weather1)
+            this.myOptionWeather1 = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        return [
+                            echarts.format.formatTime(
+                                'yyyy-MM-dd',
+                                params[0].value[dims.DATATIME]
+                            ) +
+                            ' ' +
+                            echarts.format.formatTime('hh:mm', params[0].value[dims.DATATIME]),
+                            '风向：' + params[0].value[dims.WINDDIRECTION],
+                            '预测风速：' + params[0].value[dims.WINDSPEED],
+                            '实际风速：' + params[0].value[dims.AWS]
+                        ].join('<br>');
+                    }
+                },
+                grid: {
+                    top: 10,
+                    bottom: 80
+                },
+                xAxis: {
+                    type: 'time',
+                    minInterval: 3600 * 1000 * 0.4,
+                    maxInterval: 3600 * 1000 * 24,
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ddd'
+                        }
+                    }
+                },
+                yAxis: [
+                    {
+                        name: '实际风速',
+                        nameLocation: 'middle',
+                        nameGap: 14,
+                        nameTextStyle: {
+                            fontSize: 11,
+                            color: "#fff"
+                        },
+                        axisLine: {
+                            lineStyle: {
+                            color: '#666'
+                            }
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                olor: '#ddd'
+                            }
+                        }
+                    },
+                    {
+                        name: '预测风速',
+                        nameLocation: 'middle',
+                        nameGap: 16,
+                        nameTextStyle: {
+                            fontSize: 11,
+                            color: "#fff"
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#15D1F2'
+                            }
+                        },
+                        splitLine: { show: false }
+                    },
+                    {
+                        axisLine: { show: false },
+                        axisTick: { show: false },
+                        axisLabel: { show: false },
+                        splitLine: { show: false }
+                    }
+                ],
+                visualMap: {
+                    type: 'piecewise',
+                    // show: false,
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: 0,
+                    textStyle: {
+                        color: "#fff"
+                    },
+                    pieces: [
+                        {
+                            gte: 6,
+                            color: '#18BF12',
+                            label: '大风'
+                        },
+                        {
+                            gte: 3,
+                            lt: 6,
+                            color: '#f4e9a3',
+                            label: '中风'
+                        },
+                        {
+                            lt: 3,
+                            color: '#D33C3E',
+                            label: '微风'
+                        }
+                    ],
+                    seriesIndex: 1,
+                    dimension: 3
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        xAxisIndex: 0,
+                        minSpan: 2
+                    },
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        minSpan: 2,
+                        bottom: 30,
+                        height: 20,
+                        handleStyle: {
+                            boderColor: "#fff",
+                            borderWidth: 2
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        type: 'line',
+                        yAxisIndex: 1,
+                        showSymbol: false,
+                        emphasis: {
+                            scale: false
+                        },
+                        symbolSize: 10,
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                global: false,
+                                colorStops: [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(88,160,253,1)'
+                                    },
+                                    {
+                                        offset: 0.5,
+                                        color: 'rgba(88,160,253,0.7)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(88,160,253,0)'
+                                    }
+                                ]
+                            }
+                        },
+                        lineStyle: {
+                            color: 'rgba(88,160,253,1)'
+                        },
+                        itemStyle: {
+                            color: 'rgba(88,160,253,1)'
+                        },
+                        encode: {
+                            x: dims.DATATIME,
+                            y: dims.WINDSPEED
+                        },
+                        data: data,
+                        z: 2
+                    },
+                    {
+                        type: 'custom',
+                        renderItem: renderArrow,
+                        encode: {
+                            x: dims.DATATIME,
+                            y: dims.AWS
+                        },
+                        data: data,
+                        z: 10
+                    },
+                    {
+                        type: 'line',
+                        symbol: 'none',
+                        encode: {
+                            x: dims.DATATIME,
+                            y: dims.AWS
+                        },
+                        lineStyle: {
+                            color: '#aaa',
+                            type: 'dotted'
+                        },
+                        data: data,
+                        z: 1
+                    }
+                ]
+            };
+            this.myChartWeather1.setOption(this.myOptionWeather1)
+
             window.addEventListener("resize", ()=> {
                 this.myChartState.resize()
                 this.myChartPower.resize()
+                this.myChartWeather1.resize()
             })
         },
 
@@ -1559,7 +1839,10 @@ export default {
         }
     }
     #state,
-    #powerSum {
+    #powerSum,
+    #weather1,
+    #weather2,
+    #weather3 {
         width: 100%;
         height: 100%;
     }
