@@ -650,6 +650,15 @@ export default {
 
             this.map.getLayerById("风电场办公楼").on(mars3d.EventType.click, ()=> {
                 this.map.setCameraView({ "lat": 43.585478, "lng": 87.875422, "alt": 1223.4, "heading": 127, "pitch": 0.8 })
+                $("#explanatoryPicture").css({
+                    "display": "block",
+                    "position": "absolute",
+                    "top": "10%",
+                    "left": "22%",
+                    "right": "22%",
+                    "width": "56%"
+                })
+                $("#explanatoryPicture").addClass("animated fadeInDown")
             })
         },
         addChinaMap() {
@@ -1258,15 +1267,6 @@ export default {
                 maxPitch: 0.95 // 最大仰角  0-1
             })
             this.hideBottomPanel()
-            $("#explanatoryPicture").css({
-                "display": "block",
-                "position": "absolute",
-                "top": "10%",
-                "left": "22%",
-                "right": "22%",
-                "width": "56%"
-            })
-            $("#explanatoryPicture").addClass("animated fadeInDown")
         },
         // 添加Echarts图形
         // chart Echart圆形
