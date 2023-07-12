@@ -17,6 +17,7 @@
           accept=".csv"
         >
 
+        <i slot="default" class="el-icon-plus"/>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         </el-upload>
@@ -84,6 +85,7 @@
 <script>
 import { serverIp } from "../../../../public/config.js"
 import axios from 'axios';
+import { mapMutations } from 'vuex';
 
 export default {
   props: {
@@ -100,6 +102,8 @@ export default {
     };
   },
   methods: {
+    ...mapMutations('global', ['setUploadedFileName']),
+
     // 上传文件成功
     handleUploadSuccess(response, file, fileList) {
       this.$message.success("上传成功")
@@ -111,6 +115,9 @@ export default {
 
       // TODO: 处理返回的数据，渲染表格
       this.fetchData(file);
+
+      this.setUploadedFileName(file.name);
+
     },
 
     // 上传文件之前的钩子
@@ -127,24 +134,25 @@ export default {
 
 
     fetchData(file) {
-      // const fileResponse = JSON.stringify(file.response);
-      // console.log(typeof fileResponse);
-      // const dotIndex = fileResponse.lastIndexOf('/');
-      // const jsonFolder = fileResponse.substring(0, dotIndex) + "/origin/json/";
-      // const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
-      // const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-      // const jsonFile = jsonFolder + fileNameWithoutExtension + ".json";
+      const fileResponse = JSON.stringify(file.response);
+      console.log(typeof fileResponse);
+      const dotIndex = fileResponse.lastIndexOf('/');
+      const jsonFolder = fileResponse.substring(0, dotIndex) + "/origin/json/";
+      const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
+      const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+      const jsonFile = jsonFolder + fileNameWithoutExtension + ".json";
 
 
-      // axios.get(jsonFile)
-      //   .then(response => {
-      //     const newTableData = response.data;
-      //     this.$emit('update-table-data', newTableData);
-      //   })
-      //   .catch(error => {
-      //     console.error(error);
-      //   });
-        // const newTableData = this.jsonData;
+      axios.get(jsonFile)
+        .then(response => {
+          const newTableData = response.data;
+          this.$emit('update-table-data', newTableData);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+        const newTableData = this.jsonData;
+        console.log(newTableData);
 
         const jsonData = require('@/assets/testJson/11.json');
         this.$emit('update-table-data', jsonData);  
@@ -167,6 +175,7 @@ export default {
       if (this.outlierRadio !== '' && this.missingRadio !== '') {
         console.log(this.outlierRadio); // 获取选中的复选框的值
         this.dialogFormVisible = false;
+        this.showTable = true;
         this.sendPreprocessParams();
         
       } else {
