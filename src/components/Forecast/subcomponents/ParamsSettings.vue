@@ -28,7 +28,7 @@
             v-model="form.selectedModels"
             placeholder="请选择"
             :multiple="isMultiple"
-            ::min="minModelNum"
+            ::min="1"
             collapse-tags
           >
             <el-option
@@ -97,6 +97,8 @@
 </template>
   
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -129,7 +131,10 @@ export default {
       progress: 0,
     };
   },
+
   computed: {
+    ...mapState('global', ['uploadedFileName']),
+
     calculateProgress() {
       let filledFields = 0;
       const totalFields = 5; // 总字段数
@@ -163,7 +168,7 @@ export default {
       this.progress = this.calculateProgress;
     },
     setPeriods() {
-      console.log(this.form.inputPeriod);
+      // console.log(this.form.inputPeriod);
     },
     setParams() {
       if (
@@ -178,11 +183,11 @@ export default {
           type: "warning",
         });
       } else {
-        console.log(this.form);
-        // TODO
+        // console.log(this.form);
+        const fileName = this.$store.state.global.uploadedFileName;
+
         // 调用后端预测接口，传入表单数据
-        var fileName = "test.csv"
-        this.request.post("/file/forecast",fileName).then((res) => {
+        this.request.post("/file/forecast", fileName).then((res) => {
           if (res.code === "200") {
             this.$message.success("操作成功");
           }
@@ -191,6 +196,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style>
