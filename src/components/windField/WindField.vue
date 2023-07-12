@@ -13,14 +13,14 @@
             <mars-map :url="configUrl" @onload="onMapload" :options="mapOptions" />
             <div id="leftBar" class="sideBar left opacity0">
                 <i id="leftClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideLeftPanel">&#xe653;</i>
-                <div class="bar-content" id="leftContent">
+                <div class="bar-content bar-content-left" id="leftContent">
 
                 </div>
             </div>
 
             <div id="RightBar" class="sideBar right opacity0">
                 <i id="rightClickSpan" class="iconfont opration-handler" aria-hidden="true" @click="hideRightPanel">&#xe653;</i>
-                <div class="bar-content" id="rightContent">
+                <div class="bar-content bar-content-right" id="rightContent">
                     <div class="chartbox">
                         <h5>四大风力发电场</h5>
                         <ul class="chartList">
@@ -1363,7 +1363,7 @@ export default {
                     "box-shadow": "none",
                     "background-color": "rgba(1, 48, 102, 0.8)"
                 })
-                $(".bar-content").css("display","none")
+                $(".bar-content-left").css("display","none")
             }
             else {
                 $(".sideBar.left").addClass("fadeInLeft")
@@ -1374,7 +1374,7 @@ export default {
                     "background-color": "transparent"
                 })
                 setTimeout(function () {
-                    $(".bar-content").css("display","flex")
+                    $(".bar-content-left").css("display","flex")
                 },1000)
             }
         },
@@ -1389,7 +1389,7 @@ export default {
                     "box-shadow": "none",
                     "background-color": "rgba(1, 48, 102, 0.8)"
                 })
-                $(".bar-content").css("display","none")
+                $(".bar-content-right").css("display","none")
             }
             else {
                 $(".sideBar.right").addClass("fadeInRight")
@@ -1400,7 +1400,7 @@ export default {
                     "background-color": "transparent"
                 })
                 setTimeout(function () {
-                    $(".bar-content").css("display","flex")
+                    $(".bar-content-right").css("display","flex")
                 },1000)
             }
         },
