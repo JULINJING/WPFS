@@ -20,7 +20,7 @@
 
         <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" top="25vh" width="35%" class="dialog-box" :show-close="false">
             <div class="form-row">
-                <el-tag>选择异常检测方法</el-tag>
+                <el-tag class="tag">选择异常检测方法</el-tag>
                 <el-radio-group v-model="outlierRadio">
                 <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
                 <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-row">
-                <el-tag>缺失值处理方法</el-tag>
+                <el-tag class="tag">缺失值处理方法</el-tag>
                 <el-radio-group v-model="missingRadio">
                 <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
                 <el-radio-button label="线性插值" class="bordered-checkbox" border></el-radio-button>
@@ -44,30 +44,28 @@
             </div>
         </el-dialog>
 
-        <div v-if="showTable" class="form-container">
-            <el-table :data="tableData" stripe style="width: 100%" max-height="300">
-                <el-table-column fixed prop="DATATIME" label="DATATIME" width="150">
-                </el-table-column>
-                <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150">
-                </el-table-column>
-                <el-table-column prop="PREPOWER" label="PREPOWER" width="150">
-                </el-table-column>
-                <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150">
-                </el-table-column>
-                <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150">
-                </el-table-column>
-                <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150">
-                </el-table-column>
-                <el-table-column prop="PRESSURE" label="PRESSURE" width="150">
-                </el-table-column>
-                <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150">
-                </el-table-column>
-                <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150">
-                </el-table-column>
-                <el-table-column prop="YD15" label="YD15" width="150">
-                </el-table-column>
-            </el-table>
-        </div>
+        <el-table v-if="showTable" :data="tableData" stripe style="width: 100%" max-height="300">
+            <el-table-column fixed prop="DATATIME" label="DATATIME" width="150">
+            </el-table-column>
+            <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150">
+            </el-table-column>
+            <el-table-column prop="PREPOWER" label="PREPOWER" width="150">
+            </el-table-column>
+            <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150">
+            </el-table-column>
+            <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150">
+            </el-table-column>
+            <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150">
+            </el-table-column>
+            <el-table-column prop="PRESSURE" label="PRESSURE" width="150">
+            </el-table-column>
+            <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150">
+            </el-table-column>
+            <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150">
+            </el-table-column>
+            <el-table-column prop="YD15" label="YD15" width="150">
+            </el-table-column>
+        </el-table>
     </div>
 </template>
 
@@ -230,7 +228,7 @@ export default {
             align-items: center;
             justify-content: center;
         }
-        .el-tag {
+        .tag {
             width: 120px;
             margin-bottom: 5px;
         }
@@ -265,7 +263,7 @@ export default {
         .el-dialog__body{
             padding: 10px;
         }
-        .el-tag {
+        .tag {
             width: 120px;
             margin-bottom: 4px;
         }
