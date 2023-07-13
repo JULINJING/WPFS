@@ -91,7 +91,6 @@
       </div>
     </el-dialog>
 
-<<<<<<< HEAD
         <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" top="25vh" width="35%" class="dialog-box" :show-close="false">
             <div class="form-row">
                 <el-tag class="tag">选择异常检测方法</el-tag>
@@ -144,36 +143,6 @@
             </el-table>
         </div>
     </div>
-=======
-    <el-table
-      v-if="showTable"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-      max-height="300"
-    >
-      <el-table-column fixed prop="DATATIME" label="DATATIME" width="150">
-      </el-table-column>
-      <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150">
-      </el-table-column>
-      <el-table-column prop="PREPOWER" label="PREPOWER" width="150">
-      </el-table-column>
-      <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150">
-      </el-table-column>
-      <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150">
-      </el-table-column>
-      <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150">
-      </el-table-column>
-      <el-table-column prop="PRESSURE" label="PRESSURE" width="150">
-      </el-table-column>
-      <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150">
-      </el-table-column>
-      <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150">
-      </el-table-column>
-      <el-table-column prop="YD15" label="YD15" width="150"> </el-table-column>
-    </el-table>
-  </div>
->>>>>>> dc6f424259a7387c2627f798289bbf211b4e1524
 </template>
 
 <script>
@@ -196,6 +165,9 @@ export default {
     };
   },
   methods: {
+    rowStyle() {
+      return "text-align:center";
+    },
     ...mapMutations("global", ["setUploadedFileName"]),
 
     // 上传文件成功
@@ -218,24 +190,6 @@ export default {
 
       this.setUploadedFileName(file.name);
     },
-<<<<<<< HEAD
-    data() {
-        return {
-        serverIp: serverIp,
-        dialogFormVisible: false,
-        showTable: false,
-        fileList: [],
-        outlierRadio: '',
-        missingRadio: '',
-        };
-    },
-    methods: {
-        rowStyle() {
-            return "text-align:center";
-        },
-        ...mapMutations('global', ['setUploadedFileName']),
-=======
->>>>>>> dc6f424259a7387c2627f798289bbf211b4e1524
 
     // 上传文件之前的钩子
     beforeUpload(file) {
@@ -321,7 +275,6 @@ export default {
 </script>
 
 <style lang="less">
-<<<<<<< HEAD
 .el-upload{
     width: 98%;
     background-color: rgb(241,241,241);
@@ -330,15 +283,6 @@ export default {
     border: 3px dashed #d9d9d9;
     width: 100%;
     background-color: rgb(241,241,241);
-=======
-.el-upload,
-.el-upload-dragger {
-  width: 100%;
-  background-color: rgb(241, 241, 241);
-}
-.el-upload-dragger {
-  border: 3px dashed #d9d9d9;
->>>>>>> dc6f424259a7387c2627f798289bbf211b4e1524
 }
 .el-upload-list {
   display: flex;
