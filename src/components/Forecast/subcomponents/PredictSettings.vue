@@ -6,7 +6,7 @@
       </el-form>
       <el-form ref="form" :model="form" label-width="80px">
         <!-- 进度条 -->
-        <div class="form-row">
+        <div class="predict-form-row">
           <el-progress
             type="line"
             :percentage="calculateProgress"
@@ -14,7 +14,7 @@
           ></el-progress>
         </div>
 
-        <div class="form-row">
+        <div class="predict-form-row">
           <el-tag>模型类型选择</el-tag>
           <el-radio-group
             v-model="form.modelType"
@@ -25,7 +25,7 @@
           </el-radio-group>
         </div>
 
-        <div class="form-row">
+        <div class="predict-form-row">
           <el-tag>具体模型选择</el-tag>
           <el-select
             v-model="form.selectedModels"
@@ -43,7 +43,7 @@
           </el-select>
         </div>
 
-        <div class="form-row">
+        <div class="predict-form-row">
           <el-tag>指定协变量</el-tag>
           <el-select
             v-model="form.selectedCovariates"
@@ -61,7 +61,7 @@
           </el-select>
         </div>
 
-        <div class="form-row">
+        <div class="predict-form-row">
           <el-tag>输入时间段</el-tag>
           <div class="block">
             <el-date-picker
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="predict-form-row">
           <el-tag>预测时间段</el-tag>
           <div class="block">
             <el-date-picker

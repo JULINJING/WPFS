@@ -6,11 +6,11 @@
             </el-form>
             <el-form ref="form" :model="form" label-width="80px">
                 <!-- 进度条 -->
-                <div class="form-row">
+                <div class="train-form-row">
                     <el-progress type="line" :percentage="calculateProgress" style="width: 800px"></el-progress>
                 </div>
 
-                <div class="form-row">
+                <div class="train-form-row">
                     <el-tag>具体模型选择</el-tag>
                     <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
                         <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
@@ -18,22 +18,22 @@
                     </el-select>
                 </div>
 
-                <div class="form-row">
+                <div class="train-form-row">
                     <el-tag>训练样本数量</el-tag>
                     <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
                 </div>
 
-                <div class="form-row">
+                <div class="train-form-row">
                     <el-tag>学习率</el-tag>
                     <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
                 </div>
 
-                <div class="form-row">
+                <div class="train-form-row">
                     <el-tag>输入长度</el-tag>
                     <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
                 </div>
 
-                <div class="form-row">
+                <div class="train-form-row">
                     <el-tag>预测长度</el-tag>
                     <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
                 </div>
