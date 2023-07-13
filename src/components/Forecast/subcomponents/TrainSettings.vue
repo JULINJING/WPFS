@@ -154,4 +154,5 @@ export default {
     margin-left: 30%;
     margin-right: 30%;
 }
+
 </style>
