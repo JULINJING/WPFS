@@ -7,8 +7,8 @@
         "TEMPERATURE": "3.9",
         "HUMIDITY": "45",
         "PRESSURE": "842",
-        "WS": "3.3",
-        "POWER": "17959.0",
+        "AWS": "3.3",
+        "APOWER": "17959.0",
         "YD15": "13819.0"
     },
     {
@@ -19,8 +19,8 @@
         "TEMPERATURE": "3.6",
         "HUMIDITY": "46",
         "PRESSURE": "842",
-        "WS": "3.9",
-        "POWER": "25930.0",
+        "AWS": "3.9",
+        "APOWER": "25930.0",
         "YD15": "20435.0"
     },
     {
@@ -31,8 +31,8 @@
         "TEMPERATURE": "3.3",
         "HUMIDITY": "47",
         "PRESSURE": "842",
-        "WS": "4.1",
-        "POWER": "31287.0",
+        "AWS": "4.1",
+        "APOWER": "31287.0",
         "YD15": "25376.0"
     },
     {
@@ -43,8 +43,8 @@
         "TEMPERATURE": "3.0",
         "HUMIDITY": "48",
         "PRESSURE": "842",
-        "WS": "4.3",
-        "POWER": "32626.0",
+        "AWS": "4.3",
+        "APOWER": "32626.0",
         "YD15": "25669.0"
     },
     {
@@ -55,8 +55,8 @@
         "TEMPERATURE": "2.7",
         "HUMIDITY": "49",
         "PRESSURE": "842",
-        "WS": "3.7",
-        "POWER": "24645.0",
+        "AWS": "3.7",
+        "APOWER": "24645.0",
         "YD15": "24036.0"
     },
     {
@@ -67,8 +67,8 @@
         "TEMPERATURE": "2.4",
         "HUMIDITY": "50",
         "PRESSURE": "842",
-        "WS": "2.9",
-        "POWER": "13230.0",
+        "AWS": "2.9",
+        "APOWER": "13230.0",
         "YD15": "17085.0"
     },
     {
@@ -79,8 +79,8 @@
         "TEMPERATURE": "2.2",
         "HUMIDITY": "51",
         "PRESSURE": "842",
-        "WS": "2.1",
-        "POWER": "4200.0",
+        "AWS": "2.1",
+        "APOWER": "4200.0",
         "YD15": "4606.0"
     },
     {
@@ -91,8 +91,8 @@
         "TEMPERATURE": "2.0",
         "HUMIDITY": "52",
         "PRESSURE": "841",
-        "WS": "1.5",
-        "POWER": "30.0",
+        "AWS": "1.5",
+        "APOWER": "30.0",
         "YD15": "0.0"
     },
     {
@@ -103,8 +103,8 @@
         "TEMPERATURE": "1.8",
         "HUMIDITY": "53",
         "PRESSURE": "841",
-        "WS": "1.3",
-        "POWER": "206.0",
+        "AWS": "1.3",
+        "APOWER": "206.0",
         "YD15": "0.0"
     },
     {
@@ -115,8 +115,8 @@
         "TEMPERATURE": "1.6",
         "HUMIDITY": "54",
         "PRESSURE": "841",
-        "WS": "1.2",
-        "POWER": "-223.0",
+        "AWS": "1.2",
+        "APOWER": "-223.0",
         "YD15": "-754.0"
     },
     {
@@ -127,8 +127,8 @@
         "TEMPERATURE": "1.4",
         "HUMIDITY": "55",
         "PRESSURE": "841",
-        "WS": "1.3",
-        "POWER": "-117.0",
+        "AWS": "1.3",
+        "APOWER": "-117.0",
         "YD15": "-754.0"
     },
     {
@@ -139,8 +139,8 @@
         "TEMPERATURE": "1.1",
         "HUMIDITY": "56",
         "PRESSURE": "841",
-        "WS": "1.3",
-        "POWER": "-98.0",
+        "AWS": "1.3",
+        "APOWER": "-98.0",
         "YD15": "-754.0"
     },
     {
@@ -151,8 +151,8 @@
         "TEMPERATURE": "0.9",
         "HUMIDITY": "57",
         "PRESSURE": "841",
-        "WS": "0.8",
-        "POWER": "-94.0",
+        "AWS": "0.8",
+        "APOWER": "-94.0",
         "YD15": "-754.0"
     },
     {
@@ -163,8 +163,8 @@
         "TEMPERATURE": "0.7",
         "HUMIDITY": "57",
         "PRESSURE": "841",
-        "WS": "1.1",
-        "POWER": "-94.0",
+        "AWS": "1.1",
+        "APOWER": "-94.0",
         "YD15": "-754.0"
     },
     {
@@ -175,8 +175,8 @@
         "TEMPERATURE": "0.5",
         "HUMIDITY": "58",
         "PRESSURE": "841",
-        "WS": "1.2",
-        "POWER": "-97.0",
+        "AWS": "1.2",
+        "APOWER": "-97.0",
         "YD15": "-754.0"
     },
     {
@@ -187,8 +187,8 @@
         "TEMPERATURE": "0.4",
         "HUMIDITY": "58",
         "PRESSURE": "841",
-        "WS": "1.7",
-        "POWER": "-110.0",
+        "AWS": "1.7",
+        "APOWER": "-110.0",
         "YD15": "-754.0"
     },
     {
@@ -199,8 +199,8 @@
         "TEMPERATURE": "0.2",
         "HUMIDITY": "59",
         "PRESSURE": "841",
-        "WS": "2.1",
-        "POWER": "-117.0",
+        "AWS": "2.1",
+        "APOWER": "-117.0",
         "YD15": "0.0"
     },
     {
@@ -211,8 +211,8 @@
         "TEMPERATURE": "0.1",
         "HUMIDITY": "59",
         "PRESSURE": "841",
-        "WS": "2.8",
-        "POWER": "408.0",
+        "AWS": "2.8",
+        "APOWER": "408.0",
         "YD15": "-754.0"
     },
     {
@@ -223,8 +223,8 @@
         "TEMPERATURE": "0.0",
         "HUMIDITY": "60",
         "PRESSURE": "841",
-        "WS": "2.9",
-        "POWER": "10650.0",
+        "AWS": "2.9",
+        "APOWER": "10650.0",
         "YD15": "2764.0"
     },
     {
@@ -235,8 +235,8 @@
         "TEMPERATURE": "-0.1",
         "HUMIDITY": "61",
         "PRESSURE": "841",
-        "WS": "2.6",
-        "POWER": "9179.0",
+        "AWS": "2.6",
+        "APOWER": "9179.0",
         "YD15": "8878.0"
     },
     {
@@ -247,8 +247,8 @@
         "TEMPERATURE": "-0.2",
         "HUMIDITY": "62",
         "PRESSURE": "841",
-        "WS": "2.5",
-        "POWER": "8995.0",
+        "AWS": "2.5",
+        "APOWER": "8995.0",
         "YD15": "7873.0"
     },
     {
@@ -259,8 +259,8 @@
         "TEMPERATURE": "-0.3",
         "HUMIDITY": "62",
         "PRESSURE": "841",
-        "WS": "2.2",
-        "POWER": "3118.0",
+        "AWS": "2.2",
+        "APOWER": "3118.0",
         "YD15": "4941.0"
     },
     {
@@ -271,8 +271,8 @@
         "TEMPERATURE": "-0.4",
         "HUMIDITY": "63",
         "PRESSURE": "841",
-        "WS": "2.0",
-        "POWER": "308.0",
+        "AWS": "2.0",
+        "APOWER": "308.0",
         "YD15": "0.0"
     },
     {
@@ -283,8 +283,8 @@
         "TEMPERATURE": "-0.5",
         "HUMIDITY": "64",
         "PRESSURE": "841",
-        "WS": "2.0",
-        "POWER": "-54.0",
+        "AWS": "2.0",
+        "APOWER": "-54.0",
         "YD15": "0.0"
     },
     {
@@ -295,8 +295,8 @@
         "TEMPERATURE": "-0.6",
         "HUMIDITY": "65",
         "PRESSURE": "841",
-        "WS": "2.3",
-        "POWER": "-85.0",
+        "AWS": "2.3",
+        "APOWER": "-85.0",
         "YD15": "0.0"
     },
     {
@@ -307,8 +307,8 @@
         "TEMPERATURE": "-0.7",
         "HUMIDITY": "66",
         "PRESSURE": "841",
-        "WS": "2.3",
-        "POWER": "-79.0",
+        "AWS": "2.3",
+        "APOWER": "-79.0",
         "YD15": "0.0"
     },
     {
@@ -319,8 +319,8 @@
         "TEMPERATURE": "-0.8",
         "HUMIDITY": "67",
         "PRESSURE": "841",
-        "WS": "2.5",
-        "POWER": "112.0",
+        "AWS": "2.5",
+        "APOWER": "112.0",
         "YD15": "0.0"
     },
     {
@@ -331,8 +331,8 @@
         "TEMPERATURE": "-1.0",
         "HUMIDITY": "68",
         "PRESSURE": "841",
-        "WS": "2.4",
-        "POWER": "819.0",
+        "AWS": "2.4",
+        "APOWER": "819.0",
         "YD15": "0.0"
     },
     {
@@ -343,8 +343,8 @@
         "TEMPERATURE": "-1.1",
         "HUMIDITY": "69",
         "PRESSURE": "841",
-        "WS": "2.2",
-        "POWER": "1062.0",
+        "AWS": "2.2",
+        "APOWER": "1062.0",
         "YD15": "0.0"
     },
     {
@@ -355,8 +355,8 @@
         "TEMPERATURE": "-1.3",
         "HUMIDITY": "70",
         "PRESSURE": "841",
-        "WS": "2.4",
-        "POWER": "1275.0",
+        "AWS": "2.4",
+        "APOWER": "1275.0",
         "YD15": "0.0"
     },
     {
@@ -367,8 +367,8 @@
         "TEMPERATURE": "-1.5",
         "HUMIDITY": "71",
         "PRESSURE": "841",
-        "WS": "2.3",
-        "POWER": "867.0",
+        "AWS": "2.3",
+        "APOWER": "867.0",
         "YD15": "0.0"
     },
     {
@@ -379,8 +379,8 @@
         "TEMPERATURE": "-1.8",
         "HUMIDITY": "73",
         "PRESSURE": "841",
-        "WS": "2.3",
-        "POWER": "682.0",
+        "AWS": "2.3",
+        "APOWER": "682.0",
         "YD15": "0.0"
     },
     {
@@ -391,8 +391,8 @@
         "TEMPERATURE": "-2.0",
         "HUMIDITY": "74",
         "PRESSURE": "841",
-        "WS": "2.4",
-        "POWER": "1213.0",
+        "AWS": "2.4",
+        "APOWER": "1213.0",
         "YD15": "0.0"
     },
     {
@@ -403,8 +403,8 @@
         "TEMPERATURE": "-1.9",
         "HUMIDITY": "74",
         "PRESSURE": "841",
-        "WS": "2.4",
-        "POWER": "1253.0",
+        "AWS": "2.4",
+        "APOWER": "1253.0",
         "YD15": "0.0"
     },
     {
@@ -415,8 +415,8 @@
         "TEMPERATURE": "-1.6",
         "HUMIDITY": "73",
         "PRESSURE": "841",
-        "WS": "2.4",
-        "POWER": "894.0",
+        "AWS": "2.4",
+        "APOWER": "894.0",
         "YD15": "0.0"
     },
     {
@@ -427,8 +427,8 @@
         "TEMPERATURE": "-1.3",
         "HUMIDITY": "72",
         "PRESSURE": "842",
-        "WS": "2.4",
-        "POWER": "660.0",
+        "AWS": "2.4",
+        "APOWER": "660.0",
         "YD15": "0.0"
     },
     {
@@ -439,8 +439,8 @@
         "TEMPERATURE": "-1.0",
         "HUMIDITY": "71",
         "PRESSURE": "842",
-        "WS": "2.6",
-        "POWER": "1134.0",
+        "AWS": "2.6",
+        "APOWER": "1134.0",
         "YD15": "0.0"
     },
     {
@@ -451,8 +451,8 @@
         "TEMPERATURE": "-0.5",
         "HUMIDITY": "69",
         "PRESSURE": "842",
-        "WS": "2.7",
-        "POWER": "2044.0",
+        "AWS": "2.7",
+        "APOWER": "2044.0",
         "YD15": "0.0"
     },
     {
@@ -463,8 +463,8 @@
         "TEMPERATURE": "0.2",
         "HUMIDITY": "66",
         "PRESSURE": "842",
-        "WS": "2.6",
-        "POWER": "1634.0",
+        "AWS": "2.6",
+        "APOWER": "1634.0",
         "YD15": "0.0"
     }
 ]

@@ -93,9 +93,9 @@ export default {
 
                     if (this.heatmapData && this.heatmapData.length > 0) {
 
-                        const X = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
+                        const X = ['WINDSPEED', 'PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'HUMIDITY',
                             'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
-                        const Y = ['PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'WINDSPEED', 'HUMIDITY',
+                        const Y = ['WINDSPEED', 'PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'HUMIDITY',
                             'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
 
                         const data = this.calculateCorrelation(this.heatmapData)

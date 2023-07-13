@@ -70,7 +70,6 @@ export default {
                         return [isoFormat, closestDirection, Number(entry.WINDSPEED), Number(entry.AWS)];
                     });
 
-                    console.log(data);
                     // 索引
                     const dims = {
                         DATATIME: 0,

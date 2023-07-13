@@ -167,6 +167,8 @@ export default {
     },
     handlePreview(file) {
       this.fetchData(file);
+      console.log(file.name);
+      this.setUploadedFileName(file.name);
     },
 
     handleDialogConfirm() {
