@@ -8,7 +8,9 @@
 
         <TrainSettings v-if="isTrainSettingsVisible" />
         <PredictSettings v-show="!isTrainSettingsVisible" />
-        <ForecastDisplay />
+        <ForecastDisplay v-show="!isTrainSettingsVisible" />
+        <ChartsDisplay />
+        <Footer />
     </div>
 </template>
 
@@ -18,11 +20,13 @@ import NavTop from '../baseComponents/NavTop';
 import PredictSettings from './subcomponents/PredictSettings.vue';
 import ForecastDisplay from './subcomponents/ForecastDisplay.vue';
 import TrainSettings from './subcomponents/TrainSettings.vue';
+import ChartsDisplay from './subcomponents/ChartsDisplay.vue';
+import Footer from '../baseComponents/Footer.vue';
 
 export default {
     name: 'forecast',
     components: {
-        NavTop, PredictSettings, ForecastDisplay, TrainSettings
+        NavTop, PredictSettings, ForecastDisplay, TrainSettings, ChartsDisplay, Footer
     },
     data() {
         return {
