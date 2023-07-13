@@ -1,9 +1,7 @@
 <template>
-    <div class="boxplotBox" style="width: 480px; height: 300px;">
-        <div id="boxplotChart" class="chartContainer"></div>
-    </div>
+    <div id="boxplotChart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
-  
+
 <script>
 import * as echarts from 'echarts';
 
@@ -58,6 +56,9 @@ export default {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
                         this.chartInstance = echarts.init(document.getElementById('boxplotChart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
                     }
 
                     if (this.boxData && this.boxData.length > 0) {

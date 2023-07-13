@@ -1,7 +1,5 @@
 <template>
-    <div class="scatterBox" style="width: 480px; height: 300px;">
-        <div id="scatterChart" class="chartContainer"></div>
-    </div>
+    <div id="scatterChart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -55,6 +53,9 @@ export default {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
                         this.chartInstance = echarts.init(document.getElementById('scatterChart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
                     }
                     const option = {
                         xAxis: {

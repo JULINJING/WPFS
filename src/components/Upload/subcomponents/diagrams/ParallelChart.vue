@@ -1,7 +1,5 @@
 <template>
-    <div class="radarBox" style="width: 480px; height: 250px;">
-        <div id="radarChart" class="chartContainer"></div>
-    </div>
+    <div id="radarChart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -68,6 +66,9 @@ export default {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
                         this.chartInstance = echarts.init(document.getElementById('radarChart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
                     }
 
                     const schema = [

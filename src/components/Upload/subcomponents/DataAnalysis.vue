@@ -1,82 +1,48 @@
 <template>
-    <div class="diagramcontainer">
-        <div class="diagrambody">
-            <div>
-                <h1>相关性矩阵</h1>
-                <p>无线，无繁琐，<br>
-                    只有妙不可言。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/CorrelationMatrix.png" alt=""> -->
-                <HeatMap :tableData="tableData" class="HeatMap"/>
-
+    <div class="diagramcontainer _diagramcontainer">
+        <div class="subdiv _subdiv" style="margin-top: 1%;">
+            <div class="left box">
+                <h1>时序图</h1>
+                <SolidHistogram :tableData="tableData" class="SolidHistogram"/>
             </div>
-            <div>
-                <h1>实际风速和实际功率相关图</h1>
-                <p>家的新声。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/ROUOND(A.WS,1)_YD15.png" alt=""> -->
-                <ScatterPlot :tableData="tableData" class="ScatterPlot" />
+            <div class="right box">
+                <h1>相关性矩阵</h1>
+                <HeatMap :tableData="tableData" class="HeatMap"/>
             </div>
         </div>
-
-        <div class="diagrambody">
-            <div>
-                <h1>箱线图</h1>
-                <p>你喜爱的音乐，<br>
-                    随身带着走。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/Boxplot.png" alt=""> -->
-                <BoxPlot :tableData="tableData" class="BoxPlot"/>
+        <div class="subdiv _subdiv" style="margin-top: 1%;">
+            <div class="left box">
+                <h1>风向 风速 湿度</h1>
+                <WeatherChart :tableData="tableData" class="WeatherChart"/>
             </div>
-            <div>
+            <div class="right box">
+                <h1>平行坐标系图</h1>
+                <ParallelChart :tableData="tableData" class="ParallelChart"/>
+            </div>
+        </div>
+        <div class="subdiv _subdiv" style="margin-top: 1%;">
+            <div class="left box">
+                <h1>实际风速和实际功率相关图</h1>
+                <DynamicHistogram :tableData="tableData" class="DynamicHistogram" />
+            </div>
+            <div class="right box">
                 <h1>时序图</h1>
-                <p>给好听的歌曲，<br>
-                    搭个好看的装备。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/SequenceDiagram.png" alt=""> -->
                 <LineChart :tableData="tableData" class="LineChart"/>
             </div>
         </div>
-
-        <div class="diagrambody">
-            <div>
-                <h1>平行坐标系图</h1>
-                <p>无线，无繁琐，<br>
-                    只有妙不可言。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/CorrelationMatrix.png" alt=""> -->
-                <ParallelChart :tableData="tableData" class="ParallelChart"/>
+        <div class="subdiv _subdiv" style="margin-top: 1%;margin-bottom: 1%;">
+            <div class="left box">
+                <h1>箱线图</h1>
+                <BoxPlot :tableData="tableData" class="BoxPlot"/>
             </div>
-            <div>
+            <div class="right box">
                 <h1>实际风速和实际功率相关图</h1>
-                <p>家的新声。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/ROUOND(A.WS,1)_YD15.png" alt=""> -->
-                <DynamicHistogram :tableData="tableData" class="DynamicHistogram" />
-            </div>
-        </div>
-
-        <div class="diagrambody">
-            <div>
-                <h1>风向 风速 湿度</h1>
-                <p>你喜爱的音乐，<br>
-                    随身带着走。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/Boxplot.png" alt=""> -->
-                <WeatherChart :tableData="tableData" class="WeatherChart"/>
-            </div>
-            <div>
-                <h1>时序图</h1>
-                <p>给好听的歌曲，<br>
-                    搭个好看的装备。</p>
-                <span>进一步了解 ></span>
-                <!-- <img src="../imgs/SequenceDiagram.png" alt=""> -->
-                <SolidHistogram :tableData="tableData" class="SolidHistogram"/>
+                <ScatterPlot :tableData="tableData" class="ScatterPlot" />
             </div>
         </div>
     </div>
 </template>
-  
+
 <script>
 import ScatterPlot from './diagrams/ScatterPlot.vue';
 import HeatMap from './diagrams/HeatMap.vue';
@@ -97,58 +63,45 @@ export default {
     }
 }
 </script>
-  
+
 <style lang='less' scoped>
 .ScatterPlot {
     width: 800px;
     height: 600px;
 }
+.box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 @media only screen and (min-width: 800px) {
     .diagramcontainer {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .diagrambody {
-            max-width: 1000px;
+        user-select: none;
+        font-size: 1vw;
+        .subdiv {
+            height: 50vh;
+            width: 100%;
             display: flex;
-            justify-content: space-between;
-            padding: 20px 0;
+            justify-content: space-around;
+            align-items: center;
+            font-size: .5em;
 
-            div {
+            .left {
                 width: 48%;
-                padding: 5%;
-                background-color: rgb(250, 250, 250);
-                height: 600px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                height: 100%;
+                font-size: .8em;
+            }
 
-                h1 {
-                    font-size: 20px;
-                    font-weight: 600;
-                }
-
-                p {
-                    padding: 10px 0;
-                    font-size: 40px;
-                    font-weight: 600;
-                }
-
-                span {
-                    color: rgb(12, 106, 205);
-                    padding: 10px;
-                }
-
-                img {
-                    margin-top: 30px;
-                    width: 60%;
-                    height: auto;
-                }
+            .right {
+                width: 48%;
+                height: 100%;
+                font-size: .8em;
+            }
+            .box h1 {
+                font-size: 18px;
+                font-weight: 800;
+                letter-spacing: 3px;
             }
         }
     }
@@ -157,49 +110,23 @@ export default {
 // 小于800px
 @media only screen and (max-width: 800px) {
     ._diagramcontainer {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .diagrambody {
+        ._subdiv {
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            // padding-top: 20px;
-            background-color: white;
+            // justify-content: space-around;
+            font-size: .5em;
 
-            div {
+            .left {
                 width: 100%;
-                background-color: rgb(250, 250, 250);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin-top: 20px;
+                height: 100%;
+                font-size: .8em;
+            }
 
-                h1 {
-                    margin: 10px 0;
-                    font-size: 5.333vw;
-                    font-weight: 600;
-                }
-
-                p {
-                    padding: 10px 0;
-                    font-size: 15px;
-                }
-
-                span {
-                    color: rgb(12, 106, 205);
-                    padding: 1.333vw;
-                }
-
-                img {
-                    margin-top: 30px;
-                    width: 200px;
-                    // height: 100%;
-                }
+            .right {
+                width: 100%;
+                height: 100%;
+                font-size: .8em;
             }
         }
     }

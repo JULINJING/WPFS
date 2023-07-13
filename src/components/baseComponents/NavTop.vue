@@ -5,12 +5,12 @@
     <!-- <div class="turbineicon _turbineicon"><i class="iconfont" style="font-size: 24px;" @click="$router.push('/home')">&#xe6a3;</i></div> -->
     <div ref="navID" class="mainnavlist _mainnavlist">
       <div class="navlistclose"><i @click="closeMenu()" class="iconfont">&#xeaf2;</i></div>
-      <div @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传</div>
-      <div @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 预测</div>
-      <div @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> Mars3D</div>
-      <div @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 监测</div>
-      <div @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常</div>
-      <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> Three.js</div>
+      <div @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传数据</div>
+      <div @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 训练预测</div>
+      <div @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> 数字风电</div>
+      <div @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 风电监测</div>
+      <div @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常监控</div>
+      <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> 动画Demo</div>
       <div class="logout _logout">
         <el-dropdown
           class="logout _logout" style="cursor: pointer; text-align: right; color: white"
@@ -154,7 +154,7 @@ export default {
         text-align: center;
         height: 40px;
         line-height: 40px;
-        width: 95px;
+        width: 86px;
         cursor: pointer;
         font-size: 14px;
         font-weight: 500;

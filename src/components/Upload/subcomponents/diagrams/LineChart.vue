@@ -1,7 +1,5 @@
 <template>
-    <div class="lineBox" style="width: 480px; height: 300px;" v-if="tableData !== null">
-        <div id="linechart" class="chartContainer"></div>
-    </div>
+    <div id="linechart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -52,6 +50,9 @@ export default {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
                         this.chartInstance = echarts.init(document.getElementById('linechart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
                     }
 
                     if (this.lineData && this.lineData.length > 0) {

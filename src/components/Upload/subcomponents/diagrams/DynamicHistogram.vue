@@ -1,7 +1,5 @@
 <template>
-    <div class="dynamicBox" style="width: 480px; height: 300px;">
-        <div id="DynamicHistogram" class="chartContainer"></div>
-    </div>
+    <div id="DynamicHistogram" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -60,6 +58,9 @@ export default {
                 this.$nextTick(() => {
                     var chartDom = document.getElementById('DynamicHistogram');
                     var myChart = echarts.init(chartDom);
+                    window.addEventListener("resize", ()=> {
+                        myChart.resize()
+                    })
 
                     const rawData = this.scatterData;
                     const dataTime = rawData[0].slice(0, 10);

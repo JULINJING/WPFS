@@ -1,7 +1,5 @@
 <template>
-    <div class="weatherBox" style="width: 480px; height: 300px;">
-        <div id="weatherChart" class="chartContainer"></div>
-    </div>
+    <div id="weatherChart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -42,6 +40,9 @@ export default {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
                         this.chartInstance = echarts.init(document.getElementById('scatterChart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
                     }
                     var chartDom = document.getElementById('weatherChart');
                     var myChart = echarts.init(chartDom);
