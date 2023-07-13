@@ -128,7 +128,10 @@ export default {
                         },
                         yAxis3D: {
                             type: 'category',
-                            data: variables
+                            data: variables,
+                            axisLabel: {
+                                interval: 0
+                            }
                         },
                         zAxis3D: {
                             type: 'value'

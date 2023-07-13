@@ -71,7 +71,8 @@ export default {
                         const option = {
                             animationDuration: 1000,
                             legend: {
-                                data: Object.keys(this.lineData[0]).filter(key => key !== 'DATATIME')
+                                data: Object.keys(this.lineData[0]).filter(key => key !== 'DATATIME'),
+                                top: '3%'
                             },
                             xAxis: {
                                 type: 'category',

@@ -81,9 +81,9 @@ export default {
                     ];
                     const rawData = this.radarData;
                     const CATEGORY_DIM_COUNT = 6;
-                    const GAP = 2;
-                    const BASE_LEFT = 5;
-                    const BASE_TOP = 10;
+                    const GAP = 3;
+                    const BASE_LEFT = 0;
+                    const BASE_TOP = 12;
                     // const GRID_WIDTH = 220;
                     // const GRID_HEIGHT = 220;
                     const GRID_WIDTH = (100 - BASE_LEFT - GAP) / CATEGORY_DIM_COUNT - GAP;
@@ -117,7 +117,7 @@ export default {
                                     height: GRID_HEIGHT + '%'
                                 });
                                 xAxis.push({
-                                    splitNumber: 3,
+                                    splitNumber: 2,
                                     position: 'top',
                                     axisLine: {
                                         show: j === 0,
@@ -128,14 +128,15 @@ export default {
                                         inside: true
                                     },
                                     axisLabel: {
-                                        show: j === 0
+                                        show: j === 0,
+                                        hideOverlap: true
                                     },
                                     type: 'value',
                                     gridIndex: index,
                                     scale: true
                                 });
                                 yAxis.push({
-                                    splitNumber: 3,
+                                    splitNumber: 2,
                                     position: 'right',
                                     axisLine: {
                                         show: i === CATEGORY_DIM_COUNT - 1,
@@ -210,22 +211,16 @@ export default {
                             { dim: 2, name: schema[2].text },
                             { dim: 3, name: schema[3].text },
                             { dim: 4, name: schema[4].text },
-                            { dim: 5, name: schema[5].text },
-                            // {
-                            //     dim: 6,
-                            //     name: schema[6].text,
-                            //     type: 'category',
-                            //     data: ['优', '良', '轻度', '中度', '重度', '严重']
-                            // }
+                            { dim: 5, name: schema[5].text }
                         ],
                         parallel: {
                             bottom: '5%',
-                            left: '2%',
+                            left: '5%',
                             height: '30%',
                             width: '55%',
                             parallelAxisDefault: {
                                 type: 'value',
-                                name: 'AQI指数',
+                                name: '指数',
                                 nameLocation: 'end',
                                 nameGap: 20,
                                 splitNumber: 3,
@@ -255,7 +250,7 @@ export default {
                         grid: gridOption.grid,
                         series: [
                             {
-                                name: 'parallel',
+                                name: '值',
                                 type: 'parallel',
                                 smooth: true,
                                 lineStyle: {

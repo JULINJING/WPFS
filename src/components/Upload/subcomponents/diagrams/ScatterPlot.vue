@@ -64,6 +64,10 @@ export default {
                         yAxis: {
                             scale: true
                         },
+                        grid: {
+                            top: '10%',
+                            bottom: '10%'
+                        },
                         series: [
                             {
                                 type: 'effectScatter',

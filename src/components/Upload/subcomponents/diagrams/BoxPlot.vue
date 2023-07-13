@@ -65,10 +65,6 @@ export default {
                         const data = this.getBoxplotData();
 
                         const option = {
-                            title: {
-                                text: 'Multiple Categories',
-                                left: 'center'
-                            },
                             dataset: [
                                 {
                                     source: data[0]
@@ -93,7 +89,7 @@ export default {
                                 }
                             ],
                             legend: {
-                                top: '10%'
+                                top: '3%'
                             },
                             tooltip: {
                                 trigger: 'item',
@@ -103,8 +99,8 @@ export default {
                             },
                             grid: {
                                 left: '10%',
-                                top: '20%',
-                                right: '10%',
+                                top: '15%',
+                                right: '5%',
                                 bottom: '15%'
                             },
                             xAxis: {
@@ -136,7 +132,7 @@ export default {
                                 {
                                     show: true,
                                     type: 'slider',
-                                    top: '90%',
+                                    top: '89%',
                                     xAxisIndex: [0],
                                     start: 0,
                                     end: 20

@@ -39,13 +39,11 @@ export default {
             if (this.tableData && this.tableData.length > 0) {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
-                        this.chartInstance = echarts.init(document.getElementById('scatterChart'));
+                        this.chartInstance = echarts.init(document.getElementById('weatherChart'));
                         window.addEventListener("resize", ()=> {
                             this.chartInstance.resize()
                         })
                     }
-                    var chartDom = document.getElementById('weatherChart');
-                    var myChart = echarts.init(chartDom);
 
                     // 风向 风速图
                     const directionMap = {};
@@ -127,20 +125,14 @@ export default {
                             type: 'time',
                             minInterval: 3600 * 1000 * 0.4,
                             maxInterval: 3600 * 1000 * 24,
-                            splitLine: {
-                                lineStyle: {
-                                    color: '#ddd'
-                                }
-                            }
                         },
                         yAxis: [
                             {
                                 name: '实际风速',
                                 nameLocation: 'middle',
-                                nameGap: 14,
+                                nameGap: 30,
                                 nameTextStyle: {
-                                    fontSize: 11,
-                                    color: "#fff"
+                                    fontSize: 11
                                 },
                                 axisLine: {
                                     lineStyle: {
@@ -156,14 +148,13 @@ export default {
                             {
                                 name: '预测风速',
                                 nameLocation: 'middle',
-                                nameGap: 16,
+                                nameGap: 30,
                                 nameTextStyle: {
-                                    fontSize: 11,
-                                    color: "#fff"
+                                    fontSize: 11
                                 },
                                 axisLine: {
                                     lineStyle: {
-                                        color: '#15D1F2'
+                                        color: 'rgb(64, 158, 255)'
                                     }
                                 },
                                 splitLine: { show: false }
@@ -181,9 +172,6 @@ export default {
                             orient: 'horizontal',
                             left: 'center',
                             bottom: 0,
-                            textStyle: {
-                                color: "#fff"
-                            },
                             pieces: [
                                 {
                                     gte: 6,
@@ -218,7 +206,6 @@ export default {
                                 bottom: 30,
                                 height: 20,
                                 handleStyle: {
-                                    boderColor: "#fff",
                                     borderWidth: 2
                                 }
                             }
@@ -295,7 +282,10 @@ export default {
                             }
                         ]
                     };
-                    myChart.setOption(option)
+                    this.chartInstance.setOption(option)
+                    window.addEventListener("resize", ()=> {
+                        this.chartInstance.resize()
+                    })
                 });
             }
         },

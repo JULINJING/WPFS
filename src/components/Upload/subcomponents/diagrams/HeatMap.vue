@@ -105,14 +105,18 @@ export default {
                                 position: 'top'
                             },
                             grid: {
-                                height: '60%',
-                                top: '10%'
+                                top: '5%',
+                                left: '20%',
+                                height: '80%'
                             },
                             xAxis: {
                                 type: 'category',
                                 data: X,
                                 splitArea: {
                                     show: true
+                                },
+                                axisLabel: {
+                                    interval: 1
                                 }
                             },
                             yAxis: {
@@ -128,7 +132,7 @@ export default {
                                 calculable: true,
                                 orient: 'horizontal',
                                 left: 'center',
-                                bottom: '15%'
+                                bottom: '0%'
                             },
                             series: [{
                                 name: 'Correlation Coefficient',

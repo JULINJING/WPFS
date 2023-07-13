@@ -1,28 +1,28 @@
 <template>
     <div class="diagramcontainer _diagramcontainer">
-        <div class="subdiv _subdiv" style="margin-top: 1%;">
+        <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
-                <h1>时序图</h1>
+                <h1>三维柱状图</h1>
                 <SolidHistogram :tableData="tableData" class="SolidHistogram"/>
             </div>
             <div class="right box">
-                <h1>相关性矩阵</h1>
+                <h1>相关性矩阵图</h1>
                 <HeatMap :tableData="tableData" class="HeatMap"/>
             </div>
         </div>
-        <div class="subdiv _subdiv" style="margin-top: 1%;">
+        <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
-                <h1>风向 风速 湿度</h1>
+                <h1>风向—风速图</h1>
                 <WeatherChart :tableData="tableData" class="WeatherChart"/>
             </div>
             <div class="right box">
-                <h1>平行坐标系图</h1>
+                <h1>四季图</h1>
                 <ParallelChart :tableData="tableData" class="ParallelChart"/>
             </div>
         </div>
-        <div class="subdiv _subdiv" style="margin-top: 1%;">
+        <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
-                <h1>实际风速和实际功率相关图</h1>
+                <h1>预测功率和实际功率相关图</h1>
                 <DynamicHistogram :tableData="tableData" class="DynamicHistogram" />
             </div>
             <div class="right box">
@@ -30,7 +30,7 @@
                 <LineChart :tableData="tableData" class="LineChart"/>
             </div>
         </div>
-        <div class="subdiv _subdiv" style="margin-top: 1%;margin-bottom: 1%;">
+        <div class="subdiv _subdiv" style="margin-top: 2%;margin-bottom: 2%;">
             <div class="left box">
                 <h1>箱线图</h1>
                 <BoxPlot :tableData="tableData" class="BoxPlot"/>
@@ -65,14 +65,16 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.ScatterPlot {
-    width: 800px;
-    height: 600px;
-}
 .box {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: 1.5px white solid;
+    background: linear-gradient(to left, #409EFF, #409EFF) left top no-repeat, linear-gradient(to bottom, #409EFF, #409EFF) left top no-repeat,
+        linear-gradient(to left, #409EFF, #409EFF) right top no-repeat, linear-gradient(to bottom, #409EFF, #409EFF) right top no-repeat,
+        linear-gradient(to left, #409EFF, #409EFF) left bottom no-repeat, linear-gradient(to bottom, #409EFF, #409EFF) left bottom no-repeat,
+        linear-gradient(to left, #409EFF, #409EFF) right bottom no-repeat, linear-gradient(to left, #409EFF, #409EFF) right bottom no-repeat;
+    background-size: 2px 20px, 20px 2px, 2px 20px, 20px 2px;
 }
 
 @media only screen and (min-width: 800px) {
@@ -101,7 +103,7 @@ export default {
             .box h1 {
                 font-size: 18px;
                 font-weight: 800;
-                letter-spacing: 3px;
+                letter-spacing: 5px;
             }
         }
     }
@@ -111,6 +113,7 @@ export default {
 @media only screen and (max-width: 800px) {
     ._diagramcontainer {
         ._subdiv {
+            height: 50vh;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -121,12 +124,14 @@ export default {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
+                margin-top: 10px;
             }
 
             .right {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
+                margin-top: 10px;
             }
         }
     }

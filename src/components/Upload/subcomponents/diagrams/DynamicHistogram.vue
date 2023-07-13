@@ -77,9 +77,6 @@ export default {
                     })();
 
                     var option = {
-                        title: {
-                            text: 'Dynamic Data'
-                        },
                         tooltip: {
                             trigger: 'axis',
                             axisPointer: {
@@ -89,14 +86,8 @@ export default {
                                 }
                             }
                         },
-                        legend: {},
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                dataView: { readOnly: false },
-                                restore: {},
-                                saveAsImage: {}
-                            }
+                        legend: {
+                            top: '3%'
                         },
                         dataZoom: {
                             show: false,
@@ -119,7 +110,7 @@ export default {
                             {
                                 type: 'value',
                                 scale: true,
-                                name: 'Price',
+                                name: '预测功率',
                                 max: 60000,
                                 min: 0,
                                 boundaryGap: [0.2, 0.2]
@@ -127,7 +118,7 @@ export default {
                             {
                                 type: 'value',
                                 scale: true,
-                                name: 'Order',
+                                name: '实际功率',
                                 max: 50000,
                                 min: 0,
                                 boundaryGap: [0.2, 0.2]
@@ -142,7 +133,7 @@ export default {
                                 data: prepowerData
                             },
                             {
-                                name: 'ROUDA(A.WS, 1)',
+                                name: 'ROUDA(A.POWER, 1)',
                                 type: 'line',
                                 data: powerData
                             }

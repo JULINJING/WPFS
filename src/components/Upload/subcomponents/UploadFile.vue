@@ -44,28 +44,31 @@
             </div>
         </el-dialog>
 
-        <el-table v-if="showTable" :data="tableData" stripe style="width: 100%" max-height="300">
-            <el-table-column fixed prop="DATATIME" label="DATATIME" width="150">
-            </el-table-column>
-            <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150">
-            </el-table-column>
-            <el-table-column prop="PREPOWER" label="PREPOWER" width="150">
-            </el-table-column>
-            <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150">
-            </el-table-column>
-            <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150">
-            </el-table-column>
-            <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150">
-            </el-table-column>
-            <el-table-column prop="PRESSURE" label="PRESSURE" width="150">
-            </el-table-column>
-            <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150">
-            </el-table-column>
-            <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150">
-            </el-table-column>
-            <el-table-column prop="YD15" label="YD15" width="150">
-            </el-table-column>
-        </el-table>
+        <div class="table-box" v-if="showTable">
+            <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
+            <el-table :data="tableData" highlight-current-row stripe style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
+                <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="PREPOWER" label="PREPOWER" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="PRESSURE" label="PRESSURE" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="YD15" label="YD15" width="150" align="center">
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
 </template>
 
@@ -89,6 +92,9 @@ export default {
         };
     },
     methods: {
+        rowStyle() {
+            return "text-align:center";
+        },
         ...mapMutations('global', ['setUploadedFileName']),
 
         // 上传文件成功
@@ -199,17 +205,29 @@ export default {
 </script>
 
 <style lang="less">
-.el-upload,
-.el-upload-dragger{
-    width: 100%;
+.el-upload{
+    width: 98%;
     background-color: rgb(241,241,241);
 }
 .el-upload-dragger {
     border: 3px dashed #d9d9d9;
+    width: 100%;
+    background-color: rgb(241,241,241);
 }
 .el-upload-list {
     display: flex;
     justify-content: space-between;
+}
+.table-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h1{
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 5px;
+    }
 }
 // 大于800px
 @media only screen and (min-width: 800px){

@@ -17,7 +17,7 @@
                 <h1>About</h1>
                 <p><i class="iconfont">&#xe604;</i> 武汉大学 结束乐队</p>
                 <p><i class="iconfont">&#xe608;</i> 杨可</p>
-                <p><i class="iconfont">&#xe607;</i> 吴斌文 李廷赟 黄梓涛</p>
+                <p><i class="iconfont">&#xe607;</i> 黄梓涛 吴斌文 李廷赟</p>
                 <h1>Address</h1>
                 <p><i class="iconfont">&#xe652;</i> 湖北省武汉市武昌区八一路299号</p>
                 <p><i class="iconfont">&#xe60b;</i> 430072</p>

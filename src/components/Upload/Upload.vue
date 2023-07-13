@@ -5,11 +5,13 @@
         <br>
         <UploadFile :tableData="tableData" @update-table-data="updateTableData"/>
         <DataAnalysis :tableData="tableData"/>
+        <Footer></Footer>
     </div>
 </template>
 
 <script>
 import NavTop from '../baseComponents/NavTop'
+import Footer from '../baseComponents/Footer.vue'
 import UploadFile from './subcomponents/UploadFile.vue'
 import DataAnalysis from './subcomponents/DataAnalysis.vue'
 
@@ -21,7 +23,7 @@ export default {
     },
     name: 'upload',
     components: {
-        NavTop, UploadFile, DataAnalysis
+        NavTop, UploadFile, DataAnalysis,Footer
     },
 
     methods: {
