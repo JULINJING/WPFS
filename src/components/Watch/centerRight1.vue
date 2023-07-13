@@ -2,15 +2,12 @@
     <div id="centerRight1">
         <div class="bg-color-black">
             <div class="d-flex pt-2 pl-2">
-                <span>
-                    <icon name="chart-line" class="text-icon"></icon>
-                </span>
                 <div class="d-flex">
                     <span class="fs-xl text mx-2">滚动预测屏</span>
                 </div>
             </div>
-            <div class="d-flex jc-center body-box">
-                <dv-scroll-board class="dv-scr-board" :config="config" />
+            <div class="d-flex body-box">
+                <dv-scroll-board class="dv-scr-board" :config="config" ref="scrollBoard" />
             </div>
         </div>
     </div>
@@ -34,8 +31,8 @@ export default {
                     ['4/2 2:00', '206', "0"],
                     ['4/2 2:15', '-223', "-754"]
                 ],
-                rowNum: 7, //表格行数
-                headerHeight: 35,
+                rowNum: 5, //表格行数
+                headerHeight: 20,
                 headerBGC: '#0f1325', //表头
                 oddRowBGC: '#0f1325', //奇数行
                 evenRowBGC: '#171c33', //偶数行
@@ -49,18 +46,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$box-height: 410px;
+$box-height: 100%;
 $box-width: 100%;
 
 #centerRight1 {
-    padding: 16px;
-    padding-top: 20px;
-    height: $box-height;
-    width: $box-width;
+    padding: 16px 16px 0 16px;
+    padding-top: 10px;
     border-radius: 5px;
 
     .bg-color-black {
-        height: $box-height - 30px;
+        height: $box-height;
+        width: $box-width;
         border-radius: 10px;
     }
 
@@ -70,11 +66,13 @@ $box-width: 100%;
 
     .body-box {
         border-radius: 10px;
-        overflow: hidden;
+        width: 50%;
+        height: 100%;
+        margin: 0px auto;
 
         .dv-scr-board {
-            width: 350px;
-            height: 340px;
+            height: 200px;
+            overflow: hidden;
         }
     }
 }

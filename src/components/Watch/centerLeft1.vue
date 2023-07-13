@@ -2,18 +2,15 @@
     <div id="centerLeft1">
         <div class="bg-color-black">
             <div class="d-flex pt-2 pl-2">
-                <span>
-                    <icon name="chart-bar" class="text-icon"></icon>
-                </span>
                 <div class="d-flex">
                     <span class="fs-xl text mx-2">设备运行统计</span>
                     <dv-decoration-3 class="dv-dec-3" />
                 </div>
             </div>
-            <div class="d-flex jc-center">
+            <div class="d-flex">
                 <CenterLeft1Chart />
             </div>
-            
+
         </div>
     </div>
 </template>
@@ -37,16 +34,17 @@ export default {
 
 <style lang="scss" scoped>
 $box-width: 100%;
-$box-height: 410px;
+$box-height: 95%;
 
 #centerLeft1 {
-    padding: 16px;
+    padding: 16px 16px 0px 16px;
     height: $box-height;
     width: $box-width;
     border-radius: 10px;
 
     .bg-color-black {
-        height: $box-height - 30px;
+        height: 100%;
+        width: 100%;
         border-radius: 10px;
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div id="watchContainer" class="watchContainer _watchContainer" ref="watch">
         <div class="bg">
-            <dv-loading v-if="loading">Loading...</dv-loading>
+            <dv-loading v-if="loading" style="height: 100vh;">Loading...</dv-loading>
             <div v-else class="host-body">
                 <div class="d-flex jc-center">
                     <dv-decoration-10 class="dv-dec-10" />
@@ -9,7 +9,6 @@
                         <dv-decoration-8 class="dv-dec-8" :color="decorationColor" />
                         <div class="title">
                             <span class="title-text">风力能源监控</span>
-                            <dv-decoration-6 class="dv-dec-6" :reverse="true" :color="['#50e3c2', '#67a1e5']" />
                         </div>
                         <dv-decoration-8 class="dv-dec-8" :reverse="true" :color="decorationColor" />
                     </div>
@@ -29,7 +28,7 @@
                     </div>
                     <div class="d-flex aside-width">
                         <div class="react-right bg-color-blue mr-3">
-                            <span class="text fw-b">wpfboost</span>
+                            <router-link to="/home"><span class="text fw-b">返回主页</span></router-link>
                         </div>
                         <div class="react-right mr-4 react-l-s">
                             <span class="react-after"></span>
@@ -114,7 +113,7 @@ export default {
         cancelLoading() {
             setTimeout(() => {
                 this.loading = false
-            }, 500)
+            }, 300)
         }
     },
     mounted() {

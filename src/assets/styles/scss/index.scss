@@ -1,7 +1,7 @@
 #watchContainer {
     color: #d3d6dd;
     width: 100vw;
-    height: 100%;
+    height: 100vh;
     transform-origin: left top;
     overflow: hidden;
 
@@ -10,9 +10,13 @@
         background-image: url("/public/imgs/pageBg.png");
         background-size: cover;
         background-position: center center;
+        width: 100vw;
+        height: 100vh;
     }
 
     .host-body {
+        height: 100%;
+        width: 100vw;
 
         .dv-dec-10,
         .dv-dec-10-s {
@@ -72,7 +76,7 @@
             }
 
             font-size: 18px;
-            width: 300px;
+            width: 26%;
             line-height: 50px;
             text-align: center;
             transform: skewX(-45deg);
@@ -124,6 +128,8 @@
         }
 
         .body-box {
+            height: 100vh;
+            width: 100%;
             margin-top: 10px;
             display: flex;
             flex-direction: column;
@@ -132,13 +138,15 @@
             .content-box {
                 display: grid;
                 grid-template-columns: 3fr 3fr 6fr;
+                height: 30%;
             }
 
             // 底部数据
             .bottom-box {
-                margin-top: 5px;
+                margin-top: 20px;
                 display: grid;
                 grid-template-columns: repeat(2, 50%);
+                height: 50%;
             }
         }
     }
