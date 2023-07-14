@@ -68,7 +68,7 @@
 
         <div class="table-box" v-if="showTable">
             <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
-            <el-table ref="mytable" :data=" curData " 
+            <el-table ref="mytable" :data="curData" 
             highlight-current-row stripe style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
                 <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
                 </el-table-column>
@@ -99,6 +99,7 @@
 import { serverIp } from "../../../../public/config.js";
 import axios from "axios";
 import { mapMutations } from "vuex";
+import rawData from '../../../assets/testJson/11.json'
 
 export default {
     props: {
@@ -108,7 +109,7 @@ export default {
         return {
             serverIp: serverIp,
             dialogFormVisible: false,
-            showTable: false,
+            showTable: true,
             fileList: [],
             outlierRadio: "",
             missingRadio: "",
@@ -120,7 +121,9 @@ export default {
             pageSize: 50,
         };
     },
-
+    mounted(){
+        this.curData = JSON.parse(JSON.stringify(rawData));
+    },
     methods: {
         ...mapMutations("global", ["setUploadedFileName"]),
 
@@ -181,7 +184,7 @@ export default {
             // 上传成功后，1.5秒后显示对话
             setTimeout(() => {
                 this.dialogFormVisible = true;
-            }, 1500);
+            }, 1000);
 
             this.curfile = file;
 
