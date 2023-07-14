@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import tdTheme from './theme.json' // 引入默认主题
 
 export default {
     name: 'echart',
@@ -22,7 +21,7 @@ export default {
         },
         height: {
             type: String,
-            default: '2.5rem'
+            default: '100%'
         },
         options: {
             type: Object,
@@ -30,8 +29,9 @@ export default {
         }
     },
     data() {
+
         return {
-            chart: null
+            chart: null,
         }
     },
     watch: {
@@ -44,12 +44,20 @@ export default {
         }
     },
     mounted() {
-        this.$echarts.registerTheme('tdTheme', tdTheme); // 覆盖默认主题
+        // this.$echarts.registerTheme('tdTheme', tdTheme); // 覆盖默认主题
         this.initChart();
+        window.addEventListener("resize", () => {
+            if (this.chart) {
+                this.chart.resize()
+            }
+        })
     },
     beforeDestroy() {
         this.chart.dispose()
         this.chart = null
+        window.removeEventListener('resize', () => {
+            this.chart.resize()
+        })
     },
     methods: {
         initChart() {

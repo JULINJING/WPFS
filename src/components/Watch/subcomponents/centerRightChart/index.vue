@@ -9,47 +9,41 @@ import Chart from './chart.vue';
 export default {
     data() {
         return {
+            drawTiming: null,
             cdata: {
                 indicatorData: [
-                    { name: "data1", max: 300 },
-                    { name: "data2", max: 250 },
-                    { name: "data3", max: 300 },
-                    { name: "data4", max: 5 },
-                    { name: "data5", max: 200 },
-                    { name: "data6", max: 100 }
-                ],
-                dataBJ: [
-                    [94, 69, 114, 2.08, 73, 39, 22],
-                    [99, 73, 110, 2.43, 76, 48, 23],
-                    [31, 12, 30, 0.5, 32, 16, 24],
-                    [42, 27, 43, 1, 53, 22, 25],
-                    [154, 117, 157, 3.05, 92, 58, 26],
-                    [234, 185, 230, 4.09, 123, 69, 27],
-                    [160, 120, 186, 2.77, 91, 50, 28]
-                ],
-                dataGZ: [
-                    [84, 94, 140, 2.238, 68, 18, 22],
-                    [93, 77, 104, 1.165, 53, 7, 23],
-                    [99, 130, 227, 3.97, 55, 15, 24],
-                    [146, 84, 139, 1.094, 40, 17, 25],
-                    [113, 108, 137, 1.481, 48, 15, 26],
-                    [81, 48, 62, 1.619, 26, 3, 27],
-                    [56, 48, 68, 1.336, 37, 9, 28]
-                ],
-                dataSH: [
-                    [91, 45, 125, 0.82, 34, 23, 1],
-                    [65, 27, 78, 0.86, 45, 29, 2],
-                    [83, 60, 84, 1.09, 73, 27, 3],
-                    [109, 81, 121, 1.28, 68, 51, 4],
-                    [106, 77, 114, 1.07, 55, 51, 5],
-                    [109, 81, 121, 1.28, 68, 51, 6],
-                    [106, 77, 114, 1.07, 55, 51, 7]
+                    { name: "风机1", value: 0 },
+                    { name: "风机2", value: 0 },
+                    { name: "风机3", value: 0 },
+                    { name: "风机4", value: 0 },
+                    { name: "风机5", value: 0 },
+                    { name: "风机6", value: 0 }
                 ]
             }
         }
     },
     components: {
         Chart,
+    },
+    mounted() {
+        this.drawTimeFn()
+    },
+    beforeDestroy() {
+        clearInterval(this.drawTiming)
+    },
+    methods: {
+        drawTimeFn() {
+            this.setData()
+            this.drawTiming = setInterval(() => {
+                this.setData()
+            }, 5000)
+        },
+        setData() {
+            const num = parseInt(Math.random() * 20)
+            const length = this.cdata.indicatorData.length
+            const index = parseInt(Math.random() * length)
+            this.cdata.indicatorData[index].value += num
+        }
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Echart :options="options" id="bottomLeftChart" height="480px" width="100%"></Echart>
+        <Echart :options="options" id="bottomLeftChart" height="320%" width="100%"></Echart>
     </div>
 </template>
 
@@ -46,7 +46,8 @@ export default {
                     grid: {
                         x: "8%",
                         width: "88%",
-                        y: "4%"
+                        y: "4%",
+                        y2: "10%"
                     },
                     xAxis: {
                         data: newData.category,

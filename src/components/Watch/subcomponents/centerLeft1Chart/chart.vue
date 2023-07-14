@@ -1,9 +1,9 @@
 <template>
     <div>
-        <Echart :options="options" id="centreLeft1Chart" height="400px" width="400px"></Echart>
+        <Echart :options="options" id="centreLeft1Chart" width="300%" height="200%"></Echart>
     </div>
 </template>
-  
+
 <script>
 import Echart from '../echart'
 export default {
@@ -47,7 +47,6 @@ export default {
                     },
                     grid: {
                         x: '5%',
-                        y: '15%',
                         x2: '5%',
                         y2: '15%',
                         containLabel: true
