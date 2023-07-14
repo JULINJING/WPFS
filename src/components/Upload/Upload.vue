@@ -4,7 +4,7 @@
         <NavTop/>
         <br>
         <UploadFile :tableData="tableData" @update-table-data="updateTableData"/>
-        <DataAnalysis :tableData="tableData"/>
+        <DataAnalysis v-if="isChartVisible" :tableData="tableData"/>
         <Footer></Footer>
     </div>
 </template>
@@ -19,6 +19,7 @@ export default {
     data(){
         return {
             tableData: [],
+            isChartVisible: false,
         }
     },
     name: 'upload',
@@ -29,6 +30,7 @@ export default {
     methods: {
         updateTableData(data){
             this.tableData = data;
+            this.isChartVisible = true;
         }
     }
 }

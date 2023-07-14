@@ -111,7 +111,7 @@ export default {
                                 type: 'value',
                                 scale: true,
                                 name: '预测功率',
-                                max: 60000,
+                                max: 100000,
                                 min: 0,
                                 boundaryGap: [0.2, 0.2]
                             },
@@ -119,7 +119,7 @@ export default {
                                 type: 'value',
                                 scale: true,
                                 name: '实际功率',
-                                max: 50000,
+                                max: 80000,
                                 min: 0,
                                 boundaryGap: [0.2, 0.2]
                             }

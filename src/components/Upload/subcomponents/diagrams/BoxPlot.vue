@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            boxData: []
+            boxData: [],
         };
     },
     mounted() {
@@ -118,7 +118,7 @@ export default {
                                 type: 'value',
                                 name: 'Value',
                                 min: -1000,
-                                max: 50000,
+                                max: 200000,
                                 splitArea: {
                                     show: false
                                 }
