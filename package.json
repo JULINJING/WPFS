@@ -16,6 +16,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "core-js": "^3.8.3",
     "echarts": "^5.4.2",
+    "echarts-gl": "^2.0.9",
     "element-ui": "^2.15.13",
     "install": "^0.13.0",
     "jquery": "^3.7.0",

@@ -2,26 +2,18 @@
 <template>
     <div class="uploadContainer _uploadContainer">
         <NavTop/>
+        <br>
         <UploadFile :tableData="tableData" @update-table-data="updateTableData"/>
         <DataAnalysis :tableData="tableData"/>
-        <!-- <MusicTotalinfo/> -->
-        <!-- <GoodsBriefInfo :isnew="'yes'" :goodinfo="'妙得不同凡响。'" :goodname="'AirPods Pro'" :imgsrc="require('./imgs/airpods_pro.jpg')"/>\ -->
-        <!-- <Device/> -->
-        <!-- <ProfessApp/> -->
-        <!-- <FinalMusic/> -->
-        
+        <Footer></Footer>
     </div>
 </template>
 
 <script>
 import NavTop from '../baseComponents/NavTop'
+import Footer from '../baseComponents/Footer.vue'
 import UploadFile from './subcomponents/UploadFile.vue'
 import DataAnalysis from './subcomponents/DataAnalysis.vue'
-import MusicTotalinfo from './subcomponents/MusicTotalinfo'
-import GoodsBriefInfo from './subcomponents/GoodsBriefInfo'
-import Device from './subcomponents/Device'
-import ProfessApp from './subcomponents/ProfessApp'
-import FinalMusic from './subcomponents/FinalMusic'
 
 export default {
     data(){
@@ -31,13 +23,12 @@ export default {
     },
     name: 'upload',
     components: {
-        NavTop, UploadFile, DataAnalysis, MusicTotalinfo, GoodsBriefInfo, Device, ProfessApp, FinalMusic
+        NavTop, UploadFile, DataAnalysis,Footer
     },
 
     methods: {
         updateTableData(data){
             this.tableData = data;
-            // console.log(this.tableData);
         }
     }
 }

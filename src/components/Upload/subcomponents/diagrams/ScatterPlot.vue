@@ -1,7 +1,5 @@
 <template>
-    <div class="scatterBox" style="width: 480px; height: 300px;">
-        <div id="scatterChart" class="chartContainer"></div>
-    </div>
+    <div id="scatterChart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
 
 <script>
@@ -38,7 +36,7 @@ export default {
                 // 遍历 jsonData 数组
                 for (let i = 0; i < this.tableData.length; i++) {
                     const item = this.tableData[i];
-                    const power = item.POWER;
+                    const power = item.APOWER;
                     const yd15 = item.YD15;
 
                     // 检查 POWER 和 YD15 是否存在
@@ -51,34 +49,43 @@ export default {
         },
 
         renderChart() {
-            this.$nextTick(() => {
-                if (!this.chartInstance) {
-                    this.chartInstance = echarts.init(document.getElementById('scatterChart'));
-                }
-                const option = {
-                    xAxis: {
-                        scale: true
-                    },
-                    yAxis: {
-                        scale: true
-                    },
-                    series: [
-                        {
-                            type: 'effectScatter',
-                            symbolSize: 20,
-                            data: [
-                                [172.7, 105.2],
-                                [153.4, 42]
-                            ]
+            if (this.tableData && this.tableData.length > 0) {
+                this.$nextTick(() => {
+                    if (!this.chartInstance) {
+                        this.chartInstance = echarts.init(document.getElementById('scatterChart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
+                    }
+                    const option = {
+                        xAxis: {
+                            scale: true
                         },
-                        {
-                            type: 'scatter',
-                            data: this.scatterData
-                        }
-                    ]
-                };
-                option && this.chartInstance.setOption(option);
-            });
+                        yAxis: {
+                            scale: true
+                        },
+                        grid: {
+                            top: '10%',
+                            bottom: '10%'
+                        },
+                        series: [
+                            {
+                                type: 'effectScatter',
+                                symbolSize: 20,
+                                data: [
+                                    [172.7, 105.2],
+                                    [153.4, 42]
+                                ]
+                            },
+                            {
+                                type: 'scatter',
+                                data: this.scatterData
+                            }
+                        ]
+                    };
+                    option && this.chartInstance.setOption(option);
+                });
+            }
         },
     }
 };

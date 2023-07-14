@@ -1,9 +1,7 @@
 <template>
-    <div class="boxplotBox" style="width: 480px; height: 300px;">
-        <div id="boxplotChart" class="chartContainer"></div>
-    </div>
+    <div id="boxplotChart" class="chartContainer" style="width: 100%;height: 100%;"></div>
 </template>
-  
+
 <script>
 import * as echarts from 'echarts';
 
@@ -36,132 +34,133 @@ export default {
                 this.boxData = this.tableData.map(item => ({
                     DATATIME: item.DATATIME,
                     PREPOWER: item.PREPOWER,
-                    POWER: item.POWER,
+                    POWER: item.APOWER,
                     YD15: item.YD15
                 }));
             }
         },
-        getBoxplotData(){
+        getBoxplotData() {
             const groupedData = new Array(3).fill(0).map(() => new Array(12).fill(0).map(() => new Array(this.boxData.length).fill(0)));
 
             this.boxData.forEach((item, index) => {
                 const month = new Date(item.DATATIME).getMonth();
                 groupedData[0][month][index] = item.PREPOWER;
-                groupedData[1][month][index] = item.POWER;
+                groupedData[1][month][index] = item.APOWER;
                 groupedData[2][month][index] = item.YD15;
             });
 
             return groupedData;
         },
         renderChart() {
-            this.$nextTick(() => {
-                if (!this.chartInstance) {
-                    this.chartInstance = echarts.init(document.getElementById('boxplotChart'));
-                }
+            if (this.tableData && this.tableData.length > 0) {
+                this.$nextTick(() => {
+                    if (!this.chartInstance) {
+                        this.chartInstance = echarts.init(document.getElementById('boxplotChart'));
+                        window.addEventListener("resize", ()=> {
+                            this.chartInstance.resize()
+                        })
+                    }
 
-                if (this.boxData && this.boxData.length > 0) {
-                    const data = this.getBoxplotData();
+                    if (this.boxData && this.boxData.length > 0) {
+                        const data = this.getBoxplotData();
 
-                    const option = {
-                        title: {
-                            text: 'Multiple Categories',
-                            left: 'center'
-                        },
-                        dataset: [
-                            {
-                                source: data[0]
+                        const option = {
+                            dataset: [
+                                {
+                                    source: data[0]
+                                },
+                                {
+                                    source: data[1]
+                                },
+                                {
+                                    source: data[2]
+                                },
+                                {
+                                    fromDatasetIndex: 0,
+                                    transform: { type: 'boxplot' }
+                                },
+                                {
+                                    fromDatasetIndex: 1,
+                                    transform: { type: 'boxplot' }
+                                },
+                                {
+                                    fromDatasetIndex: 2,
+                                    transform: { type: 'boxplot' }
+                                }
+                            ],
+                            legend: {
+                                top: '3%'
                             },
-                            {
-                                source: data[1]
+                            tooltip: {
+                                trigger: 'item',
+                                axisPointer: {
+                                    type: 'shadow'
+                                }
                             },
-                            {
-                                source: data[2]
+                            grid: {
+                                left: '10%',
+                                top: '15%',
+                                right: '5%',
+                                bottom: '15%'
                             },
-                            {
-                                fromDatasetIndex: 0,
-                                transform: { type: 'boxplot' }
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: true,
+                                nameGap: 30,
+                                splitArea: {
+                                    show: true
+                                },
+                                splitLine: {
+                                    show: false
+                                }
                             },
-                            {
-                                fromDatasetIndex: 1,
-                                transform: { type: 'boxplot' }
+                            yAxis: {
+                                type: 'value',
+                                name: 'Value',
+                                min: -1000,
+                                max: 50000,
+                                splitArea: {
+                                    show: false
+                                }
                             },
-                            {
-                                fromDatasetIndex: 2,
-                                transform: { type: 'boxplot' }
-                            }
-                        ],
-                        legend: {
-                            top: '10%'
-                        },
-                        tooltip: {
-                            trigger: 'item',
-                            axisPointer: {
-                                type: 'shadow'
-                            }
-                        },
-                        grid: {
-                            left: '10%',
-                            top: '20%',
-                            right: '10%',
-                            bottom: '15%'
-                        },
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: true,
-                            nameGap: 30,
-                            splitArea: {
-                                show: true
-                            },
-                            splitLine: {
-                                show: false
-                            }
-                        },
-                        yAxis: {
-                            type: 'value',
-                            name: 'Value',
-                            min: -1000,
-                            max: 50000,
-                            splitArea: {
-                                show: false
-                            }
-                        },
-                        dataZoom: [
-                            {
-                                type: 'inside',
-                                start: 0,
-                                end: 20
-                            },
-                            {
-                                show: true,
-                                type: 'slider',
-                                top: '90%',
-                                xAxisIndex: [0],
-                                start: 0,
-                                end: 20
-                            }
-                        ],
-                        series: [
-                            {
-                                name: 'PREPOWER',
-                                type: 'boxplot',
-                                datasetIndex: 3
-                            },
-                            {
-                                name: 'ROUND(A.POWER,1)',
-                                type: 'boxplot',
-                                datasetIndex: 4
-                            },
-                            {
-                                name: 'YD15',
-                                type: 'boxplot',
-                                datasetIndex: 5
-                            }
-                        ]
-                    };
+                            dataZoom: [
+                                {
+                                    type: 'inside',
+                                    start: 0,
+                                    end: 20
+                                },
+                                {
+                                    show: true,
+                                    type: 'slider',
+                                    top: '89%',
+                                    xAxisIndex: [0],
+                                    start: 0,
+                                    end: 20
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: 'PREPOWER',
+                                    type: 'boxplot',
+                                    datasetIndex: 3
+                                },
+                                {
+                                    name: 'ROUND(A.POWER,1)',
+                                    type: 'boxplot',
+                                    datasetIndex: 4
+                                },
+                                {
+                                    name: 'YD15',
+                                    type: 'boxplot',
+                                    datasetIndex: 5
+                                }
+                            ]
+                        };
 
-                    option && this.chartInstance.setOption(option);
-                }
-            });
+                        option && this.chartInstance.setOption(option);
+                    }
+                });
+            }
         }
     }
 };

@@ -7,7 +7,7 @@ export default {
         this.global.scene = new Scene();
     },
     render(){
-        return null 
+        return null
     }
 };
 </script>
