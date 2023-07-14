@@ -121,6 +121,7 @@ export default {
     height: 40px;
     background-color: #000;
     color: rgb(214, 214, 214);
+    user-select: none;
 
     .navicon {
       display: none;

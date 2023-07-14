@@ -1,29 +1,28 @@
 <template>
-    <div>
-        <div class="form-container">
-            <el-table :data="tableData" stripe style="width: 100%" max-height="300" ref="rw_table"
-                @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave">
+    <div class="form-container">
+        <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据</h1>
+        <el-table :data="tableData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
+            @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
 
-                <el-table-column fixed prop="datatime" label="DATATIME" width="150">
-                </el-table-column>
-                <el-table-column prop="windspeed" label="WINDSPEED" width="150">
-                </el-table-column>
-                <el-table-column prop="prepower" label="PREPOWER" width="150">
-                </el-table-column>
-                <el-table-column prop="winddirection" label="WINDDIRECTION" width="150">
-                </el-table-column>
-                <el-table-column prop="temperature" label="TEMPERATURE" width="150">
-                </el-table-column>
-                <el-table-column prop="humidity" label="HUMIDITY" width="150">
-                </el-table-column>
-                <el-table-column prop="pressure" label="PRESSURE" width="150">
-                </el-table-column>
-                <el-table-column prop="trueYD15" label="True YD15" width="150">
-                </el-table-column>
-                <el-table-column prop="predictiveYD15" label="Predictive YD15" width="150">
-                </el-table-column>
-            </el-table>
-        </div>
+            <el-table-column fixed prop="datatime" label="DATATIME" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="windspeed" label="WINDSPEED" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="prepower" label="PREPOWER" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="winddirection" label="WINDDIRECTION" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="temperature" label="TEMPERATURE" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="humidity" label="HUMIDITY" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="pressure" label="PRESSURE" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="trueYD15" label="True YD15" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="predictiveYD15" label="Predictive YD15" width="150" align="center">
+            </el-table-column>
+        </el-table>
     </div>
 </template>
   
@@ -158,14 +157,36 @@ export default {
 }
 </script>
 
-<style>
-.form-container {
-    margin-top: 10px;
-    width: 60%;
-    margin-left: 20%;
-    margin-right: 20%;
+<style lang="less">
+// 大于800px
+@media only screen and (min-width: 800px) {
+    .form-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 5px;
+        }
+    }
 }
-.el-tag{
-    width: 140px;
+
+// 小于800px
+@media only screen and (max-width: 800px) {
+    .form-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 5px;
+        }
+    }
 }
 </style>

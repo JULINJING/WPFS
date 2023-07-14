@@ -2,17 +2,17 @@
   <div class="totalinfocontainer _totalinfocontainer">
     <!-- Form -->
     <el-upload
-        drag
-        multiple
-        :action="'http://' + serverIp + ':7070/file/upload'"
-        :on-success="handleUploadSuccess"
-        :on-error="handleUploadError"
-        :before-upload="beforeUpload"
-        :limit="10"
-        :on-exceed="handleExceed"
-        :file-list="fileList"
-        :on-preview="handlePreview"
-        accept=".csv"
+      drag
+      multiple
+      :action="'http://' + serverIp + ':7070/file/upload'"
+      :on-success="handleUploadSuccess"
+      :on-error="handleUploadError"
+      :before-upload="beforeUpload"
+      :limit="10"
+      :on-exceed="handleExceed"
+      :file-list="fileList"
+      :on-preview="handlePreview"
+      accept=".csv"
     >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text PC_upload">
@@ -22,35 +22,35 @@
     </el-upload>
 
     <el-dialog
-        title="设置预处理预测参数"
-        :visible.sync="dialogFormVisible"
-        top="25vh"
-        width="35%"
-        class="dialog-box"
-        :show-close="false"
+      title="设置预处理预测参数"
+      :visible.sync="dialogFormVisible"
+      top="25vh"
+      width="35%"
+      class="dialog-box"
+      :show-close="false"
     >
       <div class="form-row">
         <el-tag class="tag">选择异常检测方法</el-tag>
         <el-radio-group v-model="outlierRadio">
           <el-radio-button
-              label="孤立森林"
-              class="bordered-checkbox"
-              border
+            label="孤立森林"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
           <el-radio-button
-              label="KNN"
-              class="bordered-checkbox"
-              border
+            label="KNN"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
           <el-radio-button
-              label="DBSCAN"
-              class="bordered-checkbox"
-              border
+            label="DBSCAN"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
           <el-radio-button
-              label="PCA"
-              class="bordered-checkbox"
-              border
+            label="PCA"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
         </el-radio-group>
       </div>
@@ -59,99 +59,96 @@
         <el-tag class="tag">缺失值处理方法</el-tag>
         <el-radio-group v-model="missingRadio">
           <el-radio-button
-              label="简单填充"
-              class="bordered-checkbox"
-              border
+            label="简单填充"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
           <el-radio-button
-              label="线性插值"
-              class="bordered-checkbox"
-              border
+            label="线性插值"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
           <el-radio-button
-              label="Lightgbm"
-              class="bordered-checkbox"
-              border
+            label="Lightgbm"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
           <el-radio-button
-              label="XgBoost"
-              class="bordered-checkbox"
-              border
+            label="XgBoost"
+            class="bordered-checkbox"
+            border
           ></el-radio-button>
         </el-radio-group>
       </div>
 
       <div slot="footer" class="dialog-footer">
         <el-button
-            class="confirmButton"
-            @click="handleDialogConfirm"
-            :round="true"
-        >确 定
-        </el-button
+          class="confirmButton"
+          @click="handleDialogConfirm"
+          :round="true"
+          >确 定</el-button
         >
       </div>
     </el-dialog>
 
-    <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" top="25vh" width="35%" class="dialog-box"
-               :show-close="false">
-      <div class="form-row">
-        <el-tag class="tag">选择异常检测方法</el-tag>
-        <el-radio-group v-model="outlierRadio">
-          <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
-          <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
-          <el-radio-button label="DBSCAN" class="bordered-checkbox" border></el-radio-button>
-          <el-radio-button label="PCA" class="bordered-checkbox" border></el-radio-button>
-        </el-radio-group>
-      </div>
+        <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" top="25vh" width="35%" class="dialog-box" :show-close="false">
+            <div class="form-row">
+                <el-tag class="tag">选择异常检测方法</el-tag>
+                <el-radio-group v-model="outlierRadio">
+                <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
+                <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
+                <el-radio-button label="DBSCAN" class="bordered-checkbox" border></el-radio-button>
+                <el-radio-button label="PCA" class="bordered-checkbox" border></el-radio-button>
+                </el-radio-group>
+            </div>
 
-      <div class="form-row">
-        <el-tag class="tag">缺失值处理方法</el-tag>
-        <el-radio-group v-model="missingRadio">
-          <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
-          <el-radio-button label="线性插值" class="bordered-checkbox" border></el-radio-button>
-          <el-radio-button label="Lightgbm" class="bordered-checkbox" border></el-radio-button>
-          <el-radio-button label="XgBoost" class="bordered-checkbox" border></el-radio-button>
-        </el-radio-group>
-      </div>
+            <div class="form-row">
+                <el-tag class="tag">缺失值处理方法</el-tag>
+                <el-radio-group v-model="missingRadio">
+                <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
+                <el-radio-button label="线性插值" class="bordered-checkbox" border></el-radio-button>
+                <el-radio-button label="Lightgbm" class="bordered-checkbox" border></el-radio-button>
+                <el-radio-button label="XgBoost" class="bordered-checkbox" border></el-radio-button>
+                </el-radio-group>
+            </div>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button class="confirmButton" @click="handleDialogConfirm" :round="true">确 定</el-button>
-      </div>
-    </el-dialog>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="confirmButton" @click="handleDialogConfirm" :round="true">确 定</el-button>
+            </div>
+        </el-dialog>
 
-    <div class="table-box" v-if="showTable">
-      <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
-      <el-table :data="tableData" highlight-current-row stripe style="width: 98%;margin-bottom: 20px" size="mini"
-                max-height="300" border :cell-style="rowStyle">
-        <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="PREPOWER" label="PREPOWER" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="PRESSURE" label="PRESSURE" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150" align="center">
-        </el-table-column>
-        <el-table-column prop="YD15" label="YD15" width="150" align="center">
-        </el-table-column>
-      </el-table>
+        <div class="table-box" v-if="showTable">
+            <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
+            <el-table :data="tableData" highlight-current-row stripe style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
+                <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="PREPOWER" label="PREPOWER" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="PRESSURE" label="PRESSURE" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150" align="center">
+                </el-table-column>
+                <el-table-column prop="YD15" label="YD15" width="150" align="center">
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-import {serverIp} from "../../../../public/config.js";
+import { serverIp } from "../../../../public/config.js";
 import axios from "axios";
-import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   props: {
@@ -210,23 +207,22 @@ export default {
       return isCSV;
     },
 
-    async fetchData(file) {
+    fetchData(file) {
       const fileResponse = JSON.stringify(file.response);
       const dotIndex = fileResponse.lastIndexOf('/');
       const jsonFolder = fileResponse.substring(0, dotIndex) + "/origin/json/";
       const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
       const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
       const jsonFile = jsonFolder + fileNameWithoutExtension + ".json";
-      console.log("fileNameWithoutExtension:  " + fileNameWithoutExtension);
-
+      console.log("fileNameWithoutExtension:  "+fileNameWithoutExtension);
 
       var jsonData = [];
-      await this.request.get("/file/origin/json/" + fileNameWithoutExtension + ".json").then(res => {
+
+      this.request.get("/file/origin/json/"+fileNameWithoutExtension+".json").then(res => {
+
         jsonData = JSON.parse(res.jsonContent);
-        console.log(jsonData)
+        console.log(jsonData);
       })
-
-
 
 
       this.$emit('update-table-data', jsonData);
@@ -245,7 +241,7 @@ export default {
     handleExceed(files, fileList) {
       this.$message({
         message: `当前限制选择 10 个文件，本次选择了 ${
-            files.length
+          files.length
         } 个文件，共选择了 ${files.length + fileList.length} 个文件`,
         type: "warning",
         offset: "50", //距离顶部的位置
@@ -273,53 +269,45 @@ export default {
     },
 
     // TODO: 发送预处理参数
-    sendPreprocessParams() {
-    },
+    sendPreprocessParams() {},
   },
 };
 </script>
 
 <style lang="less">
-.el-upload {
-  width: 98%;
-  background-color: rgb(241, 241, 241);
+.el-upload{
+    width: 98%;
+    background-color: rgb(241,241,241);
 }
-
 .el-upload-dragger {
-  border: 3px dashed #d9d9d9;
-  width: 100%;
-  background-color: rgb(241, 241, 241);
+    border: 3px dashed #d9d9d9;
+    width: 100%;
+    background-color: rgb(241,241,241);
 }
-
 .el-upload-list {
   display: flex;
   justify-content: space-between;
 }
-
 .table-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  h1 {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 5px;
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h1{
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 5px;
+    }
 }
-
 // 大于800px
 @media only screen and (min-width: 800px) {
   .totalinfocontainer {
     .M_upload {
       display: none;
     }
-
     .el-dialog__body {
       padding: 0;
     }
-
     .form-row {
       display: flex;
       align-items: center;
@@ -328,25 +316,20 @@ export default {
       align-items: center;
       justify-content: center;
     }
-
     .tag {
       width: 120px;
       margin-bottom: 5px;
     }
-
     .el-radio-group {
       margin-bottom: 5px;
     }
-
     .el-radio-button__inner {
       font-size: 12px;
       padding: 10px;
     }
-
     .el-button.is-round {
       padding: 8px 19px;
     }
-
     .el-dialog__footer {
       padding: 10px 20px 10px;
     }
@@ -359,37 +342,29 @@ export default {
     .PC_upload {
       display: none;
     }
-
     .el-dialog__title {
       font-size: 14px;
     }
-
     .el-dialog {
       width: 60% !important;
     }
-
     .el-dialog__body {
       padding: 10px;
     }
-
     .tag {
       width: 120px;
       margin-bottom: 4px;
     }
-
     .el-radio-group {
       margin-bottom: 5px;
     }
-
     .el-radio-button__inner {
       font-size: 12px;
       padding: 10px;
     }
-
     .el-button.is-round {
       padding: 8px 19px;
     }
-
     .el-dialog__footer {
       padding: 10px 20px 10px;
     }

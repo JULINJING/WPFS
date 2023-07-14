@@ -1,15 +1,24 @@
 <template>
-    <div id="forecastContainer" class="forecastContainer _forecastContainer" ref="forecast">
+    <div class="forecastContainer _forecastContainer" ref="forecast">
         <NavTop />
-        <el-button-group>
-            <el-button type="primary" @click="showTrainSettings">训练</el-button>
-            <el-button type="primary" @click="showPredictSettings">预测</el-button>
-        </el-button-group>
-
-        <TrainSettings v-if="isTrainSettingsVisible" />
-        <PredictSettings v-show="!isTrainSettingsVisible" />
-        <ForecastDisplay v-show="!isTrainSettingsVisible" />
-        <ChartsDisplay v-show="!isTrainSettingsVisible" />
+        <div id="tabBox">
+            <el-tabs v-model="activeName" type="border-card" style="height:100%;width:96%;margin-bottom: 20px;margin-top: 20px;">
+                <el-tab-pane name="train">
+                    <span slot="label"><i class="iconfont">&#xe628;</i> 训练</span>
+                    <TrainSettings/>
+                </el-tab-pane>
+                <el-tab-pane name="forecast">
+                    <span slot="label"><i class="iconfont">&#xe6df;</i> 预测</span>
+                    <PredictSettings/>
+                    <ForecastDisplay/>
+                    <ChartsDisplay/>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+        <!-- <el-row style="border-bottom: 3px #D9D9D9 dotted;width: 96%;margin-bottom: 5px;">
+            <el-button class="tabButton" @click="showTrainSettings">训练</el-button>
+            <el-button class="tabButton" @click="showPredictSettings">预测</el-button>
+        </el-row> -->
         <Footer />
     </div>
 </template>
@@ -30,16 +39,17 @@ export default {
     },
     data() {
         return {
-            isTrainSettingsVisible: true,
+            // isTrainSettingsVisible: true,
+            activeName: 'train'
         };
     },
     methods: {
-        showTrainSettings() {
-            this.isTrainSettingsVisible = true;
-        },
-        showPredictSettings() {
-            this.isTrainSettingsVisible = false;
-        },
+        // showTrainSettings() {
+        //     this.isTrainSettingsVisible = true;
+        // },
+        // showPredictSettings() {
+        //     this.isTrainSettingsVisible = false;
+        // }
     }
 }
 </script>
@@ -54,11 +64,23 @@ export default {
 
 // 大于800px
 @media only screen and (min-width: 800px) {
-    .forecastContainer {}
+    .forecastContainer {
+        #tabBox{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }
 
 // 小于800px
 @media only screen and (max-width: 800px) {
-    ._forecastContainer {}
+    ._forecastContainer {
+        #tabBox{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }
 </style>

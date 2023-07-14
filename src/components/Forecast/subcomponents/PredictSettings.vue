@@ -1,64 +1,55 @@
 <template>
-    <div>
-        <div class="input-container">
-            <el-form ref="form" :model="form" label-width="80px">
+    <div class="input-container _input-container">
+        <el-form ref="form" :model="form" label-width="80px">
+            <!-- 进度条 -->
+            <div class="predict-form-row">
+                <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
+            </div>
 
-            </el-form>
-            <el-form ref="form" :model="form" label-width="80px">
-                <!-- 进度条 -->
-                <div class="predict-form-row">
-                    <el-progress type="line" :percentage="calculateProgress" style="width: 800px"></el-progress>
-                </div>
+            <div class="predict-form-row">
+                <el-tag>模型类型选择</el-tag>
+                <el-radio-group v-model="form.modelType" @change="handleModelTypeChange">
+                    <el-radio-button label="single">单模型预测</el-radio-button>
+                    <el-radio-button label="multi">多模型预测</el-radio-button>
+                </el-radio-group>
+            </div>
 
-                <div class="predict-form-row">
-                    <el-tag>模型类型选择</el-tag>
-                    <el-radio-group v-model="form.modelType" @change="handleModelTypeChange">
-                        <el-radio-button label="single">单模型预测</el-radio-button>
-                        <el-radio-button label="multi">多模型预测</el-radio-button>
-                    </el-radio-group>
-                </div>
+            <div class="predict-form-row">
+                <el-tag>具体模型选择</el-tag>
+                <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="1"
+                    collapse-tags>
+                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
+                        :value="model.value"></el-option>
+                </el-select>
+            </div>
 
-                <div class="predict-form-row">
-                    <el-tag>具体模型选择</el-tag>
-                    <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="1"
-                        collapse-tags>
-                        <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
-                            :value="model.value"></el-option>
-                    </el-select>
-                </div>
+            <div class="predict-form-row">
+                <el-tag>指定协变量</el-tag>
+                <el-select v-model="form.selectedCovariates" multiple collapse-tags placeholder="请选择"
+                    @change="handleSelectChange">
+                    <el-option v-for="covariate in covariateOptions" :value="covariate" :key="covariate">{{ covariate
+                    }}</el-option>
+                </el-select>
+            </div>
 
-                <div class="predict-form-row">
-                    <el-tag>指定协变量</el-tag>
-                    <el-select v-model="form.selectedCovariates" multiple collapse-tags placeholder="请选择"
-                        @change="handleSelectChange">
-                        <el-option v-for="covariate in covariateOptions" :value="covariate" :key="covariate">{{ covariate
-                        }}</el-option>
-                    </el-select>
-                </div>
+            <div class="predict-form-row">
+                <el-tag>输入时间段</el-tag>
+                <el-date-picker v-model="form.inputPeriod" type="datetimerange" align="right"
+                    start-placeholder="开始日期" @change="setPeriods" end-placeholder="结束日期"
+                    :default-time="['12:00:00', '08:00:00']"></el-date-picker>
+            </div>
 
-                <div class="predict-form-row">
-                    <el-tag>输入时间段</el-tag>
-                    <div class="block">
-                        <el-date-picker v-model="form.inputPeriod" type="datetimerange" align="right"
-                            start-placeholder="开始日期" @change="setPeriods" end-placeholder="结束日期"
-                            :default-time="['12:00:00', '08:00:00']"></el-date-picker>
-                    </div>
-                </div>
+            <div class="predict-form-row">
+                <el-tag>预测时间段</el-tag>
+                <el-date-picker v-model="form.forecastPeriod" type="datetimerange" align="right"
+                    start-placeholder="开始日期" @change="setPeriods" end-placeholder="结束日期"
+                    :default-time="['00:00:00', '23:45:00']"></el-date-picker>
+            </div>
 
-                <div class="predict-form-row">
-                    <el-tag>预测时间段</el-tag>
-                    <div class="block">
-                        <el-date-picker v-model="form.forecastPeriod" type="datetimerange" align="right"
-                            start-placeholder="开始日期" @change="setPeriods" end-placeholder="结束日期"
-                            :default-time="['00:00:00', '23:45:00']"></el-date-picker>
-                    </div>
-                </div>
-
-                <div>
-                    <el-button type="primary" @click="setParams">确认</el-button>
-                </div>
-            </el-form>
-        </div>
+            <div>
+                <el-button @click="setParams">开始预测</el-button>
+            </div>
+        </el-form>
     </div>
 </template>
   
@@ -78,13 +69,14 @@ export default {
                 forecastPeriod: [],
             },
             modelOptions: [
-                { label: "GRU", value: "model1" },
-                { label: "MLP", value: "model2" },
-                { label: "LSTNet", value: "model3" },
-                { label: "Transformer", value: "model4" },
-                { label: "Crossformer", value: "model5" },
-                { label: "LightGBM", value: "model6" },
-                { label: "XgBoost", value: "model7" },
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
+                { label: "GRU", value: "model2" },
+                { label: "MLP", value: "model3" },
+                { label: "LSTNet", value: "model4" },
+                { label: "Transformer", value: "model5" },
+                { label: "Crossformer", value: "model6" },
+                { label: "LightGBM", value: "model7" },
+                { label: "XgBoost", value: "model8" }
             ],
             isMultiple: false,
             covariateOptions: [
@@ -171,11 +163,92 @@ export default {
 
 </script>
 
-<style>
-.input-container {
-    margin-top: 10px;
-    width: 40%;
-    margin-left: 30%;
-    margin-right: 30%;
+<style lang="less">
+// 大于800px
+@media only screen and (min-width: 800px) {
+    .input-container {
+        margin-top: 10px;
+        width: 50%;
+        margin-left: 25%;
+        margin-right: 25%;
+        .predict-form-row{
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .el-tag{
+                width: 120px;
+                margin-right: 20px;
+                font-size: 14px;
+            }
+            .el-select {
+                width: 80%;
+            }
+            .el-radio-group{
+                text-align: left;
+            }
+            .el-input,
+            .el-radio-group,
+            .el-date-editor {
+                width: 80%;
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+// 小于800px
+@media only screen and (max-width: 800px) {
+    ._input-container {
+        margin-top: 10px;
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+        .predict-form-row{
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .el-tag{
+                width: 240px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            .el-select {
+                width: 240px;
+            }
+            .el-input,
+            .el-radio-group,
+            .el-date-editor{
+                width: 240px;
+                font-size: 12px;
+            }
+            .el-radio-button__inner,
+            .el-range-input{
+                font-size: 12px;
+            }
+            .el-radio-button,
+            .el-radio-button__inner{
+                width: 120px;
+            }
+        }
+    }
+    .el-picker-panel{
+        left: 2% !important;
+    }
+    .el-date-range-picker .el-picker-panel__body {
+        min-width: 96%;
+    }     
+    .el-date-range-picker__content{        
+        width: 96% !important;    
+    }    
+    .el-date-range-picker{        
+        width: 96% !important;    
+    }
 }
 </style>

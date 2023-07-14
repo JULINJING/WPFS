@@ -538,29 +538,24 @@ export default {
                     }
 
                     const option = {
-                        backgroundColor: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                            offset: 0,
-                            color: '#c86589'
-                        },
-                        {
-                            offset: 1,
-                            color: '#06a7ff'
-                        }
-                        ], false),
-                        title: {
-                            text: "OCTOBER 2015",
-                            left: "center",
-                            bottom: "5%",
-                            textStyle: {
-                                color: "#fff",
-                                fontSize: 16
-                            }
+                        // backgroundColor: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        //     offset: 0,
+                        //     color: '#c86589'
+                        // },
+                        // {
+                        //     offset: 1,
+                        //     color: '#06a7ff'
+                        // }
+                        // ], false),
+                        legend: {
+                            left: '65%',
+                            top: '0%'
                         },
                         grid: {
-                            top: '20%',
+                            top: '10%',
                             left: '10%',
                             right: '10%',
-                            bottom: '15%',
+                            bottom: '0%',
                             containLabel: true,
                         },
                         xAxis: {
@@ -617,7 +612,7 @@ export default {
                             }
                         }],
                         series: [{
-                            name: '注册总量',
+                            name: '预测功率YD15',
                             type: 'line',
                             smooth: true, //是否平滑曲线显示
                             showAllSymbol: true,
@@ -625,23 +620,17 @@ export default {
                             symbolSize: 6,
                             lineStyle: {
                                 normal: {
-                                    color: "#fff", // 线条颜色
+                                    color: "gray", // 线条颜色
                                 },
                             },
                             label: {
                                 show: true,
-                                position: 'top',
-                                textStyle: {
-                                    color: '#fff',
-                                }
+                                position: 'top'
                             },
                             itemStyle: {
                                 color: "red",
                                 borderColor: "#fff",
                                 borderWidth: 3
-                            },
-                            tooltip: {
-                                show: false
                             },
                             areaStyle: {
                                 normal: {

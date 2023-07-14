@@ -11,36 +11,36 @@
       <NavTop></NavTop>
       <div class="subdiv _subdiv" style="margin-top: 1%;">
         <div class="left box" id="first">
-          <BlockBriefInfo :blockIcon="'&#xe62d;'" :blockTitle="'上传 原始数据可视化'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe62d;'" :blockTitle="'上传数据'" :blockInfo="'&#xec7f; '"
                           :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/1.jpg')"
                           :blockName="'upload'"/>
         </div>
         <div class="right box" id="second">
-          <BlockBriefInfo :blockIcon="'&#xe764;'" :blockTitle="'模型预测'" :blockInfo="'&#xec7f; '" :fontColor="'white'"
+          <BlockBriefInfo :blockIcon="'&#xe764;'" :blockTitle="'训练预测'" :blockInfo="'&#xec7f; '" :fontColor="'white'"
                           :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/6.jpg')"
                           :blockName="'forecast'"/>
         </div>
       </div>
       <div class="subdiv _subdiv">
         <div class="left box" id="third">
-          <BlockBriefInfo :blockIcon="'&#xe60a;'" :blockTitle="'mars3d大屏'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe60a;'" :blockTitle="'数字风电'" :blockInfo="'&#xec7f; '"
                           :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'white'" :imgSrc="require('./imgs/4.jpg')"
                           :blockName="'windfield'"/>
         </div>
         <div class="right box" id="fourth">
-          <BlockBriefInfo :blockIcon="'&#xe613;'" :blockTitle="'监测大屏'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe613;'" :blockTitle="'风电监测'" :blockInfo="'&#xec7f; '"
                           :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/5.jpg')"
                           :blockName="'watch'"/>
         </div>
       </div>
       <div class="subdiv _subdiv">
         <div class="left box" id="fifth">
-          <BlockBriefInfo :blockIcon="'&#xe614;'" :blockTitle="'风机异常大屏'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe614;'" :blockTitle="'异常监控'" :blockInfo="'&#xec7f; '"
                           :fontColor="'black'" :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/3.jpg')"
                           :blockName="'turbine'"/>
         </div>
         <div class="right box" id="sixth">
-          <BlockBriefInfo :blockIcon="'&#xe69c;'" :blockTitle="'three风机'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe69c;'" :blockTitle="'动画Demo'" :blockInfo="'&#xec7f; '"
                           :fontColor="'white'" :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/2.jpg')"
                           :blockName="'windland'"/>
         </div>

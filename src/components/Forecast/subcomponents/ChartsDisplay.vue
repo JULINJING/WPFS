@@ -2,7 +2,7 @@
     <div class="diagramcontainer _diagramcontainer">
         <div class="subdiv _subdiv" style="margin-top: 1%;">
             <div class="left box">
-                <h1>折线图</h1>
+                <h1>预测功率YD15图</h1>
                 <LineChart :tableData="tableData" class="LineChart"/>
             </div>
             <div class="right box">

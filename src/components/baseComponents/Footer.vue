@@ -6,18 +6,18 @@
             </div>
             <div id="functionTable">
                 <h1>功能</h1>
-                <p @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传</p>
-                <p @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 预测</p>
-                <p @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> 风场</p>
-                <p @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 监测</p>
-                <p @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常</p>
-                <p @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> three</p>
+                <p @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传数据</p>
+                <p @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 训练预测</p>
+                <p @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> 数字风电</p>
+                <p @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 风电监测</p>
+                <p @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常监控</p>
+                <p @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> 动画Demo</p>
             </div>
             <div>
                 <h1>About</h1>
                 <p><i class="iconfont">&#xe604;</i> 武汉大学 结束乐队</p>
-                <p><i class="iconfont">&#xe608;</i> 杨可</p>
-                <p><i class="iconfont">&#xe607;</i> 黄梓涛 吴斌文 李廷赟</p>
+                <p><i class="iconfont">&#xe608;</i> 黄梓涛</p>
+                <p><i class="iconfont">&#xe607;</i> 杨可 吴斌文 李廷赟</p>
                 <h1>Address</h1>
                 <p><i class="iconfont">&#xe652;</i> 湖北省武汉市武昌区八一路299号</p>
                 <p><i class="iconfont">&#xe60b;</i> 430072</p>

@@ -1,48 +1,43 @@
 <template>
-    <div>
-        <div class="input-container">
-            <el-form ref="form" :model="form" label-width="80px">
+    <div class="input-container _input-container">
+        <el-form ref="form" :model="form" label-width="80px">
+            <!-- 进度条 -->
+            <div class="train-form-row">
+                <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
+            </div>
 
-            </el-form>
-            <el-form ref="form" :model="form" label-width="80px">
-                <!-- 进度条 -->
-                <div class="train-form-row">
-                    <el-progress type="line" :percentage="calculateProgress" style="width: 800px"></el-progress>
-                </div>
+            <div class="train-form-row">
+                <el-tag>具体模型选择</el-tag>
+                <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
+                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
+                        :value="model.value"></el-option>
+                </el-select>
+            </div>
 
-                <div class="train-form-row">
-                    <el-tag>具体模型选择</el-tag>
-                    <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
-                        <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
-                            :value="model.value"></el-option>
-                    </el-select>
-                </div>
+            <div class="train-form-row">
+                <el-tag>训练样本数量</el-tag>
+                <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
+            </div>
 
-                <div class="train-form-row">
-                    <el-tag>训练样本数量</el-tag>
-                    <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
-                </div>
+            <div class="train-form-row">
+                <el-tag>学习率</el-tag>
+                <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
+            </div>
 
-                <div class="train-form-row">
-                    <el-tag>学习率</el-tag>
-                    <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
-                </div>
+            <div class="train-form-row">
+                <el-tag>输入长度</el-tag>
+                <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
+            </div>
 
-                <div class="train-form-row">
-                    <el-tag>输入长度</el-tag>
-                    <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
-                </div>
+            <div class="train-form-row">
+                <el-tag>预测长度</el-tag>
+                <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
+            </div>
 
-                <div class="train-form-row">
-                    <el-tag>预测长度</el-tag>
-                    <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
-                </div>
-
-                <div>
-                    <el-button type="primary" @click="setParams">开始训练</el-button>
-                </div>
-            </el-form>
-        </div>
+            <div>
+                <el-button @click="setParams">开始训练</el-button>
+            </div>
+        </el-form>
     </div>
 </template>
     
@@ -61,13 +56,14 @@ export default {
                 predLen: ""
             },
             modelOptions: [
-                { label: "GRU", value: "model1" },
-                { label: "MLP", value: "model2" },
-                { label: "LSTNet", value: "model3" },
-                { label: "Transformer", value: "model4" },
-                { label: "Crossformer", value: "model5" },
-                { label: "LightGBM", value: "model6" },
-                { label: "XgBoost", value: "model7" },
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
+                { label: "GRU", value: "model2" },
+                { label: "MLP", value: "model3" },
+                { label: "LSTNet", value: "model4" },
+                { label: "Transformer", value: "model5" },
+                { label: "Crossformer", value: "model6" },
+                { label: "LightGBM", value: "model7" },
+                { label: "XgBoost", value: "model8" }
             ],
 
             progress: 0,
@@ -111,6 +107,7 @@ export default {
                 this.$message({
                     message: "请输入有效的表单数据",
                     type: "warning",
+                    offset: "50"
                 });
                 return false;
             }
@@ -147,12 +144,65 @@ export default {
 
 </script>
   
-<style>
-.input-container {
-    margin-top: 10px;
-    width: 40%;
-    margin-left: 30%;
-    margin-right: 30%;
+<style lang="less">
+// 大于800px
+@media only screen and (min-width: 800px) {
+    .input-container {
+        margin-top: 10px;
+        width: 50%;
+        margin-left: 25%;
+        margin-right: 25%;
+        .train-form-row{
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .el-tag{
+                width: 120px;
+                margin-right: 20px;
+                font-size: 14px;
+            }
+            .el-select {
+                width: 80%;
+            }
+            .el-input{
+                width: 80%;
+                font-size: 14px;
+            }
+        }
+    }
 }
 
+// 小于800px
+@media only screen and (max-width: 800px) {
+    ._input-container {
+        margin-top: 10px;
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+        .train-form-row{
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .el-tag{
+                width: 240px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            .el-select {
+                width: 240px;
+            }
+            .el-input{
+                width: 240px;
+                font-size: 12px;
+            }
+        }
+    }
+}
 </style>

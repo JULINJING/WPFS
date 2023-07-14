@@ -58,14 +58,11 @@ export default {
                         })
                     }
                     const option = {
-                        title: {
-                            text: 'Male and female height and weight distribution',
-                            subtext: 'Data from: Heinz 2003'
-                        },
                         grid: {
                             left: '3%',
                             right: '7%',
                             bottom: '7%',
+                            top: '9%',
                             containLabel: true
                         },
                         tooltip: {
@@ -113,7 +110,7 @@ export default {
                         legend: {
                             data: ['Female', 'Male'],
                             left: 'center',
-                            bottom: 10
+                            bottom: 5
                         },
                         xAxis: [
                             {
