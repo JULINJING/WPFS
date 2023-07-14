@@ -1,5 +1,6 @@
 <template>
     <div class="diagramcontainer _diagramcontainer">
+        <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据图表可视化</h1>
         <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
                 <h1>三维柱状图</h1>
@@ -76,7 +77,11 @@ export default {
         linear-gradient(to left, #409EFF, #409EFF) right bottom no-repeat, linear-gradient(to left, #409EFF, #409EFF) right bottom no-repeat;
     background-size: 2px 20px, 20px 2px, 2px 20px, 20px 2px;
 }
-
+h1 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 5px;
+}
 @media only screen and (min-width: 800px) {
     .diagramcontainer {
         user-select: none;

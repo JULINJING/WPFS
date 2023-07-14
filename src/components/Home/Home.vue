@@ -40,7 +40,7 @@
                           :blockName="'turbine'"/>
         </div>
         <div class="right box" id="sixth">
-          <BlockBriefInfo :blockIcon="'&#xe69c;'" :blockTitle="'动画Demo'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe69c;'" :blockTitle="'AR风电'" :blockInfo="'&#xec7f; '"
                           :fontColor="'white'" :backgroundColor="'rgb(250, 250, 250)'" :imgSrc="require('./imgs/2.jpg')"
                           :blockName="'windland'"/>
         </div>

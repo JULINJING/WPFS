@@ -10,7 +10,7 @@
       <div @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> 数字风电</div>
       <div @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 风电监测</div>
       <div @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常监控</div>
-      <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> 动画Demo</div>
+      <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> AR风电</div>
       <div class="logout _logout">
         <el-dropdown
           class="logout _logout" style="cursor: pointer; text-align: right; color: white"
