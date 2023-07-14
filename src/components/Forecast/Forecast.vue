@@ -9,7 +9,7 @@
         <TrainSettings v-if="isTrainSettingsVisible" />
         <PredictSettings v-show="!isTrainSettingsVisible" />
         <ForecastDisplay v-show="!isTrainSettingsVisible" />
-        <ChartsDisplay />
+        <ChartsDisplay v-show="!isTrainSettingsVisible" />
         <Footer />
     </div>
 </template>
