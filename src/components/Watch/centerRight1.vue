@@ -37,7 +37,7 @@ export default {
                 oddRowBGC: '#0f1325', //奇数行
                 evenRowBGC: '#171c33', //偶数行
                 index: false,
-                columnWidth: [100, 100, 100],
+                columnWidth: 750,
                 align: 'center'
             }
         }
@@ -66,7 +66,7 @@ $box-width: 100%;
 
     .body-box {
         border-radius: 10px;
-        width: 50%;
+        width: 100%;
         height: 100%;
         margin: 0px auto;
 

@@ -1,6 +1,14 @@
 <template>
     <div id="watchContainer" class="watchContainer _watchContainer" ref="watch">
-        <div class="bg">
+        <el-result title="抱歉" subTitle="为获得最佳体验，请使用PC端查看">
+            <template slot="icon">
+                <el-image :src="require('./imgs/PC端提示.png')" fit="cover"></el-image>
+            </template>
+            <template slot="extra">
+                <el-button type="primary" size="medium" @click="backToHome">返回主页</el-button>
+            </template>
+        </el-result>
+        <div class="bg" id="PC">
             <dv-loading v-if="loading" style="height: 100vh;">Loading...</dv-loading>
             <div v-else class="host-body">
                 <div class="d-flex jc-center">
@@ -8,7 +16,7 @@
                     <div class="d-flex jc-center">
                         <dv-decoration-8 class="dv-dec-8" :color="decorationColor" />
                         <div class="title">
-                            <span class="title-text">风力能源监控</span>
+                            <span class="title-text">风 电 能 源 监 控</span>
                         </div>
                         <dv-decoration-8 class="dv-dec-8" :reverse="true" :color="decorationColor" />
                     </div>
@@ -20,10 +28,10 @@
                     <div class="d-flex aside-width">
                         <div class="react-left ml-4 react-l-s">
                             <span class="react-left"></span>
-                            <span class="text">数据分析1</span>
+                            <span class="text">单风电场数据分析</span>
                         </div>
                         <div class="react-left ml-3">
-                            <span class="text">数据分析2</span>
+                            <span class="text">{{turbineName}}</span>
                         </div>
                     </div>
                     <div class="d-flex aside-width">
@@ -92,6 +100,9 @@ export default {
         bottomRight
     },
     data() {
+        let filename = this.$store.state.global.uploadedFileName;
+        let machineNumber = filename.split(".")[0]; // 分割字符串并取得数字
+        let turbineName = machineNumber + '号风机'; // 组合新的字符串
         return {
             timing: null,
             loading: true,
@@ -99,7 +110,8 @@ export default {
             dateYear: null,
             dateWeek: null,
             weekday: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-            decorationColor: ['#568aea', '#000000']
+            decorationColor: ['#568aea', '#000000'],
+            turbineName
         }
     },
     methods: {
@@ -114,6 +126,10 @@ export default {
             setTimeout(() => {
                 this.loading = false
             }, 300)
+        },
+        // 返回首页 
+        backToHome() {
+            this.$router.push('/home')
         }
     },
     mounted() {

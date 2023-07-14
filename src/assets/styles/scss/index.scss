@@ -1,153 +1,179 @@
-#watchContainer {
-    color: #d3d6dd;
-    width: 100vw;
-    height: 100vh;
-    transform-origin: left top;
-    overflow: hidden;
+// 大于800px
+@media only screen and (min-width: 800px) {
 
-    .bg {
-        padding: 16px 0px;
-        background-image: url("/public/imgs/pageBg.png");
-        background-size: cover;
-        background-position: center center;
-        width: 100vw;
-        height: 100vh;
+    // 移动端消失
+    .el-result {
+        display: none;
     }
 
-    .host-body {
-        height: 100%;
+    #watchContainer {
+        color: #d3d6dd;
         width: 100vw;
+        height: 100vh;
+        transform-origin: left top;
+        overflow: hidden;
 
-        .dv-dec-10,
-        .dv-dec-10-s {
-            width: 33.3%;
-            height: 2px;
-        }
-
-        .dv-dec-10-s {
-            transform: rotateY(180deg);
-        }
-
-        .dv-dec-8 {
-            width: 200px;
-            height: 40px;
-        }
-
-        .title {
-            position: relative;
-            width: 500px;
-            text-align: center;
+        .bg {
+            padding: 16px 0px;
+            background-image: url("/public/imgs/pageBg.png");
             background-size: cover;
-            background-repeat: no-repeat;
+            background-position: center center;
+            width: 100vw;
+            height: 100vh;
+        }
 
-            .title-text {
-                font-size: 24px;
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                transform: translate(-50%);
+        .host-body {
+            height: 100%;
+            width: 100vw;
+
+            .dv-dec-10,
+            .dv-dec-10-s {
+                width: 33.3%;
+                height: 2px;
             }
 
-            .dv-dec-6 {
-                position: absolute;
-                bottom: -30px;
-                left: 50%;
-                width: 250px;
-                height: 8px;
-                transform: translate(-50%);
+            .dv-dec-10-s {
+                transform: rotateY(180deg);
             }
-        }
 
-        // 第二行
-        .aside-width {
-            width: 40%;
-        }
+            .dv-dec-8 {
+                width: 200px;
+                height: 40px;
+            }
 
-        .react-r-s,
-        .react-l-s {
-            background-color: #0f1325;
-        }
-
-        // 平行四边形
-        .react-right {
-            &.react-l-s {
-                text-align: right;
+            .title {
+                position: relative;
                 width: 500px;
+                text-align: center;
+                background-size: cover;
+                background-repeat: no-repeat;
+
+                .title-text {
+                    font-size: 24px;
+                    font-weight: 800;
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translate(-50%);
+                }
+
+                .dv-dec-6 {
+                    position: absolute;
+                    bottom: -30px;
+                    left: 50%;
+                    width: 250px;
+                    height: 8px;
+                    transform: translate(-50%);
+                }
             }
 
-            font-size: 18px;
-            width: 26%;
-            line-height: 50px;
-            text-align: center;
-            transform: skewX(-45deg);
+            // 第二行
+            .aside-width {
+                width: 40%;
+            }
 
-            .react-after {
-                position: absolute;
-                right: -25px;
-                top: 0;
-                height: 50px;
-                width: 50px;
+            .react-r-s,
+            .react-l-s {
                 background-color: #0f1325;
-                transform: skewX(45deg);
             }
 
-            .text {
-                display: inline-block;
-                transform: skewX(45deg);
-            }
-        }
+            // 平行四边形
+            .react-right {
+                &.react-l-s {
+                    text-align: right;
+                    width: 500px;
+                }
 
-        .react-left {
-            &.react-l-s {
-                width: 500px;
-                text-align: left;
-            }
+                font-size: 18px;
+                width: 26%;
+                line-height: 50px;
+                text-align: center;
+                transform: skewX(-45deg);
 
-            font-size: 18px;
-            width: 300px;
-            height: 50px;
-            line-height: 50px;
-            text-align: center;
-            transform: skewX(45deg);
-            background-color: #0f1325;
+                .react-after {
+                    position: absolute;
+                    right: -25px;
+                    top: 0;
+                    height: 50px;
+                    width: 50px;
+                    background-color: #0f1325;
+                    transform: skewX(45deg);
+                }
+
+                .text {
+                    display: inline-block;
+                    transform: skewX(45deg);
+                    letter-spacing: 5px;
+                }
+            }
 
             .react-left {
-                position: absolute;
-                left: -25px;
-                top: 0;
+                &.react-l-s {
+                    width: 500px;
+                    text-align: left;
+                }
+
+                font-size: 18px;
+                width: 300px;
                 height: 50px;
-                width: 50px;
+                line-height: 50px;
+                text-align: center;
+                transform: skewX(45deg);
                 background-color: #0f1325;
-                transform: skewX(-45deg);
+
+                .react-left {
+                    position: absolute;
+                    left: -25px;
+                    top: 0;
+                    height: 50px;
+                    width: 50px;
+                    background-color: #0f1325;
+                    transform: skewX(-45deg);
+                }
+
+                .text {
+                    display: inline-block;
+                    transform: skewX(-45deg);
+                    letter-spacing: 5px;
+                }
             }
 
-            .text {
-                display: inline-block;
-                transform: skewX(-45deg);
+            .body-box {
+                height: 100vh;
+                width: 100%;
+                margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+
+                //下方区域的布局
+                .content-box {
+                    display: grid;
+                    grid-template-columns: 3fr 3fr 6fr;
+                    height: 30%;
+                }
+
+                // 底部数据
+                .bottom-box {
+                    margin-top: 20px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 50%);
+                    height: 50%;
+                }
             }
         }
+    }
+}
 
-        .body-box {
-            height: 100vh;
-            width: 100%;
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
+// 小于800px
+@media only screen and (max-width: 800px) {
+    .el-result {
+        display: block;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-            //下方区域的布局
-            .content-box {
-                display: grid;
-                grid-template-columns: 3fr 3fr 6fr;
-                height: 30%;
-            }
-
-            // 底部数据
-            .bottom-box {
-                margin-top: 20px;
-                display: grid;
-                grid-template-columns: repeat(2, 50%);
-                height: 50%;
-            }
-        }
+    #PC {
+        display: none;
     }
 }
