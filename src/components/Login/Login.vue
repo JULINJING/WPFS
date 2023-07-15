@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="pageHeader">
       <img src="@/components/Home/imgs/logo2.png" alt="logo" />
-      <span>风 电 预 测 领 航 者</span>
+      <span>"数 智 一 体" 风 电 预 测 探 索 者</span>
     </div>
 
     <div class="login-box">
@@ -414,6 +414,7 @@ export default {
 
     .pageHeader {
       display: flex;
+      flex-direction: column;
       visibility: hidden;
       /*上下居中*/
       align-items: center;
@@ -422,9 +423,9 @@ export default {
 
       img {
         vertical-align: middle;
-        margin-right: 3%;
+        margin-right: 0%;
         height: auto;
-        width: 30%;
+        width: 50%;
       }
 
       span {
