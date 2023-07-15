@@ -52,7 +52,7 @@
         </el-form>
     </div>
 </template>
-  
+
 <script>
 import { mapState } from 'vuex';
 
@@ -150,7 +150,7 @@ export default {
 
                 console.log(this.form);
                 // 调用后端预测接口，传入表单数据
-                this.request.post("/file/forecast", this.form.fileName).then((res) => {
+                this.request.post("/file/predict", this.form.fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");
 
@@ -243,12 +243,12 @@ export default {
     }
     .el-date-range-picker .el-picker-panel__body {
         min-width: 96%;
-    }     
-    .el-date-range-picker__content{        
-        width: 96% !important;    
-    }    
-    .el-date-range-picker{        
-        width: 96% !important;    
+    }
+    .el-date-range-picker__content{
+        width: 96% !important;
+    }
+    .el-date-range-picker{
+        width: 96% !important;
     }
 }
 </style>
