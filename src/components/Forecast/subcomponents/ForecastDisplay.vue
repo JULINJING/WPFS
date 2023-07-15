@@ -4,29 +4,35 @@
         <el-table :data="curData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
             @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
 
-            <el-table-column fixed prop="datatime" label="DATATIME" width="150" align="center">
+            <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="windspeed" label="WINDSPEED" width="150" align="center">
+            <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="prepower" label="PREPOWER" width="150" align="center">
+            <el-table-column prop="PREPOWER" label="PREPOWER" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="winddirection" label="WINDDIRECTION" width="150" align="center">
+            <el-table-column prop="WINDDIRECTION" label="WINDDIRECTION" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="temperature" label="TEMPERATURE" width="150" align="center">
+            <el-table-column prop="TEMPERATURE" label="TEMPERATURE" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="humidity" label="HUMIDITY" width="150" align="center">
+            <el-table-column prop="HUMIDITY" label="HUMIDITY" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="pressure" label="PRESSURE" width="150" align="center">
+            <el-table-column prop="PRESSURE" label="PRESSURE" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="AWS" label="ROUND(A.WS,1)" width="150" align="center">
+            </el-table-column>
+            <el-table-column prop="APOWER" label="ROUND(A.POWER,0)" width="150" align="center">
             </el-table-column>
             <el-table-column prop="trueYD15" label="True YD15" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="predictiveYD15" label="Predictive YD15" width="150" align="center">
+            <el-table-column prop="predictYD15" label="Predictive YD15" width="150" align="center">
             </el-table-column>
         </el-table>
     </div>
 </template>
   
 <script>
+import rawData from '../../../assets/testJson/12.json'
+
 export default {
     props: {
         tableData: Array,
@@ -38,6 +44,9 @@ export default {
             curData: [],
         }
     },
+    mounted(){
+        this.curData = JSON.parse(JSON.stringify(rawData));
+    },
     watch: {
         tableData: {
             immediate: true, // 立即执行观察者回调函数
@@ -47,6 +56,9 @@ export default {
         }
     },
     methods: {
+        rowStyle() {
+            return "text-align:center";
+        },
         deleteRow(index, rows) {
             rows.splice(index, 1);
         },

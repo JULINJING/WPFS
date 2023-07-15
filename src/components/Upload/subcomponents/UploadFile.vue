@@ -209,13 +209,12 @@ export default {
             const fileResponse = JSON.stringify(this.curfile.response);
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-
             // TODO
-            await this.request.get("/file/processed/json/" + fileNameWithoutExtension + ".json").then(res => {
+            await this.request.get("/file/origin/json/" + fileNameWithoutExtension + ".json").then(res => {
+                // if(res.code === "200"){
                 console.log(res);
-                if(res.code === "200"){
-                    this.jsonData = JSON.parse(res.jsonContent);
-                }
+                this.jsonData = JSON.parse(res.jsonContent);
+                // }
             })
             this.$emit('update-table-data', this.jsonData.slice(0, 7 * 96));
         },

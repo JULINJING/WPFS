@@ -37,12 +37,14 @@
             <div>
                 <el-button @click="setParams">开始训练</el-button>
             </div>
+            <el-loading v-if="loading" text="加载中..." :fullscreen="true"></el-loading>
         </el-form>
     </div>
 </template>
     
 <script>
 import { mapState } from 'vuex';
+import { Loading } from 'element-ui';
 
 export default {
     data() {
@@ -53,7 +55,8 @@ export default {
                 batchSize: "32",
                 learningRate: "0.001",
                 inputLen: "384",
-                predLen: "172"
+                predLen: "172",
+                loading: false, // 加载状态
             },
             modelOptions: [
                 { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
@@ -67,7 +70,8 @@ export default {
                 { label: "PatchTST", value: "model9" },
                 { label: "TimesNet", value: "model10" }
             ],
-
+            loading: false, // 加载状态
+            loadingInstance: null,
             progress: 0,
         };
     },
@@ -135,10 +139,34 @@ export default {
                 this.request.post("/file/train", fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");
+                        this.loading = true;
+                        this.startLoading(); // 显示加载中状态
+                        // 模拟耗时操作
+                        setTimeout(() => {
+                            this.loading = false;
+                            this.endLoading(); // 隐藏加载中状态
+                        }, 10000); // 延迟10秒后隐藏加载状态
+                    } else {
+                        this.$message.error("操作失败");
                     }
                 });
             }
         },
+
+        startLoading() {
+            this.loadingInstance = Loading.service({
+                lock: true,
+                text: '正在训练……',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+        },
+        endLoading() {
+            if (this.loadingInstance) {
+                this.loadingInstance.close();
+                this.loadingInstance = null;
+            }
+        },
+
     },
 };
 
@@ -152,22 +180,26 @@ export default {
         width: 50%;
         margin-left: 25%;
         margin-right: 25%;
-        .train-form-row{
+
+        .train-form-row {
             width: 100%;
             margin-top: 15px;
             margin-bottom: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
-            .el-tag{
+
+            .el-tag {
                 width: 120px;
                 margin-right: 20px;
                 font-size: 14px;
             }
+
             .el-select {
                 width: 80%;
             }
-            .el-input{
+
+            .el-input {
                 width: 80%;
                 font-size: 14px;
             }
@@ -182,7 +214,8 @@ export default {
         width: 80%;
         margin-left: 10%;
         margin-right: 10%;
-        .train-form-row{
+
+        .train-form-row {
             width: 100%;
             margin-top: 10px;
             margin-bottom: 10px;
@@ -190,15 +223,18 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            .el-tag{
+
+            .el-tag {
                 width: 240px;
                 font-size: 12px;
                 margin-bottom: 5px;
             }
+
             .el-select {
                 width: 240px;
             }
-            .el-input{
+
+            .el-input {
                 width: 240px;
                 font-size: 12px;
             }
