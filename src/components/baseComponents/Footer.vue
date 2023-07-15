@@ -9,7 +9,7 @@
                 <p @click="routerpush('/upload')"><i class="iconfont">&#xe62d;</i> 上传数据</p>
                 <p @click="routerpush('/forecast')"><i class="iconfont">&#xe764;</i> 训练预测</p>
                 <p @click="routerpush('/windfield')"><i class="iconfont">&#xe60a;</i> 数字风电</p>
-                <p @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 风电监测</p>
+                <p @click="routerpush('/watch')"><i class="iconfont">&#xe613;</i> 风电运维</p>
                 <p @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常监控</p>
                 <p @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> AR风电</p>
             </div>

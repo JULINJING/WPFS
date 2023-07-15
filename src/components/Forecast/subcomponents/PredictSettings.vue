@@ -131,7 +131,7 @@ export default {
         setPeriods() {
             // console.log(this.form.inputPeriod);
         },
-        setParams() {
+        isFormValidate(){
             if (
                 this.form.modelType === "" ||
                 this.form.selectedModels.length === 0 ||
@@ -143,13 +143,16 @@ export default {
                     message: "请完整填写表单",
                     type: "warning",
                 });
-            } else {
-                // console.log(this.form);
+                return false;
+            }
+            return true;
+        },
+        setParams() {
+            if (this.isFormValidate()) {
                 const fileName = this.$store.state.global.uploadedFileName;
                 this.form.fileName = fileName;
 
-                console.log(this.form);
-                // 调用后端预测接口，传入表单数据
+                // 调用后端预测接口，传入预测参数
                 this.request.post("/file/predict", this.form.fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");

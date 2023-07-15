@@ -68,8 +68,8 @@
 
         <div class="table-box" v-if="showTable">
             <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
-            <el-table ref="mytable" :data="curData"
-            highlight-current-row stripe style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
+            <el-table ref="mytable" :data="curData" highlight-current-row stripe 
+                style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
                 <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
                 </el-table-column>
                 <el-table-column prop="WINDSPEED" label="WINDSPEED" width="150" align="center">
@@ -210,6 +210,7 @@ export default {
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
 
+            // TODO
             await this.request.get("/file/origin/json/" + fileNameWithoutExtension + ".json").then(res => {
                 this.jsonData = JSON.parse(res.jsonContent);
             })

@@ -16,7 +16,7 @@
                     <div class="d-flex jc-center">
                         <dv-decoration-8 class="dv-dec-8" :color="decorationColor" />
                         <div class="title">
-                            <span class="title-text">风 电 能 源 监 控</span>
+                            <span class="title-text">单 风 电 场 智 能 运 维</span>
                         </div>
                         <dv-decoration-8 class="dv-dec-8" :reverse="true" :color="decorationColor" />
                     </div>
@@ -28,7 +28,7 @@
                     <div class="d-flex aside-width">
                         <div class="react-left ml-4 react-l-s">
                             <span class="react-left"></span>
-                            <span class="text">单风电场数据分析</span>
+                            <span class="text">单风电场数据监控</span>
                         </div>
                         <div class="react-left ml-3">
                             <span class="text">{{turbineName}}</span>
