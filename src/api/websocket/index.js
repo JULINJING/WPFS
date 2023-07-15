@@ -2,7 +2,7 @@ import { sendMessage } from "./sendMessage";
 import { onMessage} from "./onMessage"
 let Socket = ''
 let setIntervalWesocketPush = null
-let global_url = "ws://localhost:8888/10001"
+let global_url = "ws://10.101.240.60:8888/10001"
 export const createSocket = url => {
     Socket && Socket.close()
     if (!Socket) {
