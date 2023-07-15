@@ -9,9 +9,9 @@
                 </el-tab-pane>
                 <el-tab-pane name="forecast">
                     <span slot="label"><i class="iconfont">&#xe6df;</i> 预测</span>
-                    <PredictSettings/>
-                    <ForecastDisplay/>
-                    <ChartsDisplay/>
+                    <PredictSettings :tableData="tableData" @update-table-data="updateTableData"/>
+                    <ForecastDisplay :tableData="tableData"/>
+                    <ChartsDisplay :tableData="tableData"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -40,16 +40,14 @@ export default {
     data() {
         return {
             // isTrainSettingsVisible: true,
-            activeName: 'train'
+            activeName: 'train',
+            tableData: [],
         };
     },
     methods: {
-        // showTrainSettings() {
-        //     this.isTrainSettingsVisible = true;
-        // },
-        // showPredictSettings() {
-        //     this.isTrainSettingsVisible = false;
-        // }
+        updateTableData(data){
+            this.tableData = data;
+        }
     }
 }
 </script>

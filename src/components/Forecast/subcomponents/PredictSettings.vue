@@ -57,6 +57,9 @@
 import { mapState } from 'vuex';
 
 export default {
+    props: {
+        tableData: Array,
+    },
     data() {
         return {
             form: {
@@ -89,6 +92,7 @@ export default {
                 "ROUND(A.WS,1)",
             ],
             progress: 0,
+            jsonData: []
         };
     },
 
@@ -147,18 +151,21 @@ export default {
             }
             return true;
         },
-        setParams() {
+        async setParams() {
             if (this.isFormValidate()) {
                 const fileName = this.$store.state.global.uploadedFileName;
                 this.form.fileName = fileName;
 
                 // 调用后端预测接口，传入预测参数
-                this.request.post("/file/predict", this.form.fileName).then((res) => {
+                await this.request.post("/file/predict", fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");
-
                     }
                 });
+                // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+                // console.log("/home/wpfs/algorithm/submission75254/pred" + fileNameWithoutExtension + ".json");
+                // this.jsonData = require("/home/wpfs/algorithm/submission75254/pred/" + fileNameWithoutExtension + ".json");
+                // this.$emit('update-table-data', this.jsonData);
             }
         },
     },

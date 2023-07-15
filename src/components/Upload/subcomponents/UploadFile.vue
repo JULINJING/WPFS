@@ -211,8 +211,11 @@ export default {
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
 
             // TODO
-            await this.request.get("/file/origin/json/" + fileNameWithoutExtension + ".json").then(res => {
-                this.jsonData = JSON.parse(res.jsonContent);
+            await this.request.get("/file/processed/json/" + fileNameWithoutExtension + ".json").then(res => {
+                console.log(res);
+                if(res.code === "200"){
+                    this.jsonData = JSON.parse(res.jsonContent);
+                }
             })
             this.$emit('update-table-data', this.jsonData.slice(0, 7 * 96));
         },
@@ -272,7 +275,7 @@ export default {
         sendPreprocessParams() {
             this.request.post("/file/preprocess", this.curfile.name).then((res) => {
                     if (res.code === "200") {
-                        console.log(object);
+                        console.log(this.curfile.name);
                         this.$message.success("预处理成功");
                     }
             });

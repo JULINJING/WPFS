@@ -7,9 +7,9 @@ import * as echarts from 'echarts';
 
 
 export default {
-    // props: {
-    //     tableData: Array,
-    // },
+    props: {
+        tableData: Array,
+    },
     data() {
         return {
             scatterData: []

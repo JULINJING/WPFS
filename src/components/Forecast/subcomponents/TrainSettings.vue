@@ -50,10 +50,10 @@ export default {
             form: {
                 type: "train",
                 selectedModels: [],
-                batchSize: "",
-                learningRate: "",
-                inputLen: "",
-                predLen: ""
+                batchSize: "32",
+                learningRate: "0.001",
+                inputLen: "384",
+                predLen: "172"
             },
             modelOptions: [
                 { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
@@ -63,7 +63,9 @@ export default {
                 { label: "Transformer", value: "model5" },
                 { label: "Crossformer", value: "model6" },
                 { label: "LightGBM", value: "model7" },
-                { label: "XgBoost", value: "model8" }
+                { label: "XgBoost", value: "model8" },
+                { label: "PatchTST", value: "model9" },
+                { label: "TimesNet", value: "model10" }
             ],
 
             progress: 0,
@@ -127,9 +129,7 @@ export default {
                     type: "warning",
                 });
             } else if (this.validateInput()) {
-                // console.log(this.form);
                 const fileName = this.$store.state.global.uploadedFileName;
-                console.log(fileName);
 
                 // 调用后端预测接口，传入表单数据
                 this.request.post("/file/train", fileName).then((res) => {

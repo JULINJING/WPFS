@@ -1,7 +1,7 @@
 <template>
     <div class="form-container">
         <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据</h1>
-        <el-table :data="tableData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
+        <el-table :data="curData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
             @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
 
             <el-table-column fixed prop="datatime" label="DATATIME" width="150" align="center">
@@ -28,91 +28,22 @@
   
 <script>
 export default {
+    props: {
+        tableData: Array,
+    },
     data() {
         return {
             rolltimer: '',
             // 测试数据
-            tableData: [{
-                datatime: '2021/11/1  0:00:00',
-                windspeed: 6,
-                prepower: 44224,
-                winddirection: 270,
-                temperature: 3.9,
-                humidity: 45,
-                pressure: 842,
-                trueYD15: 13819,
-                predictiveYD15: 12914
-            }, {
-                datatime: '2021/11/1  0:15:00',
-                windspeed: 5.8,
-                prepower: 43591,
-                winddirection: 274,
-                temperature: 3.6,
-                humidity: 46,
-                pressure: 842,
-                trueYD15: 25930,
-                predictiveYD15: 25017
-            }, {
-                datatime: '2021/11/1  0:00:00',
-                windspeed: 6,
-                prepower: 44224,
-                winddirection: 270,
-                temperature: 3.9,
-                humidity: 45,
-                pressure: 842,
-                trueYD15: 13819,
-                predictiveYD15: 12914
-            }, {
-                datatime: '2021/11/1  0:15:00',
-                windspeed: 5.8,
-                prepower: 43591,
-                winddirection: 274,
-                temperature: 3.6,
-                humidity: 46,
-                pressure: 842,
-                trueYD15: 25930,
-                predictiveYD15: 25017
-            }, {
-                datatime: '2021/11/1  0:00:00',
-                windspeed: 6,
-                prepower: 44224,
-                winddirection: 270,
-                temperature: 3.9,
-                humidity: 45,
-                pressure: 842,
-                trueYD15: 13819,
-                predictiveYD15: 12914
-            }, {
-                datatime: '2021/11/1  0:15:00',
-                windspeed: 5.8,
-                prepower: 43591,
-                winddirection: 274,
-                temperature: 3.6,
-                humidity: 46,
-                pressure: 842,
-                trueYD15: 25930,
-                predictiveYD15: 25017
-            }, {
-                datatime: '2021/11/1  0:00:00',
-                windspeed: 6,
-                prepower: 44224,
-                winddirection: 270,
-                temperature: 3.9,
-                humidity: 45,
-                pressure: 842,
-                trueYD15: 13819,
-                predictiveYD15: 12914
-            }, {
-                datatime: '2021/11/1  0:15:00',
-                windspeed: 5.8,
-                prepower: 43591,
-                winddirection: 274,
-                temperature: 3.6,
-                humidity: 46,
-                pressure: 842,
-                trueYD15: 25930,
-                predictiveYD15: 25017
-            }]
+            curData: [],
+        }
+    },
+    watch: {
+        tableData: {
+            immediate: true, // 立即执行观察者回调函数
+            handler(newVal) {
+                this.curData = newVal;
+            }
         }
     },
     methods: {
