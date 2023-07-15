@@ -23,7 +23,7 @@
       </div>
       <div class="subdiv _subdiv">
         <div class="left box" id="third">
-          <BlockBriefInfo :blockIcon="'&#xe60a;'" :blockTitle="'数字风电'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe60a;'" :blockTitle="'数字场站'" :blockInfo="'&#xec7f; '"
                           :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'white'" :imgSrc="require('./imgs/4.jpg')"
                           :blockName="'windfield'"/>
         </div>
