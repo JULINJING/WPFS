@@ -132,7 +132,7 @@ export default {
                 console.log(fileName);
 
                 // 调用后端预测接口，传入表单数据
-                this.request.post("/file/forecast", fileName).then((res) => {
+                this.request.post("/file/train", fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");
                     }

@@ -250,8 +250,8 @@ export default {
                 // console.log(this.outlierRadio); // 获取选中的复选框的值
                 this.dialogFormVisible = false;
                 this.showTable = true;
-                this.fetchData();
                 this.sendPreprocessParams();
+                this.fetchData();
                 this.updateTableData();
 
                 this.$nextTick(() => {
@@ -269,12 +269,12 @@ export default {
 
         // TODO: 发送预处理参数
         sendPreprocessParams() {
-            // this.request.post("/file/forecast", this.form).then((res) => {
-            //         if (res.code === "200") {
-            //             this.$message.success("操作成功");
-
-            //         }
-            // });
+            this.request.post("/file/preprocess", this.curfile.name).then((res) => {
+                    if (res.code === "200") {
+                        console.log(object);
+                        this.$message.success("预处理成功");
+                    }
+            });
         },
     },
 };
