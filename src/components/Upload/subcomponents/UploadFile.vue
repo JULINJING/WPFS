@@ -68,7 +68,7 @@
 
         <div class="table-box" v-if="showTable">
             <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
-            <el-table ref="mytable" :data="curData" 
+            <el-table ref="mytable" :data="curData"
             highlight-current-row stripe style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
                 <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
                 </el-table-column>
@@ -97,7 +97,6 @@
 
 <script>
 import { serverIp } from "../../../../public/config.js";
-import axios from "axios";
 import { mapMutations } from "vuex";
 import rawData from '../../../assets/testJson/11.json'
 
@@ -133,7 +132,7 @@ export default {
 
             /*浏览器兼容*/
             let userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-            let ff = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器          
+            let ff = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器
 
             if (ff) {
                 table.addEventListener('DOMMouseScroll', (event) => {
@@ -258,7 +257,7 @@ export default {
                 this.$nextTick(() => {
                     this.initVirtualScroll();
                 });
-                
+
             } else {
                 this.$message({
                     message: "请至少选择一个预处理方法",
