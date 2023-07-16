@@ -13,44 +13,118 @@
       <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> AR风电</div>
       <div class="logout _logout">
         <el-dropdown
-          class="logout _logout" style="cursor: pointer; text-align: right; color: white"
+            class="logout _logout" style="cursor: pointer; text-align: right; color: white"
         >
           <div class="logout _logout">
             <span class="el-dropdown-link" style="margin-left: 35px; width: 200px;">
-              <i class="el-icon-user-solid" style="margin-right: 10px"></i>{{user.nickname}}<i
+              <i class="el-icon-user-solid" style="margin-right: 10px"></i>{{ user.nickname }}<i
                 class="el-icon-arrow-down el-icon--right"
             ></i>
             </span>
           </div>
           <el-dropdown-menu slot="dropdown" style="width: 120px; text-align: center">
             <el-dropdown-item icon="el-icon-user">
-              <router-link to="/person">个人信息</router-link>
+              <span @click="personInfo">个人信息</span>
             </el-dropdown-item>
             <el-dropdown-item icon="el-icon-edit-outline">
-              <router-link to="/password">修改密码</router-link>
+              <span @click="changePwd">修改密码</span>
             </el-dropdown-item>
-            <el-dropdown-item divided icon="el-icon-switch-button"><span @click="logout">退出登录</span></el-dropdown-item>
+            <el-dropdown-item divided icon="el-icon-switch-button"><span @click="logout">退出登录</span>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
+
+    <!-- 个人信息弹窗 -->
+    <el-dialog
+        title="个人信息"
+        :visible.sync="infoDialogVisible"
+        width="20%">
+      <el-form label-width="80px" size="small">
+        <el-form-item label="用户名">
+          <el-input v-model="form.username" disabled autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称">
+          <el-input v-model="form.nickname" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="form.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="form.address" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button @click="infoDialogVisible=false">取 消</el-button>
+      <el-button type="primary" @click="saveInfo">保 存</el-button>
+
+    </el-dialog>
+    <!-- 修改密码弹窗 -->
+    <el-dialog
+        title="修改密码"
+        :visible.sync="pwdDialogVisible"
+        width="20%">
+      <el-form label-width="120px" size="small" :model="form" :rules="rules" ref="pass">
+        <el-form-item label="原密码" prop="password">
+          <el-input v-model="form.password" autocomplete="off" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input v-model="form.newPassword" autocomplete="off" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码" prop="confirmPassword">
+          <el-input v-model="form.confirmPassword" autocomplete="off" show-password></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="savePwd">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
+
 </template>
 
+
 <script>
+
+import {serverIp} from "@/../public/config"
 
 export default {
   name: 'navtop',
   components: {},
   data() {
     return {
-      nalistshowflag: false,
+      serverIp: serverIp,
       user: {},
+      form: {},
+      nalistshowflag: false,
+      infoDialogVisible: false,
+      pwdDialogVisible: false,
+      rules: {
+        password: [
+          {required: true, message: '请输入原密码', trigger: 'blur'},
+          {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+        ],
+        newPassword: [
+          {required: true, message: '请输入新密码', trigger: 'blur'},
+          {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+        ],
+        confirmPassword: [
+          {required: true, message: '请输入密码', trigger: 'blur'},
+          {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+        ],
+      }
     }
   },
   created() {
     // 从后台获取最新的User数据
-    this.getUser()
+    this.getUser().then(res => {
+      console.log("this.form: " + res)
+      this.form = res
+      this.form.password = ''
+    })
   },
   computed: {
     currentPathName() {
@@ -91,15 +165,62 @@ export default {
       // this.$message.success("退出成功");
 
     },
-    getUser() {
+    personInfo() {
+      console.log("个人信息")
+      this.infoDialogVisible = true
+    },
+    changePwd() {
+      console.log("修改密码")
+      this.pwdDialogVisible = true
+    },
+    async getUser() {
       let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
       if (username) {
         // 从后台获取User数据
-        this.request.get("/user/username/" + username).then(res => {
+        await this.request.get("/user/username/" + username).then(res => {
           // 重新赋值后台的最新User数据
           this.user = res.data
         })
+        console.log(this.user)
       }
+      return (await this.request.get("/user/username/" + this.user.username)).data
+    },
+    saveInfo() {
+      this.request.post("/user", this.form).then(res => {
+        if (res.code === '200') {
+          this.$message.success("保存成功")
+
+          // 触发父级更新User的方法
+          this.$emit("refreshUser")
+
+          // 更新浏览器存储的用户信息
+          this.getUser().then(res => {
+            res.token = JSON.parse(localStorage.getItem("user")).token
+            localStorage.setItem("user", JSON.stringify(res))
+          })
+
+        } else {
+          this.$message.error("保存失败")
+        }
+      })
+    },
+    savePwd() {
+      this.$refs.pass.validate((valid) => {
+        if (valid) {
+          if (this.form.newPassword !== this.form.confirmPassword) {
+            this.$message.error("2次输入的新密码不相同")
+            return false
+          }
+          this.request.post("/user/password", this.form).then(res => {
+            if (res.code === '200') {
+              this.$message.success("修改成功")
+              this.$store.commit("logout")
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        }
+      })
     }
   }
 }
@@ -166,6 +287,7 @@ export default {
       }
     }
   }
+
   .logout {
     width: 150px !important
   }
