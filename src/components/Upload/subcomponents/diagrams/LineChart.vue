@@ -4,14 +4,16 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mapState } from 'vuex';
 
 export default {
-    props: {
-        tableData: Array,
-    },
+    // props: {
+    //     tableData: Array,
+    // },
     data() {
         return {
-            lineData: []
+            lineData: [],
+            tableData: []
         };
     },
     mounted() {
@@ -20,29 +22,32 @@ export default {
             this.renderChart();
         }
     },
-    watch: {
-        tableData: {
-            handler(newTableData) {
-                if (newTableData !== null) {
-                    this.lineData = [];
-                    this.processData();
-                    this.renderChart();
-                }
-            },
-            immediate: true, // 立即执行watch处理函数
-        },
+    computed: {
+        ...mapState('global', ['obtainedJsonData']),
     },
+    // watch: {
+    //     tableData: {
+    //         handler(newTableData) {
+    //             if (newTableData !== null) {
+    //                 this.lineData = [];
+    //                 this.processData();
+    //                 this.renderChart();
+    //             }
+    //         },
+    //         immediate: true, // 立即执行watch处理函数
+    //     },
+    // },
     methods: {
         processData() {
-            if (this.tableData && this.tableData.length > 0) {
-
+            // if (this.tableData && this.tableData.length > 0) {
+                this.tableData = this.$store.state.global.obtainedJsonData;
                 this.lineData = this.tableData.map(item => ({
                     DATATIME: item.DATATIME,
                     PREPOWER: item.PREPOWER,
                     POWER: item.APOWER,
                     YD15: item.YD15
                 }));
-            }
+            // }
         },
 
         renderChart() {

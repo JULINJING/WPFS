@@ -4,34 +4,40 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mapState } from 'vuex';
 
 
 export default {
-    props: {
-        tableData: Array,
-    },
+    // props: {
+    //     tableData: Array,
+    // },
     data() {
         return {
-            scatterData: []
+            scatterData: [],
+            tableData: []
         };
     },
     mounted() {
         this.processData();
         this.renderChart();
     },
-    watch: {
-        tableData: {
-            handler(newTableData) {
-                this.scatterData = [];
-                this.processData();
-                this.renderChart();
-            },
-            immediate: true,
-        },
+    computed: {
+        ...mapState('global', ['obtainedJsonData']),
     },
+    // watch: {
+    //     tableData: {
+    //         handler(newTableData) {
+    //             this.scatterData = [];
+    //             this.processData();
+    //             this.renderChart();
+    //         },
+    //         immediate: true,
+    //     },
+    // },
     methods: {
         processData() {
-            if (this.tableData && this.tableData.length > 0) {
+            // if (this.tableData && this.tableData.length > 0) {
+                this.tableData = this.$store.state.global.obtainedJsonData;
                 var temp = [[], [], []];
                 for (let i = 0; i < this.tableData.length; i++) {
                     const item = this.tableData[i];
@@ -46,11 +52,7 @@ export default {
                     }
                 }
                 this.scatterData = temp;
-            }
-        },
-
-        getData(index) {
-
+            // }
         },
 
         renderChart() {
