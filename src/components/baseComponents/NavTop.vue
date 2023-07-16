@@ -77,9 +77,8 @@
         <el-form-item label="确认新密码" prop="confirmPassword">
           <el-input v-model="form.confirmPassword" autocomplete="off" show-password></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="savePwd">确 定</el-button>
-        </el-form-item>
+        <el-button @click="pwdDialogVisible=false">取 消</el-button>
+        <el-button type="primary" @click="savePwd">确 定</el-button>
       </el-form>
     </el-dialog>
   </div>
