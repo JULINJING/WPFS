@@ -214,6 +214,7 @@ export default {
                 // if(res.code === "200"){
                 console.log(res);
                 this.jsonData = JSON.parse(res.jsonContent);
+                this.curData = this.jsonData.slice(0, 50);
                 // }
             })
             this.$emit('update-table-data', this.jsonData.slice(0, 7 * 96));
@@ -241,13 +242,15 @@ export default {
             this.curfile = file;
             this.curData = [];
             this.fetchData(file);
+            
             this.$message({
                 message: "选择文件" + file.name,
                 type: "action",
                 offset: 50,
             });
             this.setUploadedFileName(file.name);
-            this.updateTableData();
+            console.log(this.currentPage, this.pageSize);
+
             this.$nextTick(() => {
                 this.initVirtualScroll();
             });
@@ -260,8 +263,8 @@ export default {
                 this.showTable = true;
                 await this.sendPreprocessParams();
                 this.fetchData();
-                this.updateTableData();
 
+                console.log(this.jsonData);
                 this.$nextTick(() => {
                     this.initVirtualScroll();
                 });
