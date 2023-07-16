@@ -36,24 +36,24 @@ export default {
         processData() {
             if (this.tableData && this.tableData.length > 0) {
 
-            this.lineData = this.tableData.map(item => ({
-                DATATIME: item.DATATIME,
-                predictYD15: item.predictYD15,
-                trueYD15: item.trueYD15
-            }));
+                this.lineData = this.tableData.map(item => ({
+                    DATATIME: item.DATATIME,
+                    predictYD15: item.predictYD15,
+                    trueYD15: item.trueYD15
+                }));
             }
         },
 
         renderChart() {
-            this.$nextTick(() => {
-                if (!this.chartInstance) {
-                    this.chartInstance = echarts.init(document.getElementById('linechart'));
-                    window.addEventListener("resize", () => {
-                        this.chartInstance.resize()
-                    })
-                }
+            if (this.lineData && this.lineData.length > 0) {
+                this.$nextTick(() => {
+                    if (!this.chartInstance) {
+                        this.chartInstance = echarts.init(document.getElementById('linechart'));
+                        window.addEventListener("resize", () => {
+                            this.chartInstance.resize()
+                        })
+                    }
 
-                if (this.lineData && this.lineData.length > 0) {
                     const xAxisData = this.lineData.map(item => item.DATATIME);
                     const yAxisData1 = this.lineData.map(item => item.trueYD15);
                     const yAxisData2 = this.lineData.map(item => item.predictYD15);
@@ -191,7 +191,7 @@ export default {
                                 yAxisIndex: 0 // Use the first y-axis
                             },
                             {
-                                name: '另一个系列',
+                                name: '实际功率',
                                 type: 'line',
                                 smooth: true,
                                 showAllSymbol: true,
@@ -232,8 +232,9 @@ export default {
                     };
 
                     this.chartInstance.setOption(option);
-                }
-            });
+
+                });
+            }
         }
 
 
