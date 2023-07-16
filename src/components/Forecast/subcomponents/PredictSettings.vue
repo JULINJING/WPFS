@@ -160,8 +160,10 @@ export default {
                 await this.request.post("/file/predict", fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");
-                        this.jsonData = JSON.parse(res.jsonContent);
-                        this.$emit('update-table-data', this.jsonData);
+                        // console.log("jsonContent:  "+res.jsonContent)
+                        // this.jsonData = JSON.parse(res.jsonContent);
+                        // this.$emit('update-table-data', this.jsonData);
+                      this.fetchData(fileName);
                     }
                 });
                 // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
@@ -170,6 +172,17 @@ export default {
                 // this.$emit('update-table-data', this.jsonData);
             }
         },
+      async fetchData(fileName) {
+        const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+        // TODO
+        await this.request.get("/file/predicted/json/" + fileNameWithoutExtension + ".json").then(res => {
+          // if(res.code === "200"){
+          console.log(res);
+          this.jsonData = JSON.parse(res.jsonContent);
+          // }
+        })
+        this.$emit('update-table-data', this.jsonData);
+      },
     },
 };
 

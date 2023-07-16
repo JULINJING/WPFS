@@ -41,7 +41,7 @@
         </el-form>
     </div>
 </template>
-    
+
 <script>
 import { mapState } from 'vuex';
 import { Loading } from 'element-ui';
@@ -150,7 +150,10 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                     this.endLoading(); // 隐藏加载中状态
+                    this.$message.success("训练成功");
                 }, 10000); // 延迟10秒后隐藏加载状态
+
+
             }
         },
 
@@ -172,7 +175,7 @@ export default {
 };
 
 </script>
-  
+
 <style lang="less">
 // 大于800px
 @media only screen and (min-width: 800px) {
