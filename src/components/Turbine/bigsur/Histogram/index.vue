@@ -13,7 +13,6 @@ export default {
 		return {
 			titleOptions: {
 				order: "01",
-				en: "environmental monitoring",
 				cn: "环境监测",
 			},
 			chartData: [19, 68, 70],

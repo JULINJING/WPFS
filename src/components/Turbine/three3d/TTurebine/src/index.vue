@@ -293,23 +293,23 @@ export default {
                 this.global.mixers.delete(key);
             }
         },
-        onPointerClick(event) {
-            const [w, h] = [window.innerWidth, window.innerHeight];
-            const { mouse, global, equipment, raycaster } = this;
-            this.mouse.x = (event.clientX / w) * 2 - 1;
-            this.mouse.y = -(event.clientY / h) * 2 + 1;
-            raycaster.setFromCamera(mouse, global.camera);
-            const intersects = raycaster.intersectObject(equipment, true);
-            if (intersects.length <= 0) return false;
-            const selectedObject = intersects[0].object;
-            if (selectedObject.isMesh) {
-                // alert();
-                // console.log(intersects[0].point);
-                this.outline([selectedObject]);
-                this.nowLabelData = this.labelData[intersects[0].object.name];
-                this.updateLabal(intersects[0]);
-            }
-        },
+        // onPointerClick(event) {
+        //     const [w, h] = [window.innerWidth, window.innerHeight];
+        //     const { mouse, global, equipment, raycaster } = this;
+        //     this.mouse.x = (event.clientX / w) * 2 - 1;
+        //     this.mouse.y = -(event.clientY / h) * 2 + 1;
+        //     raycaster.setFromCamera(mouse, global.camera);
+        //     const intersects = raycaster.intersectObject(equipment, true);
+        //     if (intersects.length <= 0) return false;
+        //     const selectedObject = intersects[0].object;
+        //     if (selectedObject.isMesh) {
+        //         // alert();
+        //         // console.log(intersects[0].point);
+        //         this.outline([selectedObject]);
+        //         this.nowLabelData = this.labelData[intersects[0].object.name];
+        //         this.updateLabal(intersects[0]);
+        //     }
+        // },
         outline(selectedObjects, color = 0x15c5e8) {
             const { renderer, camera, scene } = this.global;
             const [w, h] = [window.innerWidth, window.innerHeight];
@@ -430,7 +430,7 @@ export default {
         this.createTurbineLabel();
         this.alarm();
         this.global.scene.add(this.wholeGroup);
-        document.addEventListener("click", this.onPointerClick);
+        // document.addEventListener("click", this.onPointerClick);
     }
 };
 </script>

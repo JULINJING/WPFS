@@ -18,7 +18,6 @@ export default {
 		return {
 			titleOptions: {
 				order: "04",
-				en: "Generation parameters",
 				cn: "发电参数",
 			},
 			dataList: [
@@ -61,7 +60,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-$width: 10.4vw;
+$width: 13vw;
 $height: 4.16vh;
 .container {
 	position: absolute;

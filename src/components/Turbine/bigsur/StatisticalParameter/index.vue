@@ -3,8 +3,8 @@
 		<ul class="container">
 			<li class="left">
 				<header>
+					<span id="order">05&nbsp;</span>
 					<span>统计参数</span>
-					<span>statistical parameter</span>
 				</header>
 				<article>
 					<li>
@@ -71,7 +71,7 @@ export default {
 	padding: 0.625rem 1.25rem;
 	position: absolute;
 	right: 2vh;
-	bottom: 2vh;
+	bottom: 21vh;
 	.container {
 		width: 100%;
 		height: 100%;
@@ -80,21 +80,16 @@ export default {
 			width: 60%;
 			height: 100%;
 			header {
+				display: flex;
 				text-align: left;
 				color: #fff;
 				span {
-					font-size: 0.875rem;
-					font-weight: bold;
+					color: #fff;
+					font-size: 1.1rem;
+					font-weight: bolder;
 				}
-				span:nth-child(1) {
-					display: block;
-				}
-				span:nth-child(2) {
-					color: #15c5e8;
-					font-size: 0.75rem;
-					margin-top: 2px;
-					padding-bottom: 0.625rem;
-					border-bottom: 2px solid #fff;
+				#order {
+					font-size: 1.6rem;
 				}
 			}
 			article {

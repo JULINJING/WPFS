@@ -14,7 +14,6 @@ export default {
 		return {
 			titleOption: {
 				order: "02",
-				en: "environmental monitoring",
 				cn: "变桨系统",
 			},
 			rotate: "rotate(15deg)",

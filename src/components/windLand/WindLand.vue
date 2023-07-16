@@ -1,6 +1,15 @@
 <template>
-    <div id="windlandContainer" class="windLandContainer _windLandContainer" ref="windland">
+    <div id="windlandContainer" class="windLandContainer _windLandContainer">
         <NavTop/>
+        <el-result title="抱歉" subTitle="为获得最佳体验，请使用PC端查看">
+            <template slot="icon">
+                <el-image :src="require('./imgs/PC端提示.png')" fit="cover"></el-image>
+            </template>
+            <template slot="extra">
+                <el-button type="primary" size="medium" @click="backToHome">返回主页</el-button>
+            </template>
+        </el-result>
+        <div id="PC" ref="windland"></div>
     </div>
 </template>
 
@@ -23,13 +32,17 @@ export default {
             // container: null,
             // scene: null,
             // renderer: null,
-            // camera: null,
+            camera: null,
             // controls: null,
             // ambient: null,
             // sunLight: null,
         };
     },
     methods: {
+        // 返回首页 
+		backToHome() {
+            this.$router.push('/home')
+        },
         turbineThree() {
             /////////////////////////////////////////////////////////////////////////
             //// DRACO LOADER TO LOAD DRACO COMPRESSED MODELS FROM BLENDER
@@ -60,17 +73,18 @@ export default {
 
             /////////////////////////////////////////////////////////////////////////
             ///// CAMERAS CONFIG
-            const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 100)
-            camera.position.set(34, 16, -20)
-            scene.add(camera)
+            this.camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 100)
+            this.camera.position.set(34, 16, -20)
+            // this.camera.lookAt(new THREE.Vector3(0, 0, 0));  // Look at the origin
+            scene.add(this.camera)
 
             /////////////////////////////////////////////////////////////////////////
             ///// MAKE EXPERIENCE FULL SCREEN
             window.addEventListener('resize', () => {
                 const width = window.innerWidth
                 const height = window.innerHeight
-                camera.aspect = width / height
-                camera.updateProjectionMatrix()
+                this.camera.aspect = width / height
+                this.camera.updateProjectionMatrix()
 
                 renderer.setSize(width, height)
                 renderer.setPixelRatio(2)
@@ -78,7 +92,7 @@ export default {
 
             /////////////////////////////////////////////////////////////////////////
             ///// CREATE ORBIT CONTROLS
-            const controls = new OrbitControls(camera, renderer.domElement)
+            const controls = new OrbitControls(this.camera, renderer.domElement)
 
             /////////////////////////////////////////////////////////////////////////
             ///// SCENE LIGHTS
@@ -92,26 +106,26 @@ export default {
             /////////////////////////////////////////////////////////////////////////
             ///// LOADING GLB/GLTF MODEL FROM BLENDER
             loader.load('models/gltf/starter-scene.glb', function (gltf) {
-
+                gltf.scene.rotation.x = THREE.Math.degToRad(90); // Rotate the model by 90 degrees
                 scene.add(gltf.scene)
             })
 
             /////////////////////////////////////////////////////////////////////////
             //// INTRO CAMERA ANIMATION USING TWEEN
-            function introAnimation() {
+            var introAnimation = ()=> {
                 controls.enabled = false //disable orbit controls to animate the camera
 
-                new TWEEN.Tween(camera.position.set(26, 4, -35)).to({ // from camera position
-                    x: 16, //desired x position to go
-                    y: 50, //desired y position to go
-                    z: -0.1 //desired z position to go
+                new TWEEN.Tween(this.camera.position.set(16, 50, 10)).to({ // from camera position
+                    x: 26, //desired x position to go
+                    y: 4, //desired y position to go
+                    z: 35 //desired z position to go
                 }, 6500) // time take to animate
-                    .delay(1000).easing(TWEEN.Easing.Quartic.InOut).start() // define delay, easing
-                    .onComplete(function () { //on finish animation
-                        controls.enabled = true //enable orbit controls
-                        setOrbitControlsLimits() //enable controls limits
-                        TWEEN.remove(this) // remove the animation from memory
-                    })
+                .delay(1000).easing(TWEEN.Easing.Quartic.InOut).start() // define delay, easing
+                .onComplete(function () { //on finish animation
+                    controls.enabled = true //enable orbit controls
+                    setOrbitControlsLimits() //enable controls limits
+                    TWEEN.remove(this) // remove the animation from memory
+                })
             }
 
             introAnimation() // call intro animation on start
@@ -130,13 +144,13 @@ export default {
 
             /////////////////////////////////////////////////////////////////////////
             //// RENDER LOOP FUNCTION
-            function rendeLoop() {
+            var rendeLoop = ()=> {
 
                 TWEEN.update() // update animations
 
                 controls.update() // update orbit controls
 
-                renderer.render(scene, camera) // render the scene using the camera
+                renderer.render(scene, this.camera) // render the scene using the camera
 
                 requestAnimationFrame(rendeLoop) //loop the render function
 
@@ -264,12 +278,26 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px){
     .windLandContainer{
+        // 移动端消失
+        .el-result {
+            display: none;
+        }
     }
 }
 
 // 小于800px
 @media only screen and (max-width: 800px){
     ._windLandContainer{
+        .el-result {
+            display: block;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #PC {
+            display: none;
+        }
     }
 }
 </style>

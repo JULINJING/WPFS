@@ -2,7 +2,6 @@
 	<ul class="project_title">
 		<li class="numerical_order">{{ options.order }}</li>
 		<li class="title_text">
-			<div>{{ options.en }}</div>
 			<div>{{ options.cn }}</div>
 		</li>
 	</ul>
@@ -16,7 +15,6 @@ export default {
 			default: () => {
 				return {
 					order: "numerical order",
-					en: "environmental monitoring",
 					cn: "环境监测",
 				};
 			},
@@ -39,7 +37,7 @@ $height: 4vh;
 		font-size: 1.6rem;
 		color: #fff;
 		font-weight: bolder;
-		line-height: $height;
+		// line-height: $height;
 		text-align: center;
 		padding-left: 0.5rem;
 	}
@@ -48,7 +46,7 @@ $height: 4vh;
 		margin-left: 0.5rem;
 		font-size: 0.66rem;
 		color: #6284a0;
-		div:nth-child(2) {
+		div:nth-child(1) {
 			color: #fff;
 			font-size: 1.1rem;
 			font-weight: bolder;

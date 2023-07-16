@@ -1,12 +1,12 @@
 <template>
-    <div class="wrape">
-        <div class="loading-container" v-if="loadingVisible">
+    <div class="wrap">
+        <!-- <div class="loading-container" v-if="loadingVisible">
             <loading></loading>
             <div class="tips">
                 <div>模型加载中,请耐心等待</div>
                 <div>已加载{{ percent.toFixed(2) }}%</div>
             </div>
-        </div>
+        </div> -->
         <t_renderer :size="size">
             <t_camera></t_camera>
             <t_scene></t_scene>
@@ -72,6 +72,10 @@ export default {
     padding: 0;
     margin: 0;
 }
+.wrap {
+    width: 100vw;
+    height: 100vh;
+}
 #stats {
     display: flex;
 }
@@ -90,24 +94,24 @@ export default {
     height: 100%;
     background-color: #212121;
 }
-.loading-container {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    z-index: 999999;
-    background-color: #0000007a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    .tips {
-        margin-top: 10px;
-        div {
-            color: #fff;
-            font-size: 20px;
-            font-weight: bold;
-            line-height: 40px;
-        }
-    }
-}
+// .loading-container {
+//     width: 100vw;
+//     height: 100vh;
+//     position: fixed;
+//     z-index: 999999;
+//     background-color: #0000007a;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     flex-direction: column;
+//     .tips {
+//         margin-top: 10px;
+//         div {
+//             color: #fff;
+//             font-size: 20px;
+//             font-weight: bold;
+//             line-height: 40px;
+//         }
+//     }
+// }
 </style>

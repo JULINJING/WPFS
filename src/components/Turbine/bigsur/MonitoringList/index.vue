@@ -24,7 +24,6 @@ export default {
 			activeIndex: 0,
 			titleOption: {
 				order: "03",
-				en: "data monitoring",
 				cn: "数据监测",
 			},
 		};
