@@ -4,28 +4,33 @@
   
 <script>
 import * as echarts from 'echarts';
+import { mapState } from 'vuex';
 
 
 export default {
-    props: {
-        tableData: Array,
-    },
+    // props: {
+    //     tableData: Array,
+    // },
     data() {
         return {
-            heatmapData: []
+            heatmapData: [],
+            tableData: []
         };
     },
-    watch: {
-        tableData: {
-            handler(newTableData) {
-                if (newTableData !== null) {
-                    this.heatmapData = []; // 清空之前的数据
-                    this.processData();
-                    this.renderChart(); // 重新渲染
-                }
-            },
-            immediate: true, // 立即执行watch处理函数
-        },
+    // watch: {
+    //     tableData: {
+    //         handler(newTableData) {
+    //             if (newTableData !== null) {
+    //                 this.heatmapData = []; // 清空之前的数据
+    //                 this.processData();
+    //                 this.renderChart(); // 重新渲染
+    //             }
+    //         },
+    //         immediate: true, // 立即执行watch处理函数
+    //     },
+    // },
+    computed: {
+        ...mapState('global', ['obtainedJsonData']),
     },
     mounted() {
         this.processData();
@@ -33,9 +38,10 @@ export default {
     },
     methods: {
         processData() {
-            if (this.tableData && this.tableData.length > 0) {
+            // if (this.tableData && this.tableData.length > 0) {
+                this.tableData = this.$store.state.global.obtainedJsonData;
                 this.heatmapData = this.tableData;
-            }
+            // }
         },
         calculateCorrelation(data) {
             // 提取需要计算相关性的数值序列
@@ -130,9 +136,9 @@ export default {
                                 min: -1,
                                 max: 1,
                                 calculable: true,
-                                orient: 'horizontal',
-                                left: 'center',
-                                bottom: '0%'
+                                orient: 'vertical',
+                                right: '0',
+                                bottom: '5%'
                             },
                             series: [{
                                 name: 'Correlation Coefficient',
