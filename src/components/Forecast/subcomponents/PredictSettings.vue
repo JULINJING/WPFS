@@ -160,6 +160,8 @@ export default {
                 await this.request.post("/file/predict", fileName).then((res) => {
                     if (res.code === "200") {
                         this.$message.success("操作成功");
+                        this.jsonData = JSON.parse(res.jsonContent);
+                        this.$emit('update-table-data', this.jsonData);
                     }
                 });
                 // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");

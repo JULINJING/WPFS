@@ -133,23 +133,24 @@ export default {
                     type: "warning",
                 });
             } else if (this.validateInput()) {
-                const fileName = this.$store.state.global.uploadedFileName;
+                // const fileName = this.$store.state.global.uploadedFileName;
 
-                // 调用后端预测接口，传入表单数据
-                this.request.post("/file/train", fileName).then((res) => {
-                    if (res.code === "200") {
-                        this.$message.success("操作成功");
-                        this.loading = true;
-                        this.startLoading(); // 显示加载中状态
-                        // 模拟耗时操作
-                        setTimeout(() => {
-                            this.loading = false;
-                            this.endLoading(); // 隐藏加载中状态
-                        }, 10000); // 延迟10秒后隐藏加载状态
-                    } else {
-                        this.$message.error("操作失败");
-                    }
-                });
+                // // 调用后端预测接口，传入表单数据
+                // this.request.post("/file/train", fileName).then((res) => {
+                //     if (res.code === "200") {
+                //         this.$message.success("操作成功");
+
+                //     } else {
+                //         this.$message.error("操作失败");
+                //     }
+                // });
+                this.loading = true;
+                this.startLoading(); // 显示加载中状态
+                // 模拟耗时操作
+                setTimeout(() => {
+                    this.loading = false;
+                    this.endLoading(); // 隐藏加载中状态
+                }, 10000); // 延迟10秒后隐藏加载状态
             }
         },
 
