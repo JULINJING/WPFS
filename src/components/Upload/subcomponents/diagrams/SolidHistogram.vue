@@ -5,33 +5,43 @@
 <script>
 import * as echarts from 'echarts';
 import 'echarts-gl'
+import { mapState } from 'vuex';
 
 export default {
-    props: {
-        tableData: Array,
-    },
+    // props: {
+    //     tableData: Array,
+    // },
     data() {
         return {
-            scatterData: []
+            tableData: [],
+            scatterData: [],
+            varMax: [],
+            varMin: [],
         };
     },
     mounted() {
         this.processData();
         this.renderChart();
     },
-    watch: {
-        tableData: {
-            handler(newTableData) {
-                this.scatterData = []; // 清空之前的散点图数据
-                this.processData(); // 重新处理数据
-                this.renderChart(); // 重新渲染散点图
-            },
-            immediate: true, // 立即执行watch处理函数
-        },
+    // watch: {
+    //     tableData: {
+    //         handler(newTableData) {
+    //             this.scatterData = []; // 清空之前的散点图数据
+    //             this.processData(); // 重新处理数据
+    //             this.renderChart(); // 重新渲染散点图
+    //         },
+    //         immediate: true, // 立即执行watch处理函数
+    //     },
+    // },
+    computed: {
+        ...mapState('global', ['obtainedJsonData']),
     },
     methods: {
         processData() {
-            if (this.tableData && this.tableData.length > 0) {
+            // if (this.tableData && this.tableData.length > 0) {
+                // console.log(this.$store.state.global.obtainedJsonData);
+                this.tableData = this.$store.state.global.obtainedJsonData;
+                console.log(this.tableData);
                 const windspeed = this.tableData.map(item => parseFloat(item.WINDSPEED));
                 const prepower = this.tableData.map(item => parseFloat(item.PREPOWER));
                 const winddirection = this.tableData.map(item => parseFloat(item.WINDDIRECTION));
@@ -44,10 +54,23 @@ export default {
 
                 const variables = [windspeed, prepower, winddirection, temperature, humidity, pressure, ws, power, yd15];
 
+                // 取出最大小值
+                const variableMin = variables.map(variable => Math.min(...variable));
+                const variableMax = variables.map(variable => Math.max(...variable));
+                this.varMax = variableMax;
+                this.varMin = variableMin;
+
+                // 归一化数据
+                const normalizedVariables = variables.map((variable, index) => {
+                    const min = variableMin[index];
+                    const max = variableMax[index];
+                    return variable.map(value => (value - min) / (max - min));
+                });
+
                 for (let i = 0; i < variables.length; i++) {
                     this.scatterData[i] = [];
                     for (let j = 0; j < 12; j++) {
-                        this.scatterData[i][j] = [i, j, 0]; // 初始化每个元素为[行号, 列号, 均值]
+                        this.scatterData[i][j] = [i, j, 0];
                     }
                 }
 
@@ -57,18 +80,16 @@ export default {
                         return date.getMonth() + 1 === month;
                     });
 
-                    // 检查 monthData 是否为空，如果为空则手动创建一个空的数据项
                     if (monthData.length === 0) {
                         continue;
                     }
 
-                    // 计算每个变量的均值
-                    const means = variables.map((variable, index) => {
+                    const means = normalizedVariables.map((variable, index) => {
                         const monthVariableData = monthData.map(item => variable[index]);
                         const mean = monthVariableData.reduce((sum, value) => sum + value, 0) / monthVariableData.length;
                         return mean;
                     });
-                    // 填入scatterData中
+
                     means.forEach((mean, index) => {
                         const row = index % 9;
                         this.scatterData[row][month - 1] = [row, month - 1, mean];
@@ -76,7 +97,7 @@ export default {
                 }
 
                 this.scatterData = this.scatterData.flat();
-            }
+            // }
         },
 
         renderChart() {
@@ -84,7 +105,7 @@ export default {
                 this.$nextTick(() => {
                     if (!this.chartInstance) {
                         this.chartInstance = echarts.init(document.getElementById('solidHistogram'));
-                        window.addEventListener("resize", ()=> {
+                        window.addEventListener("resize", () => {
                             this.chartInstance.resize()
                         })
                     }
@@ -93,19 +114,33 @@ export default {
                     var option;
 
                     // prettier-ignore
-                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 
                     var variables = ['WINDSPEED', 'PREPOWER', 'WINDDIRECTION', 'TEMPERATURE', 'HUMIDITY',
                         'PRESSURE', 'ROUDN(A.WS,1)', 'ROUD(A.POWER,0)', 'YD15'];
 
-                    var data = this.scatterData
+                    var data = this.scatterData;
 
                     option = {
-                        tooltip: {},
+                        tooltip: {
+                            formatter: function (params) {
+                                var month = params.value[0];
+                                var variable = params.value[1];
+                                var value = params.value[2];
+                                
+                                var min = this.varMin[variable];
+                                var max = this.varMax[variable];
+                                var realValue = value * (max - min) + min;
+
+                                return '月份: ' + months[month] + '<br>' +
+                                    '变量: ' + variables[variable] + '<br>' +
+                                    '均值: ' + realValue.toFixed(2);
+                            }.bind(this)
+                        },
                         visualMap: {
-                            max: 50000,
+                            max: 1,
                             inRange: {
                                 color: [
                                     '#313695',
@@ -120,7 +155,8 @@ export default {
                                     '#d73027',
                                     '#a50026'
                                 ]
-                            }
+                            },
+                            bottom: '5%'
                         },
                         xAxis3D: {
                             type: 'category',

@@ -130,9 +130,9 @@ export default {
                                 min: -1,
                                 max: 1,
                                 calculable: true,
-                                orient: 'horizontal',
-                                left: 'center',
-                                bottom: '0%'
+                                orient: 'vertical',
+                                right: '0',
+                                bottom: '5%'
                             },
                             series: [{
                                 name: 'Correlation Coefficient',
