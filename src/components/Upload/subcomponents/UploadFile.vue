@@ -211,12 +211,12 @@ export default {
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
             // TODO
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
-                // if(res.code === "200"){
+                if(res.code === "200"){
                 console.log(res);
                 this.jsonData = JSON.parse(res.jsonContent);
                 this.curData = this.jsonData.slice(0, 50);
                 this.setObtainedJsonData(this.jsonData.slice(0, 7 * 96));
-                // }
+                }
             })
             this.$emit('update-table-data', this.jsonData.slice(0, 7 * 96));
         },
@@ -243,7 +243,7 @@ export default {
             this.curfile = file;
             this.curData = [];
             this.fetchData(file);
-            
+
             this.$message({
                 message: "选择文件" + file.name,
                 type: "action",

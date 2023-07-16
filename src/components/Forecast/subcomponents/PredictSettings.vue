@@ -189,11 +189,11 @@ export default {
       async fetchData(fileName) {
         const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
         // TODO
-        await this.request.get("/file/predicted/json/" + fileNameWithoutExtension + ".json").then(res => {
-          // if(res.code === "200"){
+        await this.request.post("/file/predicted/json" , fileNameWithoutExtension + ".json").then(res => {
+          if(res.code === "200"){
           console.log(res);
           this.jsonData = JSON.parse(res.jsonContent);
-          // }
+          }
         })
         this.$emit('update-table-data', this.jsonData);
       },
