@@ -178,7 +178,11 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                     this.endLoading(); // 隐藏加载中状态
-                    this.$message.success("预测成功");
+                    this.$message({
+                        message: "预测成功",
+                        type: "success",
+                        offset: 50,
+                    });
                 }, 1000); // 延迟10秒后隐藏加载状态
             }
         },

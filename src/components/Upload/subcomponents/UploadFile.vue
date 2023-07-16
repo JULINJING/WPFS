@@ -241,6 +241,11 @@ export default {
             this.curfile = file;
             this.curData = [];
             this.fetchData(file);
+            this.$message({
+                message: "选择文件" + file.name,
+                type: "action",
+                offset: 50,
+            });
             this.setUploadedFileName(file.name);
             this.updateTableData();
             this.$nextTick(() => {

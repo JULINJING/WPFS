@@ -111,7 +111,7 @@ export default {
                 parseInt(this.form.predLen) >= 2048
             ) {
                 this.$message({
-                    message: "请输入有效的表单数据",
+                    message: "请输入有效的训练参数",
                     type: "warning",
                     offset: "50"
                 });
@@ -129,8 +129,9 @@ export default {
                 this.form.predLen === ""
             ) {
                 this.$message({
-                    message: "请完整填写表单",
+                    message: "请完整填写训练参数",
                     type: "warning",
+                    offset: 50
                 });
             } else if (this.validateInput()) {
                 // const fileName = this.$store.state.global.uploadedFileName;
@@ -150,7 +151,11 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                     this.endLoading(); // 隐藏加载中状态
-                    this.$message.success("训练成功");
+                    this.$message({
+                        message: "训练成功",
+                        type: "success",
+                        offset: 50,
+                    });
                 }, 10000); // 延迟10秒后隐藏加载状态
 
 
