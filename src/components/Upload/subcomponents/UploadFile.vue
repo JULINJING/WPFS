@@ -68,7 +68,7 @@
 
         <div class="table-box" v-if="showTable">
             <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
-            <el-table ref="mytable" :data="curData" highlight-current-row stripe 
+            <el-table ref="mytable" :data="curData" highlight-current-row stripe
                 style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
                 <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
                 </el-table-column>
@@ -210,7 +210,7 @@ export default {
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
             // TODO
-            await this.request.get("/file/origin/json/" + fileNameWithoutExtension + ".json").then(res => {
+            await this.request.get("/file/processed/json/" + fileNameWithoutExtension + ".json").then(res => {
                 // if(res.code === "200"){
                 console.log(res);
                 this.jsonData = JSON.parse(res.jsonContent);
@@ -248,12 +248,12 @@ export default {
             });
         },
 
-        handleDialogConfirm() {
+        async handleDialogConfirm() {
             if (this.outlierRadio !== "" && this.missingRadio !== "") {
                 // console.log(this.outlierRadio); // 获取选中的复选框的值
                 this.dialogFormVisible = false;
                 this.showTable = true;
-                this.sendPreprocessParams();
+                await this.sendPreprocessParams();
                 this.fetchData();
                 this.updateTableData();
 
@@ -271,8 +271,8 @@ export default {
         },
 
         // TODO: 发送预处理参数
-        sendPreprocessParams() {
-            this.request.post("/file/preprocess", this.curfile.name).then((res) => {
+        async sendPreprocessParams() {
+            await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
                     if (res.code === "200") {
                         console.log(this.curfile.name);
                         this.$message.success("预处理成功");
