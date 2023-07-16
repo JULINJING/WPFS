@@ -38,7 +38,8 @@ const store = new Vuex.Store({
             namespaced: true, // 确保命名空间设置为 true
             state: {
                 uploadedFileName: "1.csv",
-                obtainedJsonData: []
+                processedJsonData: [],
+                predictedJsonData: []
             },
             mutations: {
                 setUploadedFileName(state, fileName) {
@@ -47,16 +48,22 @@ const store = new Vuex.Store({
                 setPath(state) {
                     state.currentPathName = localStorage.getItem("currentPathName")
                 },
-                setObtainedJsonData(state, data) {
-                    state.obtainedJsonData = data;
+                setProcessedJsonData(state, data) {
+                    state.processedJsonData = data;
+                },
+                setPredictedJsonData(state, data) {
+                    state.processedJsonData = data;
                 },
             },
             getters: {
                 getUploadedFileName(state) {
                     return state.uploadedFileName;
                 },
-                getObtainedJsonData(state) {
-                    return state.obtainedJsonData;
+                getProcessedJsonData(state) {
+                    return state.processedJsonData;
+                },
+                getPredictedJsonData(state) {
+                    return state.processedJsonData;
                 }
             }
         }

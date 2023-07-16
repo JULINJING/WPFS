@@ -34,13 +34,13 @@ export default {
     //     },
     // },
     computed: {
-        ...mapState('global', ['obtainedJsonData']),
+        ...mapState('global', ['processedJsonData']),
     },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
-                // console.log(this.$store.state.global.obtainedJsonData);
-                this.tableData = this.$store.state.global.obtainedJsonData;
+                // console.log(this.$store.state.global.processedJsonData);
+                this.tableData = this.$store.state.global.processedJsonData;
                 const windspeed = this.tableData.map(item => parseFloat(item.WINDSPEED));
                 const prepower = this.tableData.map(item => parseFloat(item.PREPOWER));
                 const winddirection = this.tableData.map(item => parseFloat(item.WINDDIRECTION));

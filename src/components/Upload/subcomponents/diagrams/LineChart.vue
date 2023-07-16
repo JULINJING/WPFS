@@ -23,7 +23,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('global', ['obtainedJsonData']),
+        ...mapState('global', ['processedJsonData']),
     },
     // watch: {
     //     tableData: {
@@ -40,7 +40,7 @@ export default {
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
-                this.tableData = this.$store.state.global.obtainedJsonData;
+                this.tableData = this.$store.state.global.processedJsonData;
                 this.lineData = this.tableData.map(item => ({
                     DATATIME: item.DATATIME,
                     PREPOWER: item.PREPOWER,

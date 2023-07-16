@@ -22,7 +22,7 @@ export default {
         this.renderChart();
     },
     computed: {
-        ...mapState('global', ['obtainedJsonData']),
+        ...mapState('global', ['processedJsonData']),
     },
     // watch: {
     //     tableData: {
@@ -36,7 +36,7 @@ export default {
     // },
     methods: {
         processData() {
-            this.tableData = this.$store.state.global.obtainedJsonData
+            this.tableData = this.$store.state.global.processedJsonData
             this.scatterData = this.tableData;
         },
 

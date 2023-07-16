@@ -124,7 +124,7 @@ export default {
         this.curData = JSON.parse(JSON.stringify(rawData));
     },
     methods: {
-        ...mapMutations("global", ["setUploadedFileName", "setObtainedJsonData"]),
+        ...mapMutations("global", ["setUploadedFileName", "setProcessedJsonData"]),
 
         initVirtualScroll() {
             /*指定table的ref*/
@@ -209,12 +209,12 @@ export default {
             const fileResponse = JSON.stringify(this.curfile.response);
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-            // TODO
+            
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
                     this.jsonData = JSON.parse(res.jsonContent);
                     this.curData = this.jsonData.slice(0, 50);
-                    this.setObtainedJsonData(this.extractNoonData(this.jsonData));
+                    this.setProcessedJsonData(this.extractNoonData(this.jsonData));
                 }
             })
             this.$emit('update-table-data');
@@ -278,7 +278,6 @@ export default {
             }
         },
 
-        // TODO: 发送预处理参数
         async sendPreprocessParams() {
             await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
                     if (res.code === "200") {

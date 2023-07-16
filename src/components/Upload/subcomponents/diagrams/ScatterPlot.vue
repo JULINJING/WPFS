@@ -22,7 +22,7 @@ export default {
         this.renderChart();
     },
     computed: {
-        ...mapState('global', ['obtainedJsonData']),
+        ...mapState('global', ['processedJsonData']),
     },
     // watch: {
     //     tableData: {
@@ -37,7 +37,7 @@ export default {
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
-            this.tableData = this.$store.state.global.obtainedJsonData;
+            this.tableData = this.$store.state.global.processedJsonData;
 
             // 遍历 jsonData 数组
             for (let i = 0; i < this.tableData.length; i++) {
