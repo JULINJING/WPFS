@@ -282,7 +282,11 @@ export default {
                         console.log(this.curfile.name);
                     }
             });
-            this.$message.success("预处理成功");
+            this.$message({
+                message: "预处理成功",
+                type: "success",
+                offset: 50,
+            });
         },
     },
 };
