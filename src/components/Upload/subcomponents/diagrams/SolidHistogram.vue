@@ -39,63 +39,57 @@ export default {
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
-                // console.log(this.$store.state.global.processedJsonData);
-                this.tableData = this.$store.state.global.processedJsonData;
-                const windspeed = this.tableData.map(item => parseFloat(item.WINDSPEED));
-                const prepower = this.tableData.map(item => parseFloat(item.PREPOWER));
-                const winddirection = this.tableData.map(item => parseFloat(item.WINDDIRECTION));
-                const temperature = this.tableData.map(item => parseFloat(item.TEMPERATURE));
-                const humidity = this.tableData.map(item => parseFloat(item.HUMIDITY));
-                const pressure = this.tableData.map(item => parseFloat(item.PRESSURE));
-                const ws = this.tableData.map(item => parseFloat(item.AWS));
-                const power = this.tableData.map(item => parseFloat(item.APOWER));
-                const yd15 = this.tableData.map(item => parseFloat(item.YD15));
+            // console.log(this.$store.state.global.processedJsonData);
+            this.tableData = this.$store.state.global.processedJsonData;
+            const windspeed = this.tableData.map(item => parseFloat(item.WINDSPEED));
+            const prepower = this.tableData.map(item => parseFloat(item.PREPOWER));
+            const winddirection = this.tableData.map(item => parseFloat(item.WINDDIRECTION));
+            const temperature = this.tableData.map(item => parseFloat(item.TEMPERATURE));
+            const humidity = this.tableData.map(item => parseFloat(item.HUMIDITY));
+            const pressure = this.tableData.map(item => parseFloat(item.PRESSURE));
+            const ws = this.tableData.map(item => parseFloat(item.AWS));
+            const power = this.tableData.map(item => parseFloat(item.APOWER));
+            const yd15 = this.tableData.map(item => parseFloat(item.YD15));
 
-                const variables = [windspeed, prepower, winddirection, temperature, humidity, pressure, ws, power, yd15];
+            const variables = [windspeed, prepower, winddirection, temperature, humidity, pressure, ws, power, yd15];
 
-                // 取出最大小值
-                const variableMin = variables.map(variable => Math.min(...variable));
-                const variableMax = variables.map(variable => Math.max(...variable));
-                this.varMax = variableMax;
-                this.varMin = variableMin;
+            // 取出最大小值
+            const variableMin = variables.map(variable => Math.min(...variable));
+            const variableMax = variables.map(variable => Math.max(...variable));
+            this.varMax = variableMax;
+            this.varMin = variableMin;
 
-                // 归一化数据
-                const normalizedVariables = variables.map((variable, index) => {
-                    const min = variableMin[index];
-                    const max = variableMax[index];
-                    return variable.map(value => (value - min) / (max - min));
+            // 归一化数据
+            const normalizedVariables = variables.map((variable, index) => {
+                const min = variableMin[index];
+                const max = variableMax[index];
+                return variable.map(value => (value - min) / (max - min));
+            });
+
+            this.scatterData = [];
+
+            for (let month = 1; month <= 12; month++) {
+                let monthData = this.tableData.filter(item => {
+                    const date = new Date(item.DATATIME);
+                    return date.getMonth() + 1 === month;
                 });
 
-                for (let i = 0; i < variables.length; i++) {
-                    this.scatterData[i] = [];
-                    for (let j = 0; j < 12; j++) {
-                        this.scatterData[i][j] = [i, j, 0];
-                    }
+                if (monthData.length === 0) {
+                    continue;
                 }
 
-                for (let month = 1; month <= 12; month++) {
-                    let monthData = this.tableData.filter(item => {
-                        const date = new Date(item.DATATIME);
-                        return date.getMonth() + 1 === month;
-                    });
+                const means = normalizedVariables.map((variable, index) => {
+                    const monthVariableData = monthData.map(item => variable[this.tableData.indexOf(item)]);
+                    const mean = monthVariableData.reduce((sum, value) => sum + value, 0) / monthVariableData.length;
+                    return mean;
+                });
 
-                    if (monthData.length === 0) {
-                        continue;
-                    }
-
-                    const means = normalizedVariables.map((variable, index) => {
-                        const monthVariableData = monthData.map(item => variable[index]);
-                        const mean = monthVariableData.reduce((sum, value) => sum + value, 0) / monthVariableData.length;
-                        return mean;
-                    });
-
-                    means.forEach((mean, index) => {
-                        const row = index % 9;
-                        this.scatterData[row][month - 1] = [row, month - 1, mean];
-                    });
-                }
-
-                this.scatterData = this.scatterData.flat();
+                means.forEach((mean, index) => {
+                    const row = index % 9;
+                    const col = month - 1;
+                    this.scatterData.push([row, col, mean]);
+                });
+            }
             // }
         },
 
@@ -128,7 +122,7 @@ export default {
                                 var month = params.value[0];
                                 var variable = params.value[1];
                                 var value = params.value[2];
-                                
+
                                 var min = this.varMin[variable];
                                 var max = this.varMax[variable];
                                 var realValue = value * (max - min) + min;
