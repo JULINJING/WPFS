@@ -56,10 +56,10 @@ export default {
                         }
                     },
                     grid: {
-                        left: 90,
-                        right: 80,
+                        x: '10%',
+                        x2: '5%',
                         y2: '10%',
-                        top: '5%',
+                        y: '10%',
                         borderWidth: 0
                     },
                     xAxis: {

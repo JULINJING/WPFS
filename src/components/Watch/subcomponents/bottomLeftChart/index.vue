@@ -128,10 +128,28 @@ export default {
     methods: {
         // 根据自己的业务情况修改
         setData() {
-            for (let i = 0; i < this.cdata.barData.length - 1; i++) {
-                let rate = 10 * this.cdata.barData[i] / this.cdata.lineData[i];
-                this.cdata.rateData.push(rate.toFixed(2));
-            }
+
+            window.addEventListener('resize', () => {
+                //视窗窗口 宽度高度改变时 触发函数程序
+                //获取浏览器视窗窗口的宽度
+                let width = document.documentElement.clientWidth
+
+                if (width < 960) {
+                    for (let i = 0; i < 10; i++) {
+                        let rate = 10 * this.cdata.barData[i] / this.cdata.lineData[i];
+                        this.cdata.rateData.push(rate.toFixed(2));
+                    }
+                    this.cdata.category = this.cdata.category.slice(0, 10)
+                    this.cdata.barData = this.cdata.barData.slice(0, 10)
+                    this.cdata.lineData = this.cdata.lineData.slice(0, 10)
+                    this.cdata.lineData = this.cdata.lineData.slice(0, 10)
+                } else {
+                    for (let i = 0; i < this.cdata.barData.length - 1; i++) {
+                        let rate = 10 * this.cdata.barData[i] / this.cdata.lineData[i];
+                        this.cdata.rateData.push(rate.toFixed(2));
+                    }
+                }
+            })
         },
     }
 };

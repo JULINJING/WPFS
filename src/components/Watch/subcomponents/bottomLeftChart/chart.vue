@@ -44,9 +44,9 @@ export default {
                         top: "0%"
                     },
                     grid: {
-                        x: "8%",
-                        width: "88%",
-                        y: "4%",
+                        x: "10%",
+                        x2:"10%",
+                        y: "8%",
                         y2: "10%"
                     },
                     xAxis: {

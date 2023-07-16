@@ -3,16 +3,16 @@
         <div class="bg" id="PC">
             <dv-loading v-if="loading" style="height: 100vh;">Loading...</dv-loading>
             <div v-else class="host-body">
-                <div class="d-flex jc-center decor">
-                    <dv-decoration-10 class="dv-dec-10" />
+                <div class="d-flex jc-center">
+                    <dv-decoration-10 class="dv-dec-10 decor" />
                     <div class="d-flex jc-center">
-                        <dv-decoration-8 class="dv-dec-8" :color="decorationColor" />
+                        <dv-decoration-8 class="dv-dec-8 decor" :color="decorationColor" />
                         <div class="title">
                             <span class="title-text">单 风 电 场 智 能 运 维</span>
                         </div>
-                        <dv-decoration-8 class="dv-dec-8" :reverse="true" :color="decorationColor" />
+                        <dv-decoration-8 class="dv-dec-8 decor" :reverse="true" :color="decorationColor" />
                     </div>
-                    <dv-decoration-10 class="dv-dec-10-s" />
+                    <dv-decoration-10 class="dv-dec-10-s decor" />
                 </div>
 
                 <!-- 第二行 -->
