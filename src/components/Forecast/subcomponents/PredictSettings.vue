@@ -55,6 +55,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { Loading } from 'element-ui';
 
 export default {
     props: {
@@ -92,7 +93,9 @@ export default {
                 "ROUND(A.WS,1)",
             ],
             progress: 0,
-            jsonData: []
+            jsonData: [],
+            loading: false, // 加载状态
+            loadingInstance: null,
         };
     },
 
@@ -159,7 +162,6 @@ export default {
                 // 调用后端预测接口，传入预测参数
                 await this.request.post("/file/predict", fileName).then((res) => {
                     if (res.code === "200") {
-                        this.$message.success("操作成功");
                         // console.log("jsonContent:  "+res.jsonContent)
                         // this.jsonData = JSON.parse(res.jsonContent);
                         // this.$emit('update-table-data', this.jsonData);
@@ -170,6 +172,14 @@ export default {
                 // console.log("/home/wpfs/algorithm/submission75254/pred" + fileNameWithoutExtension + ".json");
                 // this.jsonData = require("/home/wpfs/algorithm/submission75254/pred/" + fileNameWithoutExtension + ".json");
                 // this.$emit('update-table-data', this.jsonData);
+                this.loading = true;
+                this.startLoading(); // 显示加载中状态
+                // 模拟耗时操作
+                setTimeout(() => {
+                    this.loading = false;
+                    this.endLoading(); // 隐藏加载中状态
+                    this.$message.success("预测成功");
+                }, 1000); // 延迟10秒后隐藏加载状态
             }
         },
       async fetchData(fileName) {
@@ -183,6 +193,19 @@ export default {
         })
         this.$emit('update-table-data', this.jsonData);
       },
+      startLoading() {
+            this.loadingInstance = Loading.service({
+                lock: true,
+                text: '正在预测……',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+        },
+        endLoading() {
+            if (this.loadingInstance) {
+                this.loadingInstance.close();
+                this.loadingInstance = null;
+            }
+        },
     },
 };
 

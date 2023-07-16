@@ -275,9 +275,9 @@ export default {
             await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
                     if (res.code === "200") {
                         console.log(this.curfile.name);
-                        this.$message.success("预处理成功");
                     }
             });
+            this.$message.success("预处理成功");
         },
     },
 };
