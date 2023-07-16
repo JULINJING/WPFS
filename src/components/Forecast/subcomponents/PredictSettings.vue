@@ -16,8 +16,7 @@
 
             <div class="predict-form-row">
                 <el-tag>具体模型选择</el-tag>
-                <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="1"
-                    collapse-tags>
+                <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="1" collapse-tags>
                     <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
                         :value="model.value"></el-option>
                 </el-select>
@@ -34,16 +33,14 @@
 
             <div class="predict-form-row">
                 <el-tag>输入时间段</el-tag>
-                <el-date-picker v-model="form.inputPeriod" type="datetimerange" align="right"
-                    start-placeholder="开始日期" @change="setPeriods" end-placeholder="结束日期"
-                    :default-time="['12:00:00', '08:00:00']"></el-date-picker>
+                <el-date-picker v-model="form.inputPeriod" type="datetimerange" align="right" start-placeholder="开始日期"
+                    @change="setPeriods" end-placeholder="结束日期" :default-time="['12:00:00', '08:00:00']"></el-date-picker>
             </div>
 
             <div class="predict-form-row">
                 <el-tag>预测时间段</el-tag>
-                <el-date-picker v-model="form.forecastPeriod" type="datetimerange" align="right"
-                    start-placeholder="开始日期" @change="setPeriods" end-placeholder="结束日期"
-                    :default-time="['00:00:00', '23:45:00']"></el-date-picker>
+                <el-date-picker v-model="form.forecastPeriod" type="datetimerange" align="right" start-placeholder="开始日期"
+                    @change="setPeriods" end-placeholder="结束日期" :default-time="['00:00:00', '23:45:00']"></el-date-picker>
             </div>
 
             <div>
@@ -54,13 +51,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import { Loading } from 'element-ui';
 
 export default {
-    props: {
-        tableData: Array,
-    },
+
     data() {
         return {
             form: {
@@ -100,7 +95,6 @@ export default {
     },
 
     computed: {
-        ...mapState('global', ['uploadedFileName']),
 
         calculateProgress() {
             let filledFields = 0;
@@ -119,6 +113,9 @@ export default {
         },
     },
     methods: {
+        ...mapState('global', ['uploadedFileName']),
+        ...mapMutations('global', ['setPredictedJsonData']),
+        
         handleModelTypeChange() {
             // 清空进度条和表单数据
             this.progress = 0;
@@ -138,7 +135,7 @@ export default {
         setPeriods() {
             // console.log(this.form.inputPeriod);
         },
-        isFormValidate(){
+        isFormValidate() {
             if (
                 this.form.modelType === "" ||
                 this.form.selectedModels.length === 0 ||
@@ -162,10 +159,11 @@ export default {
                 // 调用后端预测接口，传入预测参数
                 await this.request.post("/file/predict", fileName).then((res) => {
                     if (res.code === "200") {
+                        console.log(res);
                         // console.log("jsonContent:  "+res.jsonContent)
                         // this.jsonData = JSON.parse(res.jsonContent);
                         // this.$emit('update-table-data', this.jsonData);
-                      this.fetchData(fileName);
+                        this.fetchData(fileName);
                     }
                 });
                 // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
@@ -186,18 +184,20 @@ export default {
                 }, 1000); // 延迟10秒后隐藏加载状态
             }
         },
-      async fetchData(fileName) {
-        const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-        // TODO
-        await this.request.post("/file/predicted/json" , fileNameWithoutExtension + ".json").then(res => {
-          if(res.code === "200"){
-          console.log(res);
-          this.jsonData = JSON.parse(res.jsonContent);
-          }
-        })
-        this.$emit('update-table-data', this.jsonData);
-      },
-      startLoading() {
+        async fetchData(fileName) {
+            const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+            // TODO
+            await this.request.post("/file/predicted/json", fileNameWithoutExtension + ".json").then(res => {
+                if (res.code === "200") {
+                    console.log(res);
+                    this.jsonData = JSON.parse(res.jsonContent);
+                    this.setPredictedJsonData(this.jsonData)
+                }
+            })
+        
+            this.$emit('update-table-data');
+        },
+        startLoading() {
             this.loadingInstance = Loading.service({
                 lock: true,
                 text: '正在预测……',
@@ -223,24 +223,29 @@ export default {
         width: 50%;
         margin-left: 25%;
         margin-right: 25%;
-        .predict-form-row{
+
+        .predict-form-row {
             width: 100%;
             margin-top: 15px;
             margin-bottom: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
-            .el-tag{
+
+            .el-tag {
                 width: 120px;
                 margin-right: 20px;
                 font-size: 14px;
             }
+
             .el-select {
                 width: 80%;
             }
-            .el-radio-group{
+
+            .el-radio-group {
                 text-align: left;
             }
+
             .el-input,
             .el-radio-group,
             .el-date-editor {
@@ -258,7 +263,8 @@ export default {
         width: 80%;
         margin-left: 10%;
         margin-right: 10%;
-        .predict-form-row{
+
+        .predict-form-row {
             width: 100%;
             margin-top: 10px;
             margin-bottom: 10px;
@@ -266,41 +272,49 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            .el-tag{
+
+            .el-tag {
                 width: 240px;
                 font-size: 12px;
                 margin-bottom: 5px;
             }
+
             .el-select {
                 width: 240px;
             }
+
             .el-input,
             .el-radio-group,
-            .el-date-editor{
+            .el-date-editor {
                 width: 240px;
                 font-size: 12px;
             }
+
             .el-radio-button__inner,
-            .el-range-input{
+            .el-range-input {
                 font-size: 12px;
             }
+
             .el-radio-button,
-            .el-radio-button__inner{
+            .el-radio-button__inner {
                 width: 120px;
             }
         }
     }
-    .el-picker-panel{
+
+    .el-picker-panel {
         left: 2% !important;
     }
+
     .el-date-range-picker .el-picker-panel__body {
         min-width: 96%;
     }
-    .el-date-range-picker__content{
+
+    .el-date-range-picker__content {
         width: 96% !important;
     }
-    .el-date-range-picker{
+
+    .el-date-range-picker {
         width: 96% !important;
     }
-}
-</style>
+}</style>

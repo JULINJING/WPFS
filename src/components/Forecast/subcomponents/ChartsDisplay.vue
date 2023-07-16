@@ -4,11 +4,11 @@
         <div class="subdiv _subdiv" style="margin-top: 1%;">
             <div class="left box">
                 <h1>预测功率YD15图</h1>
-                <LineChart :tableData="tableData" class="LineChart"/>
+                <LineChart class="LineChart"/>
             </div>
             <div class="right box">
                 <h1>散点图</h1>
-                <ScatterPlot :tableData="tableData" class="ScatterPlot"/>
+                <ScatterPlot class="ScatterPlot"/>
             </div>
         </div>
     </div>
@@ -19,9 +19,6 @@ import LineChart from './diagrams/LineChart.vue';
 import ScatterPlot from './diagrams/ScatterPlot.vue';
 
 export default {
-    props: {
-        tableData: Array,
-    },
     name: 'dataanalysis',
     components: {
         LineChart, ScatterPlot
