@@ -122,7 +122,6 @@ export default {
     this.getUser().then(res => {
       console.log("this.form: " + res)
       this.form = res
-      this.form.password = ''
     })
   },
   computed: {
