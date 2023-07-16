@@ -1,17 +1,9 @@
 <template>
     <div id="watchContainer" class="watchContainer _watchContainer" ref="watch">
-        <el-result title="抱歉" subTitle="为获得最佳体验，请使用PC端查看">
-            <template slot="icon">
-                <el-image :src="require('./imgs/PC端提示.png')" fit="cover"></el-image>
-            </template>
-            <template slot="extra">
-                <el-button type="primary" size="medium" @click="backToHome">返回主页</el-button>
-            </template>
-        </el-result>
         <div class="bg" id="PC">
             <dv-loading v-if="loading" style="height: 100vh;">Loading...</dv-loading>
             <div v-else class="host-body">
-                <div class="d-flex jc-center">
+                <div class="d-flex jc-center decor">
                     <dv-decoration-10 class="dv-dec-10" />
                     <div class="d-flex jc-center">
                         <dv-decoration-8 class="dv-dec-8" :color="decorationColor" />
@@ -24,7 +16,7 @@
                 </div>
 
                 <!-- 第二行 -->
-                <div class="d-flex jc-between px-2">
+                <div class="d-flex jc-between px-2 decor">
                     <div class="d-flex aside-width">
                         <div class="react-left ml-4 react-l-s">
                             <span class="react-left"></span>

@@ -166,14 +166,19 @@
 
 // 小于800px
 @media only screen and (max-width: 800px) {
-    .el-result {
-        display: block;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
+
+    .bg {
+        padding: 6px 0px;
+        background-image: url("/public/imgs/pageBg.png");
+        background-size: auto;
+        background-position: center center;
+        width: 100vw;
+        height: 100%;
+        overflow-x: hidden;
+
+        .decor {
+            display: none;
+        }
     }
 
-    #PC {
-        display: none;
-    }
 }
