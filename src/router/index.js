@@ -22,57 +22,67 @@ VueRouter.prototype.push = function push(location) {
 }
 
 Vue.use(VueRouter)
-
+const routes =  [
+    {
+        path: '/',
+        redirect: '/login'
+    },
+    {
+        path: '/home',
+        component: Home
+    },
+    {
+        path: '/upload',
+        component: Upload
+    },
+    {
+        path: '/windfield',
+        component: WindField
+    },
+    {
+        path: '/windland',
+        component: WindLand
+    },
+    {
+        path: '/turbine',
+        component: Turbine
+    },
+    {
+        path: '/watch',
+        component: Watch
+    },
+    {
+        path: '/forecast',
+        component: Forecast
+    },
+    {
+        path: '/login',
+        component: Login
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: () => import('@/components/404/404.vue')
+    }
+]
 var router = new VueRouter({
-    routes: [
-        {
-            path: '/',
-            redirect: '/login'
-        },
-        {
-            path: '/home',
-            component: Home
-        },
-        {
-            path: '/upload',
-            component: Upload
-        },
-        {
-            path: '/windfield',
-            component: WindField
-        },
-        {
-            path: '/windland',
-            component: WindLand
-        },
-        {
-            path: '/turbine',
-            component: Turbine
-        },
-        {
-            path: '/watch',
-            component: Watch
-        },
-        {
-            path: '/forecast',
-            component: Forecast
-        },
-        {
-            path: '/login',
-            component: Login
-        },
-        {
-            path: '/404',
-            name: '404',
-            component: () => import('@/components/404/404.vue')
-        }
-    ],
+    routes: routes,
     mode: 'history'
-
 })
 
 NProgress.inc(0.2)
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
+
+
+// 提供一个重置路由的方法
+export const resetRouter = () => {
+    router.matcher = new VueRouter({
+        mode: 'history',
+        base: process.env.BASE_URL,
+        routes
+    })
+}
+
 
 //用路由守卫来做nav显示
 router.beforeEach((to, from, next) => {
