@@ -21,7 +21,7 @@ export default {
         this.renderChart();
     },
     computed: {
-        ...mapState('global', ['obtainedJsonData']),
+        ...mapState('global', ['processedJsonData']),
     },
     // watch: {
     //     tableData: {
@@ -36,20 +36,21 @@ export default {
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
-                this.tableData = this.$store.state.global.obtainedJsonData;
+                this.tableData = this.$store.state.global.processedJsonData;
                 this.boxData = this.tableData.map(item => ({
                     DATATIME: item.DATATIME,
                     PREPOWER: item.PREPOWER,
-                    POWER: item.APOWER,
+                    APOWER: item.APOWER,
                     YD15: item.YD15
                 }));
             // }
         },
         getBoxplotData() {
-            const groupedData = new Array(3).fill(0).map(() => new Array(12).fill(0).map(() => new Array(this.boxData.length).fill(0)));
-
+            const groupedData = new Array(3).fill(0).map(() => new Array(12).fill(0).map(() => new Array(31).fill(0)));
+            
             this.boxData.forEach((item, index) => {
                 const month = new Date(item.DATATIME).getMonth();
+                index = index % 31;
                 groupedData[0][month][index] = item.PREPOWER;
                 groupedData[1][month][index] = item.APOWER;
                 groupedData[2][month][index] = item.YD15;
@@ -66,10 +67,9 @@ export default {
                             this.chartInstance.resize()
                         })
                     }
-
                     if (this.boxData && this.boxData.length > 0) {
                         const data = this.getBoxplotData();
-
+                        console.log(data);
                         const option = {
                             dataset: [
                                 {

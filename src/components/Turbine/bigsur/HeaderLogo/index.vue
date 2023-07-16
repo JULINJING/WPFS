@@ -1,7 +1,10 @@
 <template>
 	<div class="header">
 		<span>大型风力发电机</span>
-		<h2 style="z-index: 99999;margin-top: 1vh;"><router-link to="/home">返回主页</router-link></h2>
+		<div id="returnWF">
+			<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/home">返回主页</router-link></h2>
+			<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/windfield">返回场站</router-link></h2>
+		</div>
 	</div>
 </template>
 <script>
@@ -28,6 +31,11 @@ export default {
 		color: #fff;
 		font-weight: bolder;
 		line-height: 1.7rem;
+	}
+	#returnWF {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
 	}
 }
 </style>

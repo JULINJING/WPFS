@@ -3,8 +3,8 @@
     <div class="uploadContainer _uploadContainer">
         <NavTop/>
         <br>
-        <UploadFile :tableData="tableData" @update-table-data="updateTableData"/>
-        <DataAnalysis v-if="isChartVisible" :tableData="tableData"/>
+        <UploadFile @update-table-data="updateTableData"/>
+        <DataAnalysis v-if="isChartVisible"/>
         <Footer></Footer>
     </div>
 </template>
@@ -18,7 +18,7 @@ import DataAnalysis from './subcomponents/DataAnalysis.vue'
 export default {
     data(){
         return {
-            tableData: [],
+            // tableData: [],
             isChartVisible: false,
         }
     },
@@ -28,10 +28,14 @@ export default {
     },
 
     methods: {
-        updateTableData(data){
-            this.tableData = data;
+        updateTableData(){
+            // this.tableData = data;
+            console.log("updateTableData");
             this.isChartVisible = true;
         }
+    },
+    mounted() {
+        this.$on('update-table-data', this.updateTableData);
     }
 }
 </script>

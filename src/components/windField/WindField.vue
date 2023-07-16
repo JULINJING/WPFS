@@ -219,7 +219,10 @@ export default {
             eSum: 0,
             sSum: 0,
             wSum: 0,
-            nSum: 0
+            nSum: 0,
+
+            // 故障风机id数组
+            turbineIdError: []
         }
     },
     methods: {
@@ -991,7 +994,7 @@ export default {
 
                 // 功率 动态图
                 var powerGraphicLight = new mars3d.graphic.DivBoderLabel({
-                    id: index + 1,
+                    id: index + 21,
                     position: item,
                     style: {
                         text: `预测功率：加载中↻`,
@@ -1016,6 +1019,7 @@ export default {
             //     })
             // }, 2000)
 
+            // 第一次计时器
             // 功率 动态图
             // 随机更新功率文本
             this.intervalId = setInterval(() => {
@@ -1031,6 +1035,7 @@ export default {
                 // this.nSum = 0
 
                 var tempSum = 0
+
                 powerLayer.eachGraphic((graphic) => {
                     var power = (Math.random() - 0.2).toFixed(3) * 1000 // 随机数据文本
                     // 故障 维护 待机 并网
@@ -1040,6 +1045,8 @@ export default {
                             boderColor: "red"
                         })
                         this.gzNum += 1
+                        // 故障风机ID
+                        this.turbineIdError.push(graphic.id - 20)
                     }
                     else if (power < 50) {
                         graphic.setStyle({
@@ -1184,19 +1191,214 @@ export default {
                 }
             }, 5000)
 
+            // 风机提示
+            turbineLayer.bindTooltip("单击:显示风机大致情况<br />右击:查看风机详细情况",{direction:"right"})
+
             // 在turbineLayer图层绑定Popup弹窗
-            turbineLayer.bindPopup(function (event) {
+            turbineLayer.bindPopup((event)=> {
                 // console.log(event.graphic)
                 const attr = {}
                 attr["时间"] = "2022/1/2  0:00:00"
                 attr["风速"] = Math.random().toFixed(3) * 1000
                 attr["实际功率"] = Math.random().toFixed(3) * 1000
                 attr["预测功率"] = Math.random().toFixed(3) * 1000
+                // 停止计时器
+                clearInterval(this.intervalId);
 
                 return mars3d.Util.getTemplateHtml({ title: event.graphic.id + ' 号 风 机', template: "all", attr: attr })
             })
 
-            // 一定高度点击风机跳转视角 并删除风场
+            // 右击查看对应风机具体情况
+            turbineLayer.eachGraphic((graphic) => {
+                graphic.on(mars3d.EventType.rightClick, ()=> {
+                    this.$router.push('/turbine')
+                    const h = this.$createElement;
+                    this.$message({
+                        message: h('p', null, [
+                            h('span', null, '已成功切换至 '),
+                            h('i', { style: 'color: teal' }, graphic.id + '号风机')
+                        ]),
+                        offset: 50
+                    });
+                    // 清除计时器
+                    if (this.intervalId !== null) {
+                        // 如果已经有一个正在运行的定时器，停止它
+                        clearInterval(this.intervalId);
+                        this.intervalId = null;
+                    }
+                })
+            })
+
+            // 关闭弹窗时第二次计时器
+            turbineLayer.on(mars3d.EventType.popupClose, ()=> {
+                this.intervalId = setInterval(() => {
+                    // 统计量置零
+                    this.gzNum = 0
+                    this.whNum = 0
+                    this.djNum = 0
+                    this.bwNum = 0
+
+                    // this.eSum = 0
+                    // this.sSum = 0
+                    // this.wSum = 0
+                    // this.nSum = 0
+
+                    var tempSum = 0
+                    powerLayer.eachGraphic((graphic) => {
+                        var power = (Math.random() - 0.2).toFixed(3) * 1000 // 随机数据文本
+                        // 故障 维护 待机 并网
+                        if (power < 0) {
+                            power = 0
+                            graphic.setStyle({
+                                boderColor: "red"
+                            })
+                            this.gzNum += 1
+                        }
+                        else if (power < 50) {
+                            graphic.setStyle({
+                                boderColor: "yellow"
+                            })
+                            this.whNum += 1
+                        }
+                        else if (power < 100) {
+                            graphic.setStyle({
+                                boderColor: "#37A2DA"
+                            })
+                            this.djNum += 1
+                        }
+                        else {
+                            graphic.setStyle({
+                                boderColor: "#15d1f2"
+                            })
+                            this.bwNum += 1
+                        }
+
+                        tempSum += power
+                        // 更新预测功率
+                        graphic.setStyle({
+                            text: `预测功率：${power} W`
+                        })
+                    })
+                    // 更新风机状态图表数据
+                    this.chartsDataState = [
+                        { name: "并网", value: this.bwNum },
+                        { name: "待机", value: this.djNum },
+                        { name: "故障", value: this.gzNum },
+                        { name: "维护", value: this.whNum }
+                    ]
+                    this.myOptionState = {
+                        tooltip: {
+                            trigger: "item",
+                            formatter: "{b}<br/>{c} 占{d}%",
+                        },
+                        // 图例 的相关设置
+                        legend: {
+                            orient: "vertical",
+                            left: "right",
+                            textStyle: {
+                                color: "#fff"
+                            }
+                        },
+                        // 图形的设置
+                        series: [
+                            {
+                                // name: '访问来源',
+                                type: "pie",
+                                radius: "80%",
+                                right: "20%",
+                                // 图形上文本标签的样式设置
+                                label: {
+                                    show: true,
+                                    position: "inside",
+                                    formatter: "{c}",
+                                    fontWeight: "bold"
+                                },
+                                color: [
+                                    "#15d1f2",
+                                    "#37A2DA",
+                                    "red",
+                                    "yellow"
+                                ],
+                                center: ["45%", "55%"],
+                                data: this.chartsDataState, // 使用for循环添加
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: "rgba(0, 0, 0, 0.5)"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                    // 更新各风电场总预测功率
+                    switch (id) {
+                        case 1:
+                            this.eSum = tempSum
+                            break;
+                        case 2:
+                            this.sSum = tempSum
+                            break;
+                        case 3:
+                            this.wSum = tempSum
+                            break;
+                        default:
+                            this.nSum = tempSum
+                    }
+                    this.myOptionPower = {
+                        // xAxis和yAxis的nameTextStyle不起作用
+                        // 因此设置了字体的全局样式
+                        textStyle: {
+                            color: "#ccc"
+                        },
+                        title: {
+                            text: "单位:" + "w",
+                            // 全局样式对此不生效，
+                            textStyle: {
+                                color: "#fff",
+                                fontSize: 12
+                            }
+                        },
+                        // 移入柱子时的阴影
+                        tooltip: {
+                            trigger: "axis",
+                            formatter: "{b}<br/>{c}" + "w",
+                            axisPointer: {
+                                type: "shadow"
+                            }
+                        },
+                        grid: {
+                            left: "5px",
+                            right: "0",
+                            bottom: "5px",
+                            containLabel: true
+                        },
+                        xAxis: {
+                            type: "category",
+                            data: ["东部","南部","西部","北部"]
+                        },
+                        yAxis: {
+                            type: "value"
+                        },
+                        series: [
+                        {
+                            // 柱子的相关设置
+                            itemStyle: {
+                                color: "rgb(0, 174, 255)"
+                            },
+                            barWidth: "20px",
+                            type: "bar",
+                            emphasis: {
+                                focus: "series"
+                            },
+                            data: [this.eSum,this.sSum,this.wSum,this.nSum]
+                        }
+                        ]
+                    }
+                }, 5000)
+            })
+
+            // // 一定高度点击风机跳转视角 并删除风场
             // if (this.map.camera.positionCartographic.height >= 100000) {
             //     // 绑定点击风机事件
             //     turbineLayer.on(mars3d.EventType.click, () => {
@@ -2238,7 +2440,7 @@ export default {
         width: 80%;
         background-color: rgba(0,183,254,0.5);
         border: none;
-        font-size: 16px;
+        font-size: 0.8rem;
         font-weight: 800;
         color: white;
     }

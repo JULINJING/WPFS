@@ -124,7 +124,7 @@ export default {
         this.curData = JSON.parse(JSON.stringify(rawData));
     },
     methods: {
-        ...mapMutations("global", ["setUploadedFileName", "setObtainedJsonData"]),
+        ...mapMutations("global", ["setUploadedFileName", "setProcessedJsonData"]),
 
         initVirtualScroll() {
             /*指定table的ref*/
@@ -209,16 +209,15 @@ export default {
             const fileResponse = JSON.stringify(this.curfile.response);
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-            // TODO
+            
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
-                if(res.code === "200"){
-                console.log(res);
-                this.jsonData = JSON.parse(res.jsonContent);
-                this.curData = this.jsonData.slice(0, 50);
-                this.setObtainedJsonData(this.jsonData.slice(0, 7 * 96));
+                if (res.code === "200") {
+                    this.jsonData = JSON.parse(res.jsonContent);
+                    this.curData = this.jsonData.slice(0, 50);
+                    this.setProcessedJsonData(this.extractNoonData(this.jsonData));
                 }
             })
-            this.$emit('update-table-data', this.jsonData.slice(0, 7 * 96));
+            this.$emit('update-table-data');
         },
 
         // 上传文件失败
@@ -250,7 +249,7 @@ export default {
                 offset: 50,
             });
             this.setUploadedFileName(file.name);
-            console.log(this.currentPage, this.pageSize);
+            // console.log(this.currentPage, this.pageSize);
 
             this.$nextTick(() => {
                 this.initVirtualScroll();
@@ -265,7 +264,7 @@ export default {
                 await this.sendPreprocessParams();
                 this.fetchData();
 
-                console.log(this.jsonData);
+                // console.log(this.jsonData);
                 this.$nextTick(() => {
                     this.initVirtualScroll();
                 });
@@ -279,7 +278,6 @@ export default {
             }
         },
 
-        // TODO: 发送预处理参数
         async sendPreprocessParams() {
             await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
                     if (res.code === "200") {
@@ -292,6 +290,16 @@ export default {
                 offset: 50,
             });
         },
+        extractNoonData(jsonData) {
+            const data = (jsonData); // 解析jsonData为JavaScript对象
+            const noonData = data.filter(item => {
+                const dateTime = item.DATATIME;
+                const time = dateTime.split(' ')[1]; // 提取时间部分
+                return time === '12:00:00'; // 判断时间是否为中午12:00
+            });
+            return noonData;
+        }
+
     },
 };
 </script>
