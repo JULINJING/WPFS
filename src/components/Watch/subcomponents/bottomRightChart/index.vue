@@ -8,7 +8,7 @@
 import Chart from './chart.vue'
 export default {
     data() {
-        const now = new Date(2022,3,1)
+        const now = new Date(2022, 3, 1)
         return {
             drawTiming: null,
             cdata: {
@@ -53,12 +53,12 @@ export default {
         randomData() {
             const oneDay = 24 * 3600 * 1000
             this.now = new Date(+this.now + oneDay)
-            const value = Math.random() * 21 + 500
+            const value = Math.random() * 500 + 250
             return {
                 name: [this.now.getFullYear(), this.now.getMonth(), this.now.getDate()].join('/'),
                 value: [
                     Math.round(value),
-                    Math.round(value) - 100
+                    Math.round(value) - Math.round(Math.random() * 100)
                 ]
             };
         }

@@ -45,8 +45,8 @@ export default {
                     },
                     grid: {
                         x: "10%",
-                        x2:"10%",
-                        y: "8%",
+                        x2: "10%",
+                        y: "30%",
                         y2: "10%"
                     },
                     xAxis: {
@@ -99,7 +99,7 @@ export default {
                                     color: "#F02FC2"
                                 }
                             },
-                            data: newData.rateData
+                            data: newData.lineData
                         },
                         {
                             name: "预测功率",
@@ -114,7 +114,7 @@ export default {
                                     ])
                                 }
                             },
-                            data: newData.barData
+                            data: newData.rateData
                         },
                         {
                             name: "实际功率",
@@ -132,7 +132,7 @@ export default {
                                 }
                             },
                             z: -12,
-                            data: newData.lineData
+                            data: newData.barData
                         }
                     ]
                 }

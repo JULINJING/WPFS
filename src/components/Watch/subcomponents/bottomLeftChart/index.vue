@@ -6,6 +6,8 @@
 
 <script>
 import Chart from './chart.vue'
+import { mapState } from 'vuex'
+import rawData from '@/assets/testJson/12.json'
 export default {
     data() {
         return {
@@ -116,16 +118,41 @@ export default {
                     7500
                 ],
                 rateData: []
-            }
+            },
+            curData: Object
         };
     },
     components: {
         Chart,
     },
     mounted() {
-        this.setData();
+        this.initData()
+        this.setData()
     },
     methods: {
+        initData() {
+            this.curData = JSON.parse(JSON.stringify(rawData))
+            console.log(this.curData)
+            let width = document.documentElement.clientWidth
+            this.cdata.category = []
+            this.cdata.rateData = []
+            this.cdata.lineData = []
+            if (width < 960) {
+                for (let i = 0; i < 10; i++) {
+                    this.cdata.category.push(this.curData[i].DATATIME)
+                    this.cdata.barData.push(this.curData[i].predictYD15.toFixed(1))
+                    this.cdata.rateData.push(this.curData[i].trueYD15.toFixed(1))
+                    this.cdata.lineData.push(this.curData[i].AWS.toFixed(1))
+                }
+            } else {
+                for (let i = 0; i < this.curData.length; i++) {
+                    this.cdata.category.push(this.curData[i].DATATIME)
+                    this.cdata.barData.push(this.curData[i].predictYD15.toFixed(1))
+                    this.cdata.rateData.push(this.curData[i].trueYD15.toFixed(1))
+                    this.cdata.lineData.push(this.curData[i].AWS.toFixed(1))
+                }
+            }
+        },
         // 根据自己的业务情况修改
         setData() {
 
@@ -133,20 +160,22 @@ export default {
                 //视窗窗口 宽度高度改变时 触发函数程序
                 //获取浏览器视窗窗口的宽度
                 let width = document.documentElement.clientWidth
-
+                this.cdata.category = []
+                this.cdata.rateData = []
+                this.cdata.lineData = []
                 if (width < 960) {
                     for (let i = 0; i < 10; i++) {
-                        let rate = 10 * this.cdata.barData[i] / this.cdata.lineData[i];
-                        this.cdata.rateData.push(rate.toFixed(2));
+                        this.cdata.category.push(this.curData[i].DATATIME)
+                        this.cdata.barData.push(this.curData[i].predictYD15.toFixed(0))
+                        this.cdata.rateData.push(this.curData[i].trueYD15.toFixed(0))
+                        this.cdata.lineData.push(this.curData[i].AWS.toFixed(1))
                     }
-                    this.cdata.category = this.cdata.category.slice(0, 10)
-                    this.cdata.barData = this.cdata.barData.slice(0, 10)
-                    this.cdata.lineData = this.cdata.lineData.slice(0, 10)
-                    this.cdata.lineData = this.cdata.lineData.slice(0, 10)
                 } else {
-                    for (let i = 0; i < this.cdata.barData.length - 1; i++) {
-                        let rate = 10 * this.cdata.barData[i] / this.cdata.lineData[i];
-                        this.cdata.rateData.push(rate.toFixed(2));
+                    for (let i = 0; i < this.curData.length; i++) {
+                        this.cdata.category.push(this.curData[i].DATATIME)
+                        this.cdata.barData.push(this.curData[i].predictYD15.toFixed(0))
+                        this.cdata.rateData.push(this.curData[i].trueYD15.toFixed(0))
+                        this.cdata.lineData.push(this.curData[i].AWS.toFixed(1))
                     }
                 }
             })

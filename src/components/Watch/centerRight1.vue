@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import rawData from '@/assets/testJson/11.json'
 export default {
     data() {
         return {
@@ -39,6 +41,22 @@ export default {
                 index: false,
                 columnWidth: 750,
                 align: 'center'
+            },
+            curData: Array
+        }
+    },
+    mounted() {
+        this.curData = JSON.parse(JSON.stringify(rawData))
+        this.setData()
+    },
+    computed: {
+        ...mapState('global', ['processedJsonData']),
+    },
+    methods: {
+        setData() {
+            this.config.data = []
+            for (let i = 0; i < this.curData.length; i++) {
+                this.config.data.push([this.curData[i].DATATIME,this.curData[i].APOWER,this.curData[i].YD15])
             }
         }
     }

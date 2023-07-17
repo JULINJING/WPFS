@@ -27,7 +27,7 @@ $box-height: 100%;
 $box-width: 100%;
 
 #bottomLeft {
-    padding: 20px 16px;
+    padding: 10px 8px;
     height: $box-height;
     width: $box-width;
     border-radius: 5px;
@@ -42,4 +42,3 @@ $box-width: 100%;
     }
 }
 </style>
-  
