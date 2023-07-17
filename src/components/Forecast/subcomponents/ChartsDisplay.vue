@@ -7,6 +7,17 @@
                 <LineChart class="LineChart"/>
             </div>
             <div class="right box">
+                <h1>功率24小时变化图</h1>
+                <SolidHistogram class="SolidHistogram"/>
+            </div>
+        </div>
+
+        <div class="subdiv _subdiv" style="margin-top: 1%;">
+            <div class="left box">
+                <h1>雷达图</h1>
+                <RadarChart class="RadarChart"/>
+            </div>
+            <div class="right box">
                 <h1>散点图</h1>
                 <ScatterPlot class="ScatterPlot"/>
             </div>
@@ -17,11 +28,13 @@
 <script>
 import LineChart from './diagrams/LineChart.vue';
 import ScatterPlot from './diagrams/ScatterPlot.vue';
+import SolidHistogram from './diagrams/SolidHistogram.vue';
+import RadarChart from './diagrams/RadarChart.vue';
 
 export default {
     name: 'dataanalysis',
     components: {
-        LineChart, ScatterPlot
+        LineChart, ScatterPlot, SolidHistogram, RadarChart
     }
 }
 </script>
