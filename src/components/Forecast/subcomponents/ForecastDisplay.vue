@@ -45,8 +45,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('global', ['predictedJsonData']),
-        ...mapState('global', ['uploadedFileName']),
+        ...mapState('global', ['predictedJsonData', 'uploadedFileName']),
     },
     watch: {
         predictedJsonData: {

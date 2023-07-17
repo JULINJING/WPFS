@@ -40,28 +40,17 @@ export default {
     data() {
         return {
             Turbine_id: '',
-            tableData: []
         };
     },
-    watch: {
-        predictedJsonData: {
-            handler(newData) {
-                this.tableData = newData;
-                this.updateTitle();
-            },
-            deep: true
-        }
+    mounted() {
+        this.updateTitle();
     },
     computed: {
         ...mapState('global', ['predictedJsonData']),
     },
     methods: {
         updateTitle() {
-            this.tableData = this.$store.state.global.predictedJsonData;
-            var fileName = this.tableData[0].Turbine_id;
-            console.log(("updateTitle: ", fileName));
-            this.Turbine_id = fileName.split('.')[0];
-            console.log(this.Turbine_id);
+            this.Turbine_id = this.$store.state.global.predictedJsonData[0].TurbID;
         }
     },
 

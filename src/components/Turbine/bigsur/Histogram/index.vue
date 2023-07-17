@@ -70,28 +70,26 @@ export default {
 						// barGap: 10,
 						barCategoryGap: 11,
 						itemStyle: {
-							normal: {
-								label: {
-									show: true,
-									position: [212, 4],
-									formatter: "{c} ℃",
-									textStyle: {
-										color: "#1e9ec5",
-										fontSize: 11,
-										fontWeight: "bolder",
-									},
+							label: {
+								show: true,
+								position: [212, 4],
+								formatter: "{c} ℃",
+								textStyle: {
+									color: "#1e9ec5",
+									fontSize: 11,
+									fontWeight: "bolder",
 								},
-								color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-									{
-										offset: 0,
-										color: "#15c5e8",
-									},
-									{
-										offset: 1,
-										color: "#15c5e8",
-									},
-								]),
 							},
+							color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+								{
+									offset: 0,
+									color: "#15c5e8",
+								},
+								{
+									offset: 1,
+									color: "#15c5e8",
+								},
+							]),
 						},
 					},
 				],

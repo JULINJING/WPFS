@@ -21,15 +21,15 @@ export default {
     computed: {
         ...mapState('global', ['predictedJsonData']),
     },
-    watch: {
-        predictedJsonData: {
-            handler(newData) {
-                this.processData();
-                this.renderChart();
-            },
-            deep: true 
-        }
-    },
+    // watch: {
+    //     predictedJsonData: {
+    //         handler(newData) {
+    //             this.processData();
+    //             this.renderChart();
+    //         },
+    //         deep: true 
+    //     }
+    // },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {

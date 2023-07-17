@@ -24,15 +24,15 @@ export default {
     computed: {
         ...mapState('global', ['predictedJsonData']),
     },
-    watch: {
-        predictedJsonData: {
-            handler(newData) {
-                this.processData();
-                this.renderChart();
-            },
-            deep: true
-        }
-    },
+    // watch: {
+    //     predictedJsonData: {
+    //         handler(newData) {
+    //             this.processData();
+    //             this.renderChart();
+    //         },
+    //         deep: true
+    //     }
+    // },
     methods: {
         processData() {
             this.tableData = this.$store.state.global.predictedJsonData;
@@ -65,20 +65,17 @@ export default {
                             this.chartInstance.resize()
                         })
                     }
-                    var chartDom = document.getElementById('radarChart');
-                    var myChart = echarts.init(chartDom);
-                    var option;
 
-                    option = {
+                    const option = {
                         color: ['#67F9D8', '#FFE434', '#56A3F1', '#FF917C'],
                         legend: {},
                         radar: [
                             {
                                 indicator: [
-                                    { text: 'PREPOWER' },
-                                    { text: 'ROUND(A.POWER, 0)' },
-                                    { text: 'trueYD15' },
-                                    { text: 'predictYD15' },
+                                    { name : 'PREPOWER' },
+                                    { name : 'ROUND(A.POWER, 0)' },
+                                    { name : 'trueYD15' },
+                                    { name : 'predictYD15' },
                                 ],
                                 center: ['50%', '50%'],
                                 radius: 120,
@@ -144,7 +141,7 @@ export default {
                         ]
                     };
 
-                    option && myChart.setOption(option);
+                    option && this.chartInstance.setOption(option);
                 });
             }
         },

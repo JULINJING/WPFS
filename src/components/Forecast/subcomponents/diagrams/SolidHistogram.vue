@@ -25,15 +25,15 @@ export default {
     computed: {
         ...mapState('global', ['predictedJsonData']),
     },
-    watch: {
-        predictedJsonData: {
-            handler(newData) {
-                this.processData();
-                this.renderChart();
-            },
-            deep: true 
-        }
-    },
+    // watch: {
+    //     predictedJsonData: {
+    //         handler(newData) {
+    //             this.processData();
+    //             this.renderChart();
+    //         },
+    //         deep: true 
+    //     }
+    // },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
@@ -92,20 +92,16 @@ export default {
                             this.chartInstance.resize()
                         })
                     }
-                    var chartDom = document.getElementById('solidHistogram');
-                    var myChart = echarts.init(chartDom);
-                    var option;
-
+                    
                     var hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00',
                         '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
                         '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
-
 
                     var variables = ['PREPOWER','ROUND(A.POWER, 0)','trueYD15', 'predictYD15'];
 
                     var data = this.scatterData;
 
-                    option = {
+                    const option = {
                         tooltip: {
                             formatter: function (params) {
                                 var hour = params.value[0];
@@ -196,7 +192,7 @@ export default {
                         ]
                     };
 
-                    option && myChart.setOption(option);
+                    option && this.chartInstance.setOption(option);
                 });
             }
         },
