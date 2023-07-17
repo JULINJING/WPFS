@@ -74,14 +74,16 @@ export default {
                 forecastPeriod: [],
             },
             modelOptions: [
-                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
-                { label: "GRU", value: "model2" },
-                { label: "MLP", value: "model3" },
-                { label: "LSTNet", value: "model4" },
-                { label: "Transformer", value: "model5" },
-                { label: "Crossformer", value: "model6" },
-                { label: "LightGBM", value: "model7" },
-                { label: "XgBoost", value: "model8" }
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
+                { label: "Crossformer", value: "Crossformer" },
+                { label: "GRU", value: "GRU" },
+                { label: "LightGBM", value: "LightGBM" },
+                { label: "LSTNet", value: "LSTNet" },
+                { label: "MLP", value: "MLP" },
+                { label: "PatchTST", value: "PatchTST" },
+                { label: "TimesNet", value: "TimesNet" },
+                { label: "Transformer", value: "Transformer" },
+                { label: "XgBoost", value: "XgBoost" }
             ],
             isMultiple: false,
             covariateOptions: [
@@ -182,6 +184,8 @@ export default {
                 // this.$emit('update-table-data', this.jsonData);
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
+                var time_out = this.setPredictTimeout();
+
                 // 模拟耗时操作
                 setTimeout(() => {
                     this.loading = false;
@@ -191,12 +195,32 @@ export default {
                         type: "success",
                         offset: 50,
                     });
-                }, 1000); // 延迟10秒后隐藏加载状态
+                }, time_out); // 延迟10秒后隐藏加载状态
             }
+        },
+        setPredictTimeout(){
+            var time_out;
+                
+            if(this.form.selectedModels === "CTFN" ||
+                this.form.selectedModels === "GRU" ||
+                this.form.selectedModels === "MLP" ||
+                this.form.selectedModels === "LSTNet" ||
+                this.form.selectedModels === "Transformer" ||
+                this.form.selectedModels === "Crossformer" ||
+                this.form.selectedModels === "TimesNet"){
+
+                time_out = 10000;
+            } else if(this.form.selectedModels === "LightGBM" ||
+                        this.form.selectedModels === "XgBoost" ||
+                        this.form.selectedModels === "PatchTST") {
+
+                time_out = 5000;
+            }
+            return time_out;
         },
         async fetchData(fileName) {
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-            // TODO
+
             await this.request.post("/file/predicted/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
                     this.jsonData = JSON.parse(res.jsonContent);

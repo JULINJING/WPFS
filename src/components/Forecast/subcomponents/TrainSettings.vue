@@ -2,18 +2,16 @@
     <div class="input-container _input-container">
         <el-form ref="form" :model="form" label-width="80px">
             <!-- 进度条 -->
-            <div class="train-form-row">
+            <div class="train-form-row" v-if="!loading">
                 <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
             </div>
-
+            <div class="train-form-row" v-if="loading">
+                <el-progress type="line" id="trainProgressBar" :percentage="trainingProgress" style="width: 100%"></el-progress>
+            </div>
             <div class="train-form-row">
                 <el-tag>具体模型选择</el-tag>
                 <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option 
-                        v-for="model in modelOptions" 
-                        :key="model.value" 
-                        :label="model.label"
-                        :value="model.value"
+                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
                         :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
                     </el-option>
                 </el-select>
@@ -55,34 +53,34 @@ export default {
         return {
             form: {
                 type: "train",
-                selectedModels: [],
+                selectedModels: 'LightGBM',
                 batchSize: "32",
                 learningRate: "0.001",
                 inputLen: "384",
                 predLen: "172",
-                loading: false, // 加载状态
             },
             modelOptions: [
                 { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
-                { label: "GRU", value: "GRU" },
-                { label: "MLP", value: "MLP" },
-                { label: "LSTNet", value: "LSTNet" },
-                { label: "Transformer", value: "Transformer" },
                 { label: "Crossformer", value: "Crossformer" },
+                { label: "GRU", value: "GRU" },
                 { label: "LightGBM", value: "LightGBM" },
-                { label: "XgBoost", value: "XgBoost" },
+                { label: "LSTNet", value: "LSTNet" },
+                { label: "MLP", value: "MLP" },
                 { label: "PatchTST", value: "PatchTST" },
-                { label: "TimesNet", value: "TimesNet" }
+                { label: "TimesNet", value: "TimesNet" },
+                { label: "Transformer", value: "Transformer" },
+                { label: "XgBoost", value: "XgBoost" }
             ],
             loading: false, // 加载状态
             loadingInstance: null,
             progress: 0,
+            trainingProgress: 0, // 训练进度条百分比
+            trainingTimer: null, // 训练计时器
         };
     },
 
     computed: {
         ...mapState('global', ['uploadedFileName']),
-
         calculateProgress() {
             let filledFields = 0;
             const totalFields = 5; // 总字段数
@@ -154,53 +152,71 @@ export default {
                 //         this.$message.error("操作失败");
                 //     }
                 // });
-                var time_out;
-                
-                if(this.form.selectedModels === "CTFN" ||
-                    this.form.selectedModels === "GRU" ||
-                    this.form.selectedModels === "MLP" ||
-                    this.form.selectedModels === "LSTNet" ||
-                    this.form.selectedModels === "Transformer" ||
-                    this.form.selectedModels === "Crossformer" ||
-                    this.form.selectedModels === "TimesNet"){
 
-                    time_out = 60000;
-                } else if(this.form.selectedModels === "LightGBM" ||
-                            this.form.selectedModels === "XgBoost" ||
-                            this.form.selectedModels === "PatchTST") {
-
-                    time_out = 1000;
-                }
-                    
+                var time_out = this.setTrainTimeout();
                 this.loading = true;
-                this.startLoading(); // 显示加载中状态
-                // 模拟耗时操作
-                setTimeout(() => {
-                    this.loading = false;
-                    this.endLoading(); // 隐藏加载中状态
-                    this.$message({
-                        message: "训练成功",
-                        type: "success",
-                        offset: 50,
-                    });
-                }, time_out); // 延迟10秒后隐藏加载状态
-
+                this.startLoading(time_out); // 显示加载中状态
 
             }
         },
 
-        startLoading() {
+        setTrainTimeout() {
+            var time_out;
+
+            if (this.form.selectedModels === "CTFN" ||
+                this.form.selectedModels === "GRU" ||
+                this.form.selectedModels === "MLP" ||
+                this.form.selectedModels === "LSTNet" ||
+                this.form.selectedModels === "Transformer" ||
+                this.form.selectedModels === "Crossformer" ||
+                this.form.selectedModels === "TimesNet") {
+
+                time_out = 600000;
+            } else if (this.form.selectedModels === "LightGBM" ||
+                this.form.selectedModels === "XgBoost" ||
+                this.form.selectedModels === "PatchTST") {
+
+                time_out = 120000;
+            }
+
+            return time_out;
+        },
+        startLoading(time_out) {
+            const targetNode = document.getElementById('trainProgressBar'); // 替换为您想要覆盖的 DOM 节点的选择器
             this.loadingInstance = Loading.service({
+                // target: targetNode,
                 lock: true,
                 text: '正在训练……',
                 background: 'rgba(0, 0, 0, 0.7)'
             });
+            this.trainingProgress = 0;
+            this.trainingTimer = setInterval(() => {
+                if (this.trainingProgress < 100) {
+                    this.trainingProgress += 1;
+                } else {
+                    clearInterval(this.trainingTimer);
+                    this.trainingTimer = null;
+                }
+            }, time_out / 100);
+
+            setTimeout(() => {
+                this.trainingProgress = 100;
+                clearInterval(this.trainingTimer);
+                this.trainingTimer = null;
+                this.endLoading();
+            }, time_out);
         },
         endLoading() {
             if (this.loadingInstance) {
                 this.loadingInstance.close();
                 this.loadingInstance = null;
             }
+            this.$message({
+                        message: "训练成功",
+                        type: "success",
+                        offset: 50,
+                    });
+            this.loading = false;
         },
 
     },
