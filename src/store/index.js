@@ -37,7 +37,7 @@ const store = new Vuex.Store({
         global: {
             namespaced: true, // 确保命名空间设置为 true
             state: {
-                uploadedFileName: "1.csv",
+                uploadedFileName: "11.csv",
                 processedJsonData: [],
                 predictedJsonData: []
             },
@@ -52,7 +52,7 @@ const store = new Vuex.Store({
                     state.processedJsonData = data;
                 },
                 setPredictedJsonData(state, data) {
-                    state.processedJsonData = data;
+                    state.predictedJsonData = data;
                 },
             },
             getters: {
@@ -63,7 +63,7 @@ const store = new Vuex.Store({
                     return state.processedJsonData;
                 },
                 getPredictedJsonData(state) {
-                    return state.processedJsonData;
+                    return state.setPredictedJsonData;
                 }
             }
         }
