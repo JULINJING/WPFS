@@ -32,11 +32,9 @@
   
 <script>
 import rawData from '../../../assets/testJson/12.json'
+import { mapState } from 'vuex';
 
 export default {
-    props: {
-        tableData: Array,
-    },
     data() {
         return {
             rolltimer: '',
@@ -44,16 +42,16 @@ export default {
             curData: [],
         }
     },
-    mounted(){
-        this.curData = JSON.parse(JSON.stringify(rawData));
+    computed: {
+        ...mapState('global', ['predictedJsonData']), // 将predictedJsonData和curData从全局模块映射到组件的计算属性中
     },
     watch: {
-        tableData: {
-            immediate: true, // 立即执行观察者回调函数
-            handler(newVal) {
-                this.curData = newVal;
-            }
-        }
+        predictedJsonData(newData) {
+            this.curData = newData;
+        },
+    },
+    mounted(){
+        this.curData = JSON.parse(JSON.stringify(rawData));
     },
     methods: {
         rowStyle() {

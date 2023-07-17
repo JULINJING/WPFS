@@ -4,6 +4,7 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mapState } from 'vuex';
 
 
 export default {
@@ -12,27 +13,32 @@ export default {
     },
     data() {
         return {
-            scatterData: []
+            scatterData: [],
+            tableData: []
         };
     },
     mounted() {
         this.processData();
         this.renderChart();
     },
-    watch: {
-        tableData: {
-            handler(newTableData) {
-                this.scatterData = []; // 清空之前的散点图数据
-                this.processData(); // 重新处理数据
-                this.renderChart(); // 重新渲染散点图
-            },
-            immediate: true, // 立即执行watch处理函数
-        },
+    computed: {
+        ...mapState('global', ['predictedJsonData']),
     },
+    // watch: {
+    //     tableData: {
+    //         handler(newTableData) {
+    //             this.scatterData = []; // 清空之前的散点图数据
+    //             this.processData(); // 重新处理数据
+    //             this.renderChart(); // 重新渲染散点图
+    //         },
+    //         immediate: true, // 立即执行watch处理函数
+    //     },
+    // },
     methods: {
         processData() {
-            if (this.tableData && this.tableData.length > 0) {
-
+            // if (this.tableData && this.tableData.length > 0) {
+                this.tableData = this.$store.state.global.predictedJsonData;
+                
                 // 遍历 jsonData 数组
                 for (let i = 0; i < this.tableData.length; i++) {
                     const item = this.tableData[i];
@@ -45,7 +51,7 @@ export default {
                         this.scatterData.push([predictYD15, trueYD15]);
                     }
                 }
-            }
+            // }
         },
 
         renderChart() {

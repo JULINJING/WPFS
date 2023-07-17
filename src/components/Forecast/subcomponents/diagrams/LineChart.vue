@@ -4,44 +4,48 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mapState } from 'vuex';
 
 export default {
-    props: {
-        tableData: Array,
-    },
+    // props: {
+    //     tableData: Array,
+    // },
     data() {
         return {
-            lineData: []
+            lineData: [],
+            tableData: []
         };
     },
     mounted() {
-        if (this.lineData !== null) {
-            this.processData();
-            this.renderChart();
-        }
+        this.processData();
+        this.renderChart();
     },
-    watch: {
-        tableData: {
-            handler(newTableData) {
-                if (newTableData !== null) {
-                    this.lineData = [];
-                    this.processData();
-                    this.renderChart();
-                }
-            },
-            immediate: true, // 立即执行watch处理函数
-        },
+    computed: {
+        ...mapState('global', ['predictedJsonData']),
     },
+    // watch: {
+    //     tableData: {
+    //         handler(newTableData) {
+    //             if (newTableData !== null) {
+    //                 this.lineData = [];
+    //                 this.processData();
+    //                 this.renderChart();
+    //             }
+    //         },
+    //         immediate: true, // 立即执行watch处理函数
+    //     },
+    // },
     methods: {
         processData() {
-            if (this.tableData && this.tableData.length > 0) {
+            // if (this.tableData && this.tableData.length > 0) {
+                this.tableData = this.$store.state.global.predictedJsonData;
 
                 this.lineData = this.tableData.map(item => ({
                     DATATIME: item.DATATIME,
                     predictYD15: item.predictYD15,
                     trueYD15: item.trueYD15
                 }));
-            }
+            // }
         },
 
         renderChart() {
@@ -165,7 +169,7 @@ export default {
                                     },
                                 },
                                 label: {
-                                    show: true,
+                                    show: false,
                                     position: 'top'
                                 },
                                 itemStyle: {

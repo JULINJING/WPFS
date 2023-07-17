@@ -69,7 +69,6 @@ export default {
                     }
                     if (this.boxData && this.boxData.length > 0) {
                         const data = this.getBoxplotData();
-                        console.log(data);
                         const option = {
                             dataset: [
                                 {

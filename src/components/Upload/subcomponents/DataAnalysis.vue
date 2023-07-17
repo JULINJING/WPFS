@@ -37,7 +37,7 @@
                 <BoxPlot :tableData="tableData" class="BoxPlot"/>
             </div>
             <div class="right box">
-                <h1>实际风速和实际功率相关图</h1>
+                <h1>实际功率1 和 实际功率2 相关图</h1>
                 <ScatterPlot :tableData="tableData" class="ScatterPlot" />
             </div>
         </div>
