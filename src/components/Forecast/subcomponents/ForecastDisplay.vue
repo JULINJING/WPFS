@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据</h1>
+        <h1 style="margin-top: 20px;margin-bottom: 10px;">{{tableTitle}}</h1>
         <el-button icon="el-icon-download" circle size="mini" @click="downloadOutFile" style="margin-left: 95%;margin-bottom: 5px"></el-button>
         <el-table :data="curData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
             @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
@@ -41,6 +41,7 @@ export default {
             rolltimer: '',
             // 测试数据
             curData: [],
+            tableTitle: '预测结果(示例)'
         }
     },
     computed: {
@@ -48,14 +49,21 @@ export default {
         ...mapState('global', ['uploadedFileName']),
     },
     watch: {
-        predictedJsonData(newData) {
-            this.curData = newData;
+        predictedJsonData: {
+            handler(newData) {
+                this.curData = newData;
+                this.updateTitle();
+            }
         },
     },
     mounted(){
         this.curData = JSON.parse(JSON.stringify(rawData));
     },
     methods: {
+        updateTitle(){
+            const fileName =  this.$store.state.global.uploadedFileName;
+            this.tableTitle = fileName.split('.')[0] + "号风机预测结果";
+        },
         rowStyle() {
             return "text-align:center";
         },

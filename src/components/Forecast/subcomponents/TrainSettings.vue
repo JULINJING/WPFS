@@ -63,16 +63,16 @@ export default {
                 loading: false, // 加载状态
             },
             modelOptions: [
-                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
-                { label: "GRU", value: "model2" },
-                { label: "MLP", value: "model3" },
-                { label: "LSTNet", value: "model4" },
-                { label: "Transformer", value: "model5" },
-                { label: "Crossformer", value: "model6" },
-                { label: "LightGBM", value: "model7" },
-                { label: "XgBoost", value: "model8" },
-                { label: "PatchTST", value: "model9" },
-                { label: "TimesNet", value: "model10" }
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
+                { label: "GRU", value: "GRU" },
+                { label: "MLP", value: "MLP" },
+                { label: "LSTNet", value: "LSTNet" },
+                { label: "Transformer", value: "Transformer" },
+                { label: "Crossformer", value: "Crossformer" },
+                { label: "LightGBM", value: "LightGBM" },
+                { label: "XgBoost", value: "XgBoost" },
+                { label: "PatchTST", value: "PatchTST" },
+                { label: "TimesNet", value: "TimesNet" }
             ],
             loading: false, // 加载状态
             loadingInstance: null,
@@ -154,6 +154,24 @@ export default {
                 //         this.$message.error("操作失败");
                 //     }
                 // });
+                var time_out;
+                
+                if(this.form.selectedModels === "CTFN" ||
+                    this.form.selectedModels === "GRU" ||
+                    this.form.selectedModels === "MLP" ||
+                    this.form.selectedModels === "LSTNet" ||
+                    this.form.selectedModels === "Transformer" ||
+                    this.form.selectedModels === "Crossformer" ||
+                    this.form.selectedModels === "TimesNet"){
+
+                    time_out = 60000;
+                } else if(this.form.selectedModels === "LightGBM" ||
+                            this.form.selectedModels === "XgBoost" ||
+                            this.form.selectedModels === "PatchTST") {
+
+                    time_out = 1000;
+                }
+                    
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
                 // 模拟耗时操作
@@ -165,7 +183,7 @@ export default {
                         type: "success",
                         offset: 50,
                     });
-                }, 1000); // 延迟10秒后隐藏加载状态
+                }, time_out); // 延迟10秒后隐藏加载状态
 
 
             }

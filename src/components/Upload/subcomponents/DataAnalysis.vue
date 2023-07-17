@@ -1,44 +1,44 @@
 <template>
     <div class="diagramcontainer _diagramcontainer">
-        <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据图表可视化</h1>
+        <h1 style="margin-top: 20px;margin-bottom: 10px;">{{ Turbine_id }}号风机数据预处理后图表可视化</h1>
         <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
                 <h1>三维柱状图</h1>
-                <SolidHistogram :tableData="tableData" class="SolidHistogram"/>
+                <SolidHistogram class="SolidHistogram"/>
             </div>
             <div class="right box">
                 <h1>相关性矩阵图</h1>
-                <HeatMap :tableData="tableData" class="HeatMap"/>
+                <HeatMap class="HeatMap"/>
             </div>
         </div>
         <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
                 <h1>风向—风速图</h1>
-                <WeatherChart :tableData="tableData" class="WeatherChart"/>
+                <WeatherChart class="WeatherChart"/>
             </div>
             <div class="right box">
                 <h1>四季图</h1>
-                <ParallelChart :tableData="tableData" class="ParallelChart"/>
+                <ParallelChart class="ParallelChart"/>
             </div>
         </div>
         <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
                 <h1>预测功率和实际功率相关图</h1>
-                <DynamicHistogram :tableData="tableData" class="DynamicHistogram" />
+                <DynamicHistogram class="DynamicHistogram" />
             </div>
             <div class="right box">
                 <h1>时序图</h1>
-                <LineChart :tableData="tableData" class="LineChart"/>
+                <LineChart class="LineChart"/>
             </div>
         </div>
         <div class="subdiv _subdiv" style="margin-top: 2%;margin-bottom: 2%;">
             <div class="left box">
                 <h1>箱线图</h1>
-                <BoxPlot :tableData="tableData" class="BoxPlot"/>
+                <BoxPlot class="BoxPlot"/>
             </div>
             <div class="right box">
                 <h1>实际功率1 和 实际功率2 相关图</h1>
-                <ScatterPlot :tableData="tableData" class="ScatterPlot" />
+                <ScatterPlot class="ScatterPlot" />
             </div>
         </div>
     </div>
@@ -53,15 +53,36 @@ import ParallelChart from './diagrams/ParallelChart.vue';
 import DynamicHistogram from './diagrams/DynamicHistogram.vue';
 import WeatherChart from './diagrams/WeatherChart.vue';
 import SolidHistogram from './diagrams/SolidHistogram.vue';
+import { mapState } from 'vuex';
 
 export default {
-    props: {
-        tableData: Array,
-    },
     name: 'dataanalysis',
     components: {
         HeatMap, LineChart, BoxPlot, ScatterPlot, ParallelChart, DynamicHistogram, WeatherChart, SolidHistogram
-    }
+    },
+    data() {
+        return {
+            Turbine_id: '',
+        };
+    },
+    computed: {
+        ...mapState('global', ['uploadedFileName']),
+    },
+    watch: {
+        uploadedFileName: {
+            handler(newName) {
+                this.updateTitle();
+            },
+            deep: true
+        }
+    },
+    methods: {
+        updateTitle() {
+            var fileName = this.$store.state.global.uploadedFileName;
+            this.Turbine_id = fileName.split('.')[0];
+        }
+    },
+
 }
 </script>
 

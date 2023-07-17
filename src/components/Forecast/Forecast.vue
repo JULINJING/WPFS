@@ -11,7 +11,7 @@
                     <span slot="label"><i class="iconfont">&#xe6df;</i> 预测</span>
                     <PredictSettings @update-table-data="updateTableData"/>
                     <ForecastDisplay />
-                    <ChartsDisplay />
+                    <ChartsDisplay v-if="isChartDisplay"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -40,6 +40,7 @@ export default {
     data() {
         return {
             activeName: 'train',
+            isChartDisplay: false
         };
     },
     mounted() {
@@ -48,6 +49,7 @@ export default {
     methods: {
         updateTableData(){
             console.log("Update predict table data");
+            this.isChartDisplay = true;
         }
     }
 }

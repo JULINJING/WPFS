@@ -1,6 +1,6 @@
 <template>
     <div class="diagramcontainer _diagramcontainer">
-        <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据图表可视化</h1>
+        <h1 style="margin-top: 20px;margin-bottom: 10px;">{{ Turbine_id }}号风机预测结果数据图表可视化</h1>
         <div class="subdiv _subdiv" style="margin-top: 1%;">
             <div class="left box">
                 <h1>预测功率YD15图</h1>
@@ -30,12 +30,41 @@ import LineChart from './diagrams/LineChart.vue';
 import ScatterPlot from './diagrams/ScatterPlot.vue';
 import SolidHistogram from './diagrams/SolidHistogram.vue';
 import RadarChart from './diagrams/RadarChart.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: 'dataanalysis',
     components: {
         LineChart, ScatterPlot, SolidHistogram, RadarChart
-    }
+    },
+    data() {
+        return {
+            Turbine_id: '',
+            tableData: []
+        };
+    },
+    watch: {
+        predictedJsonData: {
+            handler(newData) {
+                this.tableData = newData;
+                this.updateTitle();
+            },
+            deep: true
+        }
+    },
+    computed: {
+        ...mapState('global', ['predictedJsonData']),
+    },
+    methods: {
+        updateTitle() {
+            this.tableData = this.$store.state.global.predictedJsonData;
+            var fileName = this.tableData[0].Turbine_id;
+            console.log(("updateTitle: ", fileName));
+            this.Turbine_id = fileName.split('.')[0];
+            console.log(this.Turbine_id);
+        }
+    },
+
 }
 </script>
 

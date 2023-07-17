@@ -8,7 +8,6 @@ import 'echarts-gl'
 import { mapState } from 'vuex';
 
 export default {
-
     data() {
         return {
             tableData: [],
@@ -38,22 +37,23 @@ export default {
         processData() {
             this.tableData = this.$store.state.global.predictedJsonData;
 
-            const prepower = this.tableData.map(item => parseFloat(item.PREPOWER));
-            const power = this.tableData.map(item => parseFloat(item.APOWER));
-            const trueYD15 = this.tableData.map(item => parseFloat(item.trueYD15));
-            const predictYD15 = this.tableData.map(item => parseFloat(item.predictYD15));
+            if (this.tableData.length > 0) {
+                const prepower = this.tableData.map(item => parseFloat(item.PREPOWER));
+                const power = this.tableData.map(item => parseFloat(item.APOWER));
+                const trueYD15 = this.tableData.map(item => parseFloat(item.trueYD15));
+                const predictYD15 = this.tableData.map(item => parseFloat(item.predictYD15));
 
-            const variables = [prepower, power, trueYD15, predictYD15];
+                const variables = [prepower, power, trueYD15, predictYD15];
 
-            // 取出最大小值
-            const variableMin = variables.map(variable => Math.min(...variable));
-            const variableMax = variables.map(variable => Math.max(...variable));
-            const variableMean = variables.map(variable => variable.reduce((sum, value) => sum + value, 0) / variable.length);
-            
-            this.varMax = variableMax;
-            this.varMin = variableMin;
-            this.varMean = variableMean;
+                // 取出最大小值
+                const variableMin = variables.map(variable => Math.min(...variable));
+                const variableMax = variables.map(variable => Math.max(...variable));
+                const variableMean = variables.map(variable => variable.reduce((sum, value) => sum + value, 0) / variable.length);
 
+                this.varMax = variableMax;
+                this.varMin = variableMin;
+                this.varMean = variableMean;
+            }
         },
 
         renderChart() {
