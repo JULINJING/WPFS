@@ -67,7 +67,7 @@
     </el-dialog>
 
     <div class="table-box" v-if="showTable">
-      <h1 style="margin-top: 20px;margin-bottom: 10px;">预处理后数据</h1>
+      <h1 style="margin-top: 20px;margin-bottom: 10px;">{{tableTitle}}</h1>
       <el-button icon="el-icon-download" circle size="mini" @click="downloadOutFile" style="margin-left: 95%;margin-bottom: 5px"></el-button>
       <el-table ref="mytable" :data="curData" highlight-current-row stripe
                 style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
@@ -119,14 +119,23 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 50,
+      tableTitle: "预处理后数据(示例)",
+      showFileList: false,
     };
+  },
+  computed: {
+    fileListTemp(){
+      return this.fileList;
+    }
   },
   mounted() {
     this.curData = JSON.parse(JSON.stringify(rawData));
   },
   methods: {
     ...mapMutations("global", ["setUploadedFileName", "setProcessedJsonData"]),
-
+    updateTitle() {
+      this.tableTitle = this.curfile.name.split('.')[0]+"号风机预处理后数据";
+    },
     initVirtualScroll() {
       /*指定table的ref*/
       var table = this.$refs.mytable.bodyWrapper;
@@ -278,7 +287,6 @@ export default {
         });
       }
     },
-
     async sendPreprocessParams() {
       await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
         if (res.code === "200") {
@@ -290,6 +298,7 @@ export default {
         type: "success",
         offset: 50,
       });
+      this.updateTitle();
     },
     extractNoonData(jsonData) {
       const data = (jsonData); // 解析jsonData为JavaScript对象
