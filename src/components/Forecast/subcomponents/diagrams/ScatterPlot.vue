@@ -8,9 +8,6 @@ import { mapState } from 'vuex';
 
 
 export default {
-    props: {
-        tableData: Array,
-    },
     data() {
         return {
             scatterData: [],
@@ -24,21 +21,20 @@ export default {
     computed: {
         ...mapState('global', ['predictedJsonData']),
     },
-    // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             this.scatterData = []; // 清空之前的散点图数据
-    //             this.processData(); // 重新处理数据
-    //             this.renderChart(); // 重新渲染散点图
-    //         },
-    //         immediate: true, // 立即执行watch处理函数
-    //     },
-    // },
+    watch: {
+        predictedJsonData: {
+            handler(newData) {
+                this.processData();
+                this.renderChart();
+            },
+            deep: true 
+        }
+    },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
                 this.tableData = this.$store.state.global.predictedJsonData;
-                
+
                 // 遍历 jsonData 数组
                 for (let i = 0; i < this.tableData.length; i++) {
                     const item = this.tableData[i];

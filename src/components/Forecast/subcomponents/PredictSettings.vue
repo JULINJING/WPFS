@@ -17,8 +17,14 @@
             <div class="predict-form-row">
                 <el-tag>具体模型选择</el-tag>
                 <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="1" collapse-tags>
-                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
-                        :value="model.value"></el-option>
+                    <el-option 
+                        v-for="model in modelOptions" 
+                        :key="model.value" 
+                        :label="model.label"
+                        :value="model.value"
+                        :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
+
+                    </el-option>
                 </el-select>
             </div>
 
@@ -116,6 +122,11 @@ export default {
         ...mapState('global', ['uploadedFileName']),
         ...mapMutations('global', ['setPredictedJsonData']),
         
+        isTargetModel(modelName) {
+            // 指定目标模型的名称
+            const targetModelName = 'CTFN(Complementary Timeseries Fusion Networks)';
+            return modelName === targetModelName;
+        },
         handleModelTypeChange() {
             // 清空进度条和表单数据
             this.progress = 0;
@@ -159,7 +170,6 @@ export default {
                 // 调用后端预测接口，传入预测参数
                 await this.request.post("/file/predict", fileName).then((res) => {
                     if (res.code === "200") {
-                        console.log(res);
                         // console.log("jsonContent:  "+res.jsonContent)
                         // this.jsonData = JSON.parse(res.jsonContent);
                         // this.$emit('update-table-data', this.jsonData);
@@ -189,7 +199,6 @@ export default {
             // TODO
             await this.request.post("/file/predicted/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
-                    console.log(res);
                     this.jsonData = JSON.parse(res.jsonContent);
                     this.setPredictedJsonData(this.jsonData)
                 }

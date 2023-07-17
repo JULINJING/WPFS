@@ -9,8 +9,13 @@
             <div class="train-form-row">
                 <el-tag>具体模型选择</el-tag>
                 <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
-                        :value="model.value"></el-option>
+                    <el-option 
+                        v-for="model in modelOptions" 
+                        :key="model.value" 
+                        :label="model.label"
+                        :value="model.value"
+                        :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
+                    </el-option>
                 </el-select>
             </div>
 
@@ -37,7 +42,6 @@
             <div>
                 <el-button @click="setParams">开始训练</el-button>
             </div>
-            <el-loading v-if="loading" text="加载中..." :fullscreen="true"></el-loading>
         </el-form>
     </div>
 </template>
@@ -96,6 +100,11 @@ export default {
         },
     },
     methods: {
+        isTargetModel(modelName) {
+            // 指定目标模型的名称
+            const targetModelName = 'CTFN(Complementary Timeseries Fusion Networks)';
+            return modelName === targetModelName;
+        },
         handleSelectChange() {
             // 更新进度条
             this.progress = this.calculateProgress;
@@ -156,7 +165,7 @@ export default {
                         type: "success",
                         offset: 50,
                     });
-                }, 10); // 延迟10秒后隐藏加载状态
+                }, 1000); // 延迟10秒后隐藏加载状态
 
 
             }

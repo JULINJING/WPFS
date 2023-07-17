@@ -7,9 +7,6 @@ import * as echarts from 'echarts';
 import { mapState } from 'vuex';
 
 export default {
-    // props: {
-    //     tableData: Array,
-    // },
     data() {
         return {
             lineData: [],
@@ -23,18 +20,15 @@ export default {
     computed: {
         ...mapState('global', ['predictedJsonData']),
     },
-    // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             if (newTableData !== null) {
-    //                 this.lineData = [];
-    //                 this.processData();
-    //                 this.renderChart();
-    //             }
-    //         },
-    //         immediate: true, // 立即执行watch处理函数
-    //     },
-    // },
+    watch: {
+        predictedJsonData: {
+            handler(newData) {
+                this.processData();
+                this.renderChart();
+            },
+            deep: true // 如果 predictedJsonData 是一个对象或数组，请使用 deep: true 监听其内部属性的变化
+        }
+    },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {

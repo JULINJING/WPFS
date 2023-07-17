@@ -1,6 +1,7 @@
 <template>
     <div class="form-container">
         <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据</h1>
+        <el-button icon="el-icon-download" circle size="mini" @click="downloadOutFile" style="margin-left: 95%;margin-bottom: 5px"></el-button>
         <el-table :data="curData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
             @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
 
@@ -43,7 +44,8 @@ export default {
         }
     },
     computed: {
-        ...mapState('global', ['predictedJsonData']), // 将predictedJsonData和curData从全局模块映射到组件的计算属性中
+        ...mapState('global', ['predictedJsonData']),
+        ...mapState('global', ['uploadedFileName']),
     },
     watch: {
         predictedJsonData(newData) {
@@ -93,6 +95,11 @@ export default {
         mouseLeave() {
             // 开启
             this.autoRoll()
+        },
+        downloadOutFile() {
+            console.log("下载预测数据")
+            const fileName =  this.$store.state.global.uploadedFileName;
+            window.open(`http://10.101.240.60:7070/file/pred/${fileName}`)
         },
     }
 }
