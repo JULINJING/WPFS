@@ -66,12 +66,12 @@ export default {
 <style lang="scss" scoped>
 .statistical_parameter {
 	width: 27.08vw;
-	height: 18vh;
+	height: 35vh;
 	background-color: #04669e73;
 	padding: 0.625rem 1.25rem;
 	position: absolute;
 	right: 2vh;
-	bottom: 21vh;
+	bottom: 2vh;
 	.container {
 		width: 100%;
 		height: 100%;

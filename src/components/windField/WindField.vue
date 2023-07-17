@@ -651,6 +651,24 @@ export default {
             })
             this.map.addLayer(transformerLayer)
 
+            transformerLayer.on(mars3d.EventType.click, () => {
+                this.$router.push('/watch')
+                const h = this.$createElement;
+                this.$message({
+                    message: h('p', null, [
+                        h('span', null, '已成功切换至 '),
+                        h('i', { style: 'color: teal' }, '风力发电场')
+                    ]),
+                    offset: 50
+                });
+                // 清除计时器
+                if (this.intervalId !== null) {
+                    // 如果已经有一个正在运行的定时器，停止它
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+            })
+
             this.map.getLayerById("风电场办公楼").on(mars3d.EventType.click, ()=> {
                 this.map.setCameraView({ "lat": 43.585478, "lng": 87.875422, "alt": 1223.4, "heading": 127, "pitch": 0.8 })
                 $("#explanatoryPicture").css({
