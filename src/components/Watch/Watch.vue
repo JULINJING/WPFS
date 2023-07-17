@@ -28,10 +28,10 @@
                     <div class="d-flex aside-width">
                         <div class="react-left ml-4 react-l-s">
                             <span class="react-left"></span>
-                            <span class="text">单风电场数据监控</span>
+                            <span class="text">{{turbineName}}</span>
                         </div>
                         <div class="react-left ml-3">
-                            <span class="text">{{turbineName}}</span>
+                            <router-link to="/windfield"><span class="text fw-b">返回场站</span></router-link>
                         </div>
                     </div>
                     <div class="d-flex aside-width">
