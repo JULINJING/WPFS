@@ -76,7 +76,7 @@ export default {
             loadingInstance: null,
             progress: 0,
             // trainingProgress: 0, // 训练进度条百分比
-            trainingTimer: null, // 训练计时器
+            trainingTimerId: null, // 用于存储计时器的ID
         };
     },
 
@@ -84,7 +84,6 @@ export default {
         ...mapState('global', ['uploadedFileName', 'trainingProgress', 'isTraining']),
 
         getTrainingProgress() {
-            console.log(this.$store.state.global.trainingProgress);
             return this.$store.state.global.trainingProgress;
         },
         getIsTraining() {
@@ -163,12 +162,12 @@ export default {
                 //         this.$message.error("操作失败");
                 //     }
                 // });
-
-                var time_out = this.setTrainTimeout();
-                // this.loading = true;
-                this.setIsTraining(true);
-                this.startLoading(time_out); // 显示加载中状态
-
+                if(!this.$store.state.global.isTraining || this.$store.state.global.trainingProgress === 100){
+                    var time_out = this.setTrainTimeout();
+                    // this.loading = true;
+                    this.setIsTraining(true);
+                    this.startLoading(time_out); // 显示加载中状态
+                }
             }
         },
 
@@ -194,6 +193,11 @@ export default {
             return time_out;
         },
         startLoading(time_out) {
+            // 清除之前的计时器
+            if (this.trainingTimerId) {
+                clearInterval(this.trainingTimerId);
+                this.trainingTimerId = null;
+            }
             const targetNode = document.getElementById('trainProgressBar');
             // this.loadingInstance = Loading.service({
             //     // target: targetNode,
@@ -203,10 +207,10 @@ export default {
             // });
             // this.trainingProgress = 0;
             this.setTrainingProgress(0);
-            const increment = 100 / time_out * 1000;
+            const increment = 100 / time_out * 10000;
             var tmp = 0;
 
-            this.trainingTimer = setInterval(() => {
+            this.trainingTimerId = setInterval(() => {
                 if (this.$store.state.global.trainingProgress < 100) {
                     tmp += increment;
                     if (!Number.isInteger(tmp)) {
@@ -222,31 +226,31 @@ export default {
                         this.setTrainingProgress(tmp);
                     }
                 } else {
-                    clearInterval(this.trainingTimer);
-                    this.trainingTimer = null;
+                    clearInterval(this.trainingTimerId);
+                    this.trainingTimerId = null;
                 }
             }, 1000);
 
             setTimeout(() => {
                 // this.trainingProgress = 100;
                 this.setTrainingProgress(100);
-                clearInterval(this.trainingTimer);
-                this.trainingTimer = null;
+                clearInterval(this.trainingTimerId);
+                this.trainingTimerId = null;
                 this.endLoading();
             }, time_out);
         },
         endLoading() {
-            if (this.loadingInstance) {
-                this.loadingInstance.close();
-                this.loadingInstance = null;
-            }
+            // if (this.loadingInstance) {
+            //     this.loadingInstance.close();
+            //     this.loadingInstance = null;
+            // }
             this.$message({
                         message: "训练成功",
                         type: "success",
                         offset: 50,
                     });
             // this.loading = false;
-            this.setIsTraining(true);
+            this.setIsTraining(false);
         },
 
     },
