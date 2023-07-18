@@ -114,6 +114,7 @@ h1 {
             justify-content: space-around;
             align-items: center;
             font-size: .5em;
+            margin-top: 5vh;
 
             .left {
                 width: 48%;

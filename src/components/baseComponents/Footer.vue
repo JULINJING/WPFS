@@ -70,13 +70,14 @@ export default {
         flex-direction: column;
         width: 100%;
         user-select: none;
+        margin-top: 10px;
         .footerbody{
             display: flex;
             justify-content: space-between;
             text-align: left;
             padding: 20px 0;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
             margin:0 8%;
             div{
                 width: 200px;

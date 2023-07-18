@@ -67,8 +67,12 @@
     </el-dialog>
 
     <div class="table-box" v-if="showTable">
-      <h1 style="margin-top: 20px;margin-bottom: 10px;">{{tableTitle}}</h1>
-      <el-button icon="el-icon-download" circle size="mini" @click="downloadOutFile" style="margin-left: 95%;margin-bottom: 5px"></el-button>
+      <div class="downloadBox">
+        <div class="centered">
+          <h1>{{ tableTitle }}</h1>
+        </div>
+        <a @click="downloadOutFile">下载<i class="iconfont">&#xe602;</i></a>
+      </div>
       <el-table ref="mytable" :data="curData" highlight-current-row stripe
                 style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" border :cell-style="rowStyle">
         <el-table-column fixed prop="DATATIME" label="DATATIME" width="150" align="center">
@@ -340,10 +344,32 @@ export default {
   align-items: center;
   justify-content: center;
 
-  h1 {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 5px;
+  .downloadBox {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 98%;
+    justify-content: space-between;
+    .centered {
+      flex-grow: 1;
+      text-align: center;
+      h1 {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 5px;
+      }
+    }
+    a{
+      text-decoration: underline;
+      color: #2c3e50;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 200;
+    }
+    a:hover {
+      color: #409EFF;
+    }
   }
 }
 
