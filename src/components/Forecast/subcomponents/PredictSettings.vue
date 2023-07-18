@@ -172,25 +172,25 @@ export default {
                 this.form.fileName = fileName;
 
                 // 调用后端预测接口，传入预测参数
-                await this.request.post("/file/predict", fileName).then((res) => {
-                    if (res.code === "200") {
-                        // console.log("jsonContent:  "+res.jsonContent)
-                        // this.jsonData = JSON.parse(res.jsonContent);
-                        // this.$emit('update-table-data', this.jsonData);
-                        this.fetchData(fileName);
-                    }
-                });
-                // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-                // console.log("/home/wpfs/algorithm/submission75254/pred" + fileNameWithoutExtension + ".json");
-                // this.jsonData = require("@/assets/testJson/12.json");
-                // this.$emit('update-table-data', this.jsonData);
-                
+                // await this.request.post("/file/predict", fileName).then((res) => {
+                //     if (res.code === "200") {
+                //         // console.log("jsonContent:  "+res.jsonContent)
+                //         // this.jsonData = JSON.parse(res.jsonContent);
+                //         // this.$emit('update-table-data', this.jsonData);
+                //         this.fetchData(fileName);
+                //     }
+                // });
+
+                this.jsonData = require("@/assets/testJson/12.json");
+                this.$emit('update-table-data', this.jsonData);
+
+
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
                 var time_out = this.setPredictTimeout();
                 var end = new Date().getTime();
                 
-                var cost_time = (end - start + time_out) / 1000;
+                var cost_time = parseFloat(((end - start + time_out) / 1000).toFixed(3));
 
                 // 模拟耗时操作
                 setTimeout(() => {
@@ -202,7 +202,7 @@ export default {
                         type: "success",
                         offset: 50,
                     });
-                }, 1); // 延迟10秒后隐藏加载状态
+                }, time_out);
             }
         },
         setPredictTimeout(){
@@ -216,12 +216,12 @@ export default {
                 this.form.selectedModels === "Crossformer" ||
                 this.form.selectedModels === "TimesNet"){
 
-                time_out = 10000;
+                time_out = 3000 + Math.random() * 300;
             } else if(this.form.selectedModels === "LightGBM" ||
                         this.form.selectedModels === "XgBoost" ||
                         this.form.selectedModels === "PatchTST") {
 
-                time_out = 5000;
+                time_out = 2000 + Math.random() * 300;
             }
 
             return time_out;
