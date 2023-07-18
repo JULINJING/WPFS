@@ -37,9 +37,11 @@ const store = new Vuex.Store({
         global: {
             namespaced: true, // 确保命名空间设置为 true
             state: {
-                uploadedFileName: "11.csv",
-                processedJsonData: [],
-                predictedJsonData: []
+                uploadedFileName: "11.csv", // 上传的文件名
+                processedJsonData: [], // 预处理后的数据
+                predictedJsonData: [], // 预测的数据
+                trainingProgress: 0, // 训练进度
+                isTraining: false, // 是否正在训练
             },
             mutations: {
                 setUploadedFileName(state, fileName) {
@@ -54,6 +56,12 @@ const store = new Vuex.Store({
                 setPredictedJsonData(state, data) {
                     state.predictedJsonData = data;
                 },
+                setTrainingProgress(state, progress) {
+                    state.trainingProgress = progress;
+                },
+                setIsTraining(state, isTraining) {
+                    state.isTraining = isTraining;
+                }
             },
             getters: {
                 getUploadedFileName(state) {
@@ -64,6 +72,9 @@ const store = new Vuex.Store({
                 },
                 getPredictedJsonData(state) {
                     return state.setPredictedJsonData;
+                },
+                getTrainingProgress(state) {
+                    return state.trainingProgress;
                 }
             }
         }
