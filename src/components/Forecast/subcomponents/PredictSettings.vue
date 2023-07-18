@@ -313,6 +313,9 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            .el-select__tags{
+                flex-wrap: nowrap !important;
+            }
 
             .el-tag {
                 width: 240px;

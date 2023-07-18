@@ -1,7 +1,11 @@
 <template>
     <div class="form-container">
-        <h1 style="margin-top: 20px;margin-bottom: 10px;">{{tableTitle}}</h1>
-        <el-button icon="el-icon-download" circle size="mini" @click="downloadOutFile" style="margin-left: 95%;margin-bottom: 5px"></el-button>
+        <div class="downloadBox">
+            <div class="centered">
+            <h1>{{ tableTitle }}</h1>
+            </div>
+            <a @click="downloadOutFile">下载<i class="iconfont">&#xe602;</i></a>
+        </div>
         <el-table :data="curData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
             @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
 
@@ -113,6 +117,33 @@ export default {
 </script>
 
 <style lang="less">
+.downloadBox {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 98%;
+    justify-content: space-between;
+    .centered {
+        flex-grow: 1;
+        text-align: center;
+        h1 {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 5px;
+        }
+    }
+    a{
+        text-decoration: underline;
+        color: #2c3e50;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 200;
+    }
+    a:hover {
+        color: #409EFF;
+    }
+}
 // 大于800px
 @media only screen and (min-width: 800px) {
     .form-container {

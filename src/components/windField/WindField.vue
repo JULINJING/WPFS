@@ -58,31 +58,34 @@
                 <i id="bottomClickSpan" class="iconfont opration-handler" aria-hidden="true"
                     @click="hideBottomPanel">&#xe601;</i>
                 <div class="bar-content-bottom" id="bottomContent">
-                    <el-col>
-                        <el-row>
+                    <el-row>
+                        <el-col>
                             <el-button plain @click="backToHome">返回主页</el-button>
-                        </el-row>
-                        <el-row>
-                            <el-button plain @click="turnToBuilding">检视风电场</el-button>
-                        </el-row>
-                        <el-row>
+                        </el-col>
+                        <el-col>
+                            <el-button plain @click="turnToBuilding">飞至风电场</el-button>
+                        </el-col>
+                        <el-col>
+                            <el-button plain @click="wanderTurbine">开始 / 停止漫游</el-button>
+                        </el-col>
+                        <el-col>
                             <el-button plain @click="chargeWindField">显示 / 关闭风场</el-button>
-                        </el-row>
-                    </el-col>
-                    <el-col>
-                        <el-row>
-                            <el-button plain @click="addTurbineLayer(1)">东部：浙江括苍山风电场</el-button>
-                        </el-row>
-                        <el-row>
-                            <el-button plain @click="addTurbineLayer(2)">南部：广东汕头南澳岛风电场</el-button>
-                        </el-row>
-                        <el-row>
-                            <el-button plain @click="addTurbineLayer(3)">西部：新疆达坂城风电场</el-button>
-                        </el-row>
-                        <el-row>
-                            <el-button plain @click="addTurbineLayer(4)">北部：内蒙古辉腾锡勒风电场</el-button>
-                        </el-row>
-                    </el-col>
+                        </el-col>
+                    </el-row>
+                    <el-row id="row2">
+                        <el-col>
+                            <el-button class="bbottomButton" plain @click="addTurbineLayer(1)">浙江括苍山风电场</el-button>
+                        </el-col>
+                        <el-col>
+                            <el-button class="bbottomButton" plain @click="addTurbineLayer(2)">广东汕头南澳岛风电场</el-button>
+                        </el-col>
+                        <el-col>
+                            <el-button class="bbottomButton" plain @click="addTurbineLayer(3)">新疆达坂城风电场</el-button>
+                        </el-col>
+                        <el-col>
+                            <el-button class="bbottomButton" plain @click="addTurbineLayer(4)">内蒙古辉腾锡勒风电场</el-button>
+                        </el-col>
+                    </el-row>
                 </div>
             </div>
             <div id="explanatoryPicture">
@@ -145,6 +148,9 @@ export default {
             mapOptions: mapOptions,
             windLayer,
             chinaLayer,
+
+            // 记录漫游状态
+            isWonder: false,
 
             // 记录视点飞行状态
             isEasternFly: false,
@@ -293,6 +299,7 @@ export default {
 
             // 添加车辆
             var carGraphic1 = new mars3d.graphic.ModelPrimitive({
+                id: 1,
                 position: [87.872971, 43.582348, 1116.1],
                 style: {
                     url: '//data.mars3d.cn/gltf/mars/car/kache3.gltf',
@@ -302,6 +309,7 @@ export default {
                 },
             })
             var carGraphic2 = new mars3d.graphic.ModelPrimitive({
+                id: 2,
                 position: [87.869916, 43.578403, 1118.1],
                 style: {
                     url: '//data.mars3d.cn/gltf/imap/d8cb721fdc3642a085533583da944c79/gltf/gltf2.gltf',
@@ -311,6 +319,7 @@ export default {
                 },
             })
             var carGraphic3 = new mars3d.graphic.ModelPrimitive({
+                id: 3,
                 position: [87.882719, 43.578459, 1113.4],
                 style: {
                     url: '//data.mars3d.cn/gltf/imap/1d4f63111fc9499dac5cee2286ad7bb3/gltf/gltf2.gltf',
@@ -320,6 +329,7 @@ export default {
                 },
             })
             var carGraphic4 = new mars3d.graphic.ModelPrimitive({
+                id: 4,
                 position: [87.873501, 43.576978, 1116.3],
                 style: {
                     url: '//data.mars3d.cn/gltf/mars/car/kache1.gltf',
@@ -1488,6 +1498,46 @@ export default {
             })
             this.hideBottomPanel()
         },
+        // 漫游风电场
+        wanderTurbine() {
+            // 移除风场
+            if (this.windLayer) {
+                this.map.removeLayer(this.windLayer, true)
+                this.windLayer = null
+            }
+
+            var wonderLayer = new mars3d.layer.GraphicLayer()
+            this.map.addLayer(wonderLayer)
+            const positions = [
+                [88.017284, 43.62002, 4381.3],
+                [87.990249, 43.603349, 4375.1],
+                [87.974938, 43.578196, 4314.4],
+                [87.929723, 43.578883, 4314.7]
+            ]
+            var fixedRoute = new mars3d.graphic.FixedRoute({
+                name: "场站漫游路线",
+                speed: 3000,
+                positions: positions,
+                clockLoop: false,      //是否循环播放
+                clockRange: Cesium.ClockRange.CLAMPED, // CLAMPED 到达终止时间后停止
+                camera: {
+                    type: "gs",
+                    heading: 30,
+                    radius: 500
+                }
+            })
+            wonderLayer.addGraphic(fixedRoute)
+
+            if (!this.isWonder) {
+                // 开始漫游
+                fixedRoute.start()
+            }
+            else {
+                // 停止漫游
+                fixedRoute.pause()
+            }
+            this.isWonder = !this.isWonder
+        },
         // 添加Echarts图形
         // chart Echart圆形
         // chart Echart柱状
@@ -2232,7 +2282,7 @@ export default {
             else {
                 $(".bottomBar").addClass("fadeInUp")
                 $(".bottomBar").css({
-                    "height": "30%",
+                    "height": "15%",
                     "width": "56%",
                     "left": "22%",
                     "right": "22%",
@@ -2383,7 +2433,7 @@ export default {
         left: 22%;
         right: 22%;
         width: 56%;
-        height: 35%;
+        height: 15%;
         border: 1px rgba(255, 255, 255, 0.5) solid;
         border-radius: 5px;
         // background-color: transparent;
@@ -2396,6 +2446,7 @@ export default {
 
     .bar-content-bottom {
         display: flex;
+        flex-direction: column;
         justify-content: space-around;
         align-items: center;
         height: 100%;
@@ -2447,18 +2498,25 @@ export default {
     }
 
     // 底栏按钮
-    .el-col-24 {
-        width: 40% !important;
-        height: 100% !important;
+    .el-row {
+        width: 80%;
+        height: 40% !important;
         display: flex;
-        flex-direction: column;
         justify-content: space-around;
+        align-items: center;
+    }
+    #row2 {
+        width: 100%;
+        margin-bottom: 2.5vh;
+        .bbottomButton {
+            width: 90%;
+        }
     }
     .bar-content-bottom .el-button {
         width: 80%;
         background-color: rgba(0,183,254,0.5);
         border: none;
-        font-size: 0.8rem;
+        font-size: 0.6rem;
         font-weight: 800;
         color: white;
     }

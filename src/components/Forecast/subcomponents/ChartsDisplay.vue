@@ -89,6 +89,7 @@ h1 {
             justify-content: space-around;
             align-items: center;
             font-size: .5em;
+            margin-top: 5vh;
 
             .left {
                 width: 48%;
@@ -124,12 +125,14 @@ h1 {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
+                margin-top: 10px;
             }
 
             .right {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
+                margin-top: 10px;
             }
         }
     }
