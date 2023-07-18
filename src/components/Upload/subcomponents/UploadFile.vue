@@ -311,7 +311,7 @@ export default {
     },
     downloadOutFile(){
       console.log("下载预处理后文件")
-      window.open(`http://10.101.240.60:7070/file/outfile/${this.curfile.name}`)
+      window.open(`http://${serverIp}:7070/file/outfile/${this.curfile.name}`)
     },
   },
 };

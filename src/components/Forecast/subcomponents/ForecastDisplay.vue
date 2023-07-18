@@ -30,11 +30,11 @@
         </el-table>
     </div>
 </template>
-  
+
 <script>
 import rawData from '../../../assets/testJson/12.json'
 import { mapState } from 'vuex';
-
+import {serverIp} from "../../../../public/config.js";
 export default {
     data() {
         return {
@@ -106,7 +106,7 @@ export default {
         downloadOutFile() {
             console.log("下载预测数据")
             const fileName =  this.$store.state.global.uploadedFileName;
-            window.open(`http://10.101.240.60:7070/file/pred/${fileName}`)
+            window.open(`http://${serverIp}:7070/file/pred/${fileName}`)
         },
     }
 }
