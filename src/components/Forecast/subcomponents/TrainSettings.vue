@@ -2,12 +2,13 @@
     <div class="input-container _input-container">
         <el-form ref="form" :model="form" label-width="80px">
             <!-- 进度条 -->
-            <div class="train-form-row" v-if="!loading">
+            <div class="train-form-row" v-if="!getIsTraining">
                 <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
             </div>
-            <div class="train-form-row" v-if="loading">
-                <el-progress type="line" id="trainProgressBar" :percentage="trainingProgress" style="width: 100%"></el-progress>
+            <div class="train-form-row" v-if="getIsTraining">
+                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress" style="width: 100%"></el-progress>
             </div>
+
             <div class="train-form-row">
                 <el-tag>具体模型选择</el-tag>
                 <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
@@ -45,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import { Loading } from 'element-ui';
 
 export default {
@@ -71,16 +72,24 @@ export default {
                 { label: "Transformer", value: "Transformer" },
                 { label: "XgBoost", value: "XgBoost" }
             ],
-            loading: false, // 加载状态
+            // loading: false, // 加载状态
             loadingInstance: null,
             progress: 0,
-            trainingProgress: 0, // 训练进度条百分比
+            // trainingProgress: 0, // 训练进度条百分比
             trainingTimer: null, // 训练计时器
         };
     },
 
     computed: {
-        ...mapState('global', ['uploadedFileName']),
+        ...mapState('global', ['uploadedFileName', 'trainingProgress', 'isTraining']),
+
+        getTrainingProgress() {
+            console.log(this.$store.state.global.trainingProgress);
+            return this.$store.state.global.trainingProgress;
+        },
+        getIsTraining() {
+            return this.$store.state.global.isTraining;
+        },
         calculateProgress() {
             let filledFields = 0;
             const totalFields = 5; // 总字段数
@@ -98,6 +107,8 @@ export default {
         },
     },
     methods: {
+        ...mapMutations('global', ['setTrainingProgress', 'setIsTraining']),
+
         isTargetModel(modelName) {
             // 指定目标模型的名称
             const targetModelName = 'CTFN(Complementary Timeseries Fusion Networks)';
@@ -154,7 +165,8 @@ export default {
                 // });
 
                 var time_out = this.setTrainTimeout();
-                this.loading = true;
+                // this.loading = true;
+                this.setIsTraining(true);
                 this.startLoading(time_out); // 显示加载中状态
 
             }
@@ -182,25 +194,42 @@ export default {
             return time_out;
         },
         startLoading(time_out) {
-            const targetNode = document.getElementById('trainProgressBar'); // 替换为您想要覆盖的 DOM 节点的选择器
-            this.loadingInstance = Loading.service({
-                // target: targetNode,
-                lock: true,
-                text: '正在训练……',
-                background: 'rgba(0, 0, 0, 0.7)'
-            });
-            this.trainingProgress = 0;
+            const targetNode = document.getElementById('trainProgressBar');
+            // this.loadingInstance = Loading.service({
+            //     // target: targetNode,
+            //     lock: false,
+            //     text: '正在训练……',
+            //     background: 'rgba(0, 0, 0, 0.3)'
+            // });
+            // this.trainingProgress = 0;
+            this.setTrainingProgress(0);
+            const increment = 100 / time_out * 1000;
+            var tmp = 0;
+
             this.trainingTimer = setInterval(() => {
-                if (this.trainingProgress < 100) {
-                    this.trainingProgress += 1;
+                if (this.$store.state.global.trainingProgress < 100) {
+                    tmp += increment;
+                    if (!Number.isInteger(tmp)) {
+                        if (tmp.toString().split('.')[1].length > 1) {
+                            // this.trainingProgress = parseFloat(tmp.toFixed(1));
+                            this.setTrainingProgress(parseFloat(tmp.toFixed(1)));
+                        } else {
+                            // this.trainingProgress = tmp;
+                            this.setTrainingProgress(tmp);
+                        }
+                    } else {
+                        // this.trainingProgress = tmp;
+                        this.setTrainingProgress(tmp);
+                    }
                 } else {
                     clearInterval(this.trainingTimer);
                     this.trainingTimer = null;
                 }
-            }, time_out / 100);
+            }, 1000);
 
             setTimeout(() => {
-                this.trainingProgress = 100;
+                // this.trainingProgress = 100;
+                this.setTrainingProgress(100);
                 clearInterval(this.trainingTimer);
                 this.trainingTimer = null;
                 this.endLoading();
@@ -216,7 +245,8 @@ export default {
                         type: "success",
                         offset: 50,
                     });
-            this.loading = false;
+            // this.loading = false;
+            this.setIsTraining(true);
         },
 
     },

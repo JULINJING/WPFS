@@ -12,14 +12,11 @@
       <div @click="routerpush('/turbine')"><i class="iconfont">&#xe614;</i> 异常监控</div>
       <div @click="routerpush('/windland')"><i class="iconfont">&#xe69c;</i> AR风电</div>
       <div class="logout _logout">
-        <el-dropdown
-            class="logout _logout" style="cursor: pointer; text-align: right; color: white"
-        >
+        <el-dropdown class="logout _logout" style="cursor: pointer; text-align: right; color: white">
           <div class="logout _logout">
             <span class="el-dropdown-link" style="margin-left: 35px; width: 200px;">
               <i class="el-icon-user-solid" style="margin-right: 10px"></i>{{ user.nickname }}<i
-                class="el-icon-arrow-down el-icon--right"
-            ></i>
+                class="el-icon-arrow-down el-icon--right"></i>
             </span>
           </div>
           <el-dropdown-menu slot="dropdown" style="width: 120px; text-align: center">
@@ -37,10 +34,7 @@
     </div>
 
     <!-- 个人信息弹窗 -->
-    <el-dialog
-        title="个人信息"
-        :visible.sync="infoDialogVisible"
-        width="20%">
+    <el-dialog title="个人信息" :visible.sync="infoDialogVisible" width="20%">
       <el-form label-width="80px" size="small">
         <el-form-item label="用户名">
           <el-input v-model="form.username" disabled autocomplete="off"></el-input>
@@ -58,15 +52,12 @@
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
-      <el-button @click="infoDialogVisible=false">取 消</el-button>
+      <el-button @click="infoDialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="saveInfo">保 存</el-button>
 
     </el-dialog>
     <!-- 修改密码弹窗 -->
-    <el-dialog
-        title="修改密码"
-        :visible.sync="pwdDialogVisible"
-        width="20%">
+    <el-dialog title="修改密码" :visible.sync="pwdDialogVisible" width="20%">
       <el-form label-width="120px" size="small" :model="form" :rules="rules" ref="pass">
         <el-form-item label="原密码" prop="password">
           <el-input v-model="form.password" autocomplete="off" show-password></el-input>
@@ -77,18 +68,17 @@
         <el-form-item label="确认新密码" prop="confirmPassword">
           <el-input v-model="form.confirmPassword" autocomplete="off" show-password></el-input>
         </el-form-item>
-        <el-button @click="pwdDialogVisible=false">取 消</el-button>
+        <el-button @click="pwdDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="savePwd">确 定</el-button>
       </el-form>
     </el-dialog>
   </div>
-
 </template>
 
 
 <script>
 
-import {serverIp} from "@/../public/config"
+import { serverIp } from "@/../public/config"
 
 export default {
   name: 'navtop',
@@ -103,16 +93,16 @@ export default {
       pwdDialogVisible: false,
       rules: {
         password: [
-          {required: true, message: '请输入原密码', trigger: 'blur'},
-          {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ],
         newPassword: [
-          {required: true, message: '请输入新密码', trigger: 'blur'},
-          {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ],
         confirmPassword: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-          {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ],
       }
     }
@@ -134,18 +124,21 @@ export default {
       this.$router.push(to)
       // 跳转之后，关闭菜单（在屏幕宽度小于800的时候才生效）
       var dom = document.getElementById('navID')
-      if (dom.classList.contains('navlistshow')) {
-        dom.classList.remove('navlistshow')
+      if (dom) {
+        if (dom.classList.contains('navlistshow')) {
+          dom.classList.remove('navlistshow')
+        }
       }
     },
     // 当屏幕宽度小于800的时候，点击菜单图标，显示隐藏的菜单
     openMenu() {
       var dom = this.$refs.navID
-
-      if (dom.classList.contains('navlistshow')) {
-        return
+      if (dom) {
+        if (dom.classList.contains('navlistshow')) {
+          return
+        }
+        dom.classList.add('navlistshow')
       }
-      dom.classList.add('navlistshow')
     },
     // 当屏幕宽度小于800的时候，点击关闭按钮，关闭菜单
     closeMenu() {
