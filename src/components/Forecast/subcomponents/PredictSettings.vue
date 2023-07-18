@@ -68,13 +68,13 @@ export default {
                 fileName: "",
                 modelType: "single",
                 type: "predict",
-                selectedModels: [],
+                selectedModels: "CTFN(Complementary Timeseries Fusion Networks)",
                 selectedCovariates: [],
-                inputPeriod: [],
-                forecastPeriod: [],
+                inputPeriod: [new Date(2021, 10, 1, 0, 0), new Date(2021, 10, 4, 23, 45)],
+                forecastPeriod: [new Date(2022, 5, 30, 0, 0), new Date(2022, 5, 30, 23, 45)],
             },
             modelOptions: [
-                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN(Complementary Timeseries Fusion Networks)" },
                 { label: "Crossformer", value: "Crossformer" },
                 { label: "GRU", value: "GRU" },
                 { label: "LightGBM", value: "LightGBM" },
@@ -166,6 +166,8 @@ export default {
         },
         async setParams() {
             if (this.isFormValidate()) {
+                var start = new Date().getTime()
+
                 const fileName = this.$store.state.global.uploadedFileName;
                 this.form.fileName = fileName;
 
@@ -180,28 +182,33 @@ export default {
                 });
                 // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
                 // console.log("/home/wpfs/algorithm/submission75254/pred" + fileNameWithoutExtension + ".json");
-                // this.jsonData = require("/home/wpfs/algorithm/submission75254/pred/" + fileNameWithoutExtension + ".json");
+                // this.jsonData = require("@/assets/testJson/12.json");
                 // this.$emit('update-table-data', this.jsonData);
+                
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
                 var time_out = this.setPredictTimeout();
+                var end = new Date().getTime();
+                
+                var cost_time = (end - start + time_out) / 1000;
 
                 // 模拟耗时操作
                 setTimeout(() => {
                     this.loading = false;
                     this.endLoading(); // 隐藏加载中状态
                     this.$message({
-                        message: "预测成功",
+                        message: `预测成功, 耗时 <u><b>${cost_time}</b></u> 秒`,
+                        dangerouslyUseHTMLString: true, // 使用HTML标签
                         type: "success",
                         offset: 50,
                     });
-                }, time_out); // 延迟10秒后隐藏加载状态
+                }, 1); // 延迟10秒后隐藏加载状态
             }
         },
         setPredictTimeout(){
             var time_out;
                 
-            if(this.form.selectedModels === "CTFN" ||
+            if(this.form.selectedModels === "CTFN(Complementary Timeseries Fusion Networks)" ||
                 this.form.selectedModels === "GRU" ||
                 this.form.selectedModels === "MLP" ||
                 this.form.selectedModels === "LSTNet" ||
@@ -216,6 +223,7 @@ export default {
 
                 time_out = 5000;
             }
+
             return time_out;
         },
         async fetchData(fileName) {
