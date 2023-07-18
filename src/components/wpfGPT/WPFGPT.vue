@@ -208,6 +208,7 @@ export default {
         right: 25px !important;
         background-color: white !important;
         border-radius: 6px;
+        border: 1px #B8D4FF solid;
         #talkbox_max{
             width: 348px;
             height: 400px;

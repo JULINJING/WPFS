@@ -1,5 +1,6 @@
 <template>
     <div class="forecastContainer _forecastContainer" ref="forecast">
+        <WPFGPT></WPFGPT>
         <NavTop />
         <div id="tabBox">
             <el-tabs v-model="activeName" type="border-card" style="height:100%;width:96%;margin-bottom: 20px;margin-top: 20px;">
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-
+import WPFGPT from '../wpfGPT/WPFGPT.vue'
 import NavTop from '../baseComponents/NavTop';
 import PredictSettings from './subcomponents/PredictSettings.vue';
 import ForecastDisplay from './subcomponents/ForecastDisplay.vue';
@@ -35,7 +36,7 @@ import Footer from '../baseComponents/Footer.vue';
 export default {
     name: 'forecast',
     components: {
-        NavTop, PredictSettings, ForecastDisplay, TrainSettings, ChartsDisplay, Footer
+        NavTop, PredictSettings, ForecastDisplay, TrainSettings, ChartsDisplay, Footer, WPFGPT
     },
     data() {
         return {

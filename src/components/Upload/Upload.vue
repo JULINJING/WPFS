@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/valid-template-root -->
 <template>
     <div class="uploadContainer _uploadContainer">
+        <WPFGPT></WPFGPT>
         <NavTop/>
         <br>
         <UploadFile @update-table-data="updateTableData"/>
@@ -10,6 +11,7 @@
 </template>
 
 <script>
+import WPFGPT from '../wpfGPT/WPFGPT.vue'
 import NavTop from '../baseComponents/NavTop'
 import Footer from '../baseComponents/Footer.vue'
 import UploadFile from './subcomponents/UploadFile.vue'
@@ -24,7 +26,7 @@ export default {
     },
     name: 'upload',
     components: {
-        NavTop, UploadFile, DataAnalysis,Footer
+        NavTop, UploadFile, DataAnalysis,Footer,WPFGPT
     },
 
     methods: {
