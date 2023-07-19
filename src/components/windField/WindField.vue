@@ -722,7 +722,7 @@ export default {
                 fadeOpacity: 0.996,
                 dropRate: 0.003,
                 dropRateBump: 0.01,
-                speedFactor: 0.2,
+                speedFactor: 0.05,
                 lineWidth: 4.0,
                 // 色带配置
                 color: [
