@@ -7,6 +7,14 @@
             </div>
 
             <div class="predict-form-row">
+                <el-tag>文件选择</el-tag>
+                <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
+                    <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
+                    </el-option>
+                </el-select>
+            </div>
+
+            <div class="predict-form-row">
                 <el-tag>模型类型选择</el-tag>
                 <el-radio-group v-model="form.modelType" @change="handleModelTypeChange">
                     <el-radio-button label="single">单模型预测</el-radio-button>
@@ -65,7 +73,7 @@ export default {
     data() {
         return {
             form: {
-                fileName: "",
+                selectedFile: "",
                 modelType: "single",
                 type: "predict",
                 selectedModels: "CTFN(Complementary Timeseries Fusion Networks)",
@@ -99,7 +107,11 @@ export default {
             jsonData: [],
             loading: false, // 加载状态
             loadingInstance: null,
+            fileList: [],
         };
+    },
+    mounted() {
+        this.fileList = this.$store.state.global.uploadedFileList;
     },
 
     computed: {
@@ -121,8 +133,8 @@ export default {
         },
     },
     methods: {
-        ...mapState('global', ['uploadedFileName']),
-        ...mapMutations('global', ['setPredictedJsonData']),
+        ...mapState('global', ['uploadedFileName', 'uploadedFileList']),
+        ...mapMutations('global', ['setPredictedJsonData', 'setUploadedFileName']),
         
         isTargetModel(modelName) {
             // 指定目标模型的名称
@@ -150,6 +162,7 @@ export default {
         },
         isFormValidate() {
             if (
+                this.form.selectedFile === "" ||
                 this.form.modelType === "" ||
                 this.form.selectedModels.length === 0 ||
                 this.form.selectedCovariates.length === 0 ||
@@ -167,9 +180,10 @@ export default {
         async setParams() {
             if (this.isFormValidate()) {
                 var start = new Date().getTime()
-
-                const fileName = this.$store.state.global.uploadedFileName;
-                this.form.fileName = fileName;
+                
+                const fileName = this.form.selectedFile;
+                console.log(fileName);
+                this.setUploadedFileName(fileName);
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
 
