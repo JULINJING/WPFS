@@ -65,6 +65,9 @@ export default {
             Turbine_id: '',
         };
     },
+    mounted() {
+        this.updateTitle();
+    },
     computed: {
         ...mapState('global', ['uploadedFileName']),
     },
@@ -78,8 +81,7 @@ export default {
     },
     methods: {
         updateTitle() {
-            var fileName = this.$store.state.global.uploadedFileName;
-            this.Turbine_id = fileName.split('.')[0];
+            this.Turbine_id = this.$store.state.global.uploadedFileName.split('.')[0];
         }
     },
 
