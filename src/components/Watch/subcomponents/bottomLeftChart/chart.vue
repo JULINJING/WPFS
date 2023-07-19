@@ -90,7 +90,7 @@ export default {
                             name: "实际风速",
                             type: "line",
                             smooth: true,
-                            showAllSymbol: true,
+                            showAllSymbol: false,
                             symbol: "emptyCircle",
                             symbolSize: 8,
                             yAxisIndex: 1,

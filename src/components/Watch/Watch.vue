@@ -16,13 +16,13 @@
                 </div>
 
                 <!-- 第二行 -->
-                <div class="d-flex jc-between px-2 decor">
+                <div class="d-flex jc-between px-2">
                     <div class="d-flex aside-width">
-                        <div class="react-left ml-4 react-l-s">
+                        <div class="react-left ml-4 react-l-s ">
                             <span class="react-left"></span>
-                            <span class="text">{{turbineName}}</span>
+                            <span class="text">{{ turbineName }}</span>
                         </div>
-                        <div class="react-left ml-3">
+                        <div class="react-left ml-3 decor">
                             <router-link to="/windfield"><span class="text fw-b">返回场站</span></router-link>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                         <div class="react-right bg-color-blue mr-3">
                             <router-link to="/home"><span class="text fw-b">返回主页</span></router-link>
                         </div>
-                        <div class="react-right mr-4 react-l-s">
+                        <div class="react-right mr-4 react-l-s decor">
                             <span class="react-after"></span>
                             <span class="text">{{ dateYear }} {{ dateWeek }} {{ dateDay }}</span>
                         </div>

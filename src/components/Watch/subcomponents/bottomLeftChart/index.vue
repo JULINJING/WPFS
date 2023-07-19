@@ -132,7 +132,6 @@ export default {
     methods: {
         initData() {
             this.curData = JSON.parse(JSON.stringify(rawData))
-            console.log(this.curData)
             let width = document.documentElement.clientWidth
             this.cdata.category = []
             this.cdata.rateData = []
