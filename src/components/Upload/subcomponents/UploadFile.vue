@@ -56,7 +56,7 @@
             </div>
         </el-dialog>
 
-        <div class="table-box" v-if="showTable">
+        <div class="table-box animated" v-if="showTable" ref="tbbox">
             <div class="downloadBox">
                 <div class="centered">
                     <h1>{{ tableTitle }}</h1>
@@ -290,6 +290,14 @@ export default {
 
                 await this.sendPreprocessParams();
                 this.fetchData();
+                // table动画
+                if (this.$refs.tbbox.classList.contains('bounceIn')) {
+                    this.$refs.tbbox.classList.remove('bounceIn')
+                }
+
+                setTimeout(()=>{
+                    this.$refs.tbbox.classList.add('bounceIn')
+                },1500)
 
                 this.loading = false;
                 this.endLoading(); // 隐藏加载中状态

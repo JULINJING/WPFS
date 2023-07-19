@@ -1,5 +1,5 @@
 <template>
-    <div class="form-container">
+    <div class="form-container animated" ref="tbbox">
         <div class="downloadBox">
             <div class="centered">
             <h1>{{ tableTitle }}</h1>
@@ -56,6 +56,14 @@ export default {
             handler(newData) {
                 this.curData = newData;
                 this.updateTitle();
+                // table动画
+                if (this.$refs.tbbox.classList.contains('bounceIn')) {
+                    this.$refs.tbbox.classList.remove('bounceIn')
+                }
+
+                setTimeout(()=>{
+                    this.$refs.tbbox.classList.add('bounceIn')
+                },1500)
             }
         },
     },
