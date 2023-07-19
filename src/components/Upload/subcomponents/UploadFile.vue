@@ -297,7 +297,7 @@ export default {
 
                 setTimeout(()=>{
                     this.$refs.tbbox.classList.add('bounceIn')
-                },1500)
+                },1000)
 
                 this.loading = false;
                 this.endLoading(); // 隐藏加载中状态

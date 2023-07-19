@@ -149,7 +149,7 @@ export default {
       loadingP.id = 'loading';
 
       // 设置元素内容和样式
-      loadingP.textContent = '请稍后...';
+      loadingP.textContent = '请稍候...';
       loadingP.setAttribute('style', 'width: 348px;height: 14px;text-align: center;line-height: 14px;padding: 8px 0;color: #000000;font-size: 10px;letter-spacing: 0;')
 
       // 将元素插入页面
@@ -246,7 +246,7 @@ export default {
 #talkbox_wrapper_min {
   position: fixed;
   cursor: pointer;
-  top: 40%;
+  top: 85%;
   right: 5px;
   background-color: transparent;
   z-index: 99999999999;
@@ -255,13 +255,16 @@ export default {
     .min_img {
       display: inline-block;
       margin-top: 0px;
-      height: 100px;
-      width: 100px;
+      height: 50px;
+      width: 50px;
       background-image: url('../../../public/imgs/th_sleep.jpg');
+      background-size: cover;
     }
 
     .min_img:hover {
       background-image: url('../../../public/imgs/th.jpg') !important;
+      height: 60px;
+      width: 60px;
     }
   }
 }

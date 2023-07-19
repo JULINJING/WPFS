@@ -8,7 +8,6 @@
       <div class="logo-list opacity0"><img src="./imgs/logo3.png"></div>
     </div>
     <div id="home">
-      <WPFGPT></WPFGPT>
       <NavTop></NavTop>
       <div class="subdiv _subdiv" style="margin-top: 1%;">
         <div class="left box" id="first">
@@ -55,7 +54,6 @@
 import BlockBriefInfo from './subcomponents/BlockBriefInfo'
 import NavTop from '../baseComponents/NavTop.vue';
 import Footer from '../baseComponents/Footer.vue'
-import WPFGPT from '../wpfGPT/WPFGPT.vue'
 import $ from 'jquery'
 
 export default {
@@ -63,8 +61,7 @@ export default {
   components: {
     BlockBriefInfo,
     NavTop,
-    Footer,
-    WPFGPT
+    Footer
   },
   data() {
     return {}
