@@ -110,7 +110,7 @@ export default {
   created() {
     // 从后台获取最新的User数据
     this.getUser().then(res => {
-      console.log("this.form: " + res)
+      // console.log("this.form: " + res)
       this.form = res
     })
   },

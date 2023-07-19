@@ -1047,6 +1047,8 @@ export default {
             //     })
             // }, 2000)
 
+            var powerArray = []
+
             // 第一次计时器
             // 功率 动态图
             // 随机更新功率文本
@@ -1065,7 +1067,7 @@ export default {
                 var tempSum = 0
 
                 powerLayer.eachGraphic((graphic) => {
-                    var power = (Math.random() - 0.2).toFixed(3) * 1000 // 随机数据文本
+                    var power = (Math.random() - 0.1).toFixed(3) * 1000 // 随机数据文本
                     // 故障 维护 待机 并网
                     if (power < 0) {
                         power = 0
@@ -1098,7 +1100,7 @@ export default {
                     tempSum += power
                     // 更新预测功率
                     graphic.setStyle({
-                        text: `预测功率：${power} W`
+                        text: `预测功率：${power} KW`
                     })
                 })
                 // 更新风机状态图表数据
@@ -1174,7 +1176,7 @@ export default {
                         color: "#ccc"
                     },
                     title: {
-                        text: "单位:" + "w",
+                        text: "单位:" + "kw",
                         // 全局样式对此不生效，
                         textStyle: {
                             color: "#fff",
@@ -1184,7 +1186,7 @@ export default {
                     // 移入柱子时的阴影
                     tooltip: {
                         trigger: "axis",
-                        formatter: "{b}<br/>{c}" + "w",
+                        formatter: "{b}<br/>{c}" + "kw",
                         axisPointer: {
                             type: "shadow"
                         }
@@ -1227,9 +1229,8 @@ export default {
                 // console.log(event.graphic)
                 const attr = {}
                 attr["时间"] = "2022/1/2  0:00:00"
-                attr["风速"] = Math.random().toFixed(3) * 1000
-                attr["实际功率"] = Math.random().toFixed(3) * 1000
-                attr["预测功率"] = Math.random().toFixed(3) * 1000
+                attr["风速"] = Math.random().toFixed(2) * 10
+                attr["实际功率"] = (Math.random() - 0.1).toFixed(3) * 1000
                 // 停止计时器
                 clearInterval(this.intervalId);
 
@@ -1304,7 +1305,7 @@ export default {
                         tempSum += power
                         // 更新预测功率
                         graphic.setStyle({
-                            text: `预测功率：${power} W`
+                            text: `预测功率：${power} KW`
                         })
                     })
                     // 更新风机状态图表数据
@@ -1380,7 +1381,7 @@ export default {
                             color: "#ccc"
                         },
                         title: {
-                            text: "单位:" + "w",
+                            text: "单位:" + "kw",
                             // 全局样式对此不生效，
                             textStyle: {
                                 color: "#fff",
@@ -1390,7 +1391,7 @@ export default {
                         // 移入柱子时的阴影
                         tooltip: {
                             trigger: "axis",
-                            formatter: "{b}<br/>{c}" + "w",
+                            formatter: "{b}<br/>{c}" + "kw",
                             axisPointer: {
                                 type: "shadow"
                             }
@@ -1509,10 +1510,8 @@ export default {
             var wonderLayer = new mars3d.layer.GraphicLayer()
             this.map.addLayer(wonderLayer)
             const positions = [
-                [88.017284, 43.62002, 4381.3],
-                [87.990249, 43.603349, 4375.1],
-                [87.974938, 43.578196, 4314.4],
-                [87.929723, 43.578883, 4314.7]
+                [88.062549, 43.574906, 2197.7],
+                [87.943603, 43.576979, 2217.3]
             ]
             var fixedRoute = new mars3d.graphic.FixedRoute({
                 name: "场站漫游路线",
@@ -1521,9 +1520,9 @@ export default {
                 clockLoop: false,      //是否循环播放
                 clockRange: Cesium.ClockRange.CLAMPED, // CLAMPED 到达终止时间后停止
                 camera: {
-                    type: "gs",
-                    heading: 30,
-                    radius: 500
+                    type: "dy",
+                    // offsetX: 1000,
+                    // offsetY: 1000
                 }
             })
             wonderLayer.addGraphic(fixedRoute)
@@ -1608,7 +1607,7 @@ export default {
                     color: "#ccc"
                 },
                 title: {
-                    text: "单位:" + "w",
+                    text: "单位:" + "kw",
                     // 全局样式对此不生效，
                     textStyle: {
                         color: "#fff",
@@ -1618,7 +1617,7 @@ export default {
                 // 移入柱子时的阴影
                 tooltip: {
                     trigger: "axis",
-                    formatter: "{b}<br/>{c}" + "w",
+                    formatter: "{b}<br/>{c}" + "kw",
                     axisPointer: {
                         type: "shadow"
                     }

@@ -10,7 +10,7 @@
           <i class="iconfont closeIcon" @click="panelSwitch">&#xeaf2;</i>
         </div>
         <div id="default_talk">
-                    <span id="talk" class="talk">
+                    <span id="talk" class="talk" ref="talk">
                         <div id="privacy_text_top">由结束乐队提供的风电宝已唤醒，可以随时开始聊天啦</div>
                         <div class="talk_panel">
                             <div v-for="(message, index) in messages" :key="index"
@@ -19,12 +19,19 @@
                                      :src="message.isUser ? '../../../imgs/user.png' : '../../../imgs/robot.png'"
                                      :alt="message.isUser ? 'User Avatar' : 'Robot Avatar'"
                                      :style="{ order: message.isUser ? 2 : 1 }"/>
-                                <p :style="{ order: message.isUser ? 1 : 2 }">{{ message.text }}</p>
+                                <p :style="{ order: message.isUser ? 1 : 2 }">
+                                  <template v-if="message.isUser">
+                                      {{ message.text }}
+                                  </template>
+                                  <template v-else>
+                                      <div v-html="markdown(message.text)"></div>
+                                  </template>
+                                </p>
                             </div>
                         </div>
                     </span>
-          <div id="privacy_text_bottom">
-            <div id="privacy_text_bottom_text">本服务由结束乐队运营</div>
+          <div id="privacy_text_bottom" ref="loadParent">
+            <div id="privacy_text_bottom_text" ref="loadChild">本服务由结束乐队运营</div>
           </div>
           <div id="voice">
             <div class="voice-input-button-wrapper">
@@ -56,6 +63,7 @@
 </template>
 <script>
 import ChatGPT from './chatgpt.js';
+import MarkdownIt from 'markdown-it';
 
 export default {
   name: 'wpfGPT',
@@ -72,12 +80,15 @@ export default {
         isUser: false,
       }],
       // 面板状态
-      isMax: false
+      isMax: false,
+      // test: '## 我是'
     }
   },
   created() {
   },
-  computed: {},
+  computed: {
+    
+  },
   methods: {
     // 科大讯飞
     recordReady() {
@@ -114,6 +125,12 @@ export default {
         }
       });
     },
+    // 转md
+    markdown(text) {
+      const md = new MarkdownIt()
+      const result = md.render(text)
+      return result
+    },
     // 对话信息
      async sendMessage() {
       // 将用户发送的信息添加到对话数组中
@@ -122,26 +139,49 @@ export default {
         isUser: true, // 表示该条信息是用户发送的
       });
 
-
+      
        this.voiceResultTemp = this.voiceResult;
        // 清空用户输入框
        this.voiceResult = '';
 
+      // 创建新的元素
+      const loadingP = document.createElement('p');
+      loadingP.id = 'loading';
 
+      // 设置元素内容和样式
+      loadingP.textContent = '请稍后...';
+      loadingP.setAttribute('style', 'width: 348px;height: 14px;text-align: center;line-height: 14px;padding: 8px 0;color: #000000;font-size: 10px;letter-spacing: 0;')
+
+      // 将元素插入页面
+      this.$refs.loadParent.insertBefore(loadingP, this.$refs.loadChild);
+      this.$refs.loadChild.style.display = 'none'
+      
       await this.generateText()
 
+      // 恢复原状
+      document.getElementById('loading').remove();
+      this.$refs.loadChild.style.display = 'block'
+
       // 模拟机器人回答信息（这里使用了setTimeout来模拟异步）
-      setTimeout(() => {
-        // this.generatedText = '这是机器人的回答'; // 替换成真实的机器人回答信息
+      // setTimeout(() => {
+      //   // this.generatedText = '这是机器人的回答'; // 替换成真实的机器人回答信息
 
-        // 将机器人回答的信息添加到对话数组中
-        this.messages.push({
-          text: this.generatedText,
-          isUser: false, // 表示该条信息是机器人回答的
-        });
-      }, 1000);
+      //   // 将机器人回答的信息添加到对话数组中
+      //   this.messages.push({
+      //     text: this.generatedText,
+      //     isUser: false, // 表示该条信息是机器人回答的
+      //   });
+      // }, 0);
+      this.messages.push({
+        text: this.generatedText,
+        isUser: false, // 表示该条信息是机器人回答的
+      });
 
-
+       setTimeout(() => { 
+        //  滚动至最下方
+        this.$refs.talk.scrollTop = this.$refs.talk.scrollHeight;
+        console.log(this.$refs.talk.scrollTop)
+       },500)
     },
     // 切换GPT面版
     panelSwitch() {
@@ -188,8 +228,13 @@ export default {
   .el-input {
     width: 85%;
 
-    .el-input__inner {
+    .el-input__inner,
+    .el-button {
       height: 30px;
+    }
+    .el-button:hover{
+      font-weight: 900;
+      font-size: larger;
     }
   }
 }
@@ -275,24 +320,51 @@ export default {
           .user-message,
           .robot-message {
             display: flex;
-            align-items: center;
+            align-items: start;
             margin-bottom: 10px;
           }
 
           .user-message {
             justify-content: flex-end;
+            margin-left: 5px;
             margin-right: 5px;
 
             p {
               margin-right: 5px;
+              font-size: 12px;
+              text-align: right;
             }
           }
 
           .robot-message {
             margin-left: 5px;
+            margin-right: 5px;
+            width: 290px;
 
             p {
               margin-left: 5px;
+              font-size: 12px;
+              text-align: left;
+              div {
+                width: 290px;
+                p{
+                  margin: 0;
+                }
+                pre{
+                  code {
+                    display: inline-block;
+                    width: 280px !important;
+                    white-space: pre-wrap;
+                    background-color: rgba(251,251,251,0.8);
+                    color: #77ACEF;
+                    border: 1px solid #F1F1F1;
+                    padding: 5px;
+                    #text {
+                      width: 280px !important;
+                    }
+                  }
+                }
+              }
             }
           }
         }
