@@ -6,7 +6,8 @@
                 <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
             </div>
             <div class="train-form-row" v-if="getIsTraining">
-                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress" style="width: 100%"></el-progress>
+                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
+                    style="width: 100%"></el-progress>
             </div>
 
             <div class="train-form-row">
@@ -162,7 +163,7 @@ export default {
                 //         this.$message.error("操作失败");
                 //     }
                 // });
-                if(!this.$store.state.global.isTraining || this.$store.state.global.trainingProgress === 100){
+                if (!this.$store.state.global.isTraining || this.$store.state.global.trainingProgress === 100) {
                     var time_out = this.setTrainTimeout();
                     // this.loading = true;
                     this.setIsTraining(true);
@@ -207,7 +208,7 @@ export default {
             // });
             // this.trainingProgress = 0;
             this.setTrainingProgress(0);
-            const increment = 100 / time_out * 10000;
+            const increment = 100 / time_out * 1000;
             var tmp = 0;
 
             this.trainingTimerId = setInterval(() => {
@@ -234,10 +235,11 @@ export default {
             setTimeout(() => {
                 // this.trainingProgress = 100;
                 this.setTrainingProgress(100);
+
                 clearInterval(this.trainingTimerId);
                 this.trainingTimerId = null;
                 this.endLoading();
-            }, time_out);
+            }, time_out + 500);
         },
         endLoading() {
             // if (this.loadingInstance) {
@@ -245,10 +247,10 @@ export default {
             //     this.loadingInstance = null;
             // }
             this.$message({
-                        message: "训练成功",
-                        type: "success",
-                        offset: 50,
-                    });
+                message: "训练成功",
+                type: "success",
+                offset: 50,
+            });
             // this.loading = false;
             this.setIsTraining(false);
         },

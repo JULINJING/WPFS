@@ -170,23 +170,9 @@ export default {
 
                 const fileName = this.$store.state.global.uploadedFileName;
                 this.form.fileName = fileName;
-
-                // 调用后端预测接口，传入预测参数
-                // await this.request.post("/file/predict", fileName).then((res) => {
-                //     if (res.code === "200") {
-                //         // console.log("jsonContent:  "+res.jsonContent)
-                //         // this.jsonData = JSON.parse(res.jsonContent);
-                //         // this.$emit('update-table-data', this.jsonData);
-                //         this.fetchData(fileName);
-                //     }
-                // });
-
-                this.jsonData = require("@/assets/testJson/12.json");
-                this.$emit('update-table-data', this.jsonData);
-
-
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
+
                 var time_out = this.setPredictTimeout();
                 var end = new Date().getTime();
                 
@@ -203,6 +189,19 @@ export default {
                         offset: 50,
                     });
                 }, time_out);
+                
+                // 调用后端预测接口，传入预测参数
+                await this.request.post("/file/predict", fileName).then((res) => {
+                    if (res.code === "200") {
+                        // console.log("jsonContent:  "+res.jsonContent)
+                        // this.jsonData = JSON.parse(res.jsonContent);
+                        // this.$emit('update-table-data', this.jsonData);
+                        this.fetchData(fileName);
+                    }
+                });
+
+                // this.jsonData = require("@/assets/testJson/12.json");
+                // this.$emit('update-table-data', this.jsonData);
             }
         },
         setPredictTimeout(){
@@ -235,8 +234,8 @@ export default {
                     this.setPredictedJsonData(this.jsonData)
                 }
             })
-        
             this.$emit('update-table-data');
+            
         },
         startLoading() {
             this.loadingInstance = Loading.service({
