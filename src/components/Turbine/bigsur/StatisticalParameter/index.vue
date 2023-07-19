@@ -46,7 +46,8 @@
 			</li>
 			<li class="right">
 				<header>
-					<span>#1风机</span>
+					<!-- <span>#1风机</span> -->
+					<span>{{ Turbine }}</span>
 				</header>
 				<!-- <div> -->
 				<StackLine class="stackLine"></StackLine>
@@ -57,10 +58,29 @@
 </template>
 <script>
 import StackLine from "../StackLine/index";
+import { mapState } from "vuex";
+
 export default {
 	components: {
 		StackLine,
 	},
+	data() {
+		return {
+			Turbine: "00号风机",
+		};
+	},
+	mounted() {
+		this.Turbine = "#" + this.$store.state.global.uploadedFileName.split('.')[0] + "号风机";;
+	},
+	computed: {
+        ...mapState('global', ['uploadedFileName']),
+		
+    },
+	// watch: {
+    //     uploadedFileName(newName, oldName) {
+	// 		this.Turbine = newName.split('.')[0] + "号风机";
+    //     }
+    // },
 };
 </script>
 <style lang="scss" scoped>
@@ -77,7 +97,7 @@ export default {
 		height: 100%;
 		display: flex;
 		.left {
-			width: 60%;
+			width: 70%;
 			height: 100%;
 			display: flex;
 			flex-direction: column;

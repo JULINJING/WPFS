@@ -43,6 +43,7 @@ const store = new Vuex.Store({
                 predictedJsonData: [], // 预测的数据
                 trainingProgress: 0, // 训练进度
                 isTraining: false, // 是否正在训练
+                isTurbineCanClick: true,
             },
             mutations: {
                 setPath(state) {
@@ -76,7 +77,10 @@ const store = new Vuex.Store({
                 },
                 setIsTraining(state, isTraining) {
                     state.isTraining = isTraining;
-                }
+                },
+                setTurbineCanClick(state, flag){
+                    state.isTurbineCanClick = flag;
+                },
             },
             getters: {
                 getUploadedFileName(state) {
@@ -93,6 +97,9 @@ const store = new Vuex.Store({
                 },
                 getTrainingProgress(state) {
                     return state.trainingProgress;
+                },
+                getTurbineCanClick(state){
+                    return state.flag;
                 }
             }
         }
