@@ -63,7 +63,7 @@ export default {
 
                 setTimeout(()=>{
                     this.$refs.tbbox.classList.add('bounceIn')
-                },1500)
+                },1000)
             }
         },
     },

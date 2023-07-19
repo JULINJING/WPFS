@@ -6,10 +6,16 @@
 				<li :class="{active: activeIndex === 0}" @click="btnhandle(0)" >实时数据</li>
 				<li :class="{active: activeIndex === 1}" @click="btnhandle(1)">故障信息</li>
 			</ul>
-			<ul class="data_list">
-				<li v-for="item in 9" :key="item">
+			<ul v-if="activeIndex === 0" class="data_list">
+				<li v-for="item in 50" :key="item">
 					<span>偏航系统精准</span>
-					<span>11:17:42</span>
+					<span>11:17:{{item + 10}}</span>
+				</li>
+			</ul>
+			<ul v-if="activeIndex === 1" class="data_list">
+				<li v-for="item in 2" :key="item" style="color: red;">
+					<span>偏航系统故障</span>
+					<span>11:17:{{item + 1}}{{random}}</span>
 				</li>
 			</ul>
 		</div>
@@ -36,6 +42,12 @@ export default {
 	components: {
 		ProjectTitle,
 	},
+	computed: {
+		random() {
+			var result = (Math.random() * 10).toFixed(0)
+			return result
+		}
+	}
 };
 </script>
 <style lang="scss" scoped>
