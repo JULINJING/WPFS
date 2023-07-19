@@ -194,7 +194,7 @@ export default {
         offset: 50,
       });
 
-      // 上传成功后，1.5秒后显示对话
+      // 上传成功后，1秒后显示对话
       setTimeout(() => {
         this.dialogFormVisible = true;
       }, 1000);
