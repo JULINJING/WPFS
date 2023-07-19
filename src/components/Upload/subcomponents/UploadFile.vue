@@ -13,56 +13,36 @@
 
         <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" top="25vh" width="35%" class="dialog-box"
             :show-close="false">
-            <div class="form-row">
-                <el-tag class="tag">选择异常检测方法</el-tag>
-                <el-radio-group v-model="outlierRadio">
-                    <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="DBSCAN" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="PCA" class="bordered-checkbox" border></el-radio-button>
-                </el-radio-group>
-            </div>
 
             <div class="form-row">
                 <el-tag class="tag">缺失值处理方法</el-tag>
                 <el-radio-group v-model="missingRadio">
-                    <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
+                    <!-- <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
                     <el-radio-button label="线性插值" class="bordered-checkbox" border></el-radio-button>
                     <el-radio-button label="Lightgbm" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="XgBoost" class="bordered-checkbox" border></el-radio-button>
+                    <el-radio-button label="XgBoost" class="bordered-checkbox" border></el-radio-button> -->
+                    <el-radio-button v-for="option in missingOptions" :key="option.value" :label="option.value" class="bordered-checkbox" border>
+                        {{ option.label }}
+                    </el-radio-button>
+                </el-radio-group>
+            </div>
+        
+            <div class="form-row">
+                <el-tag class="tag">异常值检测方法</el-tag>
+                <el-radio-group v-model="outlierRadio">
+                    <!-- <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
+                    <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
+                    <el-radio-button label="DBSCAN" class="bordered-checkbox" border></el-radio-button>
+                    <el-radio-button label="PCA" class="bordered-checkbox" border></el-radio-button> -->
+                    <el-radio-button v-for="option in outlierOptions" :key="option.value" :label="option.value" class="bordered-checkbox" border>
+                        {{ option.label }}
+                    </el-radio-button>
                 </el-radio-group>
             </div>
 
             <div slot="footer" class="dialog-footer">
                 <el-button class="confirmButton" @click="handleDialogConfirm" :round="true">确 定
                 </el-button>
-            </div>
-        </el-dialog>
-
-        <el-dialog title="设置预处理预测参数" :visible.sync="dialogFormVisible" top="25vh" width="35%" class="dialog-box"
-            :show-close="false">
-            <div class="form-row">
-                <el-tag class="tag">选择异常检测方法</el-tag>
-                <el-radio-group v-model="outlierRadio">
-                    <el-radio-button label="孤立森林" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="KNN" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="DBSCAN" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="PCA" class="bordered-checkbox" border></el-radio-button>
-                </el-radio-group>
-            </div>
-
-            <div class="form-row">
-                <el-tag class="tag">缺失值处理方法</el-tag>
-                <el-radio-group v-model="missingRadio">
-                    <el-radio-button label="简单填充" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="线性插值" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="Lightgbm" class="bordered-checkbox" border></el-radio-button>
-                    <el-radio-button label="XgBoost" class="bordered-checkbox" border></el-radio-button>
-                </el-radio-group>
-            </div>
-
-            <div slot="footer" class="dialog-footer">
-                <el-button class="confirmButton" @click="handleDialogConfirm" :round="true">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -117,7 +97,19 @@ export default {
             showTable: true,
             fileList: [],
             outlierRadio: "",
+            outlierOptions: [
+                { label: "孤立森林", value: "isolation_forest"},
+                { label: "KNN", value: "knn"},
+                { label: "DBSCAN", value: "dbscan" },
+                { label: "PCA", value: "pca" }
+            ],
             missingRadio: "",
+            missingOptions: [
+                { label: "简单填充", value: "simple" },
+                { label: "线性插值", value: "linear" },
+                { label: "Lightgbm", value: "lgb" },
+                { label: "XgBoost", value: "xgb" },
+            ],
             jsonData: [],
             curData: [],
             curfile: new Object(),
@@ -227,7 +219,7 @@ export default {
             const fileResponse = JSON.stringify(this.curfile.response);
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-
+            
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
                     this.jsonData = JSON.parse(res.jsonContent);
@@ -260,13 +252,14 @@ export default {
             this.curfile = file;
             this.curData = [];
             this.fetchData(file);
-
             this.$message({
                 message: "选择文件" + file.name,
                 type: "action",
                 offset: 50,
             });
             this.setUploadedFileName(file.name);
+            this.updateTitle();
+
             // console.log(this.currentPage, this.pageSize);
 
             this.$nextTick(() => {
@@ -304,11 +297,22 @@ export default {
             }
         },
         async sendPreprocessParams() {
+            
+            if(this.missingRadio === 'xgb'){
+                this.missingRadio = 'lgb';
+            }
+            var paramsForm = {
+                "file_name": this.curfile.name,
+                "resample_method": this.missingRadio,
+                "outlier_detection": this.outlierRadio
+            };
+
             await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
                 if (res.code === "200") {
                     console.log(this.curfile.name);
                 }
             });
+
             this.$message({
                 message: "预处理成功",
                 type: "success",
