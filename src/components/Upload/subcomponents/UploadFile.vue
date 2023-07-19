@@ -1,9 +1,19 @@
 <template>
     <div class="totalinfocontainer _totalinfocontainer">
         <!-- Form -->
-        <el-upload drag multiple :action="'http://' + serverIp + ':7070/file/upload'" :on-success="handleUploadSuccess"
-            :on-error="handleUploadError" :before-upload="beforeUpload" :limit="10" :on-exceed="handleExceed"
-            :file-list="fileList" :on-preview="handlePreview" accept=".csv">
+        <el-upload 
+            drag multiple 
+            :action="'http://' + serverIp + ':7070/file/upload'" 
+            :on-success="handleUploadSuccess"
+            :on-error="handleUploadError" 
+            :before-upload="beforeUpload" 
+            :on-remove="handleRemove"
+            :limit="10" 
+            :on-exceed="handleExceed"
+            :file-list="fileList" 
+            :on-preview="handlePreview" 
+            accept=".csv"
+        >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text PC_upload">
                 将文件拖到此处，或<em>点击上传</em>
@@ -82,14 +92,11 @@
 
 <script>
 import { serverIp } from "../../../../public/config.js";
-import { mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import rawData from '../../../assets/testJson/11.json'
 import { Loading } from 'element-ui';
 
 export default {
-    props: {
-        tableData: Array,
-    },
     data() {
         return {
             serverIp: serverIp,
@@ -123,21 +130,22 @@ export default {
         };
     },
     computed: {
+        ...mapState('global', ['uploadedFileList']),
         fileListTemp() {
             return this.fileList;
         }
     },
     mounted() {
         this.curData = JSON.parse(JSON.stringify(rawData));
+        this.fileList = this.$store.state.global.uploadedFileList;
     },
     methods: {
-        ...mapMutations("global", ["setUploadedFileName", "setProcessedJsonData"]),
+        ...mapMutations("global", ["setUploadedFileName", "setProcessedJsonData", "setUploadedFileList"]),
         updateTitle() {
             this.setUploadedFileName(this.curfile.name);
             this.tableTitle = this.curfile.name.split('.')[0] + "号风机预处理后数据";
         },
         initVirtualScroll() {
-            /*指定table的ref*/
             var table = this.$refs.mytable.bodyWrapper;
 
             /*浏览器兼容*/
@@ -196,7 +204,7 @@ export default {
             }, 1000);
 
             this.curfile = file;
-
+            this.setUploadedFileList(fileList);
             // this.setUploadedFileName(file.name);
         },
 
@@ -215,6 +223,10 @@ export default {
             return isCSV;
         },
 
+        handleRemove(file, fileList) {
+            this.setUploadedFileList(fileList);
+            this.fileList = fileList; 
+        },
         async fetchData() {
             const fileResponse = JSON.stringify(this.curfile.response);
             const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
@@ -273,7 +285,6 @@ export default {
                 this.dialogFormVisible = false;
                 this.showTable = true;
 
-                // TODO: Loading
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
 

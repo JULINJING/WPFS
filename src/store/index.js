@@ -48,9 +48,12 @@ const store = new Vuex.Store({
                 setPath(state) {
                     state.currentPathName = localStorage.getItem("currentPathName")
                 },
-                
+
                 setUploadedFileName(state, fileName) {
                     state.uploadedFileName = fileName;
+                },
+                setUploadedFileList(state, fileList){
+                    state.uploadedFileList = fileList;
                 },
                 pushToUploadedFileList(state, newItem) {
                     state.uploadedFileList.push(newItem);
@@ -78,6 +81,9 @@ const store = new Vuex.Store({
             getters: {
                 getUploadedFileName(state) {
                     return state.uploadedFileName;
+                },
+                getUploadedFileList(state) {
+                    return state.uploadedFileList;
                 },
                 getProcessedJsonData(state) {
                     return state.processedJsonData;
