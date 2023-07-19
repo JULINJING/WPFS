@@ -31,6 +31,9 @@ Vue.use(voiceInputButton, {
     // 其他配置项, 参见下方 [Attributes / 属性] 部分
 })
 
+
+
+
 new Vue({
     el: '#app',
     router,

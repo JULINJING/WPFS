@@ -44,7 +44,7 @@ export default {
 		// NavTop
 	},
 	methods: {
-		// 返回首页 
+		// 返回首页
 		backToHome() {
             this.$router.push('/home')
         }

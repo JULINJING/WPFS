@@ -5,6 +5,7 @@
 			<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/home">返回主页</router-link></h2>
 			<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/windfield">返回场站</router-link></h2>
 		</div>
+    <el-button type="primary" style="z-index: 99999" @click="">主要按钮</el-button>
 	</div>
 </template>
 <script>
