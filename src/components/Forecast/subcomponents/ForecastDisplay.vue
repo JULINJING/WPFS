@@ -1,6 +1,11 @@
 <template>
     <div class="form-container">
-        <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据</h1>
+        <div class="downloadBox">
+            <div class="centered">
+            <h1>{{ tableTitle }}</h1>
+            </div>
+            <a @click="downloadOutFile">下载<i class="iconfont">&#xe602;</i></a>
+        </div>
         <el-table :data="curData" stripe highlight-current-row style="width: 98%;margin-bottom: 20px" size="mini" max-height="300" ref="rw_table"
             @mouseenter.native="mouseEnter" @mouseleave.native="mouseLeave" :cell-style="rowStyle">
 
@@ -29,31 +34,39 @@
         </el-table>
     </div>
 </template>
-  
+
 <script>
 import rawData from '../../../assets/testJson/12.json'
 import { mapState } from 'vuex';
-
+import {serverIp} from "../../../../public/config.js";
 export default {
     data() {
         return {
             rolltimer: '',
             // 测试数据
             curData: [],
+            tableTitle: '预测结果(示例)'
         }
     },
     computed: {
-        ...mapState('global', ['predictedJsonData']), // 将predictedJsonData和curData从全局模块映射到组件的计算属性中
+        ...mapState('global', ['predictedJsonData', 'uploadedFileName']),
     },
     watch: {
-        predictedJsonData(newData) {
-            this.curData = newData;
+        predictedJsonData: {
+            handler(newData) {
+                this.curData = newData;
+                this.updateTitle();
+            }
         },
     },
     mounted(){
         this.curData = JSON.parse(JSON.stringify(rawData));
     },
     methods: {
+        updateTitle(){
+            const fileName =  this.$store.state.global.uploadedFileName;
+            this.tableTitle = fileName.split('.')[0] + "号风机预测结果";
+        },
         rowStyle() {
             return "text-align:center";
         },
@@ -94,11 +107,43 @@ export default {
             // 开启
             this.autoRoll()
         },
+        downloadOutFile() {
+            console.log("下载预测数据")
+            const fileName =  this.$store.state.global.uploadedFileName;
+            window.open(`http://${serverIp}:7070/file/pred/${fileName}`)
+        },
     }
 }
 </script>
 
 <style lang="less">
+.downloadBox {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 98%;
+    justify-content: space-between;
+    .centered {
+        flex-grow: 1;
+        text-align: center;
+        h1 {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 5px;
+        }
+    }
+    a{
+        text-decoration: underline;
+        color: #2c3e50;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 200;
+    }
+    a:hover {
+        color: #409EFF;
+    }
+}
 // 大于800px
 @media only screen and (min-width: 800px) {
     .form-container {

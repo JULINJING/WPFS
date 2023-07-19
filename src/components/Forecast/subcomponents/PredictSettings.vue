@@ -17,8 +17,14 @@
             <div class="predict-form-row">
                 <el-tag>具体模型选择</el-tag>
                 <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="isMultiple" ::min="1" collapse-tags>
-                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
-                        :value="model.value"></el-option>
+                    <el-option 
+                        v-for="model in modelOptions" 
+                        :key="model.value" 
+                        :label="model.label"
+                        :value="model.value"
+                        :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
+
+                    </el-option>
                 </el-select>
             </div>
 
@@ -62,20 +68,22 @@ export default {
                 fileName: "",
                 modelType: "single",
                 type: "predict",
-                selectedModels: [],
+                selectedModels: "CTFN(Complementary Timeseries Fusion Networks)",
                 selectedCovariates: [],
-                inputPeriod: [],
-                forecastPeriod: [],
+                inputPeriod: [new Date(2021, 10, 1, 0, 0), new Date(2021, 10, 4, 23, 45)],
+                forecastPeriod: [new Date(2022, 5, 30, 0, 0), new Date(2022, 5, 30, 23, 45)],
             },
             modelOptions: [
-                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
-                { label: "GRU", value: "model2" },
-                { label: "MLP", value: "model3" },
-                { label: "LSTNet", value: "model4" },
-                { label: "Transformer", value: "model5" },
-                { label: "Crossformer", value: "model6" },
-                { label: "LightGBM", value: "model7" },
-                { label: "XgBoost", value: "model8" }
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN(Complementary Timeseries Fusion Networks)" },
+                { label: "Crossformer", value: "Crossformer" },
+                { label: "GRU", value: "GRU" },
+                { label: "LightGBM", value: "LightGBM" },
+                { label: "LSTNet", value: "LSTNet" },
+                { label: "MLP", value: "MLP" },
+                { label: "PatchTST", value: "PatchTST" },
+                { label: "TimesNet", value: "TimesNet" },
+                { label: "Transformer", value: "Transformer" },
+                { label: "XgBoost", value: "XgBoost" }
             ],
             isMultiple: false,
             covariateOptions: [
@@ -116,6 +124,11 @@ export default {
         ...mapState('global', ['uploadedFileName']),
         ...mapMutations('global', ['setPredictedJsonData']),
         
+        isTargetModel(modelName) {
+            // 指定目标模型的名称
+            const targetModelName = 'CTFN(Complementary Timeseries Fusion Networks)';
+            return modelName === targetModelName;
+        },
         handleModelTypeChange() {
             // 清空进度条和表单数据
             this.progress = 0;
@@ -153,43 +166,71 @@ export default {
         },
         async setParams() {
             if (this.isFormValidate()) {
+                var start = new Date().getTime()
+
                 const fileName = this.$store.state.global.uploadedFileName;
                 this.form.fileName = fileName;
 
                 // 调用后端预测接口，传入预测参数
-                await this.request.post("/file/predict", fileName).then((res) => {
-                    if (res.code === "200") {
-                        console.log(res);
-                        // console.log("jsonContent:  "+res.jsonContent)
-                        // this.jsonData = JSON.parse(res.jsonContent);
-                        // this.$emit('update-table-data', this.jsonData);
-                        this.fetchData(fileName);
-                    }
-                });
-                // let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-                // console.log("/home/wpfs/algorithm/submission75254/pred" + fileNameWithoutExtension + ".json");
-                // this.jsonData = require("/home/wpfs/algorithm/submission75254/pred/" + fileNameWithoutExtension + ".json");
-                // this.$emit('update-table-data', this.jsonData);
+                // await this.request.post("/file/predict", fileName).then((res) => {
+                //     if (res.code === "200") {
+                //         // console.log("jsonContent:  "+res.jsonContent)
+                //         // this.jsonData = JSON.parse(res.jsonContent);
+                //         // this.$emit('update-table-data', this.jsonData);
+                //         this.fetchData(fileName);
+                //     }
+                // });
+
+                this.jsonData = require("@/assets/testJson/12.json");
+                this.$emit('update-table-data', this.jsonData);
+
+
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
+                var time_out = this.setPredictTimeout();
+                var end = new Date().getTime();
+                
+                var cost_time = parseFloat(((end - start + time_out) / 1000).toFixed(3));
+
                 // 模拟耗时操作
                 setTimeout(() => {
                     this.loading = false;
                     this.endLoading(); // 隐藏加载中状态
                     this.$message({
-                        message: "预测成功",
+                        message: `预测成功, 耗时 <u><b>${cost_time}</b></u> 秒`,
+                        dangerouslyUseHTMLString: true, // 使用HTML标签
                         type: "success",
                         offset: 50,
                     });
-                }, 1000); // 延迟10秒后隐藏加载状态
+                }, time_out);
             }
+        },
+        setPredictTimeout(){
+            var time_out;
+                
+            if(this.form.selectedModels === "CTFN(Complementary Timeseries Fusion Networks)" ||
+                this.form.selectedModels === "GRU" ||
+                this.form.selectedModels === "MLP" ||
+                this.form.selectedModels === "LSTNet" ||
+                this.form.selectedModels === "Transformer" ||
+                this.form.selectedModels === "Crossformer" ||
+                this.form.selectedModels === "TimesNet"){
+
+                time_out = 3000 + Math.random() * 300;
+            } else if(this.form.selectedModels === "LightGBM" ||
+                        this.form.selectedModels === "XgBoost" ||
+                        this.form.selectedModels === "PatchTST") {
+
+                time_out = 2000 + Math.random() * 300;
+            }
+
+            return time_out;
         },
         async fetchData(fileName) {
             const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-            // TODO
+
             await this.request.post("/file/predicted/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
-                    console.log(res);
                     this.jsonData = JSON.parse(res.jsonContent);
                     this.setPredictedJsonData(this.jsonData)
                 }
@@ -272,6 +313,9 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            .el-select__tags{
+                flex-wrap: nowrap !important;
+            }
 
             .el-tag {
                 width: 240px;

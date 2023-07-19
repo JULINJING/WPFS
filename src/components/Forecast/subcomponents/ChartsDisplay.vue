@@ -1,10 +1,21 @@
 <template>
     <div class="diagramcontainer _diagramcontainer">
-        <h1 style="margin-top: 20px;margin-bottom: 10px;">预测结果数据图表可视化</h1>
+        <h1 style="margin-top: 20px;margin-bottom: 10px;">{{ Turbine_id }}号风机预测结果数据图表可视化</h1>
         <div class="subdiv _subdiv" style="margin-top: 1%;">
             <div class="left box">
                 <h1>预测功率YD15图</h1>
                 <LineChart class="LineChart"/>
+            </div>
+            <div class="right box">
+                <h1>功率24小时变化图</h1>
+                <SolidHistogram class="SolidHistogram"/>
+            </div>
+        </div>
+
+        <div class="subdiv _subdiv" style="margin-top: 1%;">
+            <div class="left box">
+                <h1>雷达图</h1>
+                <RadarChart class="RadarChart"/>
             </div>
             <div class="right box">
                 <h1>散点图</h1>
@@ -17,12 +28,32 @@
 <script>
 import LineChart from './diagrams/LineChart.vue';
 import ScatterPlot from './diagrams/ScatterPlot.vue';
+import SolidHistogram from './diagrams/SolidHistogram.vue';
+import RadarChart from './diagrams/RadarChart.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: 'dataanalysis',
     components: {
-        LineChart, ScatterPlot
-    }
+        LineChart, ScatterPlot, SolidHistogram, RadarChart
+    },
+    data() {
+        return {
+            Turbine_id: '',
+        };
+    },
+    mounted() {
+        this.updateTitle();
+    },
+    computed: {
+        ...mapState('global', ['predictedJsonData']),
+    },
+    methods: {
+        updateTitle() {
+            this.Turbine_id = this.$store.state.global.predictedJsonData[0].TurbID;
+        }
+    },
+
 }
 </script>
 
@@ -58,6 +89,7 @@ h1 {
             justify-content: space-around;
             align-items: center;
             font-size: .5em;
+            margin-top: 5vh;
 
             .left {
                 width: 48%;
@@ -93,12 +125,14 @@ h1 {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
+                margin-top: 10px;
             }
 
             .right {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
+                margin-top: 10px;
             }
         }
     }

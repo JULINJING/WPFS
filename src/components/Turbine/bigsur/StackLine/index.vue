@@ -58,9 +58,7 @@ export default {
 						color: "#15c5e8",
 					},
 					itemStyle: {
-						normal: {
-							color: "#15c5e8",
-						},
+						color: "#15c5e8",
 					},
 				},
 				{
@@ -72,9 +70,7 @@ export default {
 						color: "#c8a818",
 					},
 					itemStyle: {
-						normal: {
-							color: "#c8a818",
-						},
+						color: "#c8a818",
 					},
 				},
 			],

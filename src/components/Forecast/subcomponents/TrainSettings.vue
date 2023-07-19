@@ -2,15 +2,19 @@
     <div class="input-container _input-container">
         <el-form ref="form" :model="form" label-width="80px">
             <!-- 进度条 -->
-            <div class="train-form-row">
+            <div class="train-form-row" v-if="!getIsTraining">
                 <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
+            </div>
+            <div class="train-form-row" v-if="getIsTraining">
+                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress" style="width: 100%"></el-progress>
             </div>
 
             <div class="train-form-row">
                 <el-tag>具体模型选择</el-tag>
                 <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
-                        :value="model.value"></el-option>
+                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
+                        :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
+                    </el-option>
                 </el-select>
             </div>
 
@@ -37,13 +41,12 @@
             <div>
                 <el-button @click="setParams">开始训练</el-button>
             </div>
-            <el-loading v-if="loading" text="加载中..." :fullscreen="true"></el-loading>
         </el-form>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import { Loading } from 'element-ui';
 
 export default {
@@ -51,34 +54,41 @@ export default {
         return {
             form: {
                 type: "train",
-                selectedModels: [],
+                selectedModels: 'LightGBM',
                 batchSize: "32",
                 learningRate: "0.001",
                 inputLen: "384",
                 predLen: "172",
-                loading: false, // 加载状态
             },
             modelOptions: [
-                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "model1" },
-                { label: "GRU", value: "model2" },
-                { label: "MLP", value: "model3" },
-                { label: "LSTNet", value: "model4" },
-                { label: "Transformer", value: "model5" },
-                { label: "Crossformer", value: "model6" },
-                { label: "LightGBM", value: "model7" },
-                { label: "XgBoost", value: "model8" },
-                { label: "PatchTST", value: "model9" },
-                { label: "TimesNet", value: "model10" }
+                { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
+                { label: "Crossformer", value: "Crossformer" },
+                { label: "GRU", value: "GRU" },
+                { label: "LightGBM", value: "LightGBM" },
+                { label: "LSTNet", value: "LSTNet" },
+                { label: "MLP", value: "MLP" },
+                { label: "PatchTST", value: "PatchTST" },
+                { label: "TimesNet", value: "TimesNet" },
+                { label: "Transformer", value: "Transformer" },
+                { label: "XgBoost", value: "XgBoost" }
             ],
-            loading: false, // 加载状态
+            // loading: false, // 加载状态
             loadingInstance: null,
             progress: 0,
+            // trainingProgress: 0, // 训练进度条百分比
+            trainingTimerId: null, // 用于存储计时器的ID
         };
     },
 
     computed: {
-        ...mapState('global', ['uploadedFileName']),
+        ...mapState('global', ['uploadedFileName', 'trainingProgress', 'isTraining']),
 
+        getTrainingProgress() {
+            return this.$store.state.global.trainingProgress;
+        },
+        getIsTraining() {
+            return this.$store.state.global.isTraining;
+        },
         calculateProgress() {
             let filledFields = 0;
             const totalFields = 5; // 总字段数
@@ -96,6 +106,13 @@ export default {
         },
     },
     methods: {
+        ...mapMutations('global', ['setTrainingProgress', 'setIsTraining']),
+
+        isTargetModel(modelName) {
+            // 指定目标模型的名称
+            const targetModelName = 'CTFN(Complementary Timeseries Fusion Networks)';
+            return modelName === targetModelName;
+        },
         handleSelectChange() {
             // 更新进度条
             this.progress = this.calculateProgress;
@@ -145,35 +162,95 @@ export default {
                 //         this.$message.error("操作失败");
                 //     }
                 // });
-                this.loading = true;
-                this.startLoading(); // 显示加载中状态
-                // 模拟耗时操作
-                setTimeout(() => {
-                    this.loading = false;
-                    this.endLoading(); // 隐藏加载中状态
-                    this.$message({
+                if(!this.$store.state.global.isTraining || this.$store.state.global.trainingProgress === 100){
+                    var time_out = this.setTrainTimeout();
+                    // this.loading = true;
+                    this.setIsTraining(true);
+                    this.startLoading(time_out); // 显示加载中状态
+                }
+            }
+        },
+
+        setTrainTimeout() {
+            var time_out;
+
+            if (this.form.selectedModels === "CTFN" ||
+                this.form.selectedModels === "GRU" ||
+                this.form.selectedModels === "MLP" ||
+                this.form.selectedModels === "LSTNet" ||
+                this.form.selectedModels === "Transformer" ||
+                this.form.selectedModels === "Crossformer" ||
+                this.form.selectedModels === "TimesNet") {
+
+                time_out = 600000;
+            } else if (this.form.selectedModels === "LightGBM" ||
+                this.form.selectedModels === "XgBoost" ||
+                this.form.selectedModels === "PatchTST") {
+
+                time_out = 120000;
+            }
+
+            return time_out;
+        },
+        startLoading(time_out) {
+            // 清除之前的计时器
+            if (this.trainingTimerId) {
+                clearInterval(this.trainingTimerId);
+                this.trainingTimerId = null;
+            }
+            const targetNode = document.getElementById('trainProgressBar');
+            // this.loadingInstance = Loading.service({
+            //     // target: targetNode,
+            //     lock: false,
+            //     text: '正在训练……',
+            //     background: 'rgba(0, 0, 0, 0.3)'
+            // });
+            // this.trainingProgress = 0;
+            this.setTrainingProgress(0);
+            const increment = 100 / time_out * 10000;
+            var tmp = 0;
+
+            this.trainingTimerId = setInterval(() => {
+                if (this.$store.state.global.trainingProgress < 100) {
+                    tmp += increment;
+                    if (!Number.isInteger(tmp)) {
+                        if (tmp.toString().split('.')[1].length > 1) {
+                            // this.trainingProgress = parseFloat(tmp.toFixed(1));
+                            this.setTrainingProgress(parseFloat(tmp.toFixed(1)));
+                        } else {
+                            // this.trainingProgress = tmp;
+                            this.setTrainingProgress(tmp);
+                        }
+                    } else {
+                        // this.trainingProgress = tmp;
+                        this.setTrainingProgress(tmp);
+                    }
+                } else {
+                    clearInterval(this.trainingTimerId);
+                    this.trainingTimerId = null;
+                }
+            }, 1000);
+
+            setTimeout(() => {
+                // this.trainingProgress = 100;
+                this.setTrainingProgress(100);
+                clearInterval(this.trainingTimerId);
+                this.trainingTimerId = null;
+                this.endLoading();
+            }, time_out);
+        },
+        endLoading() {
+            // if (this.loadingInstance) {
+            //     this.loadingInstance.close();
+            //     this.loadingInstance = null;
+            // }
+            this.$message({
                         message: "训练成功",
                         type: "success",
                         offset: 50,
                     });
-                }, 10); // 延迟10秒后隐藏加载状态
-
-
-            }
-        },
-
-        startLoading() {
-            this.loadingInstance = Loading.service({
-                lock: true,
-                text: '正在训练……',
-                background: 'rgba(0, 0, 0, 0.7)'
-            });
-        },
-        endLoading() {
-            if (this.loadingInstance) {
-                this.loadingInstance.close();
-                this.loadingInstance = null;
-            }
+            // this.loading = false;
+            this.setIsTraining(false);
         },
 
     },

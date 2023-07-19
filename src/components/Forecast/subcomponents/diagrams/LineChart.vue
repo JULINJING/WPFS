@@ -7,9 +7,6 @@ import * as echarts from 'echarts';
 import { mapState } from 'vuex';
 
 export default {
-    // props: {
-    //     tableData: Array,
-    // },
     data() {
         return {
             lineData: [],
@@ -24,16 +21,13 @@ export default {
         ...mapState('global', ['predictedJsonData']),
     },
     // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             if (newTableData !== null) {
-    //                 this.lineData = [];
-    //                 this.processData();
-    //                 this.renderChart();
-    //             }
+    //     predictedJsonData: {
+    //         handler(newData) {
+    //             this.processData();
+    //             this.renderChart();
     //         },
-    //         immediate: true, // 立即执行watch处理函数
-    //     },
+    //         deep: true
+    //     }
     // },
     methods: {
         processData() {
@@ -164,9 +158,7 @@ export default {
                                 symbol: 'circle',
                                 symbolSize: 6,
                                 lineStyle: {
-                                    normal: {
-                                        color: "gray",
-                                    },
+                                    color: "gray",
                                 },
                                 label: {
                                     show: false,
@@ -178,18 +170,16 @@ export default {
                                     borderWidth: 3
                                 },
                                 areaStyle: {
-                                    normal: {
-                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                            {
-                                                offset: 0,
-                                                color: '#eb64fb'
-                                            },
-                                            {
-                                                offset: 1,
-                                                color: '#3fbbff0d'
-                                            }
-                                        ], false),
-                                    }
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        {
+                                            offset: 0,
+                                            color: '#eb64fb'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: '#3fbbff0d'
+                                        }
+                                    ], false),
                                 },
                                 data: yAxisData2,
                                 yAxisIndex: 0 // Use the first y-axis
@@ -202,9 +192,7 @@ export default {
                                 symbol: 'circle',
                                 symbolSize: 6,
                                 lineStyle: {
-                                    normal: {
-                                        color: "blue",
-                                    },
+                                    color: "blue",
                                 },
                                 label: {
                                     show: true,
@@ -216,18 +204,16 @@ export default {
                                     borderWidth: 3
                                 },
                                 areaStyle: {
-                                    normal: {
-                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                            {
-                                                offset: 0,
-                                                color: '#00ff00'
-                                            },
-                                            {
-                                                offset: 1,
-                                                color: '#00ff001f'
-                                            }
-                                        ], false),
-                                    }
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        {
+                                            offset: 0,
+                                            color: '#00ff00'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: '#00ff001f'
+                                        }
+                                    ], false),
                                 },
                                 data: yAxisData1,
                                 yAxisIndex: 1
@@ -235,8 +221,7 @@ export default {
                         ]
                     };
 
-                    this.chartInstance.setOption(option);
-
+                    option && this.chartInstance.setOption(option);
                 });
             }
         }
