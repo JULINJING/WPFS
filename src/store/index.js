@@ -38,18 +38,30 @@ const store = new Vuex.Store({
             namespaced: true, // 确保命名空间设置为 true
             state: {
                 uploadedFileName: "11.csv", // 上传的文件名
+                uploadedFileList: [],
                 processedJsonData: [], // 预处理后的数据
                 predictedJsonData: [], // 预测的数据
                 trainingProgress: 0, // 训练进度
                 isTraining: false, // 是否正在训练
             },
             mutations: {
-                setUploadedFileName(state, fileName) {
-                    state.uploadedFileName = fileName;
-                },
                 setPath(state) {
                     state.currentPathName = localStorage.getItem("currentPathName")
                 },
+                
+                setUploadedFileName(state, fileName) {
+                    state.uploadedFileName = fileName;
+                },
+                pushToUploadedFileList(state, newItem) {
+                    state.uploadedFileList.push(newItem);
+                },
+                removeFromUploadedFileList(state, itemToRemove) {
+                    const index = state.uploadedFileList.indexOf(itemToRemove);
+                    if (index !== -1) {
+                        state.uploadedFileList.splice(index, 1);
+                    }
+                },
+
                 setProcessedJsonData(state, data) {
                     state.processedJsonData = data;
                 },
