@@ -1,5 +1,6 @@
 <template>
     <div id="watchContainer" class="watchContainer _watchContainer" ref="watch">
+        <WPFGPT></WPFGPT>
         <div class="bg" id="PC">
             <dv-loading v-if="loading" style="height: 100vh;">Loading...</dv-loading>
             <div v-else class="host-body">
@@ -77,6 +78,7 @@ import centerRight2 from './centerRight2'
 import bottomLeft from './bottomLeft'
 import bottomRight from './bottomRight'
 import NavTop from '../baseComponents/NavTop'
+import WPFGPT from '../wpfGPT/WPFGPT.vue'
 
 export default {
     name: 'watch',
@@ -87,7 +89,8 @@ export default {
         bottomLeft,
         centerRight1,
         centerRight2,
-        bottomRight
+        bottomRight,
+        WPFGPT
     },
     data() {
         let filename = this.$store.state.global.uploadedFileName;
