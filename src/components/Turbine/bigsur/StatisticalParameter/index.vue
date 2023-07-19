@@ -65,7 +65,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .statistical_parameter {
-	width: 27.08vw;
+	width: 35vw;
 	height: 35vh;
 	background-color: #04669e73;
 	padding: 0.625rem 1.25rem;
@@ -79,6 +79,9 @@ export default {
 		.left {
 			width: 60%;
 			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 			header {
 				display: flex;
 				text-align: left;
@@ -103,6 +106,7 @@ export default {
 					flex-shrink: 1;
 					text-align: left;
 					line-height: 1.875rem;
+					margin-top: 20px;
 					span:nth-child(2) {
 						margin: 0 1px;
 						color: #1ac2e3;

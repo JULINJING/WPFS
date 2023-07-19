@@ -6,12 +6,22 @@
                 <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
             </div>
             <div class="train-form-row" v-if="getIsTraining">
-                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress" style="width: 100%"></el-progress>
+                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
+                    style="width: 100%"></el-progress>
+            </div>
+
+
+            <div class="train-form-row">
+                <el-tag>文件选择</el-tag>
+                <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
+                    <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
+                    </el-option>
+                </el-select>
             </div>
 
             <div class="train-form-row">
                 <el-tag>具体模型选择</el-tag>
-                <el-select v-model="form.selectedModels" placeholder="请选择" :multiple="false" collapse-tags>
+                <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
                     <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
                         :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
                     </el-option>
@@ -54,12 +64,14 @@ export default {
         return {
             form: {
                 type: "train",
-                selectedModels: 'LightGBM',
+                selectedFile: "",
+                selectedModel: 'LightGBM',
                 batchSize: "32",
                 learningRate: "0.001",
                 inputLen: "384",
                 predLen: "172",
             },
+            
             modelOptions: [
                 { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
                 { label: "Crossformer", value: "Crossformer" },
@@ -77,12 +89,15 @@ export default {
             progress: 0,
             // trainingProgress: 0, // 训练进度条百分比
             trainingTimerId: null, // 用于存储计时器的ID
+            fileList: [],
         };
+    },
+    mounted() {
+        this.fileList = this.$store.state.global.uploadedFileList;
     },
 
     computed: {
-        ...mapState('global', ['uploadedFileName', 'trainingProgress', 'isTraining']),
-
+        ...mapState('global', ['uploadedFileName', 'trainingProgress', 'isTraining', 'uploadedFileList']),
         getTrainingProgress() {
             return this.$store.state.global.trainingProgress;
         },
@@ -94,7 +109,7 @@ export default {
             const totalFields = 5; // 总字段数
 
             // 根据表单字段的填写情况计算已填写字段数
-            if (this.form.selectedModels.length > 0) filledFields++;
+            if (this.form.selectedModel.length > 0) filledFields++;
             if (this.form.batchSize !== "") filledFields++;
             if (this.form.learningRate !== "") filledFields++;
             if (this.form.inputLen !== "") filledFields++;
@@ -140,7 +155,7 @@ export default {
         setParams() {
             if (
                 this.form.batchSize === "" ||
-                this.form.selectedModels.length === 0 ||
+                this.form.selectedModel.length === 0 ||
                 this.form.inputLen === "" ||
                 this.form.learningRate === "" ||
                 this.form.predLen === ""
@@ -162,7 +177,7 @@ export default {
                 //         this.$message.error("操作失败");
                 //     }
                 // });
-                if(!this.$store.state.global.isTraining || this.$store.state.global.trainingProgress === 100){
+                if (!this.$store.state.global.isTraining || this.$store.state.global.trainingProgress === 100) {
                     var time_out = this.setTrainTimeout();
                     // this.loading = true;
                     this.setIsTraining(true);
@@ -174,18 +189,18 @@ export default {
         setTrainTimeout() {
             var time_out;
 
-            if (this.form.selectedModels === "CTFN" ||
-                this.form.selectedModels === "GRU" ||
-                this.form.selectedModels === "MLP" ||
-                this.form.selectedModels === "LSTNet" ||
-                this.form.selectedModels === "Transformer" ||
-                this.form.selectedModels === "Crossformer" ||
-                this.form.selectedModels === "TimesNet") {
+            if (this.form.selectedModel === "CTFN" ||
+                this.form.selectedModel === "GRU" ||
+                this.form.selectedModel === "MLP" ||
+                this.form.selectedModel === "LSTNet" ||
+                this.form.selectedModel === "Transformer" ||
+                this.form.selectedModel === "Crossformer" ||
+                this.form.selectedModel === "TimesNet") {
 
                 time_out = 600000;
-            } else if (this.form.selectedModels === "LightGBM" ||
-                this.form.selectedModels === "XgBoost" ||
-                this.form.selectedModels === "PatchTST") {
+            } else if (this.form.selectedModel === "LightGBM" ||
+                this.form.selectedModel === "XgBoost" ||
+                this.form.selectedModel === "PatchTST") {
 
                 time_out = 120000;
             }
@@ -207,7 +222,7 @@ export default {
             // });
             // this.trainingProgress = 0;
             this.setTrainingProgress(0);
-            const increment = 100 / time_out * 10000;
+            const increment = 100 / time_out * 1000;
             var tmp = 0;
 
             this.trainingTimerId = setInterval(() => {
@@ -234,10 +249,11 @@ export default {
             setTimeout(() => {
                 // this.trainingProgress = 100;
                 this.setTrainingProgress(100);
+
                 clearInterval(this.trainingTimerId);
                 this.trainingTimerId = null;
                 this.endLoading();
-            }, time_out);
+            }, time_out + 500);
         },
         endLoading() {
             // if (this.loadingInstance) {
@@ -245,10 +261,10 @@ export default {
             //     this.loadingInstance = null;
             // }
             this.$message({
-                        message: "训练成功",
-                        type: "success",
-                        offset: 50,
-                    });
+                message: "训练成功",
+                type: "success",
+                offset: 50,
+            });
             // this.loading = false;
             this.setIsTraining(false);
         },

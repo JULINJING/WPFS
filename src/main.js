@@ -27,9 +27,12 @@ Vue.use(voiceInputButton, {
     apiSecret: 'NjE2ZGE1ZmZhNGYxZWJlYTM5YTExOTg1', // 您开通的语音听写服务的 apiSecret
     color: '#fff', // 按钮图标的颜色
     tipPosition: 'top', // 提示条位置
-    vad_eos: 1000
+    vad_eos: 2000
     // 其他配置项, 参见下方 [Attributes / 属性] 部分
 })
+
+
+
 
 new Vue({
     el: '#app',

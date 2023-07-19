@@ -11,7 +11,7 @@
                 <HeatMap class="HeatMap"/>
             </div>
         </div>
-        <div class="subdiv _subdiv" style="margin-top: 2%;">
+        <div class="subdiv _subdiv" style="margin-top: 5%;">
             <div class="left box">
                 <h1>风向—风速图</h1>
                 <WeatherChart class="WeatherChart"/>
@@ -21,7 +21,7 @@
                 <ParallelChart class="ParallelChart"/>
             </div>
         </div>
-        <div class="subdiv _subdiv" style="margin-top: 2%;">
+        <div class="subdiv _subdiv" style="margin-top: 5%;">
             <div class="left box">
                 <h1>预测功率和实际功率相关图</h1>
                 <DynamicHistogram class="DynamicHistogram" />
@@ -31,7 +31,7 @@
                 <LineChart class="LineChart"/>
             </div>
         </div>
-        <div class="subdiv _subdiv" style="margin-top: 2%;margin-bottom: 2%;">
+        <div class="subdiv _subdiv" style="margin-top: 5%;margin-bottom: 2%;">
             <div class="left box">
                 <h1>箱线图</h1>
                 <BoxPlot class="BoxPlot"/>
@@ -65,6 +65,9 @@ export default {
             Turbine_id: '',
         };
     },
+    mounted() {
+        this.updateTitle();
+    },
     computed: {
         ...mapState('global', ['uploadedFileName']),
     },
@@ -78,8 +81,7 @@ export default {
     },
     methods: {
         updateTitle() {
-            var fileName = this.$store.state.global.uploadedFileName;
-            this.Turbine_id = fileName.split('.')[0];
+            this.Turbine_id = this.$store.state.global.uploadedFileName.split('.')[0];
         }
     },
 
@@ -114,7 +116,6 @@ h1 {
             justify-content: space-around;
             align-items: center;
             font-size: .5em;
-            margin-top: 5vh;
 
             .left {
                 width: 48%;
@@ -151,14 +152,14 @@ h1 {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
-                margin-top: 10px;
+                margin-top: 20px;
             }
 
             .right {
                 width: 100%;
                 height: 100%;
                 font-size: .8em;
-                margin-top: 10px;
+                margin-top: 20px;
             }
         }
     }

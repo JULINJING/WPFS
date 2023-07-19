@@ -1,7 +1,7 @@
 <template>
     <div class="diagramcontainer _diagramcontainer">
         <h1 style="margin-top: 20px;margin-bottom: 10px;">{{ Turbine_id }}号风机预测结果数据图表可视化</h1>
-        <div class="subdiv _subdiv" style="margin-top: 1%;">
+        <div class="subdiv _subdiv" style="margin-top: 2%;">
             <div class="left box">
                 <h1>预测功率YD15图</h1>
                 <LineChart class="LineChart"/>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div class="subdiv _subdiv" style="margin-top: 1%;">
+        <div class="subdiv _subdiv" style="margin-top: 5%;margin-bottom: 2%;">
             <div class="left box">
                 <h1>雷达图</h1>
                 <RadarChart class="RadarChart"/>
