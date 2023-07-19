@@ -78,7 +78,7 @@ export default {
                 type: "predict",
                 selectedModels: "CTFN(Complementary Timeseries Fusion Networks)",
                 selectedCovariates: [],
-                inputPeriod: [new Date(2021, 10, 1, 0, 0), new Date(2021, 10, 4, 23, 45)],
+                inputPeriod: [new Date(2022, 5, 25, 5, 0), new Date(2022, 5, 29, 5, 0)],
                 forecastPeriod: [new Date(2022, 5, 30, 0, 0), new Date(2022, 5, 30, 23, 45)],
             },
             modelOptions: [
