@@ -9,6 +9,7 @@
             </template>
         </el-result>
 		<div id="PC">
+			<WPFGPT></WPFGPT>
 			<HeaderLogo></HeaderLogo>
 			<Histogram></Histogram>
 			<AngleGuage></AngleGuage>
@@ -30,6 +31,7 @@ import ControlPanel from "./bigsur/ControlPanel";
 import AngleGuage from "./bigsur/AngleGuage/index";
 import HeaderLogo from "./bigsur/HeaderLogo/index";
 import Three3d from "./three3d/index";
+import WPFGPT from '../wpfGPT/WPFGPT.vue'
 export default {
 	name: "Turbine",
 	components: {
@@ -42,6 +44,7 @@ export default {
 		AngleGuage,
 		HeaderLogo,
 		// NavTop
+		WPFGPT
 	},
 	methods: {
 		// 返回首页
