@@ -53,6 +53,11 @@ export default {
             this.Turbine_id = this.$store.state.global.predictedJsonData[0].TurbID;
         }
     },
+    watch: {
+        predictedJsonData(newData, oldData){
+            this.Turbine_id = newData[0].TurbID;
+        }
+    }
 
 }
 </script>
