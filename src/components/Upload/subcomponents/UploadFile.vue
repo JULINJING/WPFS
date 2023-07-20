@@ -7,6 +7,7 @@
             :on-success="handleUploadSuccess"
             :on-error="handleUploadError" 
             :before-upload="beforeUpload" 
+            :before-remove="beforeRemove"
             :on-remove="handleRemove"
             :limit="10" 
             :on-exceed="handleExceed"
@@ -127,6 +128,7 @@ export default {
             showFileList: false,
             loading: false, // 加载状态
             loadingInstance: null,
+            uploadCounter: 0,
         };
     },
     computed: {
@@ -192,20 +194,24 @@ export default {
 
         // 上传文件成功
         handleUploadSuccess(response, file, fileList) {
-            this.$message({
-                message: "上传成功",
-                type: "success",
-                offset: 50,
-            });
+            this.uploadCounter++;
 
-            // 上传成功后，1秒后显示对话
-            setTimeout(() => {
-                this.dialogFormVisible = true;
-            }, 1000);
+            if (this.uploadCounter === fileList.length) {
+                this.$message({
+                    message: "上传成功",
+                    type: "success",
+                    offset: 50,
+                });
+                console.log(1111);
+                // 上传成功后，1秒后显示对话
+                setTimeout(() => {
+                    this.dialogFormVisible = true;
+                }, 1000);
 
-            this.curfile = file;
-            this.setUploadedFileList(fileList);
-            // this.setUploadedFileName(file.name);
+                this.curfile = file;
+                this.setUploadedFileList(fileList);
+                // this.setUploadedFileName(file.name);
+            }
         },
 
         // 上传文件之前的钩子
@@ -222,8 +228,13 @@ export default {
 
             return isCSV;
         },
-
+        beforeRemove(file, fileList){
+            if(this.uploadCounter <= 0){
+                this.uploadCounter = fileList.length;
+            }
+        },
         handleRemove(file, fileList) {
+            this.uploadCounter--;
             this.setUploadedFileList(fileList);
             this.fileList = fileList; 
         },
