@@ -356,6 +356,11 @@ export default {
                 const time = dateTime.split(' ')[1]; // 提取时间部分
                 return time === '12:00:00'; // 判断时间是否为中午12:00
             });
+            noonData.sort((a, b) => {
+                const dateTimeA = new Date(a.DATATIME);
+                const dateTimeB = new Date(b.DATATIME);
+                return dateTimeA - dateTimeB; // 按照时间升序排序
+            });
             return noonData;
         },
         downloadOutFile() {

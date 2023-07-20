@@ -134,7 +134,7 @@ export default {
         },
     },
     methods: {
-        ...mapState('global', ['uploadedFileName', 'uploadedFileList']),
+        ...mapState('global', ['uploadedFileName', 'uploadedFileList', 'processedJsonData']),
         ...mapMutations('global', ['setPredictedJsonData', 'setUploadedFileName']),
         
         isTargetModel(modelName) {
@@ -175,13 +175,25 @@ export default {
                     type: "warning",
                 });
                 return false;
+            } else if(this.form.inputPeriod[0].getTime() >= this.form.forecastPeriod[1].getTime()) {
+                this.$message({
+                    message: "输入时间段的开始时间必须早于预测时间段的结束时间",
+                    type: "warning",
+                });
+                return false;
+            }
+             else if(this.form.inputPeriod[1].getTime() >= Date.parse(new Date(this.$store.state.global.processedJsonData[this.$store.state.global.processedJsonData.length - 1].DATATIME))){
+                this.$message({
+                    message: "输入时间段应当在所选数据时间范围内",
+                    type: "warning",
+                });
+                return false;
             }
             return true;
         },
         async setParams() {
             if (this.isFormValidate()) {
                 var start = new Date().getTime()
-                
                 const fileName = this.form.selectedFile;
 
                 this.setUploadedFileName(fileName);
@@ -235,12 +247,12 @@ export default {
                 this.form.selectedModels === "LSTNet" ||
                 this.form.selectedModels === "Transformer" ||
                 this.form.selectedModels === "Crossformer" ||
-                this.form.selectedModels === "TimesNet"){
+                this.form.selectedModels === "TimesNet"  ||
+                this.form.selectedModels === "PatchTST"){
 
                 time_out = 3000 + Math.random() * 300;
             } else if(this.form.selectedModels === "LightGBM" ||
-                        this.form.selectedModels === "XgBoost" ||
-                        this.form.selectedModels === "PatchTST") {
+                        this.form.selectedModels === "XgBoost") {
 
                 time_out = 2000 + Math.random() * 300;
             }

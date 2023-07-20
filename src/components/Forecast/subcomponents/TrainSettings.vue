@@ -195,12 +195,12 @@ export default {
                 this.form.selectedModel === "LSTNet" ||
                 this.form.selectedModel === "Transformer" ||
                 this.form.selectedModel === "Crossformer" ||
-                this.form.selectedModel === "TimesNet") {
+                this.form.selectedModel === "TimesNet" ||
+                this.form.selectedModel === "PatchTST") {
 
                 time_out = 600000;
             } else if (this.form.selectedModel === "LightGBM" ||
-                this.form.selectedModel === "XgBoost" ||
-                this.form.selectedModel === "PatchTST") {
+                this.form.selectedModel === "XgBoost") {
 
                 time_out = 120000;
             }
