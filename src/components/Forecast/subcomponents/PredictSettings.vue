@@ -250,11 +250,11 @@ export default {
                 this.form.selectedModels === "TimesNet"  ||
                 this.form.selectedModels === "PatchTST"){
 
-                time_out = 3000 + Math.random() * 300;
+                time_out = 1000 + Math.random() * 500;
             } else if(this.form.selectedModels === "LightGBM" ||
                         this.form.selectedModels === "XgBoost") {
 
-                time_out = 2000 + Math.random() * 300;
+                time_out = Math.random() * 500;
             }
 
             return time_out;
