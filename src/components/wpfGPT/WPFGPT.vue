@@ -123,6 +123,9 @@ export default {
           console.log(res.msg)
           this.generatedText = res.msg;
         }
+        else {
+          document.getElementById('loading').textContent = '抱歉，服务器异常，请重试';
+        }
       });
     },
     // 转md
@@ -144,6 +147,10 @@ export default {
        // 清空用户输入框
        this.voiceResult = '';
 
+      //  判断异常与否
+       if (document.getElementById('loading')) {
+        document.getElementById('loading').remove()
+      }
       // 创建新的元素
       const loadingP = document.createElement('p');
       loadingP.id = 'loading';

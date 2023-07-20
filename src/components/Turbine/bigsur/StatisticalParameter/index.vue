@@ -15,7 +15,7 @@
 					<li>
 						<span>负荷率:</span>
 						<span>34.33</span>
-						<span>万kWh</span>
+						<span>%</span>
 					</li>
 					<li>
 						<span>月发电量:</span>
