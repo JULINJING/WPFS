@@ -202,7 +202,6 @@ export default {
                     type: "success",
                     offset: 50,
                 });
-                console.log(1111);
                 // 上传成功后，1秒后显示对话
                 setTimeout(() => {
                     this.dialogFormVisible = true;
