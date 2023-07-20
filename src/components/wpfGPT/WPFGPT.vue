@@ -359,7 +359,7 @@ export default {
                     width: 280px !important;
                     white-space: pre-wrap;
                     background-color: rgba(251,251,251,0.8);
-                    color: #77ACEF;
+                    color: #409EFF;
                     border: 1px solid #F1F1F1;
                     padding: 5px;
                     #text {
