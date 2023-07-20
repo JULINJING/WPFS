@@ -336,7 +336,7 @@ export default {
                 "outlier_detection": this.outlierRadio
             };
 
-            await this.request.post("/file/preprocess", this.curfile.name).then((res) => {
+            await this.request.post("/file/preprocess", paramsForm).then((res) => {
                 if (res.code === "200") {
                     console.log(this.curfile.name);
                 }

@@ -118,9 +118,10 @@ export default {
 
         calculateProgress() {
             let filledFields = 0;
-            const totalFields = 5; // 总字段数
+            const totalFields = 6; // 总字段数
 
             // 根据表单字段的填写情况计算已填写字段数
+            if(this.form.selectedFile !== "") filledFields++;
             if (this.form.modelType !== "") filledFields++;
             if (this.form.selectedModels.length > 0) filledFields++;
             if (this.form.selectedCovariates.length > 0) filledFields++;
@@ -182,7 +183,7 @@ export default {
                 var start = new Date().getTime()
                 
                 const fileName = this.form.selectedFile;
-                console.log(fileName);
+
                 this.setUploadedFileName(fileName);
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
@@ -204,8 +205,15 @@ export default {
                     });
                 }, time_out);
                 
+                var predictParams = {
+                    "file_name": fileName,
+                    "start_time": this.form.forecastPeriod[0].getTime().toString(),
+                    "end_time": this.form.forecastPeriod[1].getTime().toString(),
+                }
+
+                // console.log(predictParams);
                 // 调用后端预测接口，传入预测参数
-                await this.request.post("/file/predict", fileName).then((res) => {
+                await this.request.post("/file/predict", predictParams).then((res) => {
                     if (res.code === "200") {
                         // console.log("jsonContent:  "+res.jsonContent)
                         // this.jsonData = JSON.parse(res.jsonContent);
