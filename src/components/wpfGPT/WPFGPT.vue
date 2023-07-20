@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="talkbox_wrapper_min" class="" ref="tb_normal">
+    <div id="talkbox_wrapper_min" ref="tb_normal">
       <div id="talkbox_max" class="b_hide" ref="tb_max">
         <div class="talkbox_header">
           <i class="iconfont">&#xe642;</i>
@@ -360,6 +360,7 @@ export default {
                     white-space: pre-wrap;
                     background-color: rgba(251,251,251,0.8);
                     color: #409EFF;
+                    font-weight: 800;
                     border: 1px solid #F1F1F1;
                     padding: 5px;
                     #text {
