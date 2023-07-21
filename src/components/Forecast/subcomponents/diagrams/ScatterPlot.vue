@@ -64,7 +64,7 @@ export default {
                             scale: true
                         },
                         yAxis: {
-                            scale: true
+                            scale: true,
                         },
                         grid: {
                             top: '10%',
