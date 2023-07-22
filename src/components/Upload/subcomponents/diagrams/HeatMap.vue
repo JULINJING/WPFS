@@ -17,18 +17,18 @@ export default {
             tableData: []
         };
     },
-    // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             if (newTableData !== null) {
-    //                 this.heatmapData = []; // 清空之前的数据
-    //                 this.processData();
-    //                 this.renderChart(); // 重新渲染
-    //             }
-    //         },
-    //         immediate: true, // 立即执行watch处理函数
-    //     },
-    // },
+    watch: {
+        processedJsonData: {
+            handler(newTableData) {
+                if (newTableData !== null) {
+                    this.heatmapData = []; // 清空之前的数据
+                    this.processData();
+                    this.renderChart(); // 重新渲染
+                }
+            },
+            immediate: true, // 立即执行watch处理函数
+        },
+    },
     computed: {
         ...mapState('global', ['processedJsonData']),
     },

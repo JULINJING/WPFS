@@ -25,18 +25,18 @@ export default {
     computed: {
         ...mapState('global', ['processedJsonData']),
     },
-    // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             if (newTableData !== null) {
-    //                 this.lineData = [];
-    //                 this.processData();
-    //                 this.renderChart();
-    //             }
-    //         },
-    //         immediate: true, // 立即执行watch处理函数
-    //     },
-    // },
+    watch: {
+        processedJsonData: {
+            handler(newTableData) {
+                if (newTableData !== null) {
+                    this.lineData = [];
+                    this.processData();
+                    this.renderChart();
+                }
+            },
+            immediate: true, // 立即执行watch处理函数
+        },
+    },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {

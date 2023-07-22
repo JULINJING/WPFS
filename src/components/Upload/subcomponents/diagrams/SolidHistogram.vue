@@ -23,16 +23,16 @@ export default {
         this.processData();
         this.renderChart();
     },
-    // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             this.scatterData = []; // 清空之前的散点图数据
-    //             this.processData(); // 重新处理数据
-    //             this.renderChart(); // 重新渲染散点图
-    //         },
-    //         immediate: true, // 立即执行watch处理函数
-    //     },
-    // },
+    watch: {
+        processedJsonData: {
+            handler(newTableData) {
+                this.scatterData = []; // 清空之前的散点图数据
+                this.processData(); // 重新处理数据
+                this.renderChart(); // 重新渲染散点图
+            },
+            immediate: true, // 立即执行watch处理函数
+        },
+    },
     computed: {
         ...mapState('global', ['processedJsonData']),
     },

@@ -24,16 +24,16 @@ export default {
     computed: {
         ...mapState('global', ['processedJsonData']),
     },
-    // watch: {
-    //     tableData: {
-    //         handler(newTableData) {
-    //             this.scatterData = [];
-    //             this.processData();
-    //             this.renderChart();
-    //         },
-    //         immediate: true,
-    //     },
-    // },
+    watch: {
+        processedJsonData: {
+            handler(newTableData) {
+                this.scatterData = [];
+                this.processData();
+                this.renderChart();
+            },
+            immediate: true,
+        },
+    },
     methods: {
         processData() {
             // if (this.tableData && this.tableData.length > 0) {
