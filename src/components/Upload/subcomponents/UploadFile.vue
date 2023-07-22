@@ -140,6 +140,7 @@ export default {
     mounted() {
         this.curData = JSON.parse(JSON.stringify(rawData));
         this.fileList = this.$store.state.global.uploadedFileList;
+        this.uploadCounter = this.$store.state.global.uploadedFileList.length;
     },
     methods: {
         ...mapMutations("global", ["setUploadedFileName", "setProcessedJsonData", "setUploadedFileList"]),
@@ -195,7 +196,7 @@ export default {
         // 上传文件成功
         handleUploadSuccess(response, file, fileList) {
             this.uploadCounter++;
-
+            
             if (this.uploadCounter === fileList.length) {
                 this.$message({
                     message: "上传成功",

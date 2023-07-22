@@ -47,7 +47,7 @@
 			<li class="right">
 				<header>
 					<!-- <span>#1风机</span> -->
-					<span>{{ Turbine }}</span>
+					<span>单风机</span>
 				</header>
 				<!-- <div> -->
 				<StackLine class="stackLine"></StackLine>
@@ -70,7 +70,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.Turbine = "#" + this.$store.state.global.uploadedFileName.split('.')[0] + "号风机";;
+		// this.Turbine = "#" + this.$store.state.global.uploadedFileName.split('.')[0] + "号风机";
 	},
 	computed: {
         ...mapState('global', ['uploadedFileName']),
