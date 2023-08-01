@@ -239,6 +239,42 @@ export default {
             this.map.fixedLight = true // 固定光照，避免gltf模型随时间存在亮度不一致。
             this.map.setCameraView({ lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -90 })
             // this.map.scene.globe.terrainExaggeration = 2 // 修改地形夸张程度
+            // 宇宙天空盒
+            this.map.scene.skyBox = new Cesium.SkyBox({
+                sources: {
+                    negativeX: "../../../imgs/skybox/tycho2t3_80_mx.jpg",
+                    negativeY: "../../../imgs/skybox/tycho2t3_80_my.jpg",
+                    negativeZ: "../../../imgs/skybox/tycho2t3_80_mz.jpg",
+                    positiveX: "../../../imgs/skybox/tycho2t3_80_px.jpg",
+                    positiveY: "../../../imgs/skybox/tycho2t3_80_py.jpg",
+                    positiveZ: "../../../imgs/skybox/tycho2t3_80_pz.jpg"
+                }
+            })
+            // 近地天空盒 晴天
+            const qingtianSkybox = new mars3d.GroundSkyBox({
+                sources: {
+                    positiveX: "../../../imgs/skybox_near/rightav9.jpg",
+                    negativeX: "../../../imgs/skybox_near/leftav9.jpg",
+                    positiveY: "../../../imgs/skybox_near/frontav9.jpg",
+                    negativeY: "../../../imgs/skybox_near/backav9.jpg",
+                    positiveZ: "../../../imgs/skybox_near/topav9.jpg",
+                    negativeZ: "../../../imgs/skybox_near/bottomav9.jpg"
+                }
+            })
+            let defaultSkybox = this.map.scene.skyBox
+            this.map.on(mars3d.EventType.postRender, ()=> {
+                const position = this.map.camera.position
+                const height = Cesium.Cartographic.fromCartesian(position).height
+                if (height < 230000) {
+                    this.map.scene.skyBox = qingtianSkybox
+                    this.map.scene.skyAtmosphere.show = false
+                } else {
+                    if (defaultSkybox) {
+                        this.map.scene.skyBox = defaultSkybox
+                    }
+                    this.map.scene.skyAtmosphere.show = true
+                }
+            })
 
             this.addWindLayer()
             this.addOtherFactoryLayer()
@@ -661,6 +697,7 @@ export default {
             })
             this.map.addLayer(transformerLayer)
 
+            // 变电站点击事件
             transformerLayer.on(mars3d.EventType.click, () => {
                 this.$router.push('/watch')
                 const h = this.$createElement;
@@ -679,6 +716,7 @@ export default {
                 }
             })
 
+            // 办公楼点击事件
             this.map.getLayerById("风电场办公楼").on(mars3d.EventType.click, ()=> {
                 this.map.setCameraView({ "lat": 43.585478, "lng": 87.875422, "alt": 1223.4, "heading": 127, "pitch": 0.8 })
                 $("#explanatoryPicture").css({
@@ -691,6 +729,67 @@ export default {
                 })
                 $("#explanatoryPicture").addClass("animated fadeInDown")
             })
+
+            // 添加监控
+            function addCamera(graphicLayer, position) {
+                const graphicImg = new mars3d.graphic.DivGraphic({
+                    position: position,
+                    style: {
+                        html: ` <div class="mars3d-camera-content" style="height: 30px;cursor:pointer">
+                                    <svg width="30px" height="50px" xmlns="http://www.w3.org/2000/svg">
+                                        <image href="../../imgs/camera.svg" width="30" height="30">
+                                            <animate attributeName="y" values="20;0;20" keyTimes="0;0.5;1" dur="2s" repeatCount="indefinite" />
+                                        </image>
+                                    </svg>
+                                </div>
+                                <div class="mars3d-camera-line" style="height: 80px;width: 5px;margin-top: 20px;
+                                border-left: 3px dashed #5b8fee;margin-left: calc(50% - 1px);"></div>
+                                <div class="mars3d-camera-point" style="border-radius: 50%;width: 8px;height: 8px;
+                                margin-left: calc(50% - 3px);background-color: #5b8fee;"></div>
+                            `,
+                        offsetX: -16,
+                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+                    },
+                    popup: `<video src='../../imgs/videos/概览.mp4' controls autoplay style="width: 300px;" ></video>`,
+                    popupOptions: {
+                        offsetY: -170, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
+                        template: `<div class="marsBlackPanel" style="min-width: 90px;min-height: 35px;position: absolute;left: 16px;bottom: 10px;
+                                        cursor: default;border-radius: 4px;opacity: 0.96;border: 1px solid #14171c;box-shadow: 0px 2px 21px 0px rgba(33, 34, 39, 0.55);
+                                        border-radius: 4px;box-sizing: border-box;background: linear-gradient(0deg, #1e202a 0%, #0d1013 100%);">
+                                        <div class="marsBlackPanel-text" style="width: 100%;height: 100%;min-height: 33px;text-align: center;padding: 5px 5px 0 5px;
+                                            margin: 0;font-size: 14px;font-weight: 400;color: #ffffff;border: 1px solid #ffffff4f;-webkit-box-sizing: border-box;
+                                            box-sizing: border-box;white-space: nowrap;">
+                                            {content}
+                                        </div>
+                                    </div>`,
+                        horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+                        verticalOrigin: Cesium.VerticalOrigin.CENTER
+                    }
+                })
+                graphicLayer.addGraphic(graphicImg)
+            }
+            // 添加具体监控数据
+            addCamera(otherFactoryLayer, [87.884014, 43.585733, 1271.6])
+            addCamera(otherFactoryLayer, [87.875852, 43.577082, 1153.9])
+            addCamera(otherFactoryLayer, [87.916696, 43.579158, 1164.2])
+            var style = document.createElement('style');
+            style.innerHTML = '.marsBlackPanel::before { content: ""; width: calc(100% + 22px); height: 39px; position: absolute; bottom: -39px; left: -22px; background: url(//mars3d.cn/img/icon/popupLbl.png) 0px 0px no-repeat; background-position: 0px 0px; }';
+            document.getElementsByTagName('head')[0].appendChild(style);
+
+            // 添加视频
+            const video2D = new mars3d.graphic.Video2D({
+                position: [87.875485, 43.572068, 1104],
+                style: {
+                    url: "../../imgs/videos/百度智能云-龙源电力.mp4",
+                    angle: 40,
+                    angle2: 22.5,
+                    heading: 235,
+                    pitch: 8,
+                    distance: 360,
+                    showFrustum: true
+                }
+            })
+            otherFactoryLayer.addGraphic(video2D)
         },
         addChinaMap() {
             this.chinaLayer = new mars3d.layer.GeoJsonLayer({
@@ -1047,7 +1146,7 @@ export default {
             //     })
             // }, 2000)
 
-            var powerArray = []
+            // var powerArray = []
 
             // 第一次计时器
             // 功率 动态图
