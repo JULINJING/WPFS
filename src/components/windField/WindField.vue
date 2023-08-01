@@ -71,6 +71,9 @@
                         <el-col>
                             <el-button plain @click="chargeWindField">显示 / 关闭风场</el-button>
                         </el-col>
+                        <el-col>
+                            <el-button plain @click="controlCha">开启 / 关闭角色控制</el-button>
+                        </el-col>
                     </el-row>
                     <el-row id="row2">
                         <el-col>
@@ -101,6 +104,7 @@ import Layout from "./subcomponents/Header/index";
 
 import MarsMap from "./mars-work/mars-map.vue"
 import * as mars3d from 'mars3d'
+import CesiumRoleController from "../../../public/lib/CesiumRoleController/CesiumRoleController.js"
 import $ from 'jquery'
 import * as turf from '@turf/turf'
 import * as echarts from "echarts"
@@ -148,7 +152,10 @@ export default {
             mapOptions: mapOptions,
             windLayer,
             chinaLayer,
+            controller: null,
 
+            // 记录人物状态
+            isControl: false,
             // 记录漫游状态
             isWonder: false,
 
@@ -1566,6 +1573,36 @@ export default {
                 this.windLayer = null
             }
         },
+        // 控制人物
+        controlCha() {
+            // 人物控制器
+            this.controller = new CesiumRoleController(mars3d.Cesium, this.map.viewer)
+            if (!this.isControl) {
+                this.map.setCursor("crosshair")
+
+                this.map.once("click", (event) => {
+                    this.map.setCursor("default")
+                    this.initController(event.cartesian)
+                })
+                this.isControl = true
+            } else {
+                this.controller.destroy()
+                this.isControl = false
+            }
+        },
+        initController(position) {
+            const point = mars3d.LngLatPoint.fromCartesian(position) // 转为经纬度
+            this.controller.init({
+                position: [point.lng, point.lat, point.alt],
+                url: "//data.mars3d.cn/gltf/mars/man/running.glb",
+                animation: "run",
+                lockViewLevel: 1,
+                pitch: -25,
+                speed: 0.1,
+                range: 50
+            })
+            this.isControl = true
+        },
         // 返回首页 
         backToHome() {
             this.$router.push('/home')
@@ -2597,7 +2634,7 @@ export default {
 
     // 底栏按钮
     .el-row {
-        width: 80%;
+        width: 98%;
         height: 40% !important;
         display: flex;
         justify-content: space-around;
@@ -2611,7 +2648,7 @@ export default {
         }
     }
     .bar-content-bottom .el-button {
-        width: 80%;
+        width: 95%;
         background-color: rgba(0,183,254,0.5);
         border: none;
         font-size: 0.6rem;
