@@ -11,11 +11,14 @@
 		<div id="PC">
 			<WPFGPT></WPFGPT>
 			<HeaderLogo></HeaderLogo>
-			<Histogram></Histogram>
-			<AngleGuage></AngleGuage>
-			<MonitoringList></MonitoringList>
-			<StatisticalParameter></StatisticalParameter>
 			<ControlPanel></ControlPanel>
+			
+			<Histogram v-if="dataList[0].checked"></Histogram>
+			<AngleGuage v-if="dataList[1].checked"></AngleGuage>
+			<MonitoringList v-if="dataList[2].checked"></MonitoringList>
+			<StatisticalParameter v-if="dataList[3].checked"></StatisticalParameter>
+			<GenerationParameter v-if="dataList[4].checked"></GenerationParameter>
+
 			<Three3d></Three3d>
 		</div>
 	</div>
@@ -23,35 +26,64 @@
 <script>
 /*eslint-disable*/
 // import NavTop from '../baseComponents/NavTop'
+import ControlPanel from "./bigsur/ControlPanel";
 import ProjectTitle from "./bigsur/Project_title/index";
 import Histogram from "./bigsur/Histogram/index";
 import MonitoringList from "./bigsur/MonitoringList/index";
 import StatisticalParameter from "./bigsur/StatisticalParameter";
-import ControlPanel from "./bigsur/ControlPanel";
+import GenerationParameter from "./bigsur/GenerationParameter";
 import AngleGuage from "./bigsur/AngleGuage/index";
 import HeaderLogo from "./bigsur/HeaderLogo/index";
 import Three3d from "./three3d/index";
 import WPFGPT from '../wpfGPT/WPFGPT.vue'
+
+import { mapState } from 'vuex';
+
+
 export default {
 	name: "Turbine",
+    data() {
+        return {
+            titleOptions: {
+                // order: "04",
+                cn: "控制面板",
+            },
+            dataList: [],
+        };
+    },
+	mounted() {
+		this.dataList = this.$store.state.global.TurbineTableList;
+	},
 	components: {
 		Three3d,
 		ProjectTitle,
 		Histogram,
 		MonitoringList,
 		StatisticalParameter,
-		ControlPanel,
+		GenerationParameter,
 		AngleGuage,
 		HeaderLogo,
 		// NavTop
-		WPFGPT
+		WPFGPT,
+		ControlPanel
 	},
 	methods: {
 		// 返回首页
 		backToHome() {
             this.$router.push('/home')
         }
-	}
+	},
+	computed: {
+        ...mapState('global', ['TurbineTableList']),
+    },
+	watch: {
+        TurbineTableList: {
+            handler(newTableData) {
+                this.dataList = newTableData;
+            },
+            immediate: true, // 立即执行watch处理函数
+        },
+    },
 };
 </script>
 <style lang="scss" scoped>
