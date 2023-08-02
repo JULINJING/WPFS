@@ -36,8 +36,12 @@ export default {
         return {
             test: "test",
             matrixTurbine: null,
+            materials: [],
             wireframe: null,
             metal: null,
+            texture: null, // 纹理对象
+            turbineAnimation: null, // 风机动画
+            frameId: null, // 动画帧ID
             mouse: new THREE.Vector2(),
             raycaster: new THREE.Raycaster(),
             equipment: null,
@@ -222,6 +226,7 @@ export default {
             loader.load(`${process.env.BASE_URL}model/turbine.glb`, object => {
                 this.$emit("complete")
                 this.matrixTurbine = object;
+
                 let mesh = object.scene;
                 this.mesh = mesh;
                 this.metal = mesh.getObjectByName("颜色材质");
@@ -237,6 +242,7 @@ export default {
                 this.wholeGroup.add(mesh);
                 mesh.position.set(0, 0, -2.42);
                 this.changeAnimation(mesh, "Anim_0");
+                this.changeTurbineColor(0x42dcea);
             }, onProgress);
         },
         loadEquipment() {
@@ -260,19 +266,26 @@ export default {
                 // this.wholeGroup2.add(mesh);
 
                 mesh.position.set(0, 0, -2.42);
+                //     this.equipment.traverse(child => {
+                //     if (child.isMesh) {
+                //         child.material.color.set(0x42dcea);
+                //     }
+                // });
+
             });
         },
         loadingPlane() {
             let loader = new GLTFLoader();
             loader.load(`${process.env.BASE_URL}model/plane.glb`, object => {
                 let mesh = object.scene;
-                // this.equipment = mesh;
+                this.plane = mesh;
                 let scale = 0.0003 * 1;
                 mesh.scale.set(scale, scale, scale);
                 mesh.rotateX(Math.PI / 2);
                 mesh.rotateY(-Math.PI / 2);
                 this.global.scene.add(mesh);
                 mesh.position.set(0, 0, -2.42);
+                this.planeAnimation();
             });
         },
         //添加和改变风机旋转动画
@@ -291,6 +304,28 @@ export default {
             } else {
                 this.global.mixers.delete(key);
             }
+        },
+        // 风机平台动画
+        planeAnimation() {
+            const texture = this.plane.children[0].material.map;
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+
+            this.frameId = requestAnimationFrame(this.animateTexture);
+        },
+
+        animateTexture() {
+            const texture = this.plane.children[0].material.map;
+            const count = texture ? texture.repeat.y : 0;
+            if (count <= 10) {
+                texture.repeat.x += 0.01;
+                texture.repeat.y += 0.02;
+            } else {
+                texture.repeat.x = 0;
+                texture.repeat.y = 0;
+            }
+
+            this.frameId = requestAnimationFrame(this.animateTexture);
         },
         onPointerClick(event) {
             const [w, h] = [window.innerWidth, window.innerHeight];
@@ -420,6 +455,13 @@ export default {
                 }, 4000);
             }, 5000);
         },
+        changeTurbineColor(color) {
+            this.mesh.traverse(child => {
+                if (child.isMesh) {
+                    child.material.color.set(color);
+                }
+            });
+        }
     },
     mounted() {
         this.loadTurbine();
@@ -429,10 +471,10 @@ export default {
         this.createTurbineLabel();
         this.alarm();
         this.global.scene.add(this.wholeGroup);
-        // TODO
-        // if (this.$store.state.global.isTurbineCanClick) {
-        //     document.addEventListener("click", this.onPointerClick);
-        // }
+
+    },
+    beforeUnmount() {
+        cancelAnimationFrame(this.frameId);
     },
     computed: {
         ...mapState('global', ['isTurbineCanClick']),

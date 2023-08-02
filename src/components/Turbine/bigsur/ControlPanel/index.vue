@@ -1,5 +1,5 @@
 <template>
-    <div class="container"  style="z-index: 99999">
+    <div class="container" :style="containerStyle" style="z-index: 99999">
         <ProjectTitle :options="titleOptions"></ProjectTitle>
 
         <div class="control_panel" v-for="data in dataList" :key="data.cn">
@@ -50,6 +50,13 @@ export default {
     components: {
         ProjectTitle,
     },
+    computed: {
+        containerStyle() {
+            return {
+                right: this.dataList[3].checked ? '30vh' : '2vh',
+            };
+        },
+    },
     methods: {
         ...mapMutations('global', ['setTurbineTableList']),
         handleCheckboxChange() {
@@ -66,7 +73,7 @@ $height: 4.16vh;
 .container {
     position: absolute;
     top: 6vh;
-    left: 32vh;
+    right: 30vh;
 }
 
 .control_panel {

@@ -16,8 +16,8 @@
 			<Histogram v-if="dataList[0].checked"></Histogram>
 			<AngleGuage v-if="dataList[1].checked"></AngleGuage>
 			<MonitoringList v-if="dataList[2].checked"></MonitoringList>
-			<StatisticalParameter v-if="dataList[3].checked"></StatisticalParameter>
-			<GenerationParameter v-if="dataList[4].checked"></GenerationParameter>
+			<GenerationParameter v-if="dataList[3].checked"></GenerationParameter>
+			<StatisticalParameter v-if="dataList[4].checked"></StatisticalParameter>
 
 			<Three3d></Three3d>
 		</div>
