@@ -44,6 +44,28 @@ const store = new Vuex.Store({
                 trainingProgress: 0, // 训练进度
                 isTraining: false, // 是否正在训练
                 isTurbineCanClick: true,
+                TurbineTableList: [
+                    {
+                        cn: "环境监测",
+                        checked: true,
+                    },
+                    {
+                        cn: "变桨系统",
+                        checked: true,
+                    },
+                    {
+                        cn: "数据监测",
+                        checked: true,
+                    },
+                    {
+                        cn: "发电参数",
+                        checked: true,
+                    },
+                    {
+                        cn: "统计参数",
+                        checked: true,
+                    }
+                ],
             },
             mutations: {
                 setPath(state) {
@@ -81,6 +103,10 @@ const store = new Vuex.Store({
                 setTurbineCanClick(state, flag){
                     state.isTurbineCanClick = flag;
                 },
+
+                setTurbineTableList(state, data){
+                    state.TurbineTableList = data;
+                }
             },
             getters: {
                 getUploadedFileName(state) {
@@ -100,7 +126,10 @@ const store = new Vuex.Store({
                 },
                 getTurbineCanClick(state){
                     return state.flag;
-                }
+                },
+                getTurbineTableList(state){
+                    return state.TurbineTableList;
+                },
             }
         }
     },
