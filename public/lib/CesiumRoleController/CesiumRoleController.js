@@ -16,7 +16,7 @@ export default class CesiumRoleController {
     this.cartographic_terrain = null
     this.cartographic_3dtiles = null
     this.event = false
-    this.radian = Cesium.Math.toRadians(1)
+    this.radian = Cesium.Math.toRadians(4)
     this.flag = {
       moveUp: false,
       moveDown: false,
@@ -231,20 +231,20 @@ export default class CesiumRoleController {
     )
 
     if (this.cartographic_3dtiles && this.cartographic_3dtiles.height > 0) {
-      this.viewer.scene
-        .clampToHeightMostDetailed([this.position])
-        .then((newP) => {
-          if (this.Cesium.Cartographic.fromCartesian(newP[0]).height > 0) {
-            this.position = newP[0]
-            this.Cesium.Transforms.headingPitchRollToFixedFrame(
-              this.position,
-              this.hpRoll,
-              this.Cesium.Ellipsoid.WGS84,
-              this.converter,
-              this.rolePrimitive.modelMatrix
-            )
-          }
-        })
+      // this.viewer.scene
+      //   .clampToHeightMostDetailed([this.position])
+      //   .then((newP) => {
+      // if (this.Cesium.Cartographic.fromCartesian(newP[0]).height > 0) {
+      //   this.position = newP[0]
+      this.Cesium.Transforms.headingPitchRollToFixedFrame(
+        this.position,
+        this.hpRoll,
+        this.Cesium.Ellipsoid.WGS84,
+        this.converter,
+        this.rolePrimitive.modelMatrix
+      )
+      // }
+      // })
     } else if (this.cartographic_terrain) {
       if (this.cartographic_terrain.height > 0) {
         this.Cesium.sampleTerrainMostDetailed(this.viewer.terrainProvider, [
@@ -310,7 +310,7 @@ export default class CesiumRoleController {
     this.cartographic_terrain = null
     this.cartographic_3dtiles = null
     this.event = false
-    this.radian = this.Cesium.Math.toRadians(1)
+    this.radian = this.Cesium.Math.toRadians(4)
     this.flag = {
       moveUp: false,
       moveDown: false,
@@ -335,7 +335,8 @@ export default class CesiumRoleController {
         this.Cesium.Ellipsoid.WGS84,
         this.converter
       ),
-      minimumPixelSize: 40,
+      // minimumPixelSize: 128,
+      scale: 10
     })
     this.rolePrimitive = this.viewer.scene.primitives.add(model)
     this.rolePrimitive.readyEvent.addEventListener(() => {
