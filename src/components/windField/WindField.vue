@@ -786,17 +786,41 @@ export default {
             style.innerHTML = '.marsBlackPanel::before { content: ""; width: calc(100% + 22px); height: 39px; position: absolute; bottom: -39px; left: -22px; background: url(//mars3d.cn/img/icon/popupLbl.png) 0px 0px no-repeat; background-position: 0px 0px; }';
             document.getElementsByTagName('head')[0].appendChild(style);
 
+            // 添加广告牌
+            var billboardGraphic1 = new mars3d.graphic.ModelPrimitive({
+                position: [87.882859, 43.57894, 1205.2],
+                style: {
+                    url: '//data.mars3d.cn/gltf/mars/jiaotong/led.gltf',
+                    heading: 155,
+                    scale: 40,
+                    pitch: 4.5,
+                    minimumPixelSize: 1,
+                },
+            })
+            var billboardGraphic2 = new mars3d.graphic.ModelPrimitive({
+                position: [87.882859, 43.57894, 1123.2],
+                style: {
+                    url: '//data.mars3d.cn/gltf/xiaofang/gan/gan.gltf',
+                    heading: 155,
+                    scale: 0.2,
+                    minimumPixelSize: 1,
+                },
+            })
+            otherFactoryLayer.addGraphic(billboardGraphic1)
+            otherFactoryLayer.addGraphic(billboardGraphic2)
+
             // 添加视频
             const video2D = new mars3d.graphic.Video2D({
-                position: [87.875485, 43.572068, 1104],
+                position: [87.883859, 43.57928, 1198],
                 style: {
                     url: "../../imgs/videos/百度智能云-龙源电力.mp4",
-                    angle: 40,
-                    angle2: 22.5,
-                    heading: 235,
-                    pitch: 8,
-                    distance: 360,
-                    showFrustum: true
+                    angle: 31.8,
+                    angle2: 17.8875,
+                    heading: 245,
+                    pitch: 4.5,
+                    distance: 94,
+                    showFrustum: false,
+                    opacity: 1.0
                 }
             })
             otherFactoryLayer.addGraphic(video2D)
