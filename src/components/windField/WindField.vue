@@ -283,6 +283,9 @@ export default {
                 }
             })
 
+            // 人物控制器
+            this.controller = new CesiumRoleController(mars3d.Cesium, this.map.viewer)
+
             this.addWindLayer()
             this.addOtherFactoryLayer()
             // this.addChinaMap()
@@ -1575,8 +1578,6 @@ export default {
         },
         // 控制人物
         controlCha() {
-            // 人物控制器
-            this.controller = new CesiumRoleController(mars3d.Cesium, this.map.viewer)
             if (!this.isControl) {
                 this.map.setCursor("crosshair")
 
@@ -1596,10 +1597,10 @@ export default {
                 position: [point.lng, point.lat, point.alt],
                 url: "//data.mars3d.cn/gltf/mars/man/running.glb",
                 animation: "run",
-                lockViewLevel: 1,
+                lockViewLevel: 3,
                 pitch: -25,
-                speed: 0.1,
-                range: 50
+                speed: 2,
+                range: 8
             })
             this.isControl = true
         },
