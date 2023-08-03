@@ -309,13 +309,31 @@ export default {
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
                     this.jsonData = JSON.parse(res.jsonContent);
+
+                    this.getFilePeriod();
+
                     this.curData = this.jsonData.slice(0, 50);
                     this.setProcessedJsonData(this.extractNoonData(this.jsonData));
                     this.$emit('update-table-data');
                 }
             })
         },
+        getFilePeriod(){
+            const index = this.fileList.findIndex(file => file.name === this.curfile.name);
 
+            if (index !== -1) {
+                this.$set(this.fileList[index], 'forecastPeriod', [
+                    this.jsonData[this.jsonData.length - 96].DATATIME,
+                    this.jsonData[this.jsonData.length - 1].DATATIME
+                ]);
+                this.$set(this.fileList[index], 'inputPeriod', [
+                    this.jsonData[this.jsonData.length - 96 * 7].DATATIME,
+                    this.jsonData[this.jsonData.length - 172].DATATIME
+                ]);
+            }
+
+            this.setUploadedFileList(this.fileList);
+        }, 
         // 上传文件失败
         handleUploadError(err, file, fileList) {
             this.$message({
@@ -337,7 +355,8 @@ export default {
         handlePreview(file) {
             this.curfile = file;
             this.curData = [];
-            this.fetchData(file);
+            this.fetchData();
+            
             this.$message({
                 message: "选择文件" + file.name,
                 type: "action",

@@ -8,8 +8,13 @@
 
             <div class="predict-form-row">
                 <el-tag>文件选择</el-tag>
-                <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
+                <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags @change="handleFileChange">
+                    <el-option 
+                        v-for="file in fileList" 
+                        :key="file.name" 
+                        :label="file.name" 
+                        :value="file.name"
+                    >
                     </el-option>
                 </el-select>
             </div>
@@ -78,7 +83,7 @@ export default {
                 type: "predict",
                 selectedModels: "CTFN(Complementary Timeseries Fusion Networks)",
                 selectedCovariates: [],
-                inputPeriod: [new Date(2022, 5, 25, 5, 0), new Date(2022, 5, 29, 5, 0)],
+                inputPeriod: [new Date(2022, 5, 24, 0, 0), new Date(2022, 5, 29, 5, 0)],
                 forecastPeriod: [new Date(2022, 5, 30, 0, 0), new Date(2022, 5, 30, 23, 45)],
             },
             modelOptions: [
@@ -112,10 +117,22 @@ export default {
     },
     mounted() {
         this.fileList = this.$store.state.global.uploadedFileList;
+
+        if (this.$store.state.global.processedJsonData.length > 0) {
+            // 输入的日期字符串
+            const dateString = this.$store.state.global.processedJsonData[this.$store.state.global.processedJsonData.length - 1].DATATIME;
+
+            // 将日期字符串拆分成组成部分
+            const [datePart, timePart] = dateString.split(" ");
+            const [year, month, day] = datePart.split("-");
+            const [hour, minute, second] = timePart.split(":");
+
+            // 使用拆分得到的组成部分创建新的JavaScript日期对象
+            const dateObject = new Date(year, month - 1, day, hour, minute, second);
+        }
     },
 
     computed: {
-
         calculateProgress() {
             let filledFields = 0;
             const totalFields = 6; // 总字段数
@@ -132,16 +149,43 @@ export default {
             var percentage = (filledFields / totalFields) * 100;
             return Math.round(percentage);
         },
+        // 计算属性，用于根据所选文件名称设置初始时间
+        // initialTime() {
+        //     const fileName = this.form.selectedFile;
+        //     console.log(11);
+        //     const dateString = this.fetchProcessedData(fileName);
+        //     const [datePart, timePart] = dateString.split(" ");
+        //     const [year, month, day] = datePart.split("-");
+        //     const [hour, minute, second] = timePart.split(":");
+            
+        //     this.form.forecastPeriod = [new Date(year, month - 1, day, 0, 0, 0), new Date(year, month - 1, day, 0, 0, 0)];
+        //     this.form.inputPeriod = [new Date(year, month - 1, day - 6, 0, 0, 0), new Date(year, month - 1, day - 1, 5, 0, 0)];
+        // },
     },
     methods: {
         ...mapState('global', ['uploadedFileName', 'uploadedFileList', 'processedJsonData']),
-        ...mapMutations('global', ['setPredictedJsonData', 'setUploadedFileName']),
+        ...mapMutations('global', ['setPredictedJsonData', 'setUploadedFileName', "setUploadedFileList"]),
         
         isTargetModel(modelName) {
             // 指定目标模型的名称
             const targetModelName = 'CTFN(Complementary Timeseries Fusion Networks)';
             return modelName === targetModelName;
         },
+
+        async handleFileChange(){
+            const index = this.fileList.findIndex(file => file.name === this.form.selectedFile);
+            if (index !== -1) {
+                if (this.fileList[index].inputPeriod && this.fileList[index].forecastPeriod) {
+                    this.form.inputPeriod = [new Date(this.fileList[index].inputPeriod[0]), new Date(this.fileList[index].inputPeriod[1])];
+                    this.form.forecastPeriod = [new Date(this.fileList[index].forecastPeriod[0]), new Date(this.fileList[index].forecastPeriod[1])];
+                } else {
+                    await this.fetchProcessedData(this.form.selectedFile);
+                    this.form.inputPeriod = [new Date(this.fileList[index].inputPeriod[0]), new Date(this.fileList[index].inputPeriod[1])];
+                    this.form.forecastPeriod = [new Date(this.fileList[index].forecastPeriod[0]), new Date(this.fileList[index].forecastPeriod[1])];
+                }
+            }
+        },
+
         handleModelTypeChange() {
             // 清空进度条和表单数据
             this.progress = 0;
@@ -160,6 +204,7 @@ export default {
         },
         setPeriods() {
             // console.log(this.form.inputPeriod);
+            // console.log(this.form.forecastPeriod);
         },
         isFormValidate() {
             if (
@@ -218,9 +263,9 @@ export default {
                 }, time_out);
                 
                 var predictParams = {
-                    "file_name": fileName,
-                    "start_time": this.form.forecastPeriod[0].getTime().toString(),
-                    "end_time": this.form.forecastPeriod[1].getTime().toString(),
+                    "fileName": fileName,
+                    "startTime": this.form.forecastPeriod[0].getTime().toString(),
+                    "endTime": this.form.forecastPeriod[1].getTime().toString(),
                 }
 
                 // console.log(predictParams);
@@ -269,8 +314,35 @@ export default {
                 }
             })
             this.$emit('update-table-data');
-            
         },
+
+        async fetchProcessedData(fileName) {
+            const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+
+            await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
+                if (res.code === "200") {
+                    const jsonData = JSON.parse(res.jsonContent);
+                    this.getFilePeriod(fileName, jsonData);
+                }
+            })
+        },
+
+        getFilePeriod(fileName, jsonData){
+            const index = this.fileList.findIndex(file => file.name === fileName);
+
+            if (index !== -1) {
+                this.$set(this.fileList[index], 'forecastPeriod', [
+                    jsonData[jsonData.length - 96].DATATIME,
+                    jsonData[jsonData.length - 1].DATATIME
+                ]);
+                this.$set(this.fileList[index], 'inputPeriod', [
+                    jsonData[jsonData.length - 96 * 7].DATATIME,
+                    jsonData[jsonData.length - 172].DATATIME
+                ]);
+            }
+
+            this.setUploadedFileList(this.fileList);
+        }, 
         startLoading() {
             this.loadingInstance = Loading.service({
                 lock: true,
