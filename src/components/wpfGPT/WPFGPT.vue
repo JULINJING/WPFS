@@ -25,13 +25,14 @@
                                   </template>
                                   <template v-else>
                                     <div v-html="markdown(message.text)"></div>
-                                    <div></div>
                                     <template v-if="message.isImage">
-                                    <el-image
-                                        style="width: 100px; height: 100px"
+                                      <div style="display: flex;justify-content: center">
+                                        <el-image
+                                        style="width: 100px; height: 100px;"
                                         :src="thumbnail"
                                         :preview-src-list="masterImg">
-                                    </el-image>
+                                        </el-image>
+                                        </div>
                                     </template>
                                   </template>
                                 </p>
