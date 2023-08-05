@@ -7,7 +7,15 @@
             </div>
 
             <div class="predict-form-row">
-                <el-tag>文件选择</el-tag>
+                <el-tag>风场选择</el-tag>
+                <el-cascader
+                    v-model="selectedOptions"
+                    :options="pcaTextArr"
+                >
+                </el-cascader>
+            </div>
+            <div class="predict-form-row">
+                <el-tag>风机数据选择</el-tag>
                 <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags @change="handleFileChange">
                     <el-option 
                         v-for="file in fileList" 
@@ -72,11 +80,14 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import { Loading } from 'element-ui';
+import { pcaTextArr } from 'element-china-area-data'
 
 export default {
 
     data() {
         return {
+            selectedOptions: [],
+            pcaTextArr,
             form: {
                 selectedFile: "",
                 modelType: "single",
@@ -383,6 +394,9 @@ export default {
                 margin-right: 20px;
                 font-size: 14px;
             }
+            .el-cascader {
+                width: 80%;
+            }
 
             .el-select {
                 width: 80%;
@@ -392,7 +406,9 @@ export default {
                 text-align: left;
             }
 
-            .el-input,
+            .el-input {
+                width: 100%;
+            }
             .el-radio-group,
             .el-date-editor {
                 width: 80%;
@@ -431,7 +447,9 @@ export default {
             .el-select {
                 width: 240px;
             }
-
+            .el-cascader {
+                width: 240px;
+            }
             .el-input,
             .el-radio-group,
             .el-date-editor {

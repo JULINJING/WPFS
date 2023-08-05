@@ -1,67 +1,80 @@
 <template>
-    <div class="input-container _input-container">
-        <el-form ref="form" :model="form" label-width="80px">
-            <!-- 进度条 -->
-            <div class="train-form-row" v-if="!getIsTraining">
-                <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
-            </div>
-            <div class="train-form-row" v-if="getIsTraining">
-                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
-                    style="width: 100%"></el-progress>
-            </div>
+    <div>
+        <div class="gif-container">
+            <img src="@/assets/images/chatRobot-unscreen.gif" alt="GIF Image" class="gif">
+        </div>
+        <div class="input-container _input-container">
+            <el-form ref="form" :model="form" label-width="80px">
+                <!-- 进度条 -->
+                <div class="train-form-row" v-if="!getIsTraining">
+                    <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
+                </div>
+                <div class="train-form-row" v-if="getIsTraining">
+                    <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
+                        style="width: 100%"></el-progress>
+                </div>
 
+                <div class="train-form-row">
+                    <el-tag>风场选择</el-tag>
+                    <el-cascader v-model="selectedOptions" :options="pcaTextArr">
+                    </el-cascader>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>文件选择</el-tag>
-                <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
-                    </el-option>
-                </el-select>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>风机数据选择</el-tag>
+                    <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
+                        <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
+                        </el-option>
+                    </el-select>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>具体模型选择</el-tag>
-                <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
-                        :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
-                    </el-option>
-                </el-select>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>具体模型选择</el-tag>
+                    <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
+                        <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
+                            :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
+                        </el-option>
+                    </el-select>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>训练样本数量</el-tag>
-                <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>训练样本数量</el-tag>
+                    <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>学习率</el-tag>
-                <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>学习率</el-tag>
+                    <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>输入长度</el-tag>
-                <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>输入长度</el-tag>
+                    <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>预测长度</el-tag>
-                <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>预测长度</el-tag>
+                    <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
+                </div>
 
-            <div>
-                <el-button @click="setParams">开始训练</el-button>
-            </div>
-        </el-form>
+                <div>
+                    <el-button @click="setParams">开始训练</el-button>
+                </div>
+            </el-form>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
 import { Loading } from 'element-ui';
+import { pcaTextArr } from 'element-china-area-data'
 
 export default {
     data() {
         return {
+            pcaTextArr,
+            selectedOptions: [],
             form: {
                 type: "train",
                 selectedFile: "",
@@ -71,7 +84,7 @@ export default {
                 inputLen: "384",
                 predLen: "172",
             },
-            
+
             modelOptions: [
                 { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
                 { label: "Crossformer", value: "Crossformer" },
@@ -296,16 +309,35 @@ export default {
                 margin-right: 20px;
                 font-size: 14px;
             }
+            .el-cascader {
+                width: 80%;
+                .el-input {
+                    width: 100%;
+                }
+            }
 
             .el-select {
                 width: 80%;
             }
-
+            .el-radio-group {
+                text-align: left;
+            }
             .el-input {
                 width: 80%;
                 font-size: 14px;
             }
         }
+    }
+
+    .gif-container {
+        float: left;
+        flex-shrink: 0;
+        margin: 0 auto;
+    }
+
+    .gif {
+        align-items: center;
+        max-width: 20vw;
     }
 }
 
@@ -335,12 +367,18 @@ export default {
             .el-select {
                 width: 240px;
             }
+            .el-cascader {
+                width: 240px;
+            }
 
             .el-input {
                 width: 240px;
                 font-size: 12px;
             }
         }
+    }
+    .gif-container {
+        display: none;
     }
 }
 </style>
