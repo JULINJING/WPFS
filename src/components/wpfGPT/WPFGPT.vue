@@ -24,9 +24,18 @@
                                       {{ message.text }}
                                   </template>
                                   <template v-else>
-                                      <div v-html="markdown(message.text)"></div>
+                                    <div v-html="markdown(message.text)"></div>
+                                    <div></div>
+                                    <template v-if="message.isImage">
+                                    <el-image
+                                        style="width: 100px; height: 100px"
+                                        :src="thumbnail"
+                                        :preview-src-list="masterImg">
+                                    </el-image>
+                                    </template>
                                   </template>
                                 </p>
+
                             </div>
                         </div>
                     </span>
@@ -64,6 +73,7 @@
 <script>
 import ChatGPT from './chatgpt.js';
 import MarkdownIt from 'markdown-it';
+import {mapState} from 'vuex';
 
 export default {
   name: 'wpfGPT',
@@ -78,16 +88,22 @@ export default {
       messages: [{
         text: '请问有什么能够帮助您的？',
         isUser: false,
+        isImage: false,
       }],
+      isImage: false,
       // 面板状态
       isMax: false,
       // test: '## 我是'
+      thumbnail: 'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+      masterImg: [
+        'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+      ]
     }
   },
   created() {
   },
   computed: {
-    
+    ...mapState('global', ['predictedJsonData', 'uploadedFileName']),
   },
   methods: {
     // 科大讯飞
@@ -118,12 +134,21 @@ export default {
       // this.generatedText = await ChatGPT.generateText(this.voiceResult);
       // 发送对话信息给gpt接口
       // Java版本
-      await this.request.post("/wpfgpt/postChat", this.voiceResultTemp).then((res) => {
+
+      var processParams = {
+        "question": this.voiceResultTemp,
+        "fileName": this.$store.state.global.uploadedFileName,
+      }
+
+      await this.request.post("/wpfgpt/postChat2", processParams).then((res) => {
         if (res.code === "200") {
+          console.log("res.image:" + res.image)
+          this.isImage = res.image
+          this.thumbnail = "http://10.101.240.60:7070/wpfgpt/api/images/" + (this.$store.state.global.uploadedFileName).replace(".csv", ".png")
+          this.masterImg = ["http://10.101.240.60:7070/wpfgpt/api/images/" + (this.$store.state.global.uploadedFileName).replace(".csv", ".png")]
           console.log(res.msg)
           this.generatedText = res.msg;
-        }
-        else {
+        } else {
           document.getElementById('loading').textContent = '抱歉，服务器异常，请重试';
         }
       });
@@ -135,20 +160,21 @@ export default {
       return result
     },
     // 对话信息
-     async sendMessage() {
+    async sendMessage() {
       // 将用户发送的信息添加到对话数组中
       this.messages.push({
         text: this.voiceResult,
         isUser: true, // 表示该条信息是用户发送的
+        isImage: this.isImage,
       });
 
-      
-       this.voiceResultTemp = this.voiceResult;
-       // 清空用户输入框
-       this.voiceResult = '';
+
+      this.voiceResultTemp = this.voiceResult;
+      // 清空用户输入框
+      this.voiceResult = '';
 
       //  判断异常与否
-       if (document.getElementById('loading')) {
+      if (document.getElementById('loading')) {
         document.getElementById('loading').remove()
       }
       // 创建新的元素
@@ -162,7 +188,7 @@ export default {
       // 将元素插入页面
       this.$refs.loadParent.insertBefore(loadingP, this.$refs.loadChild);
       this.$refs.loadChild.style.display = 'none'
-      
+
       await this.generateText()
 
       // 恢复原状
@@ -182,13 +208,14 @@ export default {
       this.messages.push({
         text: this.generatedText,
         isUser: false, // 表示该条信息是机器人回答的
+        isImage: this.isImage,
       });
 
-       setTimeout(() => { 
+      setTimeout(() => {
         //  滚动至最下方
         this.$refs.talk.scrollTop = this.$refs.talk.scrollHeight;
         console.log(this.$refs.talk.scrollTop)
-       },500)
+      }, 500)
     },
     // 切换GPT面版
     panelSwitch() {
@@ -239,7 +266,8 @@ export default {
     .el-button {
       height: 30px;
     }
-    .el-button:hover{
+
+    .el-button:hover {
       font-weight: 900;
       font-size: larger;
     }
@@ -355,21 +383,25 @@ export default {
               margin-left: 5px;
               font-size: 12px;
               text-align: left;
+
               div {
                 width: 290px;
-                p{
+
+                p {
                   margin: 0;
                 }
-                pre{
+
+                pre {
                   code {
                     display: inline-block;
                     width: 280px !important;
                     white-space: pre-wrap;
-                    background-color: rgba(251,251,251,0.8);
+                    background-color: rgba(251, 251, 251, 0.8);
                     color: #409EFF;
                     font-weight: 800;
                     border: 1px solid #F1F1F1;
                     padding: 5px;
+
                     #text {
                       width: 280px !important;
                     }
