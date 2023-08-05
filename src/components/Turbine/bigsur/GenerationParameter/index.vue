@@ -70,7 +70,7 @@ $height: 4.16vh;
 .control_panel {
 	width: $width;
 	height: $height;
-	background-color: #04669e73;
+	background-color: #0d4560;
 	display: flex;
 	justify-content: space-between;
 	line-height: $height;

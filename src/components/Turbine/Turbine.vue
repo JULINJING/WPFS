@@ -98,7 +98,7 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px) {
 	#turbine {
-		background-color: #040b1a;
+		background-color: #000000;
 	}
 	// 移动端消失
 	.el-result {

@@ -9,9 +9,9 @@ export default {
         let controls = new OrbitControls(camera, CSSRender.domElement);
         // controls.minDistance = 0.2;
         controls.maxDistance = 10.0;
-        controls.maxPolarAngle = Math.PI / 2.5;
+        controls.maxPolarAngle = Math.PI * 0.9;
         this.global.controls = controls;
-        this.global.controls.enablePan = false;
+        this.global.controls.enablePan = true;
     },
     render(){
         return null 

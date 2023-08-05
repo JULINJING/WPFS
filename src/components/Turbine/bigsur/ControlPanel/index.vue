@@ -1,11 +1,11 @@
 <template>
-    <div class="container" :style="containerStyle" style="z-index: 99999">
+    <div class="container" :style="containerStyle" style="z-index: 99998">
         <ProjectTitle :options="titleOptions"></ProjectTitle>
 
         <div class="control_panel" v-for="data in dataList" :key="data.cn">
             <label class="control_panel-label">
                 <input type="checkbox" v-model="data.checked" @click="handleCheckboxChange" />
-                <span class="name">{{ data.cn }}:</span>
+                <span class="name">{{ data.cn }}</span>
             </label>
         </div>
     </div>
@@ -79,11 +79,11 @@ $height: 4.16vh;
 .control_panel {
     width: $width;
     height: $height;
-    background-color: #04669e73;
+    background-color: #0d4560;
     display: flex;
     justify-content: space-between;
     line-height: $height;
-    font-size: 0.7rem;
+    font-size: 1.0rem;
     padding: 0 1.2rem;
     box-sizing: border-box;
     color: #fff;

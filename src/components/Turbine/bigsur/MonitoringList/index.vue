@@ -3,16 +3,16 @@
 		<ProjectTitle :options="titleOption"></ProjectTitle>
 		<div class="monitoring_list">
 			<ul class="btn_list">
-				<li :class="{active: activeIndex === 0}" @click="btnhandle(0)" >实时数据</li>
+				<li :class="{active: activeIndex === 0}" @click="btnhandle(0)">实时数据</li>
 				<li :class="{active: activeIndex === 1}" @click="btnhandle(1)">故障信息</li>
 			</ul>
-			<ul v-if="activeIndex === 0" class="data_list">
+			<ul v-if="activeIndex === 0" class="data_list" ref="realTimeTable">
 				<li v-for="item in 50" :key="item">
 					<span>偏航系统精准</span>
 					<span>11:17:{{item + 10}}</span>
 				</li>
 			</ul>
-			<ul v-if="activeIndex === 1" class="data_list">
+			<ul v-if="activeIndex === 1" class="data_list" ref="faultInfoTable">
 				<li v-for="item in 2" :key="item" style="color: red;">
 					<span>偏航系统故障</span>
 					<span>11:17:{{item + 1}}{{random}}</span>
@@ -28,16 +28,29 @@ export default {
 	data() {
 		return {
 			activeIndex: 0,
+			scrollPosition: 0,
 			titleOption: {
 				order: "03",
 				cn: "数据监测",
 			},
 		};
 	},
+	mounted() {
+		// 每隔一段时间执行一次滚动
+		this.timer = setInterval(this.autoScroll, 100);
+	},
 	methods:{
 		btnhandle(index) {
 			this.activeIndex = index
-		}
+		},
+		autoScroll() {
+			// 每隔一段时间执行一次滚动
+			this.scrollPosition += 1;
+			const table = this.activeIndex === 0 ? this.$refs.realTimeTable : this.$refs.faultInfoTable;
+			if (table) {
+				table.scrollTop = this.scrollPosition;
+			}
+		},
 	},
 	components: {
 		ProjectTitle,
@@ -54,10 +67,11 @@ export default {
 $list_height: 2.8vh;
 $btn_height: calc(#{$list_height} + 4px); 
 .data_monitoring {
+	overflow: hidden;
 	position: absolute;
 	bottom: 2vh;
 	left: 2vh;
-	z-index: 999999;
+	z-index: 99999;
 	.monitoring_list {
 		width: 16.6vw;
 		height: 26.8vh;

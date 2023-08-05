@@ -1,104 +1,119 @@
 <template>
-	<div class="statistical_parameter">
-		<ul class="container">
-			<li class="left">
-				<header>
-					<span id="order">05&nbsp;</span>
-					<span>统计参数</span>
-				</header>
-				<article>
-					<li>
-						<span>年发电量:</span>
-						<span>8398.86</span>
-						<span>万kWh</span>
-					</li>
-					<li>
-						<span>负荷率:</span>
-						<span>34.33</span>
-						<span>%</span>
-					</li>
-					<li>
-						<span>月发电量:</span>
-						<span>288.08</span>
-						<span>万kWh</span>
-					</li>
-					<li>
-						<span>平均风速:</span>
-						<span>14.2</span>
-						<span>m/s</span>
-					</li>
-					<li>
-						<span>日发电量:</span>
-						<span>48.62</span>
-						<span>万kWh</span>
-					</li>
-					<li>
-						<span>最大风速:</span>
-						<span>19.95</span>
-						<span>m/s</span>
-					</li>
-					<li>
-						<span>总功率:</span>
-						<span>35508.3</span>
-						<span>万kWh</span>
-					</li>
+	<div>
+		<div class="title_container" style="z-index: 99998">
+			<ProjectTitle :options="titleOptions"></ProjectTitle>
+		</div>
+		<div class="statistical_parameter">
+			<ul class="container">
+				<li class="left">
+					<!-- <header>
+						<span id="order">05&nbsp;</span>
+						<span>统计参数</span>
+					</header> -->
+					<article>
+				<li>
+					<span>年发电量:</span>
+					<span>8398.86</span>
+					<span>万kWh</span>
+				</li>
+				<li>
+					<span>负荷率:</span>
+					<span>34.33</span>
+					<span>%</span>
+				</li>
+				<li>
+					<span>月发电量:</span>
+					<span>288.08</span>
+					<span>万kWh</span>
+				</li>
+				<li>
+					<span>平均风速:</span>
+					<span>14.2</span>
+					<span>m/s</span>
+				</li>
+				<li>
+					<span>日发电量:</span>
+					<span>48.62</span>
+					<span>万kWh</span>
+				</li>
+				<li>
+					<span>最大风速:</span>
+					<span>19.95</span>
+					<span>m/s</span>
+				</li>
+				<li>
+					<span>总功率:</span>
+					<span>35508.3</span>
+					<span>万kWh</span>
+				</li>
 				</article>
-			</li>
-			<li class="right">
-				<header>
-					<!-- <span>#1风机</span> -->
-					<span>单风机</span>
-				</header>
-				<!-- <div> -->
-				<StackLine class="stackLine"></StackLine>
-				<!-- </div> -->
-			</li>
-		</ul>
+				</li>
+				<li class="right">
+					<header>
+						<span>{{ Turbine }}</span>
+					</header>
+					<StackLine class="stackLine"></StackLine>
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 <script>
 import StackLine from "../StackLine/index";
 import { mapState } from "vuex";
+import ProjectTitle from "../Project_title";
 
 export default {
 	components: {
 		StackLine,
+		ProjectTitle
 	},
 	data() {
 		return {
 			Turbine: "00号风机",
+			titleOptions: {
+				order: "05",
+				cn: "统计参数",
+			},
 		};
 	},
 	mounted() {
-		// this.Turbine = "#" + this.$store.state.global.uploadedFileName.split('.')[0] + "号风机";
+		this.Turbine = "#" + this.$store.state.global.uploadedFileName.split('.')[0] + "号风机";
 	},
 	computed: {
-        ...mapState('global', ['uploadedFileName']),
-		
-    },
-	// watch: {
-    //     uploadedFileName(newName, oldName) {
-	// 		this.Turbine = newName.split('.')[0] + "号风机";
-    //     }
-    // },
+		...mapState('global', ['uploadedFileName']),
+	},
+	watch: {
+	    uploadedFileName(newName, oldName) {
+			this.Turbine = newName.split('.')[0] + "号风机";
+	    }
+	},
 };
 </script>
 <style lang="scss" scoped>
+.title_container {
+    position: absolute;
+    top: 58vh;
+    right: 49vh;
+}
 .statistical_parameter {
 	width: 35vw;
-	height: 35vh;
-	background-color: #04669e73;
+	height: 34vh;
+	background-color: #0d4560;
 	padding: 0.625rem 1.25rem;
 	position: absolute;
 	right: 2vh;
 	bottom: 2vh;
+	opacity: 0.8;
 	.container {
 		width: 100%;
 		height: 100%;
 		display: flex;
+		opacity: 1.0;
+
 		.left {
 			width: 70%;
-			height: 100%;
+			height: 90%;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
