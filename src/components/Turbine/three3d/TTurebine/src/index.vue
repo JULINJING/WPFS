@@ -1,6 +1,8 @@
 <template>
-    <ul class="equipmentLabel" ref="demo" :class="{ hide: labelHide }" @click="labelHide = true">
-        <li></li>
+    <!-- <ul class="equipmentLabel" ref="demo" :class="{ hide: labelHide }" @click="labelHide = true">
+        <li></li> -->
+    <ul class="equipmentLabel" ref="demo" :class="{ hide: labelHide }">
+        <li @click="labelHide = true"></li>
         <li class="labelInfo">
             <div>
                 <header>
@@ -234,7 +236,6 @@ const labelData = {
 };
 
 export default {
-
     name: "TTurebine",
     inject: ["global"],
     data() {
@@ -258,6 +259,8 @@ export default {
             wholeGroupall: new THREE.Group(),
             turbineLabel: null,
             labelHide: true,
+            isOutlineVisible: false,
+            renderMixins: new Map(),
             nowLabelData: {
                 cn: "暂无数据",
                 en: "暂无数据",
@@ -273,6 +276,7 @@ export default {
     },
     
     methods: {
+        // 风机加载
         loadTurbine() {
             const loader = new GLTFLoader()
             const onProgress = xhr => {
@@ -300,6 +304,7 @@ export default {
                 this.changeTurbineColor(0x3cbfc1);
             }, onProgress);
         },
+        // 设备加载
         loadEquipment() {
             let loader = new GLTFLoader();
             loader.load(`${process.env.BASE_URL}model/equipment1.glb`, object => {
@@ -324,7 +329,7 @@ export default {
                 this.wholeGroup.add(mesh);
             }); 
         },
-
+        // 平台加载
         loadingPlane() {
             let loader = new GLTFLoader();
             loader.load(`${process.env.BASE_URL}model/plane.glb`, object => {
@@ -369,7 +374,6 @@ export default {
 
             this.frameId = requestAnimationFrame(this.animateTexture);
         },
-
         animateTexture() {
             const texture = this.plane.children[0].material.map;
             const count = texture ? texture.repeat.y : 0;
@@ -393,8 +397,9 @@ export default {
             if (intersects.length <= 0) return false;
             const selectedObject = intersects[0].object;
             if (selectedObject.isMesh) {
-                console.log(intersects[0].object.name);
+                // console.log(intersects[0].object.name);
                 this.outline([selectedObject]);
+
                 if(labelData[intersects[0].object.name]){
                     this.nowLabelData = labelData[intersects[0].object.name];
                 } else {
@@ -411,11 +416,28 @@ export default {
                     };
                 }
                 this.updateLabal(intersects[0]);
+            } 
+        },
+        updateLabal(intersect) {
+            if (this.labelHide && this.isOutlineVisible) {
+                this.labelHide = false;
+                const point = intersect.point;
+                this.turbineLabel.position.set(point.x, point.y, point.z);
+            } else if(!this.labelHide) {
+                this.labelHide = true;
             }
         },
         outline(selectedObjects, color = 0x15c5e8) {
             const { renderer, camera, scene } = this.global;
             const [w, h] = [window.innerWidth, window.innerHeight];
+
+            // 如果轮廓已经显示，移除效果并清除标记
+            if (this.isOutlineVisible) {
+                this.global.compose.passes.pop();
+                this.isOutlineVisible = false;
+                return;
+            }
+
             var compose = new EffectComposer(renderer);
             var renderPass = new RenderPass(scene, camera);
             var outlinePass = new OutlinePass(
@@ -441,6 +463,8 @@ export default {
             outlinePass.hiddenEdgeColor.set(color);
             compose.render(scene, camera);
             this.$set(this.global, "compose", compose);
+
+            this.isOutlineVisible = true;
         },
         //过度动画
         animation(oldObject, newObject, time, update, complete) {
@@ -510,11 +534,6 @@ export default {
             this.turbineLabel = label;
             this.global.scene.add(label);
         },
-        updateLabal(intersect) {
-            this.labelHide = false;
-            const point = intersect.point;
-            this.turbineLabel.position.set(point.x, point.y, point.z);
-        },
         alarm() {
             const nameList = [
                 '主轴',
@@ -572,7 +591,6 @@ export default {
                 });
             });
         },
-        // TODO: 设备合成
         equipmentComposeAnimation(){
             this.groundAndSkeletonShowAnimation();
             this.equipment.value?.children.forEach((child) => {
@@ -587,7 +605,6 @@ export default {
                 })
             })
         },
-
         // 地面和风机骨架隐藏动画
         groundAndSkeletonHideAnimation() {
             this.mesh.traverse((mesh) => {
@@ -628,7 +645,40 @@ export default {
         },
         sleep(time) {
             return new Promise((resolve) => setTimeout(resolve, time));
-        }
+        },
+        skeletonAnimation() {
+            console.log("skeletonAnimation() called");
+
+            const shellModel = this.matrixTurbine?.scene?.getObjectByName(
+                "颜色材质"
+            );
+            const clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 3.5);
+
+            shellModel.traverse((mesh) => {
+                if (!(mesh instanceof THREE.Mesh)) return;
+
+                const material = new THREE.MeshPhysicalMaterial({
+                    color: 0xffffff,
+                    metalness: 1,
+                    roughness: 0.7,
+                });
+
+                mesh.material = material;
+                // 白色外壳消隐效果
+                mesh.material.clippingPlanes = [clippingPlane];
+            });
+
+            const uid = uuid();
+            this.renderMixins.set(uid, () => {
+                if (clippingPlane.constant <= -0.1) {
+                    this.matrixTurbine?.scene?.remove(shellModel);
+                    this.renderMixins.delete(uid);
+                    console.log('renderMixins', this.renderMixins);
+                }
+                console.log(clippingPlane.constant);
+                clippingPlane.constant -= 0.01;
+            });
+        },
     },
     mounted() {
         this.loadTurbine();
@@ -652,13 +702,14 @@ export default {
                 document.addEventListener("click", this.onPointerClick);
                 this.mesh.visible = false;
                 this.equipmentDecomposeAnimation();
+                // this.skeletonAnimation();
             } else {
                 document.removeEventListener("click", this.onPointerClick);
                 this.equipmentComposeAnimation();
+                this.labelHide = true;
                 this.sleep(2000).then(() => {
                     this.mesh.visible = true;
                 });
-                this.mesh.visible = true;
             }
         }
     },
