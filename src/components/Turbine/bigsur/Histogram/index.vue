@@ -71,7 +71,7 @@ export default {
 							type: "bar",
 							showBackground: true,
 							backgroundStyle: {
-								color: "#123e59",
+								color: "#05343e",
 							},
 							// barGap: 10,
 							barCategoryGap: 11,
@@ -81,7 +81,7 @@ export default {
 									position: [212, 4],
 									formatter: "{c} ℃",
 									textStyle: {
-										color: "#1e9ec5",
+										color: "#0edfe0",
 										fontSize: 11,
 										fontWeight: "bolder",
 									},
@@ -89,11 +89,11 @@ export default {
 								color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
 									{
 										offset: 0,
-										color: "#15c5e8",
+										color: "#0edfe0",
 									},
 									{
 										offset: 1,
-										color: "#15c5e8",
+										color: "#0edfe0",
 									},
 								]),
 							},

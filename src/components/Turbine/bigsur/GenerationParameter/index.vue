@@ -70,7 +70,7 @@ $height: 4.16vh;
 .control_panel {
 	width: $width;
 	height: $height;
-	background-color: #0d4560;
+	background-color: #0c5c69;
 	display: flex;
 	justify-content: space-between;
 	line-height: $height;
@@ -83,7 +83,7 @@ $height: 4.16vh;
     background-size: $width $height;
 	.number_value {
 		margin: 0 5px;
-		color: #1ac2e3;
+		color: #0ee8e8;
 	}
 	.unit {
 		color: #7da2dc;

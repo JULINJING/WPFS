@@ -13,7 +13,7 @@
 				</li>
 			</ul>
 			<ul v-if="activeIndex === 1" class="data_list" ref="faultInfoTable">
-				<li v-for="item in 2" :key="item" style="color: red;">
+				<li v-for="item in 2" :key="item" style="color: rgb(255, 0, 0);">
 					<span>偏航系统故障</span>
 					<span>11:17:{{item + 1}}{{random}}</span>
 				</li>
@@ -88,7 +88,7 @@ $btn_height: calc(#{$list_height} + 4px);
 				line-height: $btn_height;
 				color: #fff;
 				font-size: 0.8rem;
-				background-color: #04669e73;
+				background-color: #06424e;
 				cursor: pointer;
 			}
 			li.active {
@@ -100,13 +100,13 @@ $btn_height: calc(#{$list_height} + 4px);
 			max-height: 22.4vh;
 			overflow-y: scroll;
 			li:nth-child(2n) {
-				background-color: #04669e73;
+				background-color: #05343e;
 			}
 			li {
 				width: 100%;
 				height: $list_height;
 				background-color: #091c4645;
-				color: #15c5e8;
+				color: #0ee8e8;
 				line-height: $list_height;
 				font-size: 0.7px;
 				text-align: left;

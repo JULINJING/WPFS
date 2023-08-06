@@ -99,7 +99,7 @@ export default {
 .statistical_parameter {
 	width: 35vw;
 	height: 34vh;
-	background-color: #0d4560;
+	background-color: #0c5c69;
 	padding: 0.625rem 1.25rem;
 	position: absolute;
 	right: 2vh;
@@ -135,7 +135,7 @@ export default {
 				display: flex;
 				flex-wrap: wrap;
 				font-size: 12px;
-				color: #fff;
+				color: #ffffff;
 				li {
 					width: 50%;
 					flex-shrink: 1;
@@ -144,11 +144,11 @@ export default {
 					margin-top: 20px;
 					span:nth-child(2) {
 						margin: 0 1px;
-						color: #1ac2e3;
+						color: #13f5f5;
 					}
 					span:nth-child(3) {
 						margin: 0 1px;
-						color: #7da2dc;
+						color: #88afed;
 					}
 				}
 			}
@@ -163,7 +163,7 @@ export default {
 				span {
 					width: 50%;
 					height: 24px;
-					background-color: #028ab5;
+					background-color: #097da0;
 					color: #fff;
 					font-size: 12px;
 					line-height: 24px;
