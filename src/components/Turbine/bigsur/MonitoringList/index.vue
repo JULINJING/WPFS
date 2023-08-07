@@ -7,15 +7,15 @@
 				<li :class="{active: activeIndex === 1}" @click="btnhandle(1)">故障信息</li>
 			</ul>
 			<ul v-if="activeIndex === 0" class="data_list" ref="realTimeTable">
-				<li v-for="item in 50" :key="item">
+				<li v-for="item in 100" :key="item">
 					<span>偏航系统精准</span>
-					<span>11:17:{{item + 10}}</span>
+					<span>{{ getCurrentTime(item + 10) }}</span>
 				</li>
 			</ul>
 			<ul v-if="activeIndex === 1" class="data_list" ref="faultInfoTable">
-				<li v-for="item in 2" :key="item" style="color: rgb(255, 0, 0);">
+				<li v-for="item in 20" :key="item" style="color: rgb(255, 0, 0);">
 					<span>偏航系统故障</span>
-					<span>11:17:{{item + 1}}{{random}}</span>
+					<span>{{ getCurrentTime(item + 10) }}</span>
 				</li>
 			</ul>
 		</div>
@@ -39,17 +39,30 @@ export default {
 		// 每隔一段时间执行一次滚动
 		this.timer = setInterval(this.autoScroll, 100);
 	},
+	beforeDestroy() {
+		clearInterval(this.timer);
+	},
 	methods:{
 		btnhandle(index) {
-			this.activeIndex = index
+			this.activeIndex = index;
 		},
-		autoScroll() {
-			// 每隔一段时间执行一次滚动
+		autoScroll() {			
 			this.scrollPosition += 1;
-			const table = this.activeIndex === 0 ? this.$refs.realTimeTable : this.$refs.faultInfoTable;
+			const table =
+				this.activeIndex === 0 ? this.$refs.realTimeTable : this.$refs.faultInfoTable;
 			if (table) {
+				if (this.scrollPosition >= table.scrollHeight - table.clientHeight) {
+					this.scrollPosition = 0;
+				}
 				table.scrollTop = this.scrollPosition;
 			}
+		},
+		getCurrentTime(seconds) {
+			const now = new Date();
+			const currentSeconds = now.getSeconds() + seconds;
+			const minutes = String(Math.floor(currentSeconds / 60) % 60).padStart(2, "0");
+			const secondsLeft = String(currentSeconds % 60).padStart(2, "0");
+			return `${now.getHours()}:${minutes}:${secondsLeft}`;
 		},
 	},
 	components: {
@@ -63,6 +76,7 @@ export default {
 	}
 };
 </script>
+
 <style lang="scss" scoped>
 $list_height: 2.8vh;
 $btn_height: calc(#{$list_height} + 4px); 
@@ -99,6 +113,7 @@ $btn_height: calc(#{$list_height} + 4px);
 		.data_list {
 			max-height: 22.4vh;
 			overflow-y: scroll;
+			
 			li:nth-child(2n) {
 				background-color: #05343e;
 			}

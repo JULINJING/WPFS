@@ -125,7 +125,7 @@ $height: 4.16vh;
   }
 
   .checkbox-square:checked + .square + .name {
-    color: #0ee8e8;
+    color: #fff;
   }
 }
 </style>
