@@ -146,7 +146,7 @@ export default {
         }
         var windLayer = new mars3d.layer.WindLayer()
         var chinaLayer = new mars3d.layer.GeoJsonLayer()
-        
+
         return {
             configUrl: basePathUrl + 'config/config.json',
             mapOptions: mapOptions,
@@ -1622,13 +1622,13 @@ export default {
                 url: "//data.mars3d.cn/gltf/mars/man/running.glb",
                 animation: "run",
                 lockViewLevel: 3,
-                pitch: -25,
-                speed: 2,
+                pitch: -10,
+                speed: 5,
                 range: 8
             })
             this.isControl = true
         },
-        // 返回首页 
+        // 返回首页
         backToHome() {
             this.$router.push('/home')
             // 清除计时器
@@ -2586,7 +2586,7 @@ export default {
         height: 100%;
     }
 
-    // 底部 
+    // 底部
     .bottomBar {
         position: absolute;
         bottom: 0;

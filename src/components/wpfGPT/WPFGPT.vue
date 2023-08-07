@@ -29,8 +29,8 @@
                                       <div style="display: flex;justify-content: center">
                                         <el-image
                                         style="width: 100px; height: 100px;"
-                                        :src="thumbnail"
-                                        :preview-src-list="masterImg">
+                                        :src="message.thumbnail"
+                                        :preview-src-list="message.masterImg">
                                         </el-image>
                                         </div>
                                     </template>
@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-import ChatGPT from './chatgpt.js';
+
 import MarkdownIt from 'markdown-it';
 import {mapState} from 'vuex';
 
@@ -90,8 +90,14 @@ export default {
         text: '请问有什么能够帮助您的？',
         isUser: false,
         isImage: false,
+        isReport: false,
+        thumbnail: 'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+        masterImg: [
+          'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+        ]
       }],
       isImage: false,
+      isReport: false,
       // 面板状态
       isMax: false,
       // test: '## 我是'
@@ -145,8 +151,9 @@ export default {
         if (res.code === "200") {
           console.log("res.image:" + res.image)
           this.isImage = res.image
-          this.thumbnail = "http://10.101.240.60:7070/wpfgpt/api/images/" + (this.$store.state.global.uploadedFileName).replace(".csv", ".png")
-          this.masterImg = ["http://10.101.240.60:7070/wpfgpt/api/images/" + (this.$store.state.global.uploadedFileName).replace(".csv", ".png")]
+          this.thumbnail = "http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time)+".png"
+          this.masterImg = ["http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time)+".png"]
+          this.messages.forEach(e => console.log("thumbnail: "+e.thumbnail))
           console.log(res.msg)
           this.generatedText = res.msg;
         } else {
@@ -167,6 +174,8 @@ export default {
         text: this.voiceResult,
         isUser: true, // 表示该条信息是用户发送的
         isImage: this.isImage,
+        thumbnail: this.thumbnail,
+        masterImg: this.masterImg,
       });
 
 
@@ -210,6 +219,8 @@ export default {
         text: this.generatedText,
         isUser: false, // 表示该条信息是机器人回答的
         isImage: this.isImage,
+        thumbnail: this.thumbnail,
+        masterImg: this.masterImg,
       });
 
       setTimeout(() => {
@@ -315,7 +326,9 @@ export default {
 
   #talkbox_max {
     width: 348px;
+    //width: 700px;
     height: 400px;
+    //height: 500px;
 
     .talkbox_header {
       height: 40px;
