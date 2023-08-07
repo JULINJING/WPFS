@@ -1,4 +1,8 @@
 <template>
+    <div>
+        <div class="gif-container">
+            <img src="@/assets/images/chatRobot-unscreen.gif" alt="GIF Image" class="gif">
+        </div>
     <div class="input-container _input-container">
         <el-form ref="form" :model="form" label-width="80px">
             <!-- 进度条 -->
@@ -9,7 +13,7 @@
             <div class="predict-form-row">
                 <el-tag>风场选择</el-tag>
                 <el-cascader
-                    v-model="selectedOptions"
+                    v-model="form.selectedRegion"
                     :options="pcaTextArr"
                 >
                 </el-cascader>
@@ -18,8 +22,8 @@
                 <el-tag>风机数据选择</el-tag>
                 <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags @change="handleFileChange">
                     <el-option 
-                        v-for="file in fileList" 
-                        :key="file.name" 
+                        v-for="(file, index) in fileList"
+                        :key="index"
                         :label="file.name" 
                         :value="file.name"
                     >
@@ -75,6 +79,8 @@
             </div>
         </el-form>
     </div>
+</div>
+
 </template>
 
 <script>
@@ -83,12 +89,11 @@ import { Loading } from 'element-ui';
 import { pcaTextArr } from 'element-china-area-data'
 
 export default {
-
     data() {
         return {
-            selectedOptions: [],
             pcaTextArr,
             form: {
+                selectedRegion: [],
                 selectedFile: "",
                 modelType: "single",
                 type: "predict",
@@ -123,24 +128,12 @@ export default {
             jsonData: [],
             loading: false, // 加载状态
             loadingInstance: null,
-            fileList: [],
+            fileList: [{ name: "01.csv"}, { name: "02.csv"}, { name: "03.csv"}, { name: "04.csv"}, { name: "05.csv"}
+                        , { name: "06.csv"}, { name: "07.csv"}, { name: "08.csv"}, { name: "09.csv"}, { name: "10.csv"}],
         };
     },
     mounted() {
-        this.fileList = this.$store.state.global.uploadedFileList;
-
-        if (this.$store.state.global.processedJsonData.length > 0) {
-            // 输入的日期字符串
-            const dateString = this.$store.state.global.processedJsonData[this.$store.state.global.processedJsonData.length - 1].DATATIME;
-
-            // 将日期字符串拆分成组成部分
-            const [datePart, timePart] = dateString.split(" ");
-            const [year, month, day] = datePart.split("-");
-            const [hour, minute, second] = timePart.split(":");
-
-            // 使用拆分得到的组成部分创建新的JavaScript日期对象
-            const dateObject = new Date(year, month - 1, day, hour, minute, second);
-        }
+        this.fileList = [...this.fileList, ...this.$store.state.global.uploadedFileList];
     },
 
     computed: {
@@ -149,8 +142,9 @@ export default {
             const totalFields = 6; // 总字段数
 
             // 根据表单字段的填写情况计算已填写字段数
-            if(this.form.selectedFile !== "") filledFields++;
-            if (this.form.modelType !== "") filledFields++;
+            if (this.form.selectedRegion.length > 0) filledFields++;
+            if (this.form.selectedFile !== "") filledFields++;
+            // if (this.form.modelType !== "") filledFields++;
             if (this.form.selectedModels.length > 0) filledFields++;
             if (this.form.selectedCovariates.length > 0) filledFields++;
             if (this.form.inputPeriod.length > 0) filledFields++;
@@ -238,17 +232,22 @@ export default {
                 });
                 return false;
             }
-             else if(this.form.inputPeriod[1].getTime() >= Date.parse(new Date(this.$store.state.global.processedJsonData[this.$store.state.global.processedJsonData.length - 1].DATATIME))){
-                this.$message({
-                    message: "输入时间段应当在所选数据时间范围内",
-                    type: "warning",
-                });
-                return false;
+            else {
+                if (this.$store.state.global.processedJsonData.length > 0) {
+                    if (this.form.inputPeriod[1].getTime() >= Date.parse(new Date(this.$store.state.global.processedJsonData[this.$store.state.global.processedJsonData.length - 1].DATATIME))) {
+                        this.$message({
+                            message: "输入时间段应当在所选数据时间范围内",
+                            type: "warning",
+                        });
+                        return false;
+                    }
+                } 
+                return true;
             }
-            return true;
         },
         async setParams() {
             if (this.isFormValidate()) {
+
                 var start = new Date().getTime()
                 const fileName = this.form.selectedFile;
 
@@ -322,6 +321,8 @@ export default {
                 if (res.code === "200") {
                     this.jsonData = JSON.parse(res.jsonContent);
                     this.setPredictedJsonData(this.jsonData)
+                } else {
+                    console.error("请求错误");
                 }
             })
             this.$emit('update-table-data');
@@ -416,6 +417,17 @@ export default {
             }
         }
     }
+
+    .gif-container {
+        float: left;
+        flex-shrink: 0;
+        margin: 0 auto;
+    }
+
+    .gif {
+        align-items: center;
+        max-width: 20vw;
+    }
 }
 
 // 小于800px
@@ -483,5 +495,8 @@ export default {
 
     .el-date-range-picker {
         width: 96% !important;
+    }
+    .gif-container {
+        display: none;
     }
 }</style>

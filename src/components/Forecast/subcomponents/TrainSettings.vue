@@ -14,21 +14,21 @@
                         style="width: 100%"></el-progress>
                 </div>
 
-                <div class="train-form-row">
+                <div class="train-form-row-select">
                     <el-tag>风场选择</el-tag>
-                    <el-cascader v-model="selectedOptions" :options="pcaTextArr">
+                    <el-cascader v-model="form.selectedRegion" :options="pcaTextArr">
                     </el-cascader>
                 </div>
 
-                <div class="train-form-row">
+                <div class="train-form-row-select">
                     <el-tag>风机数据选择</el-tag>
                     <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
-                        <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
+                        <el-option v-for="file in fileList" :key="file" :label="file" :value="file">
                         </el-option>
                     </el-select>
                 </div>
 
-                <div class="train-form-row">
+                <div class="train-form-row-select">
                     <el-tag>具体模型选择</el-tag>
                     <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
                         <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
@@ -74,8 +74,8 @@ export default {
     data() {
         return {
             pcaTextArr,
-            selectedOptions: [],
             form: {
+                selectedRegion: [],
                 type: "train",
                 selectedFile: "",
                 selectedModel: 'LightGBM',
@@ -102,11 +102,13 @@ export default {
             progress: 0,
             // trainingProgress: 0, // 训练进度条百分比
             trainingTimerId: null, // 用于存储计时器的ID
-            fileList: [],
+            fileList: ['01.csv', '02.csv', '03.csv', '04.csv', '05.csv', 
+                        '06.csv', '07.csv', '08.csv', '09.csv', '10.csv'],
         };
     },
     mounted() {
-        this.fileList = this.$store.state.global.uploadedFileList;
+        const uploadedFileNames = this.$store.state.global.uploadedFileList.map(item => item.name);
+        this.fileList = [...this.fileList, ...uploadedFileNames];    
     },
 
     computed: {
@@ -119,9 +121,11 @@ export default {
         },
         calculateProgress() {
             let filledFields = 0;
-            const totalFields = 5; // 总字段数
+            const totalFields = 7; // 总字段数
 
             // 根据表单字段的填写情况计算已填写字段数
+            if (this.form.selectedRegion.length > 0) filledFields++;
+            if (this.form.selectedFile.length > 0) filledFields++;
             if (this.form.selectedModel.length > 0) filledFields++;
             if (this.form.batchSize !== "") filledFields++;
             if (this.form.learningRate !== "") filledFields++;
@@ -167,6 +171,7 @@ export default {
 
         setParams() {
             if (
+                this.form.selectedRegion.length === 0 ||
                 this.form.batchSize === "" ||
                 this.form.selectedModel.length === 0 ||
                 this.form.inputLen === "" ||
@@ -226,7 +231,12 @@ export default {
                 clearInterval(this.trainingTimerId);
                 this.trainingTimerId = null;
             }
-            const targetNode = document.getElementById('trainProgressBar');
+            this.$message({
+                message: "开始训练",
+                type: "action",
+                offset: 50,
+            });
+            // const targetNode = document.getElementById('trainProgressBar');
             // this.loadingInstance = Loading.service({
             //     // target: targetNode,
             //     lock: false,
@@ -234,6 +244,7 @@ export default {
             //     background: 'rgba(0, 0, 0, 0.3)'
             // });
             // this.trainingProgress = 0;
+
             this.setTrainingProgress(0);
             const increment = 100 / time_out * 1000;
             var tmp = 0;
@@ -296,24 +307,10 @@ export default {
         margin-left: 25%;
         margin-right: 25%;
 
-        .train-form-row {
-            width: 100%;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            .el-tag {
+        .el-tag {
                 width: 120px;
                 margin-right: 20px;
                 font-size: 14px;
-            }
-            .el-cascader {
-                width: 80%;
-                .el-input {
-                    width: 100%;
-                }
             }
 
             .el-select {
@@ -322,8 +319,37 @@ export default {
             .el-radio-group {
                 text-align: left;
             }
+
+        .train-form-row {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
             .el-input {
                 width: 80%;
+                font-size: 14px;
+            }
+        }
+        .train-form-row-select {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .el-cascader {
+                width: 80%;
+                .el-input {
+                    width: 100%;
+                }
+            }
+
+            .el-input {
+                width: 100%;
                 font-size: 14px;
             }
         }
