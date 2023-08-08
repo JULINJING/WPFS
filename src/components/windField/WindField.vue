@@ -676,9 +676,9 @@ export default {
             // var transformerGraphic1 = new mars3d.graphic.ModelPrimitive({
             //     position: [87.884667, 43.574988, 1116.7],
             //     style: {
-            //         url: '../../../mars3dModels/变电站.gltf',
+            //         url: '../../../mars3dModels/发电厂.gltf',
             //         heading: 210,
-            //         scale: 4,
+            //         scale: 1,
             //         minimumPixelSize: 1,
             //         distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 100000)
             //     },
