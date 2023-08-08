@@ -60,7 +60,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-$width: 13vw;
+$width: 16vw;
 $height: 4.16vh;
 .container {
 	position: absolute;
@@ -74,7 +74,7 @@ $height: 4.16vh;
 	display: flex;
 	justify-content: space-between;
 	line-height: $height;
-	font-size: 0.7rem;
+	font-size: 0.9rem;
 	padding: 0 1.2rem;
 	box-sizing: border-box;
 	color: #fff;

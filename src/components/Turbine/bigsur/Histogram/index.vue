@@ -132,7 +132,7 @@ export default {
 	left: 2vh;
 
 	.echart_container {
-		width: 16.6vw;
+		width: 18.6vw;
 		height: 8vh;
 	}
 }

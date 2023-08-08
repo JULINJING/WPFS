@@ -6,7 +6,7 @@ export default {
     mounted() {
         const { w, h } = this.global.rendererSize;
         const camera = new PerspectiveCamera(35, w / h, 0.1, 500);
-        camera.position.set(-2, 2, 2);
+        camera.position.set(-2, -2, 2);
         camera.name = "camera";
         this.global.camera = camera;
     },

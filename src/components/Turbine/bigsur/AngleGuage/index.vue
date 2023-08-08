@@ -35,10 +35,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-$width: 10vw;
+$width: 12vw;
 .AngleGuage {
 	position: absolute;
-	top: 35vh;
+	top: 33vh;
 	left: 2vh;
 	.angle_guagle {
 		width: $width;
@@ -48,7 +48,7 @@ $width: 10vw;
 		position: relative;
 		.pointer {
 			width: 2px;
-			height: 115px;
+			height: 18.5vh;
 			background-color: #15c5e8;
 			position: absolute;
 			top: 1vw;

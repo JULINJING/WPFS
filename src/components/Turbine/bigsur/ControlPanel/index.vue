@@ -60,7 +60,7 @@ export default {
     computed: {
         containerStyle() {
             return {
-                right: this.dataList[3].checked ? '30vh' : '2vh',
+                right: this.dataList[3].checked ? '38.4vh' : '2vh',
             };
         },
     },
@@ -74,13 +74,13 @@ export default {
 </script>
   
 <style lang="scss" scoped>
-$width: 13vw;
+$width: 16vw;
 $height: 4.16vh;
 
 .container {
   position: absolute;
   top: 6vh;
-  right: 30vh;
+  right: 38.4vh;
 }
 
 .control_panel {
