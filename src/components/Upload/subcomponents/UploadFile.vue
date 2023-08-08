@@ -302,9 +302,11 @@ export default {
         //     }
         // },
         async fetchData() {
-            const fileResponse = JSON.stringify(this.curfile.response);
-            const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
-            const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+            // const fileResponse = JSON.stringify(this.curfile.response);
+            // const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
+            // const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+            const fileName = this.curfile.name;
+            const fileNameWithoutExtension = fileName.split('.')[0]
 
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
@@ -364,8 +366,6 @@ export default {
             });
             this.setUploadedFileName(file.name);
             this.updateTitle();
-
-            // console.log(this.currentPage, this.pageSize);
 
             this.$nextTick(() => {
                 this.initVirtualScroll();

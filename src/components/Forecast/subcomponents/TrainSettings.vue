@@ -16,14 +16,23 @@
 
                 <div class="train-form-row-select">
                     <el-tag>风场选择</el-tag>
-                    <el-cascader v-model="form.selectedRegion" :options="pcaTextArr">
+                    <el-cascader 
+                        v-model="form.selectedRegion" 
+                        :options="pcaTextArr"
+                        @change="handleSelectRegion"
+                    >
                     </el-cascader>
                 </div>
 
                 <div class="train-form-row-select">
                     <el-tag>风机数据选择</el-tag>
                     <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
-                        <el-option v-for="file in fileList" :key="file" :label="file" :value="file">
+                        <el-option 
+                            v-for="(file, index) in fileList"
+                            :key="index"
+                            :label="file.name" 
+                            :value="file.name"
+                        >
                         </el-option>
                     </el-select>
                 </div>
@@ -102,13 +111,12 @@ export default {
             progress: 0,
             // trainingProgress: 0, // 训练进度条百分比
             trainingTimerId: null, // 用于存储计时器的ID
-            fileList: ['01.csv', '02.csv', '03.csv', '04.csv', '05.csv', 
-                        '06.csv', '07.csv', '08.csv', '09.csv', '10.csv'],
+            fileList: [],
         };
     },
     mounted() {
-        const uploadedFileNames = this.$store.state.global.uploadedFileList.map(item => item.name);
-        this.fileList = [...this.fileList, ...uploadedFileNames];    
+        // const uploadedFileNames = this.$store.state.global.uploadedFileList.map(item => item.name);
+        // this.fileList = [...this.fileList, ...uploadedFileNames];    
     },
 
     computed: {
@@ -149,7 +157,22 @@ export default {
             // 更新进度条
             this.progress = this.calculateProgress;
         },
-
+        handleSelectRegion() {
+            if (this.form.selectedRegion.length > 0) {
+                this.fileList = [
+                    { name: "01.csv" }, { name: "02.csv" }, { name: "03.csv" }, { name: "04.csv" }, { name: "05.csv" }, 
+                    { name: "06.csv" }, { name: "07.csv" }, { name: "08.csv" }, { name: "09.csv" }, { name: "10.csv" }
+                ];
+                
+                // 检查是否有重复的文件名
+                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file.name);
+                this.$store.state.global.uploadedFileList.forEach(file => {
+                    if (!uploadedFileNames.includes(file.name)) {
+                        this.fileList.push(file);
+                    }
+                });
+            }
+        },
         validateInput() {
             if (
                 !/^\d+$/.test(this.form.batchSize) || !/^\d+$/.test(this.form.inputLen) ||

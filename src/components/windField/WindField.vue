@@ -121,7 +121,21 @@ export default {
         Layout,
         // BaseField
     },
-
+    created() {
+        // 监听浏览器后退事件，清除定时器
+        window.addEventListener('popstate', () => {
+            console.log("this.intervalIdChartWeather: ", this.intervalIdChartWeather2, this.intervalIdChartWeather3);
+            // 清除计时器
+            if (this.intervalIdChartWeather2 !== null) {
+                clearInterval(this.intervalIdChartWeather2);
+                this.intervalIdChartWeather2 = null;
+            }
+            if (this.intervalIdChartWeather3 !== null) {
+                clearInterval(this.intervalIdChartWeather3);
+                this.intervalIdChartWeather3 = null;
+            }
+        });
+    },
     data() {
         const basePathUrl = window.basePathUrl || ' '
         const mapOptions = {
@@ -167,6 +181,10 @@ export default {
 
             // 记录计时器ID
             intervalId: null,
+
+            // echarts定时器
+            intervalIdChartWeather3: null,
+            intervalIdChartWeather2: null,
 
             // 记录面板展开状态
             isLeftOpen: true,
@@ -2177,7 +2195,7 @@ export default {
             this.myChartWeather2.setOption(this.myOptionWeather2)
             let index = 0; // 创建一个索引变量
             let len = arrWeather2.length; // 获取数据的长度
-            setInterval(()=> {
+            this.intervalIdChartWeather2 = setInterval(()=> {
                 this.myChartWeather2.setOption({
                     series: [
                     {
@@ -2327,7 +2345,7 @@ export default {
             var tempThird = thirdElements.slice()
             var tempFirst = firstElements.slice()
             var tempOrder = order.slice()
-            setInterval(() => {
+            this.intervalIdChartWeather3 = setInterval(() => {
                 tempSecond.shift();
                 tempSecond.push(secondRemainingElements[count]);
                 tempThird.shift();

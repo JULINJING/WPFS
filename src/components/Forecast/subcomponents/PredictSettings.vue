@@ -15,6 +15,7 @@
                 <el-cascader
                     v-model="form.selectedRegion"
                     :options="pcaTextArr"
+                    @change="handleSelectRegion"
                 >
                 </el-cascader>
             </div>
@@ -128,12 +129,12 @@ export default {
             jsonData: [],
             loading: false, // 加载状态
             loadingInstance: null,
-            fileList: [{ name: "01.csv"}, { name: "02.csv"}, { name: "03.csv"}, { name: "04.csv"}, { name: "05.csv"}
-                        , { name: "06.csv"}, { name: "07.csv"}, { name: "08.csv"}, { name: "09.csv"}, { name: "10.csv"}],
+            fileList: [],
         };
     },
     mounted() {
-        this.fileList = [...this.fileList, ...this.$store.state.global.uploadedFileList];
+        // this.fileList = [...this.fileList, ...this.$store.state.global.uploadedFileList];
+        console.log(this.fileList);
     },
 
     computed: {
@@ -206,6 +207,22 @@ export default {
         handleSelectChange() {
             // 更新进度条
             this.progress = this.calculateProgress;
+        },
+        handleSelectRegion() {
+            if (this.form.selectedRegion.length > 0) {
+                this.fileList = [
+                    { name: "01.csv" }, { name: "02.csv" }, { name: "03.csv" }, { name: "04.csv" }, { name: "05.csv" }, 
+                    { name: "06.csv" }, { name: "07.csv" }, { name: "08.csv" }, { name: "09.csv" }, { name: "10.csv" }
+                ];
+
+                // 检查是否有重复的文件名
+                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file.name);
+                this.$store.state.global.uploadedFileList.forEach(file => {
+                    if (!uploadedFileNames.includes(file.name)) {
+                        this.fileList.push(file);
+                    }
+                });
+            }
         },
         setPeriods() {
             // console.log(this.form.inputPeriod);
