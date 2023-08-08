@@ -417,7 +417,7 @@ export default {
                   pre {
                     code {
                       display: inline-block;
-                      // width: 280px !important;
+                      width: 100% !important;
                       white-space: pre-wrap;
                       background-color: rgba(251, 251, 251, 0.8);
                       color: #409EFF;
