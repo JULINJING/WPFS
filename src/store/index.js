@@ -44,6 +44,7 @@ const store = new Vuex.Store({
                 trainingProgress: 0, // 训练进度
                 isTraining: false, // 是否正在训练
                 isTurbineCanClick: true,
+                currentTurbineId: "",
                 TurbineTableList: [
                     {
                         cn: "环境监测",
@@ -106,7 +107,10 @@ const store = new Vuex.Store({
 
                 setTurbineTableList(state, data){
                     state.TurbineTableList = data;
-                }
+                },
+                setCurrentTurbineId(state, data){
+                    state.currentTurbineId = data;
+                },
             },
             getters: {
                 getUploadedFileName(state) {
@@ -130,6 +134,9 @@ const store = new Vuex.Store({
                 getTurbineTableList(state){
                     return state.TurbineTableList;
                 },
+                getCurrentTurbineId(state){
+                    return state.currentTurbineId;
+                }   
             }
         }
     },

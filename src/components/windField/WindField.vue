@@ -101,7 +101,7 @@
 
 <script>
 import Layout from "./subcomponents/Header/index";
-
+import { mapMutations } from "vuex";
 import MarsMap from "./mars-work/mars-map.vue"
 import * as mars3d from 'mars3d'
 import CesiumRoleController from "../../../public/lib/CesiumRoleController/CesiumRoleController.js"
@@ -257,6 +257,7 @@ export default {
         }
     },
     methods: {
+        ...mapMutations('global', ['setCurrentTurbineId']),
         // 地图构造完成回调
         onMapload() {
             // 开场
@@ -1379,11 +1380,15 @@ export default {
             turbineLayer.bindPopup((event)=> {
                 // console.log(event.graphic)
                 const attr = {}
-                attr["时间"] = "2022/1/2  0:00:00"
+                // attr["时间"] = "2022/1/2  0:00:00"
+                attr["时间"] = new Date().toLocaleString()
                 attr["风速"] = Math.random().toFixed(2) * 10
                 attr["实际功率"] = (Math.random() - 0.1).toFixed(3) * 1000
                 // 停止计时器
                 clearInterval(this.intervalId);
+
+                // 设置 异常监控 风机编号
+                this.setCurrentTurbineId(event.graphic.id);
 
                 return mars3d.Util.getTemplateHtml({ title: event.graphic.id + ' 号 风 机', template: "all", attr: attr })
             })

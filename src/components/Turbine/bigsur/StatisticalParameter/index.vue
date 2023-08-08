@@ -78,14 +78,18 @@ export default {
 		};
 	},
 	mounted() {
-		this.Turbine = "#" + this.$store.state.global.uploadedFileName.split('.')[0] + "号风机";
+		if(this.$store.state.global.currentTurbineId){
+			this.Turbine = "# " + this.$store.state.global.currentTurbineId + " 号 风 机";
+		} else {
+			this.Turbine = "# 00 号 风 机";
+		}
 	},
 	computed: {
-		...mapState('global', ['uploadedFileName']),
+		...mapState('global', ['currentTurbineId']),
 	},
 	watch: {
-	    uploadedFileName(newName, oldName) {
-			this.Turbine = newName.split('.')[0] + "号风机";
+	    currentTurbineId(newName, oldName) {
+			this.Turbine = "# " +  newName + " 号 风 机";
 	    }
 	},
 };
