@@ -1387,15 +1387,15 @@ export default {
                 // 停止计时器
                 clearInterval(this.intervalId);
 
-                // 设置 异常监控 风机编号
-                this.setCurrentTurbineId(event.graphic.id);
-
                 return mars3d.Util.getTemplateHtml({ title: event.graphic.id + ' 号 风 机', template: "all", attr: attr })
             })
 
             // 右击查看对应风机具体情况
             turbineLayer.eachGraphic((graphic) => {
                 graphic.on(mars3d.EventType.rightClick, ()=> {
+                    // 设置 异常监控 风机编号
+                    this.setCurrentTurbineId(graphic.id);
+
                     this.$router.push('/turbine')
                     const h = this.$createElement;
                     this.$message({

@@ -1,6 +1,6 @@
 <template>
 	<div class="header">
-		<span>大型风力发电机</span>
+		<span>{{ turbine }} 风 力 发 电 机</span>
 		<div style="display: flex;flex-direction: column;width: 100%">
 			<div id="returnWF">
 				<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/home">返回主页</router-link></h2>
@@ -16,8 +16,21 @@ import { mapState, mapMutations } from "vuex";
 
 export default {
 	name: "HeaderLogo",
+	data() {
+		return {
+			turbine: "",
+		};
+	},
+	mounted() {
+		console.log(this.$store.state.global.currentTurbineId);
+		if(this.$store.state.global.currentTurbineId){
+			this.turbine = this.$store.state.global.currentTurbineId + " 号";
+		} else {
+			this.turbine = "00 号";
+		}
+	},
 	computed: {
-        ...mapState('global', ['isTurbineCanClick']),
+        ...mapState('global', ['isTurbineCanClick', 'currentTurbineId']),
     },
 	methods: {
 		...mapMutations("global", ["setTurbineCanClick"]),

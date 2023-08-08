@@ -108,8 +108,8 @@ const store = new Vuex.Store({
                 setTurbineTableList(state, data){
                     state.TurbineTableList = data;
                 },
-                setCurrentTurbineId(state, data){
-                    state.currentTurbineId = data;
+                setCurrentTurbineId(state, id){
+                    state.currentTurbineId = id;
                 },
             },
             getters: {
