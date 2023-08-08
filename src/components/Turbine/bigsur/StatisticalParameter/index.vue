@@ -10,47 +10,47 @@
 						<span id="order">05&nbsp;</span>
 						<span>统计参数</span>
 					</header> -->
-					<article>
-				<li>
-					<span>年发电量:</span>
-					<span>8398.86</span>
-					<span>万kWh</span>
-				</li>
-				<li>
-					<span>负荷率:</span>
-					<span>34.33</span>
-					<span>%</span>
-				</li>
-				<li>
-					<span>月发电量:</span>
-					<span>288.08</span>
-					<span>万kWh</span>
-				</li>
-				<li>
-					<span>平均风速:</span>
-					<span>14.2</span>
-					<span>m/s</span>
-				</li>
-				<li>
-					<span>日发电量:</span>
-					<span>48.62</span>
-					<span>万kWh</span>
-				</li>
-				<li>
-					<span>最大风速:</span>
-					<span>19.95</span>
-					<span>m/s</span>
-				</li>
-				<li>
-					<span>总功率:</span>
-					<span>35508.3</span>
-					<span>万kWh</span>
-				</li>
+				<article>
+					<li>
+						<span>年发电量:</span>
+						<span>{{ generationData.yearGeneration }}</span>
+						<span>万kWh</span>
+					</li>
+					<li>
+						<span>负荷率:</span>
+						<span>{{ generationData.loadRate }}</span>
+						<span>%</span>
+					</li>
+					<li>
+						<span>月发电量:</span>
+						<span>{{ generationData.monthGeneration }}</span>
+						<span>万kWh</span>
+					</li>
+					<li>
+						<span>平均风速:</span>
+						<span>{{ generationData.averageWindSpeed }}</span>
+						<span>m/s</span>
+					</li>
+					<li>
+						<span>日发电量:</span>
+						<span>{{ generationData.dayGeneration }}</span>
+						<span>万kWh</span>
+					</li>
+					<li>
+						<span>最大风速:</span>
+						<span>{{ generationData.maxWindSpeed }}</span>
+						<span>m/s</span>
+					</li>
+					<!-- <li>
+						<span>总功率:</span>
+						<span>35508.3</span>
+						<span>万kWh</span>
+					</li> -->
 				</article>
 				</li>
 				<li class="right">
 					<header>
-						<span>{{ Turbine }}</span>
+						<span># {{ TurbineId }} 号 风 机</span>
 					</header>
 					<StackLine class="stackLine"></StackLine>
 				</li>
@@ -70,28 +70,45 @@ export default {
 	},
 	data() {
 		return {
-			Turbine: "00号风机",
+			TurbineId: "00",
 			titleOptions: {
 				order: "05",
 				cn: "统计参数",
+			},
+			generationData: {
+				yearGeneration: 8398.86,
+				loadRate: 34.33,
+				monthGeneration: 288.08,
+				averageWindSpeed: 14.2,
+				dayGeneration: 48.62,
+				maxWindSpeed: 19.95,
 			},
 		};
 	},
 	mounted() {
 		if(this.$store.state.global.currentTurbineId){
-			this.Turbine = "# " + this.$store.state.global.currentTurbineId + " 号 风 机";
+			this.TurbineId = this.$store.state.global.currentTurbineId;
 		} else {
-			this.Turbine = "# 00 号 风 机";
+			this.TurbineId = "00";
 		}
+		this.addRandomNumbers();
 	},
 	computed: {
 		...mapState('global', ['currentTurbineId']),
 	},
-	watch: {
-	    currentTurbineId(newName, oldName) {
-			this.Turbine = "# " +  newName + " 号 风 机";
-	    }
-	},
+	methods: {
+		getRandomNumber(min, max) {
+            return (Math.random() * (max - min)) + min;
+        },
+        addRandomNumbers() {
+			this.generationData.yearGeneration = (this.generationData.yearGeneration + this.getRandomNumber(-500, 500)).toFixed(2);
+        	this.generationData.loadRate = (this.generationData.loadRate + this.getRandomNumber(-3, 3)).toFixed(2);
+			this.generationData.monthGeneration = (this.generationData.monthGeneration + this.getRandomNumber(-50, 50)).toFixed(2);
+        	this.generationData.averageWindSpeed = (this.generationData.averageWindSpeed + this.getRandomNumber(-3, 3)).toFixed(2);
+        	this.generationData.dayGeneration = (this.generationData.dayGeneration + this.getRandomNumber(-2, 2)).toFixed(2);
+			this.generationData.maxWindSpeed = (this.generationData.maxWindSpeed + this.getRandomNumber(-10, 10)).toFixed(2);
+        }
+	}
 };
 </script>
 <style lang="scss" scoped>
@@ -144,7 +161,7 @@ export default {
 					width: 50%;
 					flex-shrink: 1;
 					text-align: left;
-					line-height: 1.875rem;
+					line-height: 2.75rem;
 					margin-top: 20px;
 					span:nth-child(2) {
 						margin: 0 1px;

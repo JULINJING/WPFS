@@ -81,7 +81,7 @@ const MODEL_EQUIPMENT_POSITION_PARAMS_ENUM = {
         DECOMPOSE: { x: 20437.78515625, y: 8650, z: 100 },
     }
 };
-const labelData = {
+var labelData = {
     [MODEL_EQUIPMENT_ENUM.VARIABLE_PADDLE_SYSTEM]: {
         cn: "变桨系统",
         en: "Variable-Pitch System",
@@ -110,7 +110,7 @@ const labelData = {
             {
                 name: "额定电压",
                 value: "110",
-                unit: "v"
+                unit: "V"
             },
             {
                 name: "额定电流",
@@ -123,7 +123,7 @@ const labelData = {
                 unit: "kw"
             },
             {
-                name: "功率频率",
+                name: "额定频率",
                 value: "100",
                 unit: "Hz"
             }
@@ -353,6 +353,7 @@ export default {
         changeAnimation(turbine, animationName) {
             const animations = this.matrixTurbine.animations;
             const mixer = new THREE.AnimationMixer(turbine);
+
             const clip = THREE.AnimationClip.findByName(
                 animations,
                 animationName
@@ -399,7 +400,7 @@ export default {
             if (selectedObject.isMesh) {
                 // console.log(intersects[0].object.name);
                 this.outline([selectedObject]);
-
+                this.addRandomNumbers();
                 if(labelData[intersects[0].object.name]){
                     this.nowLabelData = labelData[intersects[0].object.name];
                 } else {
@@ -679,6 +680,19 @@ export default {
                 clippingPlane.constant -= 0.01;
             });
         },
+        getRandomNumber(min, max) {
+            return (Math.random() * (max - min)) + min;
+        },
+        addRandomNumbers() {
+            for (const equipmentType in labelData) {
+                const equipment = labelData[equipmentType];
+                for (const item of equipment.list) {
+                    if(!item.name.includes("额定")){
+                        item.value = this.getRandomNumber(0, 10).toFixed(2);
+                    }
+                }
+            }
+        }
     },
     mounted() {
         this.loadTurbine();
@@ -794,7 +808,7 @@ export default {
                     }
 
                     span:nth-child(2) {
-                        width: 10%;
+                        width: 20%;
                         color: #f0c002;
                     }
 
