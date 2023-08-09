@@ -355,11 +355,13 @@ export default {
         checkRouteQueryParams() {
             // 检查路由参数，如果是从返回场站按钮进入的，并且地图加载完成，则执行 addTurbineLayer 方法
             if (this.$route.params.isReturnButtonClicked && this.isMapLoaded) {
-                if(this.$route.params.fieldId !== 0){
+                if(this.$route.params.type === "turbine" && this.$route.params.fieldId !== 0){
                     console.log("fieldId: ", this.$route.params.fieldId);
                     const id = this.$route.params.fieldId;
                     this.flyStates[id] = true;
                     this.addTurbineLayer(id);
+                } else if(this.$route.params.type === "watch"){
+                    this.turnToBuilding();
                 }
             }
         },

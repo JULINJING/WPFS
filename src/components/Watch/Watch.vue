@@ -9,7 +9,7 @@
                     <div class="d-flex jc-center">
                         <dv-decoration-8 class="dv-dec-8 decor" :color="decorationColor" />
                         <div class="title">
-                            <span class="title-text">单 风 电 场 智 能 运 维</span>
+                            <span class="title-text">单 风 电 场 监 测 大 屏</span>
                         </div>
                         <dv-decoration-8 class="dv-dec-8 decor" :reverse="true" :color="decorationColor" />
                     </div>
@@ -24,7 +24,8 @@
                             <span class="text">{{ turbineName }}</span>
                         </div>
                         <div class="react-left ml-3 decor">
-                            <router-link to="/windfield"><span class="text fw-b">返回场站</span></router-link>
+                            <!-- <router-link to="/windfield"><span class="text fw-b">返回场站</span></router-link> -->
+                            <span class="text fw-b" style="cursor: pointer;" @click="redirectToWindfield">返回场站</span> 
                         </div>
                     </div>
                     <div class="d-flex aside-width">
@@ -123,7 +124,11 @@ export default {
         // 返回首页 
         backToHome() {
             this.$router.push('/home')
-        }
+        },
+        redirectToWindfield() {
+			// 执行路由跳转到 windfield 页面，并传递参数 isReturnButtonClicked
+			this.$router.push({ name: 'windfield', params: { isReturnButtonClicked: true,  type: "watch"} });
+		}
     },
     mounted() {
         this.timeFn()

@@ -43,7 +43,7 @@ export default {
 			const fieldId = this.$store.state.global.windFieldId;
 			console.log(fieldId);
 			// 执行路由跳转到 windfield 页面，并传递参数 isReturnButtonClicked
-			this.$router.push({ name: 'windfield', params: { isReturnButtonClicked: true,  fieldId: fieldId } });
+			this.$router.push({ name: 'windfield', params: { isReturnButtonClicked: true, type: "turbine", fieldId: fieldId } });
 			// this.$router.push({ path: '/windfield', query: { isReturnButtonClicked: true, fieldId: fieldId } });
 		}
 	}
