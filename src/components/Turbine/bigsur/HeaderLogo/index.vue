@@ -4,7 +4,8 @@
 		<div style="display: flex;flex-direction: column;width: 100%">
 			<div id="returnWF">
 				<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/home">返回主页</router-link></h2>
-				<h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/windfield">返回场站</router-link></h2>
+				<!-- <h2 style="z-index: 99999;margin-top: 1.5vh;"><router-link to="/windfield">返回场站</router-link></h2> -->
+				<h2 style="z-index: 99999;margin-top: 1.5vh; color: #D3D6DD;" @click="redirectToWindfield">返回场站</h2> 
 			</div>
 			<h2 id="control" style="z-index: 99999;text-align: center;margin-top: 10px;color: #D3D6DD;" @click="changeState">开启/关闭详细信息</h2>
 		</div>
@@ -22,7 +23,7 @@ export default {
 		};
 	},
 	mounted() {
-		console.log(this.$store.state.global.currentTurbineId);
+		// console.log(this.$store.state.global.currentTurbineId);
 		if(this.$store.state.global.currentTurbineId){
 			this.turbine = this.$store.state.global.currentTurbineId + " 号";
 		} else {
@@ -30,13 +31,19 @@ export default {
 		}
 	},
 	computed: {
-        ...mapState('global', ['isTurbineCanClick', 'currentTurbineId']),
+        ...mapState('global', ['isTurbineCanClick', 'currentTurbineId', 'windFieldId']),
     },
 	methods: {
 		...mapMutations("global", ["setTurbineCanClick"]),
 		changeState() {
 			var flag = this.$store.state.global.isTurbineCanClick;
 			this.setTurbineCanClick(!flag);
+		},
+		redirectToWindfield() {
+			const fieldId = this.$store.state.global.windFieldId;
+			// 执行路由跳转到 windfield 页面，并传递参数 isReturnButtonClicked
+			this.$router.push({ name: 'windfield', params: { isReturnButtonClicked: true,  fieldId: fieldId } });
+			// this.$router.push({ path: '/windfield', query: { isReturnButtonClicked: true, fieldId: fieldId } });
 		}
 	}
 };

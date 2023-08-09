@@ -136,6 +136,7 @@ export default {
             }
         });
     },
+
     data() {
         const basePathUrl = window.basePathUrl || ' '
         const mapOptions = {
@@ -167,6 +168,7 @@ export default {
             windLayer,
             chinaLayer,
             controller: null,
+            isMapLoaded: false,
 
             // 记录人物状态
             isControl: false,
@@ -178,6 +180,12 @@ export default {
             isSouthernFly: false,
             isWesternFly: false,
             isNorthernFly: false,
+            flyStates: {
+                1: false,
+                2: false,
+                3: false,
+                4: false
+            },
 
             // 记录计时器ID
             intervalId: null,
@@ -257,7 +265,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('global', ['setCurrentTurbineId']),
+        ...mapMutations('global', ['setCurrentTurbineId', 'setWindFieldId']),
         // 地图构造完成回调
         onMapload() {
             // 开场
@@ -328,6 +336,18 @@ export default {
             this.map.on(mars3d.EventType.renderError, function () {
                 window.location.reload();
             });
+
+            this.isMapLoaded = true;
+            this.checkRouteQueryParams();
+        },
+        checkRouteQueryParams() {
+            // 检查路由参数，如果是从返回场站按钮进入的，并且地图加载完成，则执行 addTurbineLayer 方法
+            if (this.$route.params.isReturnButtonClicked && this.isMapLoaded) {
+                console.log("fieldId: ", this.$route.params.fieldId);
+                const id = this.$route.params.fieldId;
+                this.flyStates[id] = true;
+                this.addTurbineLayer(id);
+            }
         },
         addOtherFactoryLayer() {
             // 添加道路
@@ -893,7 +913,9 @@ export default {
             })
             this.map.addLayer(this.windLayer)
             this.loadNetCDF("/weather/wind.nc").then((data) => {
-                this.windLayer.setData(data)
+                if(this.windLayer !== null){
+                    this.windLayer.setData(data)
+                }
             })
         },
         loadNetCDF(filepath) {
@@ -946,6 +968,7 @@ export default {
             })
         },
         addTurbineLayer(id) {
+            this.setWindFieldId(id);
             // 清除计时器
             if (this.intervalId !== null) {
                 // 如果已经有一个正在运行的定时器，停止它
@@ -973,6 +996,7 @@ export default {
             var viewPoints = []
             var factoryTitle = ''
             var factoryPosition = {}
+
             switch (id) {
                 case 1:
                     positions = [
@@ -1004,12 +1028,12 @@ export default {
                         { "lat": 28.827739, "lng": 120.968225, "alt": 2866.4, "heading": 253.6, "pitch": -22.4, duration: 3 },
                         { "lat": 28.843931, "lng": 120.882302, "alt": 2803.8, "heading": 131.2, "pitch": -20.8, duration: 3 }
                     ]
-                    if (this.isEasternFly)
+                    if (this.flyStates[1])
                         this.map.setCameraView({"lat":28.843931,"lng":120.882302,"alt":2803.8,"heading":131.2,"pitch":-20.8})
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
-                    this.isEasternFly = true
+                    this.flyStates[1] = true
                     factoryTitle = '浙江括苍山风电场'
                     factoryPosition = { lng: 120.913288, lat: 28.819988, alt: 823.2}
                     break;
@@ -1035,12 +1059,12 @@ export default {
                         { "lat": 23.472185, "lng": 117.218578, "alt": 1872.8, "heading": 183.4, "pitch": -19.4, duration: 3 },
                         { "lat": 23.419527, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3, duration: 3 },
                     ]
-                    if (this.isSouthernFly)
+                    if (this.flyStates[2])
                         this.map.setCameraView({ "lat": 23.419334, "lng": 117.164786, "alt": 1845.7, "heading": 93.2, "pitch": -21.3 })
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
-                    this.isSouthernFly = true
+                    this.flyStates[2] = true
                     factoryTitle = '广东汕头南澳岛风电场'
                     factoryPosition = { lng: 117.250791, lat: 23.419054, alt: 7}
                     break;
@@ -1066,12 +1090,12 @@ export default {
                         { "lat": 43.624864, "lng": 87.980843, "alt": 4903.2, "heading": 183.2, "pitch": -38.4, duration: 3 },
                         { "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1, duration: 3 }
                     ]
-                    if (this.isWesternFly)
+                    if (this.flyStates[3])
                         this.map.setCameraView({ "lat": 43.57666, "lng": 87.915963, "alt": 4799, "heading": 93.3, "pitch": -37.1 })
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
-                    this.isWesternFly = true
+                    this.flyStates[3] = true
                     factoryTitle = '新疆达坂城风电场'
                     factoryPosition = { lng: 88.007588, lat: 43.574361, alt: 1713.9}
                     break;
@@ -1097,12 +1121,12 @@ export default {
                         { "lat": 41.358879, "lng": 112.957203, "alt": 5022.1, "heading": 184.3, "pitch": -32.4, duration: 3 },
                         { "lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5, duration: 3 }
                     ]
-                    if (this.isNorthernFly)
+                    if (this.flyStates[4])
                         this.map.setCameraView({"lat": 41.300225, "lng": 112.874408, "alt": 5020.9, "heading": 88.7, "pitch": -29.5})
                     else
                         // 视角切换（分步执行）
                         this.map.setCameraViewList(viewPoints)
-                    this.isNorthernFly = true
+                    this.flyStates[4] = true
                     factoryTitle = '内蒙古辉腾锡勒风电场'
                     factoryPosition = { lng: 112.991873, lat: 41.300298, alt: 1713.9}
             }
