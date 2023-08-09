@@ -136,7 +136,19 @@ export default {
             }
         });
     },
-
+    beforeRouteLeave(to, from, next) {
+        console.log("Leaving the current page");
+        // 清除计时器
+        if (this.intervalIdChartWeather2 !== null) {
+            clearInterval(this.intervalIdChartWeather2);
+            this.intervalIdChartWeather2 = null;
+        }
+        if (this.intervalIdChartWeather3 !== null) {
+            clearInterval(this.intervalIdChartWeather3);
+            this.intervalIdChartWeather3 = null;
+        }
+        next();
+    },
     data() {
         const basePathUrl = window.basePathUrl || ' '
         const mapOptions = {
@@ -801,7 +813,7 @@ export default {
                         offsetX: -16,
                         distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
                     },
-                    popup: `<video src='../../imgs/videos/概览.mp4' controls autoplay style="width: 300px;" ></video>`,
+                    popup: `<video src='../../imgs/videos/风电监控.mp4' controls autoplay style="width: 300px;" ></video>`,
                     popupOptions: {
                         offsetY: -170, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
                         template: `<div class="marsBlackPanel" style="min-width: 90px;min-height: 35px;position: absolute;left: 16px;bottom: 10px;
@@ -854,7 +866,7 @@ export default {
             const video2D = new mars3d.graphic.Video2D({
                 position: [87.883859, 43.57928, 1198],
                 style: {
-                    url: "../../imgs/videos/百度智能云-龙源电力.mp4",
+                    url: "../../imgs/videos/百度智能云.mp4",
                     angle: 31.8,
                     angle2: 17.8875,
                     heading: 245,
