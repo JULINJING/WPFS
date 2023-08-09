@@ -121,21 +121,21 @@ export default {
         Layout,
         // BaseField
     },
-    created() {
-        // 监听浏览器后退事件，清除定时器
-        window.addEventListener('popstate', () => {
-            console.log("this.intervalIdChartWeather: ", this.intervalIdChartWeather2, this.intervalIdChartWeather3);
-            // 清除计时器
-            if (this.intervalIdChartWeather2 !== null) {
-                clearInterval(this.intervalIdChartWeather2);
-                this.intervalIdChartWeather2 = null;
-            }
-            if (this.intervalIdChartWeather3 !== null) {
-                clearInterval(this.intervalIdChartWeather3);
-                this.intervalIdChartWeather3 = null;
-            }
-        });
-    },
+    // created() {
+    //     // 监听浏览器后退事件，清除定时器
+    //     window.addEventListener('popstate', () => {
+    //         console.log("this.intervalIdChartWeather: ", this.intervalIdChartWeather2, this.intervalIdChartWeather3);
+    //         // 清除计时器
+    //         if (this.intervalIdChartWeather2 !== null) {
+    //             clearInterval(this.intervalIdChartWeather2);
+    //             this.intervalIdChartWeather2 = null;
+    //         }
+    //         if (this.intervalIdChartWeather3 !== null) {
+    //             clearInterval(this.intervalIdChartWeather3);
+    //             this.intervalIdChartWeather3 = null;
+    //         }
+    //     });
+    // },
     beforeRouteLeave(to, from, next) {
         console.log("Leaving the current page");
         // 清除计时器
