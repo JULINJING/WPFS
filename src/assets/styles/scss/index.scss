@@ -1,6 +1,82 @@
 // 大于800px
 @media only screen and (min-width: 800px) {
+    :deep(.el-input__inner) {
+        z-index: 99999 !important;
+        background-color: #0f1325 !important;
+        background-image: none;
+        border-radius: 4px;
+        border: 1.5px solid #2e6099;
+        box-sizing: border-box;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        outline: 0;
+        padding: 0 15px;
+        transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+        width: 100%;
+        color: #eee;
+        font-size: large;
+        text-align: center;
+    }
+    :deep(.el-select-dropdown) {
+        z-index: 99999;
+        background-color: rgba(1, 28, 82, 0.8);
+        border: 1.5px solid #2e6099;
+    }
+    :deep(.el-scrollbar__view) {
+        z-index: 99999;
+        padding: 0 0;
+        background-color: rgba(1, 28, 82, 0.8);
+        max-height: 200px !important;
+    }
+    .el-select-dropdown__item {
+        z-index: 99999 !important;
+        color: #fff;
+        font-weight: 100;
+        background-color: #0f1325;
+    }
+    .el-select-dropdown__item:hover {
+        color: #2e6099;
+    }
+    
+.custom-select {
+  position: relative;
+  width: 200px;
+}
 
+.selected-option {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+
+.options-list li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.options-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.options-list li.selected {
+  background-color: #3d6ad3;
+  color: #fff;
+}
     // 移动端消失
     .el-result {
         display: none;
@@ -150,6 +226,9 @@
                     display: grid;
                     grid-template-columns: 3fr 3fr 6fr;
                     height: 30%;
+                    .dv-border-box-12{
+                        z-index: 1;
+                    }
                 }
 
                 // 底部数据
@@ -181,7 +260,7 @@
             display: none;
         }
 
-        .text{
+        .text {
             color: aliceblue;
         }
 
