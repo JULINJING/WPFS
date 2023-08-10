@@ -13,7 +13,6 @@
                     <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
                         style="width: 100%"></el-progress>
                 </div>
-
                 <div class="train-form-row-select">
                     <el-tag>风场选择</el-tag>
                     <el-cascader 
@@ -165,12 +164,13 @@ export default {
                 ];
                 
                 // 检查是否有重复的文件名
-                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file.name);
+                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file);
                 this.$store.state.global.uploadedFileList.forEach(file => {
                     if (!uploadedFileNames.includes(file.name)) {
                         this.fileList.push(file);
                     }
                 });
+                console.log(this.fileList);
             }
         },
         validateInput() {
