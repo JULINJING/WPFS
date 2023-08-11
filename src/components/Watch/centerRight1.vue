@@ -46,18 +46,31 @@ export default {
         }
     },
     mounted() {
-        this.curData = JSON.parse(JSON.stringify(rawData))
         this.setData()
+    },
+    watch: {
+        processedJsonData: {
+            handler(newData) {
+                this.setData();
+            },
+            deep: true
+        }
     },
     computed: {
         ...mapState('global', ['processedJsonData']),
     },
     methods: {
         setData() {
+            if (this.$store.state.global.processedJsonData.length == 0) {
+                this.curData = JSON.parse(JSON.stringify(rawData))
+            } else {
+                this.curData = this.$store.state.global.processedJsonData.slice(0, 672);
+            }
             this.config.data = []
             for (let i = 0; i < this.curData.length; i++) {
                 this.config.data.push([this.curData[i].DATATIME,this.curData[i].APOWER,this.curData[i].YD15])
             }
+            this.config = { ...this.config };
         }
     }
 }

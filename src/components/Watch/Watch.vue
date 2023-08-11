@@ -1,6 +1,5 @@
 <template>
     <div id="watchContainer" class="watchContainer _watchContainer" ref="watch">
-        <WPFGPT></WPFGPT>
         <div class="bg" id="PC">
             <dv-loading v-if="loading" style="height: 100vh;">Loading...</dv-loading>
             <div v-else class="host-body">
@@ -24,10 +23,11 @@
                             <!-- <span class="text">{{ turbineName }}</span> -->
                             <div class="text the_national"  style="z-index: 9999;">
                                 <el-select 
-                                    v-model="value" 
-                                    placeholder="请选择" 
+                                    v-model="selectedTurbine" 
+                                    placeholder="0号风机" 
                                     size="small"
                                     :popper-append-to-body="false"
+                                    @change="handleTurbineChange"
                                     @visible-change="handleVisibleChange"
                                 >
                                     <el-option style="z-index: 99999;" v-for="item in options" :key="item.value" :label="item.label"
@@ -92,8 +92,8 @@ import centerRight2 from './centerRight2'
 import bottomLeft from './bottomLeft'
 import bottomRight from './bottomRight'
 import NavTop from '../baseComponents/NavTop'
-import WPFGPT from '../wpfGPT/WPFGPT.vue'
-import { Dropdown, Select } from 'element-ui'
+
+import { mapMutations } from 'vuex'
 
 export default {
     name: 'watch',
@@ -105,7 +105,6 @@ export default {
         centerRight1,
         centerRight2,
         bottomRight,
-        WPFGPT
     },
     data() {
         let filename = this.$store.state.global.uploadedFileName;
@@ -121,7 +120,7 @@ export default {
             decorationColor: ['#568aea', '#000000'],
             isCenterLeftVisible: true,
             turbineName,
-            value: '',
+            selectedTurbine: '',
             options: [{
                 value: '11',
                 label: '11号风机'
@@ -156,6 +155,8 @@ export default {
         }
     },
     methods: {
+        ...mapMutations('global', ['setPredictedJsonData', 'setProcessedJsonData']),
+
         timeFn() {
             this.timing = setInterval(() => {
                 this.dateDay = formatTime(new Date(), 'HH:mm:ss')
@@ -178,7 +179,31 @@ export default {
         },
         handleVisibleChange(isVisible) {
             this.isCenterLeftVisible = !isVisible;
-        }
+        },
+        handleTurbineChange(){
+            this.fetchPredictedData(this.selectedTurbine);
+            this.fetchProcessedData(this.selectedTurbine);
+        },
+        async fetchPredictedData(turbineId) {
+            await this.request.post("/file/predicted/json", turbineId + ".json").then(res => {
+                if (res.code === "200") {
+                    let jsonData = JSON.parse(res.jsonContent);
+                    this.setPredictedJsonData(jsonData)
+                } else {
+                    console.error("请求错误");
+                }
+            })
+        },
+        async fetchProcessedData(turbineId) {
+            await this.request.post("/file/processed/json", turbineId + ".json").then(res => {
+                if (res.code === "200") {
+                    let jsonData = JSON.parse(res.jsonContent);
+                    this.setProcessedJsonData(jsonData)
+                } else {
+                    console.error("请求错误");
+                }
+            })
+        },
     },
     mounted() {
         this.timeFn()
