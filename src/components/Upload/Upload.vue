@@ -7,7 +7,8 @@
     <UploadFile @update-table-data="updateTableData"/>
     <DataAnalysis v-if="isChartVisible"/>
     <Footer></Footer>
-    <el-dialog :title="titles" :visible.sync="dialogVisible" width="95%" class="filebox">
+    <el-dialog :visible.sync="dialogVisible" top="10vh" width="60%" class="filebox">
+      <a id="dl" @click="downloadOutFile">下载<i class="iconfont">&#xe602;</i></a>
       <div ref="childRef" class="childRef" v-if="wordShow"></div>
     </el-dialog>
   </div>
@@ -43,7 +44,6 @@ export default {
       this.dialogVisible = true;
       this.excelShow = false;
       this.wordShow = true;
-      this.titles = "报表预览";
       this.$nextTick(() => {
         fetch(docFile.docFile)
             .then((response) => {
@@ -79,13 +79,80 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px) {
   .uploadContainer {
-
+    :deep(.el-dialog){
+      .el-dialog__header{
+        padding-top: 8px !important;
+      }
+      .el-dialog__body {
+        // text-align: left !important;
+        padding-top: 0;
+        #dl {
+          text-align: center !important;
+          text-decoration: underline;
+          color: #2c3e50;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 200;
+        }
+        #dl:hover {
+          color: #409EFF;
+        }
+        .docx-wrapper{
+          padding: 0;
+          .docx{
+            width: 100% !important;
+            margin: 0;
+            article {
+              text-align: left !important;
+              padding: 5px !important;
+              .docx_table{
+                width: 100% !important;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
 // 小于800px
 @media only screen and (max-width: 800px) {
   ._uploadContainer {
+    :deep(.el-dialog){
+      .el-dialog__header{
+        padding-top: 8px !important;
+      }
+      .el-dialog__body {
+        // text-align: left !important;
+        padding-top: 0;
+        #dl {
+          text-align: center !important;
+          text-decoration: underline;
+          color: #2c3e50;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 200;
+        }
+        #dl:hover {
+          color: #409EFF;
+        }
+        .docx-wrapper{
+          padding: 0;
+          .docx{
+            width: 100% !important;
+            margin: 0;
+            article {
+              text-align: left !important;
+              padding: 5px !important;
+              .docx_table{
+                width: 100% !important;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>
