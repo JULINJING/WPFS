@@ -11,6 +11,13 @@
       <div id="default_talk">
         <span id="talk" class="talk" ref="talk">
           <div id="privacy_text_top">由结束乐队提供的风电宝已唤醒，可以随时开始聊天啦</div>
+          <div style="padding: 0 0 5px 0;">
+            <el-radio-group v-model="radio" size="small">
+              <el-radio-button label="文字模式"></el-radio-button>
+              <el-radio-button label="图表模式"></el-radio-button>
+              <el-radio-button label="图文报表模式"></el-radio-button>
+            </el-radio-group>
+          </div>
           <div class="talk_panel">
             <div v-for="(message, index) in messages" :key="index"
                  :class="message.isUser ? 'user-message' : 'robot-message'">
@@ -100,7 +107,8 @@ export default {
       thumbnail: 'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
       masterImg: [
         'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
-      ]
+      ],
+      radio: '文字模式'
     }
   },
   components: {
@@ -387,7 +395,7 @@ export default {
             letter-spacing: .8px;
             color: #c0c0c0;
             overflow: hidden;
-            padding: 10px 0 14px 0;
+            padding: 10px 0 5px 0;
             vertical-align: middle;
           }
 
@@ -586,7 +594,7 @@ export default {
             letter-spacing: .3px;
             color: #c0c0c0;
             overflow: hidden;
-            padding: 10px 0 14px 0;
+            padding: 10px 0 5px 0;
             vertical-align: middle;
           }
 
