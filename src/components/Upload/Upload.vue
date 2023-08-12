@@ -21,7 +21,6 @@ import Footer from '../baseComponents/Footer.vue'
 import UploadFile from './subcomponents/UploadFile.vue'
 import DataAnalysis from './subcomponents/DataAnalysis.vue'
 import {renderAsync} from "docx-preview";
-import {serverIp} from "../../../public/config";
 
 export default {
   data() {
@@ -32,7 +31,6 @@ export default {
       excelShow: false,
       wordShow: false,
       docxFile: "",
-      // tableData: [],
       isChartVisible: false,
     }
   },
@@ -61,7 +59,6 @@ export default {
               renderAsync(docData, childRef[0]).then((res) => {
                 console.log(res)
               });
-
             })
             .catch((error) => {
               console.log(error);
