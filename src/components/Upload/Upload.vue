@@ -8,7 +8,7 @@
     <DataAnalysis v-if="isChartVisible"/>
     <Footer></Footer>
     <el-dialog :visible.sync="dialogVisible" top="10vh" width="60%" class="filebox">
-      <a id="dl" @click="downloadOutFile">下载<i class="iconfont">&#xe602;</i></a>
+      <a id="dl" @click="downloadDocxFile">下载<i class="iconfont">&#xe602;</i></a>
       <div ref="childRef" class="childRef" v-if="wordShow"></div>
     </el-dialog>
   </div>
@@ -21,6 +21,7 @@ import Footer from '../baseComponents/Footer.vue'
 import UploadFile from './subcomponents/UploadFile.vue'
 import DataAnalysis from './subcomponents/DataAnalysis.vue'
 import {renderAsync} from "docx-preview";
+import {serverIp} from "../../../public/config";
 
 export default {
   data() {
@@ -30,6 +31,7 @@ export default {
       titles: "",
       excelShow: false,
       wordShow: false,
+      docxFile: "",
       // tableData: [],
       isChartVisible: false,
     }
@@ -40,12 +42,16 @@ export default {
   },
 
   methods: {
-    PreviewFile(docFile) {//点击预览事件的时候拿到当前对应的一个文件属性
+    downloadDocxFile(){
+      window.open(this.docxFile)
+    },
+    PreviewFile(data) {//点击预览事件的时候拿到当前对应的一个文件属性
+      this.docxFile = data.docxFile;
       this.dialogVisible = true;
       this.excelShow = false;
       this.wordShow = true;
       this.$nextTick(() => {
-        fetch(docFile.docFile)
+        fetch(data.docxFile)
             .then((response) => {
               console.log("docx文件预览")
               let docData = response.blob(); //将文件转换成bolb形式

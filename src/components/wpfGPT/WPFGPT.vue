@@ -120,9 +120,9 @@ export default {
     ...mapState('global', ['predictedJsonData', 'uploadedFileName']),
   },
   methods: {
-    PreviewFile(docFile) {//点击预览事件的时候拿到当前对应的一个文件属性
+    PreviewFile(docxFile) {//点击预览事件的时候拿到当前对应的一个文件属性
       this.panelSwitch();
-      this.$emit('custom-event', { docFile: docFile });
+      this.$emit('custom-event', { docxFile: docxFile });
     },
     // 科大讯飞
     recordReady() {
