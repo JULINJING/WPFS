@@ -10,6 +10,7 @@
             </template>
         </el-result>
         <div id="PC" ref="windland"></div>
+        <HolographicProjection></HolographicProjection>
     </div>
 </template>
 
@@ -21,11 +22,13 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import NavTop from '../baseComponents/NavTop'
+import HolographicProjection from '@/components/windLand/AR/HolographicProjection'
 
 export default {
     name: 'windland',
     components: {
-        NavTop
+        NavTop,
+        HolographicProjection
     },
     data() {
         return {
