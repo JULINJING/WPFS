@@ -6,8 +6,9 @@
 
 <script>
 import Chart from './chart.vue'
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 import rawData from '@/assets/testJson/12.json'
+
 export default {
     data() {
         return {
@@ -129,9 +130,27 @@ export default {
         this.initData()
         this.setData()
     },
+    watch: {
+        predictedJsonData: {
+            handler(newData) {
+                this.initData();
+                this.setData();
+            },
+            deep: true
+        }
+    },
+    computed: {
+        ...mapState('global', ['predictedJsonData']),
+    },
     methods: {
         initData() {
-            this.curData = JSON.parse(JSON.stringify(rawData))
+            // this.curData = JSON.parse(JSON.stringify(rawData))
+            if(this.$store.state.global.predictedJsonData.length == 0){
+                this.curData = JSON.parse(JSON.stringify(rawData))
+            } else {
+                this.curData = this.$store.state.global.predictedJsonData;
+            }
+
             let width = document.documentElement.clientWidth
             this.cdata.category = []
             this.cdata.rateData = []

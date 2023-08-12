@@ -30,7 +30,7 @@ export default {
 				axisLine: {
 					show: false,
 					lineStyle: {
-						color: "#028ab5ad",
+						color: "#0edfe0",
 					},
 				},
 			},
@@ -39,13 +39,13 @@ export default {
 				axisLine: {
 					show: false,
 					lineStyle: {
-						color: "#028ab5ad",
+						color: "#0edfe0",
 					},
 				},
 
 				splitLine: {
 					lineStyle: {
-						color: ["#028ab545"],
+						color: ["#0edfe0"],
 					},
 				},
 			},

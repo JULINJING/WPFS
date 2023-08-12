@@ -29,30 +29,37 @@ const routes =  [
     },
     {
         path: '/home',
+        name: 'home',
         component: Home
     },
     {
         path: '/upload',
+        name: 'upload',
         component: Upload
     },
     {
         path: '/windfield',
+        name: 'windfield',
         component: WindField
     },
     {
         path: '/windland',
+        name: 'windland',
         component: WindLand
     },
     {
         path: '/turbine',
+        name: 'turbine',
         component: Turbine
     },
     {
         path: '/watch',
+        name: 'watch',
         component: Watch
     },
     {
         path: '/forecast',
+        name: 'forecast',
         component: Forecast
     },
     {

@@ -45,39 +45,33 @@ export default {
             this.$router.push('/home')
         },
         turbineThree() {
-            /////////////////////////////////////////////////////////////////////////
-            //// DRACO LOADER TO LOAD DRACO COMPRESSED MODELS FROM BLENDER
+            // 从Blender向Draco加载器加载Draco压缩模型
             const dracoLoader = new DRACOLoader()
             const loader = new GLTFLoader()
             dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
             dracoLoader.setDecoderConfig({ type: 'js' })
             loader.setDRACOLoader(dracoLoader)
 
-            /////////////////////////////////////////////////////////////////////////
-            ///// DIV CONTAINER CREATION TO HOLD THREEJS EXPERIENCE
+            // 创造DIV容器容纳three.js
             const container = document.createElement('div')
-            // document.body.appendChild(container)
             this.$refs.windland.appendChild(container)
 
-            /////////////////////////////////////////////////////////////////////////
-            ///// SCENE CREATION
+            // 创建场景
             const scene = new THREE.Scene()
             scene.background = new THREE.Color('#c8f0f9')
             scene.fog = new THREE.Fog(0xc8f0f9, 50, 100)
 
-            /////////////////////////////////////////////////////////////////////////
-            ///// RENDERER CONFIG
-            const renderer = new THREE.WebGLRenderer({ antialias: true }) // turn on antialias
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) //set pixel ratio
-            renderer.setSize(window.innerWidth, window.innerHeight) // make it full screen
-            renderer.outputEncoding = THREE.sRGBEncoding // set color encoding
-            container.appendChild(renderer.domElement) // add the renderer to html div
+            // renderer配置
+            const renderer = new THREE.WebGLRenderer({ antialias: true }) // 打开抗锯齿
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // 设置像素比
+            renderer.setSize(window.innerWidth, window.innerHeight) // 全屏
+            renderer.outputEncoding = THREE.sRGBEncoding // 设置颜色编码
+            container.appendChild(renderer.domElement) // 加入renderer
 
-            /////////////////////////////////////////////////////////////////////////
-            ///// CAMERAS CONFIG
+            // 相机配置
             this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 120)
             // this.camera.position.set(34, 16, -20)
-            // this.camera.lookAt(new THREE.Vector3(0, 0, 0));  // Look at the origin
+            // this.camera.lookAt(new THREE.Vector3(0, 0, 0));  // 回到起始视角
             scene.add(this.camera)
 
             let stats = new Stats()
@@ -87,8 +81,7 @@ export default {
             stats.domElement.style.left = '0px'
             stats.domElement.style.top = '0px'
             document.body.appendChild(stats.domElement)
-            /////////////////////////////////////////////////////////////////////////
-            ///// MAKE EXPERIENCE FULL SCREEN
+            // 保持全屏
             window.addEventListener('resize', () => {
                 const width = window.innerWidth
                 const height = window.innerHeight
@@ -160,22 +153,21 @@ export default {
                 controls.enabled = false //disable orbit controls to animate the camera
 
                 new TWEEN.Tween(this.camera.position.set(16, 50, 10)).to({ // from camera position
-                    x: -41, //desired x position to go
-                    y: -38, //desired y position to go
-                    z: 12 //desired z position to go
+                    x: 26, //desired x position to go
+                    y: 4, //desired y position to go
+                    z: 35 //desired z position to go
                 }, 6500) // time take to animate
-                    .delay(1000).easing(TWEEN.Easing.Quartic.InOut).start() // define delay, easing
-                    .onComplete(function () { //on finish animation
-                        controls.enabled = true //enable orbit controls
-                        setOrbitControlsLimits() //enable controls limits
-                        TWEEN.remove(this) // remove the animation from memory
-                    })
+                .delay(1000).easing(TWEEN.Easing.Quartic.InOut).start() // define delay, easing
+                .onComplete(function () { //on finish animation
+                    controls.enabled = true //enable orbit controls
+                    setOrbitControlsLimits() //enable controls limits
+                    TWEEN.remove(this) // remove the animation from memory
+                })
             }
 
-            introAnimation() // call intro animation on start
+            introAnimation() // 动画开始
 
-            /////////////////////////////////////////////////////////////////////////
-            //// DEFINE ORBIT CONTROLS LIMITS
+            // 定义轨道控制限制
             function setOrbitControlsLimits() {
                 controls.enableDamping = true
                 controls.dampingFactor = 0.04
@@ -191,18 +183,13 @@ export default {
             var clock = new THREE.Clock()
             var rendeLoop = () => {
 
-                TWEEN.update() // update animations
+                TWEEN.update() // 更新动画
 
-                controls.update() // update orbit controls
+                controls.update() // 更新轨道控制
 
                 renderer.render(scene, this.camera) // render the scene using the camera
                 requestAnimationFrame(rendeLoop) //loop the render function
 
-                var time = clock.getDelta()
-                if (mixer) {
-                    mixer.update(time)
-                }
-                stats.update()
             }
 
             rendeLoop() //start rendering
@@ -210,11 +197,6 @@ export default {
 
     },
     mounted() {
-        // this.initThree();
-        // this.loadModel();
-        // this.introAnimation();
-        // this.renderLoop();
-        // this.fullScreen();
         this.turbineThree()
     }
 }

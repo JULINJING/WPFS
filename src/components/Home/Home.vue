@@ -28,7 +28,7 @@
                           :blockName="'windfield'"/>
         </div>
         <div class="right box" id="fourth">
-          <BlockBriefInfo :blockIcon="'&#xe613;'" :blockTitle="'风电运维'" :blockInfo="'&#xec7f; '"
+          <BlockBriefInfo :blockIcon="'&#xe613;'" :blockTitle="'监测大屏'" :blockInfo="'&#xec7f; '"
                           :backgroundColor="'rgb(250, 250, 250)'" :fontColor="'black'" :imgSrc="require('./imgs/5.jpg')"
                           :blockName="'watch'"/>
         </div>

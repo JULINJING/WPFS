@@ -1,18 +1,18 @@
 <template>
     <div class="totalinfocontainer _totalinfocontainer">
         <!-- Form -->
-        <el-upload 
-            drag multiple 
-            :action="'http://' + serverIp + ':7070/file/upload'" 
+        <el-upload
+            drag multiple
+            :action="'http://' + serverIp + ':7070/file/upload'"
             :on-success="handleUploadSuccess"
-            :on-error="handleUploadError" 
-            :before-upload="beforeUpload" 
+            :on-error="handleUploadError"
+            :before-upload="beforeUpload"
             :before-remove="beforeRemove"
             :on-remove="handleRemove"
-            :limit="10" 
+            :limit="10"
             :on-exceed="handleExceed"
-            :file-list="fileList" 
-            :on-preview="handlePreview" 
+            :file-list="fileList"
+            :on-preview="handlePreview"
             accept=".csv"
         >
             <i class="el-icon-upload"></i>
@@ -37,7 +37,7 @@
                     </el-radio-button>
                 </el-radio-group>
             </div>
-        
+
             <div class="form-row">
                 <el-tag class="tag">异常值检测方法</el-tag>
                 <el-radio-group v-model="outlierRadio">
@@ -196,7 +196,7 @@ export default {
         // 上传文件成功
         handleUploadSuccess(response, file, fileList) {
             this.uploadCounter++;
-            
+
             if (this.uploadCounter === fileList.length) {
                 this.$message({
                     message: "上传成功",
@@ -210,6 +210,7 @@ export default {
 
                 this.curfile = file;
                 this.setUploadedFileList(fileList);
+                this.fileList = fileList;
                 // this.setUploadedFileName(file.name);
             }
         },
@@ -236,23 +237,105 @@ export default {
         handleRemove(file, fileList) {
             this.uploadCounter--;
             this.setUploadedFileList(fileList);
-            this.fileList = fileList; 
+            this.fileList = fileList;
         },
+
+        async processAllData() {
+            let lastResponse;
+
+            const uploadPromises = this.fileList.map(file => {
+                const fileName = file.name;
+
+                if (this.missingRadio === 'xgb') {
+                    this.missingRadio = 'lgb';
+                }
+                var paramsForm = {
+                    "fileName": fileName,
+                    "resampleMethod": this.missingRadio,
+                    "outlierDetection": this.outlierRadio
+                };
+
+                return this.request.post("/file/preprocess", paramsForm);
+            });
+
+            try {
+                const responses = await Promise.all(uploadPromises);
+                lastResponse = responses[responses.length - 1];
+
+                if (lastResponse.code === "200") {
+                    // console.log(lastResponse);
+                    this.$message({
+                        message: "预处理成功",
+                        type: "success",
+                        offset: 50,
+                    });
+                    this.curfile = this.fileList[this.fileList.length - 1];
+                    this.updateTitle();
+                }
+            } catch (error) {
+                console.error("Error preprocessing files:", error);
+            }
+        },
+        // async fetchAllData() {
+        //     let lastResponse;
+
+        //     const uploadPromises = this.fileList.map(file => {
+        //         const fileName = file.name;
+        //         const fileNameWithoutExtension = fileName.split('.')[0]
+
+        //         return this.request.post("/file/processed/json", fileNameWithoutExtension + ".json");
+        //     });
+
+        //     try {
+        //         const responses = await Promise.all(uploadPromises);
+
+        //         lastResponse = responses[responses.length - 1];
+
+        //         if (lastResponse.code === "200") {
+        //             this.jsonData = JSON.parse(lastResponse.jsonContent);
+        //             this.curData = this.jsonData.slice(0, 50);
+        //             this.setProcessedJsonData(this.extractNoonData(this.jsonData));
+        //             this.$emit('update-table-data');
+        //         }
+        //     } catch (error) {
+        //         console.error("Error uploading files:", error);
+        //     }
+        // },
         async fetchData() {
-            const fileResponse = JSON.stringify(this.curfile.response);
-            const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
-            const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-            
+            // const fileResponse = JSON.stringify(this.curfile.response);
+            // const fileName = fileResponse.substring(fileResponse.lastIndexOf("/") + 1);
+            // const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+            const fileName = this.curfile.name;
+            const fileNameWithoutExtension = fileName.split('.')[0]
+
             await this.request.post("/file/processed/json", fileNameWithoutExtension + ".json").then(res => {
                 if (res.code === "200") {
                     this.jsonData = JSON.parse(res.jsonContent);
+
+                    this.getFilePeriod();
+
                     this.curData = this.jsonData.slice(0, 50);
                     this.setProcessedJsonData(this.extractNoonData(this.jsonData));
+                    this.$emit('update-table-data');
                 }
             })
-            this.$emit('update-table-data');
         },
+        getFilePeriod(){
+            const index = this.fileList.findIndex(file => file.name === this.curfile.name);
 
+            if (index !== -1) {
+                this.$set(this.fileList[index], 'forecastPeriod', [
+                    this.jsonData[this.jsonData.length - 96].DATATIME,
+                    this.jsonData[this.jsonData.length - 1].DATATIME
+                ]);
+                this.$set(this.fileList[index], 'inputPeriod', [
+                    this.jsonData[this.jsonData.length - 96 * 7].DATATIME,
+                    this.jsonData[this.jsonData.length - 172].DATATIME
+                ]);
+            }
+
+            this.setUploadedFileList(this.fileList);
+        },
         // 上传文件失败
         handleUploadError(err, file, fileList) {
             this.$message({
@@ -274,7 +357,8 @@ export default {
         handlePreview(file) {
             this.curfile = file;
             this.curData = [];
-            this.fetchData(file);
+            this.fetchData();
+
             this.$message({
                 message: "选择文件" + file.name,
                 type: "action",
@@ -282,8 +366,6 @@ export default {
             });
             this.setUploadedFileName(file.name);
             this.updateTitle();
-
-            // console.log(this.currentPage, this.pageSize);
 
             this.$nextTick(() => {
                 this.initVirtualScroll();
@@ -299,8 +381,11 @@ export default {
                 this.loading = true;
                 this.startLoading(); // 显示加载中状态
 
-                await this.sendPreprocessParams();
+                await this.processAllData();
+
                 this.fetchData();
+                // await this.fetchAllData();
+
                 // table动画
                 if (this.$refs.tbbox.classList.contains('bounceIn')) {
                     this.$refs.tbbox.classList.remove('bounceIn')
@@ -312,7 +397,7 @@ export default {
 
                 this.loading = false;
                 this.endLoading(); // 隐藏加载中状态
-                
+
                 // console.log(this.jsonData);
                 this.$nextTick(() => {
                     this.initVirtualScroll();
@@ -327,19 +412,19 @@ export default {
             }
         },
         async sendPreprocessParams() {
-            
+
             if(this.missingRadio === 'xgb'){
                 this.missingRadio = 'lgb';
             }
             var paramsForm = {
-                "file_name": this.curfile.name,
-                "resample_method": this.missingRadio,
-                "outlier_detection": this.outlierRadio
+                "fileName": this.curfile.name,
+                "resampleMethod": this.missingRadio,
+                "outlierDetection": this.outlierRadio
             };
 
             await this.request.post("/file/preprocess", paramsForm).then((res) => {
                 if (res.code === "200") {
-                    console.log(this.curfile.name);
+                    console.log("Processed Data: ", this.curfile.name);
                 }
             });
 

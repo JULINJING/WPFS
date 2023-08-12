@@ -6,6 +6,7 @@
 
 <script>
 import Echart from '@/components/Watch/subcomponents/echart'
+
 export default {
     data() {
         return {

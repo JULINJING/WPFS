@@ -9,7 +9,6 @@
             </template>
         </el-result>
 		<div id="PC">
-			<WPFGPT></WPFGPT>
 			<HeaderLogo></HeaderLogo>
 			<ControlPanel></ControlPanel>
 			
@@ -35,7 +34,6 @@ import GenerationParameter from "./bigsur/GenerationParameter";
 import AngleGuage from "./bigsur/AngleGuage/index";
 import HeaderLogo from "./bigsur/HeaderLogo/index";
 import Three3d from "./three3d/index";
-import WPFGPT from '../wpfGPT/WPFGPT.vue'
 
 import { mapState } from 'vuex';
 
@@ -64,7 +62,6 @@ export default {
 		AngleGuage,
 		HeaderLogo,
 		// NavTop
-		WPFGPT,
 		ControlPanel
 	},
 	methods: {
@@ -98,7 +95,7 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px) {
 	#turbine {
-		background-color: #040b1a;
+		background-color: #000000;
 	}
 	// 移动端消失
 	.el-result {

@@ -1,68 +1,90 @@
 <template>
-    <div class="input-container _input-container">
-        <el-form ref="form" :model="form" label-width="80px">
-            <!-- 进度条 -->
-            <div class="train-form-row" v-if="!getIsTraining">
-                <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
-            </div>
-            <div class="train-form-row" v-if="getIsTraining">
-                <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
-                    style="width: 100%"></el-progress>
-            </div>
+    <div>
+        <div class="gif-container">
+            <img src="@/assets/images/chatRobot-unscreen.gif" alt="GIF Image" class="gif">
+        </div>
+        <div class="input-container _input-container">
+            <el-form ref="form" :model="form" label-width="80px">
+                <!-- 进度条 -->
+                <div class="train-form-row" v-if="!getIsTraining">
+                    <el-progress type="line" :percentage="calculateProgress" style="width: 100%"></el-progress>
+                </div>
+                <div class="train-form-row" v-if="getIsTraining">
+                    <el-progress type="line" id="trainProgressBar" :percentage="getTrainingProgress"
+                        style="width: 100%"></el-progress>
+                </div>
 
+                <div class="train-form-row-select">
+                    <el-tag>风场选择</el-tag>
+                    <el-cascader 
+                        v-model="form.selectedRegion" 
+                        :options="pcaTextArr"
+                        @change="handleSelectRegion"
+                    >
+                    </el-cascader>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>文件选择</el-tag>
-                <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="file in fileList" :key="file.name" :label="file.name" :value="file.name">
-                    </el-option>
-                </el-select>
-            </div>
+                <div class="train-form-row-select">
+                    <el-tag>风机数据选择</el-tag>
+                    <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
+                        <el-option 
+                            v-for="(file, index) in fileList"
+                            :key="index"
+                            :label="file.name" 
+                            :value="file.name"
+                        >
+                        </el-option>
+                    </el-select>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>具体模型选择</el-tag>
-                <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
-                    <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
-                        :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
-                    </el-option>
-                </el-select>
-            </div>
+                <div class="train-form-row-select">
+                    <el-tag>具体模型选择</el-tag>
+                    <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
+                        <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
+                            :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
+                        </el-option>
+                    </el-select>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>训练样本数量</el-tag>
-                <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>训练样本数量</el-tag>
+                    <el-input v-model="form.batchSize" placeholder="请输入训练样本数量(1~2048)" clearable></el-input>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>学习率</el-tag>
-                <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>学习率</el-tag>
+                    <el-input v-model="form.learningRate" placeholder="请输入学习率(0~1)" clearable></el-input>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>输入长度</el-tag>
-                <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>输入长度</el-tag>
+                    <el-input v-model="form.inputLen" placeholder="请输入输入长度(96~2048)" clearable></el-input>
+                </div>
 
-            <div class="train-form-row">
-                <el-tag>预测长度</el-tag>
-                <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
-            </div>
+                <div class="train-form-row">
+                    <el-tag>预测长度</el-tag>
+                    <el-input v-model="form.predLen" placeholder="请输入预测长度(96~2048)" clearable></el-input>
+                </div>
 
-            <div>
-                <el-button @click="setParams">开始训练</el-button>
-            </div>
-        </el-form>
+                <div>
+                    <el-button @click="setParams">开始训练</el-button>
+                </div>
+            </el-form>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
 import { Loading } from 'element-ui';
+import { pcaTextArr } from 'element-china-area-data'
 
 export default {
     data() {
         return {
+            pcaTextArr,
             form: {
+                selectedRegion: [],
                 type: "train",
                 selectedFile: "",
                 selectedModel: 'LightGBM',
@@ -71,7 +93,7 @@ export default {
                 inputLen: "384",
                 predLen: "172",
             },
-            
+
             modelOptions: [
                 { label: "CTFN(Complementary Timeseries Fusion Networks)", value: "CTFN" },
                 { label: "Crossformer", value: "Crossformer" },
@@ -93,7 +115,8 @@ export default {
         };
     },
     mounted() {
-        this.fileList = this.$store.state.global.uploadedFileList;
+        // const uploadedFileNames = this.$store.state.global.uploadedFileList.map(item => item.name);
+        // this.fileList = [...this.fileList, ...uploadedFileNames];    
     },
 
     computed: {
@@ -106,9 +129,11 @@ export default {
         },
         calculateProgress() {
             let filledFields = 0;
-            const totalFields = 5; // 总字段数
+            const totalFields = 7; // 总字段数
 
             // 根据表单字段的填写情况计算已填写字段数
+            if (this.form.selectedRegion.length > 0) filledFields++;
+            if (this.form.selectedFile.length > 0) filledFields++;
             if (this.form.selectedModel.length > 0) filledFields++;
             if (this.form.batchSize !== "") filledFields++;
             if (this.form.learningRate !== "") filledFields++;
@@ -132,7 +157,22 @@ export default {
             // 更新进度条
             this.progress = this.calculateProgress;
         },
-
+        handleSelectRegion() {
+            if (this.form.selectedRegion.length > 0) {
+                this.fileList = [
+                    { name: "01.csv" }, { name: "02.csv" }, { name: "03.csv" }, { name: "04.csv" }, { name: "05.csv" }, 
+                    { name: "06.csv" }, { name: "07.csv" }, { name: "08.csv" }, { name: "09.csv" }, { name: "10.csv" }
+                ];
+                
+                // 检查是否有重复的文件名
+                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file.name);
+                this.$store.state.global.uploadedFileList.forEach(file => {
+                    if (!uploadedFileNames.includes(file.name)) {
+                        this.fileList.push(file);
+                    }
+                });
+            }
+        },
         validateInput() {
             if (
                 !/^\d+$/.test(this.form.batchSize) || !/^\d+$/.test(this.form.inputLen) ||
@@ -154,6 +194,7 @@ export default {
 
         setParams() {
             if (
+                this.form.selectedRegion.length === 0 ||
                 this.form.batchSize === "" ||
                 this.form.selectedModel.length === 0 ||
                 this.form.inputLen === "" ||
@@ -213,7 +254,12 @@ export default {
                 clearInterval(this.trainingTimerId);
                 this.trainingTimerId = null;
             }
-            const targetNode = document.getElementById('trainProgressBar');
+            this.$message({
+                message: "开始训练",
+                type: "action",
+                offset: 50,
+            });
+            // const targetNode = document.getElementById('trainProgressBar');
             // this.loadingInstance = Loading.service({
             //     // target: targetNode,
             //     lock: false,
@@ -221,6 +267,7 @@ export default {
             //     background: 'rgba(0, 0, 0, 0.3)'
             // });
             // this.trainingProgress = 0;
+
             this.setTrainingProgress(0);
             const increment = 100 / time_out * 1000;
             var tmp = 0;
@@ -283,15 +330,7 @@ export default {
         margin-left: 25%;
         margin-right: 25%;
 
-        .train-form-row {
-            width: 100%;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            .el-tag {
+        .el-tag {
                 width: 120px;
                 margin-right: 20px;
                 font-size: 14px;
@@ -300,12 +339,54 @@ export default {
             .el-select {
                 width: 80%;
             }
+            .el-radio-group {
+                text-align: left;
+            }
+
+        .train-form-row {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             .el-input {
                 width: 80%;
                 font-size: 14px;
             }
         }
+        .train-form-row-select {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .el-cascader {
+                width: 80%;
+                .el-input {
+                    width: 100%;
+                }
+            }
+
+            .el-input {
+                width: 100%;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .gif-container {
+        float: left;
+        flex-shrink: 0;
+        margin: 0 auto;
+    }
+
+    .gif {
+        align-items: center;
+        max-width: 20vw;
     }
 }
 
@@ -335,12 +416,18 @@ export default {
             .el-select {
                 width: 240px;
             }
+            .el-cascader {
+                width: 240px;
+            }
 
             .el-input {
                 width: 240px;
                 font-size: 12px;
             }
         }
+    }
+    .gif-container {
+        display: none;
     }
 }
 </style>
