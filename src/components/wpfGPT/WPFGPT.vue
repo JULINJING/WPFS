@@ -32,12 +32,6 @@
                   <template v-else-if="message.isReport">
                     <div style="display: flex;justify-content: center">
                       <el-button type="text" @click="PreviewFile(message.docxFile)">报表预览</el-button>
-
-<!--                      <el-dialog :title="titles" :visible.sync="dialogVisible" width="90%" class="filebox"-->
-<!--                                 @close="closeDialog">-->
-<!--                        <div ref="childRef" class="childRef" v-if="wordShow"></div>-->
-<!--                      </el-dialog>-->
-
                     </div>
                   </template>
 
@@ -73,7 +67,6 @@
 
 import MarkdownIt from 'markdown-it';
 import {mapState} from 'vuex';
-import {renderAsync} from "docx-preview";
 import Upload from '../Upload/Upload.vue'
 
 export default {
@@ -101,11 +94,6 @@ export default {
       isReport: false,
       docxFile: null,
       htmlData: '',
-      fileUrl: "",
-      dialogVisible: false,
-      titles: "",
-      excelShow: false,
-      wordShow: false,
       // 面板状态
       isMax: false,
       // test: '## 我是'
@@ -125,33 +113,9 @@ export default {
   },
   methods: {
     PreviewFile(docFile) {//点击预览事件的时候拿到当前对应的一个文件属性
-
-      // this.dialogVisible = true;
-      // this.excelShow = false;
-      // this.wordShow = true;
-      // this.titles = "报表预览";
-      // this.$nextTick(() => {
-      //   fetch(docFile)
-      //       .then((response) => {
-      //         console.log("docx文件预览")
-      //         let docData = response.blob(); //将文件转换成bolb形式
-      //         //选择要渲染的元素
-      //         let childRef = document.getElementsByClassName("childRef");
-      //         //用docx-preview渲染
-      //         renderAsync(docData, childRef[0]).then((res) => {
-      //           console.log(res)
-      //         });
-      //
-      //       })
-      //       .catch((error) => {
-      //         console.log(error);
-      //       });
-      // });
-
       this.panelSwitch();
       this.$emit('custom-event', { docFile: docFile });
     },
-
     // 科大讯飞
     recordReady() {
       console.info('按钮就绪!')

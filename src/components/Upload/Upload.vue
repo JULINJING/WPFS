@@ -7,8 +7,7 @@
     <UploadFile @update-table-data="updateTableData"/>
     <DataAnalysis v-if="isChartVisible"/>
     <Footer></Footer>
-    <el-dialog :title="titles" :visible.sync="dialogVisible" width="95%" class="filebox"
-               @close="closeDialog">
+    <el-dialog :title="titles" :visible.sync="dialogVisible" width="95%" class="filebox">
       <div ref="childRef" class="childRef" v-if="wordShow"></div>
     </el-dialog>
   </div>
