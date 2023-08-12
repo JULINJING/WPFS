@@ -9,51 +9,51 @@
         <i class="iconfont closeIcon" @click="panelSwitch">&#xeaf2;</i>
       </div>
       <div id="default_talk">
-                  <span id="talk" class="talk" ref="talk">
-                      <div id="privacy_text_top">由结束乐队提供的风电宝已唤醒，可以随时开始聊天啦</div>
-                      <div class="talk_panel">
-                          <div v-for="(message, index) in messages" :key="index"
-                                :class="message.isUser ? 'user-message' : 'robot-message'">
-                              <img class="avatar"
-                                    :src="message.isUser ? '../../../imgs/user.png' : '../../../imgs/robot.png'"
-                                    :alt="message.isUser ? 'User Avatar' : 'Robot Avatar'"
-                                    :style="{ order: message.isUser ? 2 : 1 }"/>
-                              <p :style="{ order: message.isUser ? 1 : 2 }">
-                                <template v-if="message.isUser">
-                                    {{ message.text }}
-                                </template>
-                                <template v-else>
-                                  <div v-html="markdown(message.text)"></div>
-                                  <template v-if="message.isImage">
-                                    <div style="display: flex;justify-content: center">
-                                      <el-image
-                                      :src="message.thumbnail"
-                                      :preview-src-list="message.masterImg">
-                                      </el-image>
-                                      </div>
-                                  </template>
-                                </template>
-                              </p>
+        <span id="talk" class="talk" ref="talk">
+          <div id="privacy_text_top">由结束乐队提供的风电宝已唤醒，可以随时开始聊天啦</div>
+          <div class="talk_panel">
+            <div v-for="(message, index) in messages" :key="index"
+                 :class="message.isUser ? 'user-message' : 'robot-message'">
+              <img class="avatar" :src="message.isUser ? '../../../imgs/user.png' : '../../../imgs/robot.png'"
+                   :alt="message.isUser ? 'User Avatar' : 'Robot Avatar'" :style="{ order: message.isUser ? 2 : 1 }"/>
+              <p :style="{ order: message.isUser ? 1 : 2 }">
+                <template v-if="message.isUser">
+                  {{ message.text }}
+                </template>
+                <template v-else>
+                  <div v-html="markdown(message.text)"></div>
+                  <template v-if="message.isImage">
+                    <div style="display: flex;justify-content: center">
+                      <el-image :src="message.thumbnail" :preview-src-list="message.masterImg">
+                      </el-image>
+                    </div>
+                  </template>
 
-                          </div>
-                      </div>
-                  </span>
+                  <template v-else-if="message.isReport">
+                    <div style="display: flex;justify-content: center">
+                      <el-button type="text" @click="PreviewFile(message.docxFile)">报表预览</el-button>
+
+<!--                      <el-dialog :title="titles" :visible.sync="dialogVisible" width="90%" class="filebox"-->
+<!--                                 @close="closeDialog">-->
+<!--                        <div ref="childRef" class="childRef" v-if="wordShow"></div>-->
+<!--                      </el-dialog>-->
+
+                    </div>
+                  </template>
+
+                </template>
+              </p>
+            </div>
+          </div>
+        </span>
         <div id="privacy_text_bottom" ref="loadParent">
           <div id="privacy_text_bottom_text" ref="loadChild">本服务由结束乐队运营</div>
         </div>
         <div id="voice">
           <div class="voice-input-button-wrapper">
-            <voice-input-button
-                v-model="voiceResult"
-                @record="showResult"
-                @record-start="recordStart"
-                @record-stop="recordStop"
-                @record-blank="recordNoResult"
-                @record-failed="recordFailed"
-                @record-ready="recordReady"
-                @record-complete="recordComplete"
-                interactiveMode="touch"
-            >
+            <voice-input-button v-model="voiceResult" @record="showResult" @record-start="recordStart"
+                                @record-stop="recordStop" @record-blank="recordNoResult" @record-failed="recordFailed"
+                                @record-ready="recordReady" @record-complete="recordComplete" interactiveMode="touch">
               <template slot="no-speak">没听清您说的什么</template>
             </voice-input-button>
           </div>
@@ -66,12 +66,15 @@
     <div id="talkbox_min" class="talkbox_min" ref="tb_min">
       <span id="min_img" ref="minImg" class="min_img" @click="panelSwitch"></span>
     </div>
+
   </div>
 </template>
 <script>
 
 import MarkdownIt from 'markdown-it';
 import {mapState} from 'vuex';
+import {renderAsync} from "docx-preview";
+import Upload from '../Upload/Upload.vue'
 
 export default {
   name: 'wpfGPT',
@@ -84,17 +87,25 @@ export default {
       generatedText: '',
       // 总对话
       messages: [{
-        text: '请问有什么能够帮助您的？',
+        text: '请问有什么能够帮助您的?',
         isUser: false,
         isImage: false,
         isReport: false,
-        thumbnail: 'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+        docxFile: null,
+        thumbnail: '',
         masterImg: [
-          'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+          '',
         ]
       }],
       isImage: false,
       isReport: false,
+      docxFile: null,
+      htmlData: '',
+      fileUrl: "",
+      dialogVisible: false,
+      titles: "",
+      excelShow: false,
+      wordShow: false,
       // 面板状态
       isMax: false,
       // test: '## 我是'
@@ -104,12 +115,43 @@ export default {
       ]
     }
   },
+  components: {
+    Upload
+  },
   created() {
   },
   computed: {
     ...mapState('global', ['predictedJsonData', 'uploadedFileName']),
   },
   methods: {
+    PreviewFile(docFile) {//点击预览事件的时候拿到当前对应的一个文件属性
+
+      // this.dialogVisible = true;
+      // this.excelShow = false;
+      // this.wordShow = true;
+      // this.titles = "报表预览";
+      // this.$nextTick(() => {
+      //   fetch(docFile)
+      //       .then((response) => {
+      //         console.log("docx文件预览")
+      //         let docData = response.blob(); //将文件转换成bolb形式
+      //         //选择要渲染的元素
+      //         let childRef = document.getElementsByClassName("childRef");
+      //         //用docx-preview渲染
+      //         renderAsync(docData, childRef[0]).then((res) => {
+      //           console.log(res)
+      //         });
+      //
+      //       })
+      //       .catch((error) => {
+      //         console.log(error);
+      //       });
+      // });
+
+      this.panelSwitch();
+      this.$emit('custom-event', { docFile: docFile });
+    },
+
     // 科大讯飞
     recordReady() {
       console.info('按钮就绪!')
@@ -146,11 +188,11 @@ export default {
 
       await this.request.post("/wpfgpt/postChat2", processParams).then((res) => {
         if (res.code === "200") {
-          console.log("res.image:" + res.image)
           this.isImage = res.image
-          this.thumbnail = "http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time)+".png"
-          this.masterImg = ["http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time)+".png"]
-          this.messages.forEach(e => console.log("thumbnail: "+e.thumbnail))
+          this.isReport = res.report
+          this.thumbnail = "http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time) + ".png"
+          this.masterImg = ["http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time) + ".png"]
+          this.docxFile = "http://10.101.240.60:7070/wpfgpt/docx/" + processParams.fileName.replace(".csv", "") + "_" + (res.time) + ".docx";
           console.log(res.msg)
           this.generatedText = res.msg;
         } else {
@@ -158,6 +200,17 @@ export default {
         }
       });
     },
+    // async getDocxFile(){
+    //   await this.request.get("/wpfgpt/docx/19_1691757420398.docx").then(res => {
+    //     if (res.code === "200") {
+    //       this.docxFile = res.data
+    //       this.loadDocx(this.docxFile)
+    //       console.log(this.htmlData)
+    //     } else {
+    //       this.$message.error(res.msg)
+    //     }
+    //   })
+    // },
     // 转md
     markdown(text) {
       const md = new MarkdownIt()
@@ -171,8 +224,10 @@ export default {
         text: this.voiceResult,
         isUser: true, // 表示该条信息是用户发送的
         isImage: this.isImage,
+        isReport: this.isReport,
         thumbnail: this.thumbnail,
         masterImg: this.masterImg,
+        docxFile: this.docxFile,
       });
 
 
@@ -216,8 +271,10 @@ export default {
         text: this.generatedText,
         isUser: false, // 表示该条信息是机器人回答的
         isImage: this.isImage,
+        isReport: this.isReport,
         thumbnail: this.thumbnail,
         masterImg: this.masterImg,
+        docxFile: this.docxFile,
       });
 
       setTimeout(() => {
@@ -402,6 +459,7 @@ export default {
                 margin-left: 5px;
                 font-size: 14px;
                 text-align: left;
+
                 .el-image {
                   width: 250px;
                   height: 250px;
@@ -455,6 +513,7 @@ export default {
     }
   }
 }
+
 // 小于800px
 @media only screen and (max-width: 800px) {
   #voice {
@@ -599,6 +658,7 @@ export default {
                 margin-left: 5px;
                 font-size: 12px;
                 text-align: left;
+
                 .el-image {
                   width: 100px;
                   height: 100px;
