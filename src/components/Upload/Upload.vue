@@ -82,13 +82,16 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px) {
   .uploadContainer {
-    :deep(.el-dialog){
-      .el-dialog__header{
-        padding-top: 8px !important;
+    :deep(.el-dialog) {
+      .el-dialog__header {
+        padding-top: 16px !important;
       }
+
       .el-dialog__body {
         // text-align: left !important;
         padding-top: 0;
+        margin: auto 5px;
+
         #dl {
           text-align: center !important;
           text-decoration: underline;
@@ -97,18 +100,24 @@ export default {
           font-size: 14px;
           font-weight: 200;
         }
+
         #dl:hover {
           color: #409EFF;
         }
-        .docx-wrapper{
+
+        .docx-wrapper {
           padding: 0;
-          .docx{
+
+          .docx {
             width: 100% !important;
             margin: 0;
+
             article {
               text-align: left !important;
               padding: 5px !important;
-              .docx_table{
+              margin: 10px !important;
+
+              .docx_table {
                 width: 100% !important;
               }
             }
@@ -122,13 +131,16 @@ export default {
 // 小于800px
 @media only screen and (max-width: 800px) {
   ._uploadContainer {
-    :deep(.el-dialog){
-      .el-dialog__header{
-        padding-top: 8px !important;
+    :deep(.el-dialog) {
+      .el-dialog__header {
+        padding-top: 16px !important;
       }
+
       .el-dialog__body {
         // text-align: left !important;
         padding-top: 0;
+        margin: auto 5px;
+
         #dl {
           text-align: center !important;
           text-decoration: underline;
@@ -137,18 +149,24 @@ export default {
           font-size: 14px;
           font-weight: 200;
         }
+
         #dl:hover {
           color: #409EFF;
         }
-        .docx-wrapper{
+
+        .docx-wrapper {
           padding: 0;
-          .docx{
+
+          .docx {
             width: 100% !important;
             margin: 0;
+
             article {
               text-align: left !important;
               padding: 5px !important;
-              .docx_table{
+              margin: 10px !important;
+
+              .docx_table {
                 width: 100% !important;
               }
             }

@@ -104,20 +104,15 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px) {
   .forecastContainer {
-    #tabBox {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
     :deep(.el-dialog) {
       .el-dialog__header {
-        padding-top: 8px !important;
+        padding-top: 16px !important;
       }
 
       .el-dialog__body {
         // text-align: left !important;
         padding-top: 0;
+        margin: auto 5px;
 
         #dl {
           text-align: center !important;
@@ -142,6 +137,7 @@ export default {
             article {
               text-align: left !important;
               padding: 5px !important;
+              margin: 10px !important;
 
               .docx_table {
                 width: 100% !important;
@@ -150,6 +146,11 @@ export default {
           }
         }
       }
+    }
+    #tabBox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
@@ -157,20 +158,15 @@ export default {
 // 小于800px
 @media only screen and (max-width: 800px) {
   ._forecastContainer {
-    #tabBox {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
     :deep(.el-dialog) {
       .el-dialog__header {
-        padding-top: 8px !important;
+        padding-top: 16px !important;
       }
 
       .el-dialog__body {
         // text-align: left !important;
         padding-top: 0;
+        margin: auto 5px;
 
         #dl {
           text-align: center !important;
@@ -195,6 +191,7 @@ export default {
             article {
               text-align: left !important;
               padding: 5px !important;
+              margin: 10px !important;
 
               .docx_table {
                 width: 100% !important;
@@ -203,6 +200,11 @@ export default {
           }
         }
       }
+    }
+    #tabBox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
