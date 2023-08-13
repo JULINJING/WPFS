@@ -34,6 +34,8 @@ export default {
             // renderer: null,
             camera: null,
             matrix: null,
+            raycaster: new THREE.Raycaster(),
+            mouse: new THREE.Vector2()
             // controls: null,
             // ambient: null,
             // sunLight: null,
@@ -69,18 +71,18 @@ export default {
             container.appendChild(renderer.domElement) // 加入renderer
 
             // 相机配置
-            this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 120)
+            this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 120)
             // this.camera.position.set(34, 16, -20)
             // this.camera.lookAt(new THREE.Vector3(0, 0, 0));  // 回到起始视角
             scene.add(this.camera)
 
-            let stats = new Stats()
-            stats.setMode(0)
+            // let stats = new Stats()
+            // stats.setMode(0)
 
-            stats.domElement.style.position = 'absolute'
-            stats.domElement.style.left = '0px'
-            stats.domElement.style.top = '0px'
-            document.body.appendChild(stats.domElement)
+            // stats.domElement.style.position = 'absolute'
+            // stats.domElement.style.left = '0px'
+            // stats.domElement.style.top = '0px'
+            // document.body.appendChild(stats.domElement)
             // 保持全屏
             window.addEventListener('resize', () => {
                 const width = window.innerWidth
@@ -135,7 +137,6 @@ export default {
                     }
                 })
                 scene.add(gltf.scene)
-
                 animations = gltf.animations
                 mixer = new THREE.AnimationMixer(gltf.scene)
                 const clip = THREE.AnimationClip.findByName(animations, 'Anim_0')
@@ -153,16 +154,16 @@ export default {
                 controls.enabled = false //disable orbit controls to animate the camera
 
                 new TWEEN.Tween(this.camera.position.set(16, 50, 10)).to({ // from camera position
-                    x: 26, //desired x position to go
-                    y: 4, //desired y position to go
-                    z: 35 //desired z position to go
+                    x: -35, //desired x position to go
+                    y: -35, //desired y position to go
+                    z: 20 //desired z position to go
                 }, 6500) // time take to animate
-                .delay(1000).easing(TWEEN.Easing.Quartic.InOut).start() // define delay, easing
-                .onComplete(function () { //on finish animation
-                    controls.enabled = true //enable orbit controls
-                    setOrbitControlsLimits() //enable controls limits
-                    TWEEN.remove(this) // remove the animation from memory
-                })
+                    .delay(1000).easing(TWEEN.Easing.Quartic.InOut).start() // define delay, easing
+                    .onComplete(function () { //on finish animation
+                        controls.enabled = true //enable orbit controls
+                        setOrbitControlsLimits() //enable controls limits
+                        TWEEN.remove(this) // remove the animation from memory
+                    })
             }
 
             introAnimation() // 动画开始
@@ -172,7 +173,7 @@ export default {
                 controls.enableDamping = true
                 controls.dampingFactor = 0.04
                 controls.minDistance = 35
-                controls.maxDistance = 120
+                controls.maxDistance = 100
                 controls.enableRotate = true
                 controls.enableZoom = true
                 controls.maxPolarAngle = Math.PI / 2.5
@@ -184,9 +185,12 @@ export default {
             var rendeLoop = () => {
 
                 TWEEN.update() // 更新动画
-
+                var time = clock.getDelta()
+                if (mixer) {
+                    mixer.update(time)
+                }
                 controls.update() // 更新轨道控制
-
+                // stats.update()
                 renderer.render(scene, this.camera) // render the scene using the camera
                 requestAnimationFrame(rendeLoop) //loop the render function
 
@@ -194,6 +198,16 @@ export default {
 
             rendeLoop() //start rendering
         },
+        onModelClick(event) {
+            const [w, h] = [window.innerWidth, window.innerHeight]
+            const { mouse, raycaster } = this
+            this.mouse.x = (event.clientX / w) * 2 - 1
+            this.mouse.y = -(event.clientY / h) * 2 + 1
+            raycaster.setFromCamera(mouse, this.camera)
+            const intersects = raycaster.intersectObject(this.matrix.scene, true)
+            if (intersects.length <= 0) return false
+            const selectedObject = intersects[0].object
+        }
 
     },
     mounted() {
