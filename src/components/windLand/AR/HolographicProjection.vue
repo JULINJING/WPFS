@@ -1,16 +1,16 @@
 <template>
-    <div id="talkbox_wrapper_min" ref="tb_normal">
-        <div id="arbox_max" class="b_hide" ref="tb_max">
-            <div class="talkbox_header">
+    <div id="arbox_wrapper_min" ref="tb_normal">
+        <div id="arbox_max" class="b_hide" ref="ar_max">
+            <div class="arbox_header">
                 <i class="iconfont">&#xe642;</i>
-                <div id="tb_header_text" class="tb_header_text">
+                <div id="ar_header_text" class="ar_header_text">
                     AR风电
                 </div>
-                <i class="iconfont closeIcon" @click="panelSwitch">&#xeaf2;</i>
+                <i class="iconfont close_Icon" @click="panelSwitch">&#xeaf2;</i>
             </div>
 
             <el-carousel :autoplay="false" indicator-position="outside" height="480px">
-                <el-carousel-item v-for="item in carouselItems" :key="item">
+                <el-carousel-item v-for="(item, index) in carouselItems" :key="index">
                     <img :src="item.imageSrc" alt="Carousel Image" class="carousel-image">
                 </el-carousel-item>
             </el-carousel>
@@ -23,7 +23,7 @@
 <script>
 
 export default {
-    name: 'wpfGPT',
+    name: 'ar',
     data() {
         return {
             carouselItems: [
@@ -41,16 +41,15 @@ export default {
     created() {
     },
     methods: {
-        // 切换GPT面版
         panelSwitch() {
             if (!this.isMax) {
                 this.$refs.tb_normal.classList.add('talkbox_wrapper_max', 'animated', 'fadeInRight')
-                this.$refs.tb_max.classList.remove('b_hide')
+                this.$refs.ar_max.classList.remove('b_hide')
                 this.$refs.tb_min.classList.add('b_hide')
                 this.isMax = true
             } else {
                 this.$refs.tb_normal.classList.remove('talkbox_wrapper_max', 'fadeInRight')
-                this.$refs.tb_max.classList.add('b_hide')
+                this.$refs.ar_max.classList.add('b_hide')
                 this.$refs.tb_min.classList.remove('b_hide')
                 this.isMax = false
             }
@@ -78,7 +77,7 @@ export default {
         z-index: 999999999999 !important;
     }
 
-    #talkbox_wrapper_min {
+    #arbox_wrapper_min {
         position: fixed;
         cursor: pointer;
         top: 85%;
@@ -134,7 +133,7 @@ export default {
             // width: 50%;
             height: 500px;
 
-            .talkbox_header {
+            .arbox_header {
                 height: 40px;
                 line-height: 40px;
                 border-radius: 6px 6px 0 0;
@@ -145,7 +144,7 @@ export default {
                 align-items: center;
                 padding: 0 10px;
 
-                .closeIcon {
+                .close_Icon {
                     cursor: pointer;
                 }
             }
@@ -159,7 +158,7 @@ export default {
         display: none;
     }
 
-    #talkbox_wrapper_min {
+    #arbox_wrapper_min {
         position: fixed;
         cursor: pointer;
         top: 85%;
@@ -199,7 +198,7 @@ export default {
             height: 400px;
             //height: 500px;
 
-            .talkbox_header {
+            .arbox_header {
                 height: 40px;
                 line-height: 40px;
                 border-radius: 6px 6px 0 0;
@@ -209,7 +208,7 @@ export default {
                 justify-content: space-around;
                 align-items: center;
 
-                .closeIcon {
+                .close_Icon {
                     cursor: pointer;
                 }
             }
