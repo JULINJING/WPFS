@@ -1,6 +1,6 @@
 <template>
     <div id="talkbox_wrapper_min" ref="tb_normal">
-        <div id="talkbox_max" class="b_hide" ref="tb_max">
+        <div id="arbox_max" class="b_hide" ref="tb_max">
             <div class="talkbox_header">
                 <i class="iconfont">&#xe642;</i>
                 <div id="tb_header_text" class="tb_header_text">
@@ -15,7 +15,7 @@
                 </el-carousel-item>
             </el-carousel>
         </div>
-        <div id="talkbox_min" class="talkbox_min" ref="tb_min">
+        <div id="arbox_min" class="arbox_min" ref="tb_min">
             <span id="min_img" ref="minImg" class="min_img" @click="panelSwitch"></span>
         </div>
     </div>
@@ -86,7 +86,7 @@ export default {
         background-color: transparent;
         z-index: 99999999999;
 
-        #talkbox_min {
+        #arbox_min {
             .min_img {
                 display: inline-block;
                 margin-top: 0px;
@@ -130,7 +130,7 @@ export default {
             background-color: #d3dce6;
         }
 
-        #talkbox_max {
+        #arbox_max {
             // width: 50%;
             height: 500px;
 
@@ -167,7 +167,7 @@ export default {
         background-color: transparent;
         z-index: 99999999999;
 
-        #talkbox_min {
+        #arbox_min {
             .min_img {
                 display: inline-block;
                 margin-top: 0px;
@@ -193,7 +193,7 @@ export default {
         border-radius: 6px;
         border: 1px #B8D4FF solid;
 
-        #talkbox_max {
+        #arbox_max {
             width: 348px;
             //width: 700px;
             height: 400px;
