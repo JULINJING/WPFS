@@ -37,7 +37,8 @@
                   </template>
 
                   <template v-else-if="message.isReport">
-                    <div style="display: flex;justify-content: center">
+                    <div style="margin-top:10px;display: flex;flex-direction:column;justify-content: center">
+                      <img @click="PreviewFile(message.docxFile)" src="@/assets/images/word文档.png">
                       <el-button type="text" @click="PreviewFile(message.docxFile)">报表预览</el-button>
                     </div>
                   </template>
