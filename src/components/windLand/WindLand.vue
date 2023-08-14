@@ -15,9 +15,9 @@
                 <li class="labelInfo">
                     <div>
                         <header>
-                            <div class="cn">123</div>
-                            <span class="en">123</span>
-                            <img src="./imgs/pattern-logo.png">
+                            <!-- <div class="cn">123</div>
+                            <span class="en">123</span> -->
+                            <img src="./imgs/pattern-logo.png" width="360px" height="300px">
                         </header>
                     </div>
                 </li>
@@ -35,7 +35,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import NavTop from '../baseComponents/NavTop'
 import HolographicProjection from '@/components/windLand/AR/HolographicProjection'
-import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
+import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 
 
 export default {
@@ -48,7 +48,7 @@ export default {
         return {
             // container: null,
             scene: null,
-            // renderer: null,
+            renderer: null,
             infoHide: true,
             labelHide: true,
             camera: null,
@@ -56,6 +56,7 @@ export default {
             raycaster: new THREE.Raycaster(),
             mouse: new THREE.Vector2(),
             turbineLabel: null,
+            cssRenderer:new CSS2DRenderer(this.$refs.demo),
             // controls: null,
             // ambient: null,
             // sunLight: null,
@@ -89,6 +90,14 @@ export default {
             renderer.setSize(window.innerWidth, window.innerHeight) // 全屏
             renderer.outputEncoding = THREE.sRGBEncoding // 设置颜色编码
             container.appendChild(renderer.domElement) // 加入renderer
+            let cssRenderer = this.cssRenderer
+            cssRenderer.domElement.style.position = "absolute";
+            cssRenderer.domElement.style.top = 0;
+
+
+            cssRenderer.setSize(0,0)
+            container.appendChild(cssRenderer.domElement)
+
 
             // 相机配置
             this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 120)
@@ -213,10 +222,11 @@ export default {
                 // stats.update()
                 this.scene = scene;
                 renderer.render(scene, this.camera) // render the scene using the camera
+                cssRenderer.render(scene,this.camera)
                 requestAnimationFrame(rendeLoop) //loop the render function
 
             }
-
+            this.renderer = renderer;
             rendeLoop() //start rendering
         },
         onModelClick(event) {
@@ -253,6 +263,7 @@ export default {
                 const point = intersect.point;
                 this.turbineLabel.position.set(point.x, point.y, point.z);
                 console.log(this.turbineLabel);
+                this.cssRenderer.setSize(window.innerWidth, window.innerHeight);
             }
         },
     },
@@ -291,7 +302,7 @@ export default {
                 color: #fff;
                 width: 191.5px;
                 height: 225.5px;
-                // background-image: url("@/assets/images/1.png");
+                background-image: url("@/assets/images/1.png");
                 background-size: 191.5px auto;
                 position: absolute;
                 right: 302.5px;
