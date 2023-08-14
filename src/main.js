@@ -11,6 +11,8 @@ import request from "@/utils/request";
 import store from './store'
 import voiceInputButton from 'voice-input-button2'
 
+import './assets/fonts/iconfont.css'
+
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts

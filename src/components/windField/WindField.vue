@@ -153,6 +153,7 @@ export default {
         const basePathUrl = window.basePathUrl || ' '
         const mapOptions = {
             scene: {
+                requestRenderMode: true, //开启显式渲染
                 center: { lat: 20.648765, lng: 129.340334, alt: 19999976, heading: 355, pitch: -89 },
                 scene3Donly: true,
                 fxaa: false,
@@ -403,7 +404,7 @@ export default {
                 id: 1,
                 position: [87.872971, 43.582348, 1116.1],
                 style: {
-                    url: '//data.mars3d.cn/gltf/mars/car/kache3.gltf',
+                    url: '../../../mars3dModels/kache3.gltf',
                     heading: 210,
                     scale: 5,
                     minimumPixelSize: 1,
@@ -433,7 +434,7 @@ export default {
                 id: 4,
                 position: [87.873501, 43.576978, 1116.3],
                 style: {
-                    url: '//data.mars3d.cn/gltf/mars/car/kache1.gltf',
+                    url: '../../../mars3dModels/kache1.gltf',
                     heading: 30,
                     scale: 5,
                     minimumPixelSize: 1,
