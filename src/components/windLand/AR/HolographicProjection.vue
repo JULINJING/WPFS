@@ -27,14 +27,10 @@ export default {
     data() {
         return {
             carouselItems: [
-                // { imageSrc: require('@/components/Home/imgs/logo3.png') },
-                // { imageSrc: require('@/components/Home/imgs/logo3.png') },
-                // { imageSrc: require('@/components/Home/imgs/logo3.png') },
-                // { imageSrc: require('@/components/Home/imgs/logo3.png') }
-                { imageSrc: require('../imgs/pattern-logo3.png') },
-                { imageSrc: require('../imgs/pattern-logo3.png') },
-                { imageSrc: require('../imgs/pattern-logo3.png') },
-                { imageSrc: require('../imgs/pattern-logo3.png') }
+                { imageSrc: require('../imgs/pattern-logo.png') },
+                { imageSrc: require('../imgs/pattern-logo.png') },
+                { imageSrc: require('../imgs/pattern-turbine.png') },
+                { imageSrc: require('../imgs/pattern-windspeed.png') }
             ],
         }
     },
@@ -43,12 +39,12 @@ export default {
     methods: {
         panelSwitch() {
             if (!this.isMax) {
-                this.$refs.tb_normal.classList.add('talkbox_wrapper_max', 'animated', 'fadeInRight')
+                this.$refs.tb_normal.classList.add('arbox_wrapper_max', 'animated', 'fadeInRight')
                 this.$refs.ar_max.classList.remove('b_hide')
                 this.$refs.tb_min.classList.add('b_hide')
                 this.isMax = true
             } else {
-                this.$refs.tb_normal.classList.remove('talkbox_wrapper_max', 'fadeInRight')
+                this.$refs.tb_normal.classList.remove('arbox_wrapper_max', 'fadeInRight')
                 this.$refs.ar_max.classList.add('b_hide')
                 this.$refs.tb_min.classList.remove('b_hide')
                 this.isMax = false
@@ -103,7 +99,7 @@ export default {
         }
     }
 
-    .talkbox_wrapper_max {
+    .arbox_wrapper_max {
         cursor: default !important;
         width: 50%;
         top: 20% !important;
@@ -114,11 +110,10 @@ export default {
         border: 1px #B8D4FF solid;
 
         .carousel-image {
-            width: 100%;
+            // width: 100%;
             max-width: 100%;
-            /* 图片最大宽度为容器宽度 */
+            // height: 100%;
             max-height: 100%;
-            /* 图片最大高度为容器高度 */
         }
 
         .el-carousel__item:nth-child(2n) {
@@ -184,7 +179,7 @@ export default {
         }
     }
 
-    .talkbox_wrapper_max {
+    .arbox_wrapper_max {
         cursor: default !important;
         top: 25% !important;
         right: 25px !important;
