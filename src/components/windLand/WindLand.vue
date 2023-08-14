@@ -9,7 +9,20 @@
                 <el-button type="primary" size="medium" @click="backToHome">返回主页</el-button>
             </template>
         </el-result>
-        <div id="PC" ref="windland"></div>
+        <div id="PC" ref="windland" @click="onModelClick">
+            <ul class="equipmentLabel" ref="demo" :class="{ hide: labelHide }">
+                <li @click="labelHide = true"></li>
+                <li class="labelInfo">
+                    <div>
+                        <header>
+                            <!-- <div class="cn">123</div>
+                            <span class="en">123</span> -->
+                            <img src="./imgs/pattern-logo.png" width="360px" height="300px">
+                        </header>
+                    </div>
+                </li>
+            </ul>
+        </div>
         <HolographicProjection></HolographicProjection>
     </div>
 </template>
@@ -20,9 +33,10 @@ import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import Stats from 'three/examples/jsm/libs/stats.module'
 import NavTop from '../baseComponents/NavTop'
 import HolographicProjection from '@/components/windLand/AR/HolographicProjection'
+import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
+
 
 export default {
     name: 'windland',
@@ -33,12 +47,16 @@ export default {
     data() {
         return {
             // container: null,
-            // scene: null,
-            // renderer: null,
+            scene: null,
+            renderer: null,
+            infoHide: true,
+            labelHide: true,
             camera: null,
             matrix: null,
             raycaster: new THREE.Raycaster(),
-            mouse: new THREE.Vector2()
+            mouse: new THREE.Vector2(),
+            turbineLabel: null,
+            cssRenderer:new CSS2DRenderer(this.$refs.demo),
             // controls: null,
             // ambient: null,
             // sunLight: null,
@@ -72,6 +90,14 @@ export default {
             renderer.setSize(window.innerWidth, window.innerHeight) // 全屏
             renderer.outputEncoding = THREE.sRGBEncoding // 设置颜色编码
             container.appendChild(renderer.domElement) // 加入renderer
+            let cssRenderer = this.cssRenderer
+            cssRenderer.domElement.style.position = "absolute";
+            cssRenderer.domElement.style.top = 0;
+
+
+            cssRenderer.setSize(0,0)
+            container.appendChild(cssRenderer.domElement)
+
 
             // 相机配置
             this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 120)
@@ -194,27 +220,56 @@ export default {
                 }
                 controls.update() // 更新轨道控制
                 // stats.update()
+                this.scene = scene;
                 renderer.render(scene, this.camera) // render the scene using the camera
+                cssRenderer.render(scene,this.camera)
                 requestAnimationFrame(rendeLoop) //loop the render function
 
             }
-
+            this.renderer = renderer;
             rendeLoop() //start rendering
         },
         onModelClick(event) {
+            // console.log(event);
             const [w, h] = [window.innerWidth, window.innerHeight]
             const { mouse, raycaster } = this
             this.mouse.x = (event.clientX / w) * 2 - 1
-            this.mouse.y = -(event.clientY / h) * 2 + 1
+            this.mouse.y = -((event.clientY) / h) * 2 + 1
             raycaster.setFromCamera(mouse, this.camera)
             const intersects = raycaster.intersectObject(this.matrix.scene, true)
             if (intersects.length <= 0) return false
-            const selectedObject = intersects[0].object
-        }
+            const selectedObject = intersects[0].object;
+            console.log(selectedObject.name, selectedObject.id);
 
+            if (selectedObject.isMesh) {
+                if (selectedObject.name.includes("polySurface")) {
+
+                    // this.infoHide = false;
+                    this.updateLabal(intersects[0]);
+                } else {
+                    this.labelHide = true;
+                    // this.infoHide = true;
+                }
+            }
+        },
+        createTurbineLabel() {
+            let label = new CSS2DObject(this.$refs.demo);
+            this.turbineLabel = label;
+            this.scene.add(label);
+        },
+        updateLabal(intersect) {
+            if (this.labelHide) {
+                this.labelHide = false;
+                const point = intersect.point;
+                this.turbineLabel.position.set(point.x, point.y, point.z);
+                console.log(this.turbineLabel);
+                this.cssRenderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        },
     },
     mounted() {
-        this.turbineThree()
+        this.turbineThree();
+        this.createTurbineLabel();
     }
 }
 </script>
@@ -230,6 +285,94 @@ export default {
 // 大于800px
 @media only screen and (min-width: 800px) {
     .windLandContainer {
+
+        .hide {
+            display: none;
+        }
+
+        .equipmentLabel {
+            top: 10%;
+            z-index: 999;
+            // display: flex;
+            width: 988px;
+            height: 451px;
+
+            // background-color: red;
+            &>li:nth-child(1) {
+                color: #fff;
+                width: 191.5px;
+                height: 225.5px;
+                background-image: url("@/assets/images/1.png");
+                background-size: 191.5px auto;
+                position: absolute;
+                right: 302.5px;
+                top: 0px;
+            }
+
+            .labelInfo {
+                width: 302.5px;
+                height: 225.5px;
+                background-image: url("@/assets/images/2.png");
+                background-size: 302.5px auto;
+                position: absolute;
+                right: 0px;
+                top: 0px;
+                padding: 10px;
+                box-sizing: border-box;
+
+                &>div {
+                    width: 100%;
+                    height: 100%;
+                    background-color: #65b2de73;
+                    border: 1px solid #15c5e8;
+                    box-sizing: border-box;
+                    padding: 20px 20px;
+
+                    header {
+                        width: 100%;
+                        // height: 40px;
+                        text-align: left;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #fff;
+                        border-bottom: 1px dashed aqua;
+                        padding-bottom: 14px;
+
+                        .en {
+                            font-size: 12px;
+                            color: aqua;
+                        }
+                    }
+
+                    ul {
+                        width: 100%;
+                        color: #fff;
+
+                        li {
+                            line-height: 30px;
+                            font-size: 14px;
+                            display: flex;
+                            // justify-content: space-between;
+                            text-align: left;
+                            align-items: center;
+
+                            span:nth-child(1) {
+                                width: 40%;
+                            }
+
+                            span:nth-child(2) {
+                                width: 20%;
+                                color: #f0c002;
+                            }
+
+                            span:nth-child(3) {
+                                width: 30%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // 移动端消失
         .el-result {

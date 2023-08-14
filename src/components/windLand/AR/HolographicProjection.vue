@@ -29,7 +29,7 @@ export default {
             carouselItems: [
                 { imageSrc: require('../imgs/pattern-logo.png') },
                 { imageSrc: require('../imgs/pattern-logo.png') },
-                { imageSrc: require('../imgs/pattern-turbine.png') },
+                // { imageSrc: require('../imgs/pattern-turbine.png') },
                 { imageSrc: require('../imgs/pattern-windspeed.png') }
             ],
         }
