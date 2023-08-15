@@ -165,7 +165,7 @@ export default {
                 ];
                 
                 // 检查是否有重复的文件名
-                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file.name);
+                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file);
                 this.$store.state.global.uploadedFileList.forEach(file => {
                     if (!uploadedFileNames.includes(file.name)) {
                         this.fileList.push(file);
