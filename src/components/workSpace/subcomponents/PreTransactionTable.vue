@@ -2,17 +2,17 @@
   <el-table :data="list" style="width: 90%;padding-top: 15px;">
     <el-table-column label="文件名" min-width="100" align="center">
       <template slot-scope="scope">
-        {{ scope.row.filename}}
+        {{ scope.row.filename }}
       </template>
     </el-table-column>
     <el-table-column label="文件大小" width="195" align="center">
       <template slot-scope="scope">
-        {{ scope.row.filesize}}kb
+        {{ scope.row.filesize }}kb
       </template>
     </el-table-column>
     <el-table-column label="预处理方法" width="400" align="center">
       <template slot-scope="scope">
-        {{ scope.row.method1}} + {{ scope.row.method2}}
+        {{ scope.row.method1 }} + {{ scope.row.method2 }}
       </template>
     </el-table-column>
     <el-table-column label="处理时间" width="250" align="center">
@@ -21,12 +21,16 @@
       </template>
     </el-table-column>
     <el-table-column label="下载" width="100" align="center">
-      <el-button size="mini" type="primary" icon="el-icon-download" circle></el-button>
+      <template slot-scope="scope">
+        <el-button size="mini" type="primary" icon="el-icon-download" circle @click="downloadOutFile(scope.row)"></el-button>
+      </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script>
+import { serverIp } from "../../../../public/config.js";
+
 export default {
   data() {
     return {
@@ -51,6 +55,11 @@ export default {
         { "filename": "17.csv", "method1": "简单填充", "method2": "DBSCAN", "filesize": 7482, "uploadTime": "2023-08-10 15:22:14" }
       ]
     }
-  }
+  },
+  methods: {
+    downloadOutFile(selectedRow) {
+      window.open(`http://${serverIp}:7070/file/outfile/${selectedRow.filename}`)
+    },
+  },
 }
 </script>
