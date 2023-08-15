@@ -26,6 +26,9 @@
             <el-dropdown-item icon="el-icon-edit-outline">
               <span @click="changePwd">修改密码</span>
             </el-dropdown-item>
+            <el-dropdown-item icon="el-icon-data-analysis">
+              <span @click="routerpush('/workspace')">工作空间</span>
+            </el-dropdown-item>
             <el-dropdown-item divided icon="el-icon-switch-button"><span @click="logout">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>

@@ -9,6 +9,7 @@ import Turbine from '../components/Turbine/Turbine'
 import Watch from '../components/Watch/Watch'
 import Forecast from '../components/Forecast/Forecast'
 import Login from '../components/Login/Login'
+import WorkSpace from '../components/workSpace/WorkSpace'
 
 // import store from '@/store'
 import NProgress from 'nprogress'
@@ -22,7 +23,7 @@ VueRouter.prototype.push = function push(location) {
 }
 
 Vue.use(VueRouter)
-const routes =  [
+const routes = [
     {
         path: '/',
         redirect: '/login'
@@ -70,6 +71,11 @@ const routes =  [
         path: '/404',
         name: '404',
         component: () => import('@/components/404/404.vue')
+    },
+    {
+        path: '/workspace',
+        name: 'workspace',
+        component: WorkSpace
     }
 ]
 var router = new VueRouter({
