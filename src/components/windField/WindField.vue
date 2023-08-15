@@ -182,6 +182,7 @@ export default {
             chinaLayer,
             controller: null,
             isMapLoaded: false,
+            isStationLoaded: false,
 
             // 记录人物状态
             isControl: false,
@@ -327,7 +328,7 @@ export default {
             this.controller = new CesiumRoleController(mars3d.Cesium, this.map.viewer)
 
             this.addWindLayer()
-            this.addOtherFactoryLayer()
+            // this.addOtherFactoryLayer()
             // this.addChinaMap()
             setTimeout(function () {
                 $(".sideBar.left").removeClass("opacity0").removeClass("fadeOutLeft").addClass("animated fadeInLeft")
@@ -846,7 +847,7 @@ export default {
             var billboardGraphic1 = new mars3d.graphic.ModelPrimitive({
                 position: [87.882859, 43.57894, 1205.2],
                 style: {
-                    url: '//data.mars3d.cn/gltf/mars/jiaotong/led.gltf',
+                    url: '../../../mars3dModels/led.gltf',
                     heading: 155,
                     scale: 40,
                     pitch: 4.5,
@@ -1187,7 +1188,7 @@ export default {
                     id: index + 1,
                     position: item,
                     style: {
-                        url: '//data.mars3d.cn/gltf/mars/fengche.gltf',
+                        url: '../../../mars3dModels/fengche.gltf',
                         heading: 90,
                         scale: 100,
                         minimumPixelSize: 30,
@@ -1683,7 +1684,7 @@ export default {
             const point = mars3d.LngLatPoint.fromCartesian(position) // 转为经纬度
             this.controller.init({
                 position: [point.lng, point.lat, point.alt],
-                url: "//data.mars3d.cn/gltf/mars/man/running.glb",
+                url: "../../../mars3dModels/running.glb",
                 animation: "run",
                 lockViewLevel: 3,
                 pitch: -10,
@@ -1723,6 +1724,11 @@ export default {
                 maxPitch: 0.95 // 最大仰角  0-1
             })
             this.hideBottomPanel()
+            // 添加场站
+            if (!this.isStationLoaded) {
+                this.addOtherFactoryLayer()
+                this.isStationLoaded = true
+            }
         },
         // 漫游风电场
         wanderTurbine() {
