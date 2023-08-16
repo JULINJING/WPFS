@@ -216,9 +216,10 @@ export default {
                 ];
 
                 // 检查是否有重复的文件名
-                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file);
-                this.$store.state.global.uploadedFileList.forEach(file => {
-                    if (!uploadedFileNames.includes(file.name)) {
+                const uploadedFileNames = [...this.$store.state.global.uploadedFileList];
+                uploadedFileNames.forEach(file => {
+                    if (!this.fileList.some(existingFile => existingFile.name === file.name)) {
+                        console.log(uploadedFileNames);
                         this.fileList.push(file);
                     }
                 });

@@ -225,8 +225,16 @@ export default {
                     offset: 50,
                 });
             }
+            const isFileInList = this.fileList.some(existingFile => existingFile.name === file.name);
+            if(isFileInList){
+                this.$message({
+                    message: "请不要上传重复的文件!",
+                    type: "error",
+                    offset: 50,
+                });
+            }
 
-            return isCSV;
+            return isCSV && !isFileInList;
         },
         beforeRemove(file, fileList){
             if(this.uploadCounter <= 0){

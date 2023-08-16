@@ -16,23 +16,14 @@
 
                 <div class="train-form-row-select">
                     <el-tag>风场选择</el-tag>
-                    <el-cascader 
-                        v-model="form.selectedRegion" 
-                        :options="pcaTextArr"
-                        @change="handleSelectRegion"
-                    >
+                    <el-cascader v-model="form.selectedRegion" :options="pcaTextArr" @change="handleSelectRegion">
                     </el-cascader>
                 </div>
 
                 <div class="train-form-row-select">
                     <el-tag>风机数据选择</el-tag>
                     <el-select v-model="form.selectedFile" placeholder="请选择" :multiple="false" collapse-tags>
-                        <el-option 
-                            v-for="(file, index) in fileList"
-                            :key="index"
-                            :label="file.name" 
-                            :value="file.name"
-                        >
+                        <el-option v-for="(file, index) in fileList" :key="index" :label="file.name" :value="file.name">
                         </el-option>
                     </el-select>
                 </div>
@@ -40,7 +31,8 @@
                 <div class="train-form-row-select">
                     <el-tag>具体模型选择</el-tag>
                     <el-select v-model="form.selectedModel" placeholder="请选择" :multiple="false" collapse-tags>
-                        <el-option v-for="model in modelOptions" :key="model.value" :label="model.label" :value="model.value"
+                        <el-option v-for="model in modelOptions" :key="model.value" :label="model.label"
+                            :value="model.value"
                             :style="{ color: isTargetModel(model.label) ? '#97272e' : '', 'font-weight': isTargetModel(model.label) ? 'bold' : '' }">
                         </el-option>
                     </el-select>
@@ -160,14 +152,15 @@ export default {
         handleSelectRegion() {
             if (this.form.selectedRegion.length > 0) {
                 this.fileList = [
-                    { name: "01.csv" }, { name: "02.csv" }, { name: "03.csv" }, { name: "04.csv" }, { name: "05.csv" }, 
+                    { name: "01.csv" }, { name: "02.csv" }, { name: "03.csv" }, { name: "04.csv" }, { name: "05.csv" },
                     { name: "06.csv" }, { name: "07.csv" }, { name: "08.csv" }, { name: "09.csv" }, { name: "10.csv" }
                 ];
-                
+
                 // 检查是否有重复的文件名
-                const uploadedFileNames = this.$store.state.global.uploadedFileList.map(file => file);
-                this.$store.state.global.uploadedFileList.forEach(file => {
-                    if (!uploadedFileNames.includes(file.name)) {
+                const uploadedFileNames = [...this.$store.state.global.uploadedFileList];
+                uploadedFileNames.forEach(file => {
+                    if (!this.fileList.some(existingFile => existingFile.name === file.name)) {
+                        console.log(uploadedFileNames);
                         this.fileList.push(file);
                     }
                 });
@@ -331,17 +324,18 @@ export default {
         margin-right: 25%;
 
         .el-tag {
-                width: 120px;
-                margin-right: 20px;
-                font-size: 14px;
-            }
+            width: 120px;
+            margin-right: 20px;
+            font-size: 14px;
+        }
 
-            .el-select {
-                width: 80%;
-            }
-            .el-radio-group {
-                text-align: left;
-            }
+        .el-select {
+            width: 80%;
+        }
+
+        .el-radio-group {
+            text-align: left;
+        }
 
         .train-form-row {
             width: 100%;
@@ -356,6 +350,7 @@ export default {
                 font-size: 14px;
             }
         }
+
         .train-form-row-select {
             width: 100%;
             margin-top: 15px;
@@ -366,6 +361,7 @@ export default {
 
             .el-cascader {
                 width: 80%;
+
                 .el-input {
                     width: 100%;
                 }
@@ -416,6 +412,7 @@ export default {
             .el-select {
                 width: 240px;
             }
+
             .el-cascader {
                 width: 240px;
             }
@@ -426,6 +423,7 @@ export default {
             }
         }
     }
+
     .gif-container {
         display: none;
     }
