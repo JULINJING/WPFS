@@ -238,12 +238,12 @@ export default {
                 this.form.selectedModel === "Crossformer" ||
                 this.form.selectedModel === "TimesNet" ||
                 this.form.selectedModel === "PatchTST") {
-
-                time_out = 600000;
+                // TODO
+                time_out = 600;
             } else if (this.form.selectedModel === "LightGBM" ||
                 this.form.selectedModel === "XgBoost") {
 
-                time_out = 120000;
+                time_out = 1200;
             }
 
             return time_out;

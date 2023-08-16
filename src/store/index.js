@@ -38,7 +38,8 @@ const store = new Vuex.Store({
             namespaced: true, // 确保命名空间设置为 true
             state: {
                 uploadedFileName: "11.csv", // 上传的文件名
-                uploadedFileList: [],
+                uploadedFileList: [], // 上传的文件列表
+                existedFileList: [], // 已经存在的文件列表
                 processedJsonData: [], // 预处理后的数据
                 predictedJsonData: [], // 预测的数据
                 trainingProgress: 0, // 训练进度
@@ -79,6 +80,9 @@ const store = new Vuex.Store({
                 },
                 setUploadedFileList(state, fileList){
                     state.uploadedFileList = fileList;
+                },
+                setExistedFileList(state, fileList){
+                    state.existedFileList = fileList;
                 },
                 pushToUploadedFileList(state, newItem) {
                     state.uploadedFileList.push(newItem);
@@ -122,6 +126,9 @@ const store = new Vuex.Store({
                 },
                 getUploadedFileList(state) {
                     return state.uploadedFileList;
+                },
+                getExistedFileList(state) {
+                    return state.existedFileList;
                 },
                 getProcessedJsonData(state) {
                     return state.processedJsonData;

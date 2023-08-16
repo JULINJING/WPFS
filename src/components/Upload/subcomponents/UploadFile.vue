@@ -180,7 +180,6 @@ export default {
                         this.currentPage--;
                     }
                     this.updateTableData();
-
                 });
             }
         },

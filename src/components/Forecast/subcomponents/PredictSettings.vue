@@ -134,7 +134,7 @@ export default {
     },
     mounted() {
         // this.fileList = [...this.fileList, ...this.$store.state.global.uploadedFileList];
-        console.log(this.fileList);
+        // console.log(this.fileList);
     },
 
     computed: {
@@ -170,7 +170,7 @@ export default {
     },
     methods: {
         ...mapState('global', ['uploadedFileName', 'uploadedFileList', 'processedJsonData']),
-        ...mapMutations('global', ['setPredictedJsonData', 'setUploadedFileName', "setUploadedFileList"]),
+        ...mapMutations('global', ['setPredictedJsonData', 'setUploadedFileName', "setExistedFileList"]),
         
         isTargetModel(modelName) {
             // 指定目标模型的名称
@@ -369,8 +369,7 @@ export default {
                     jsonData[jsonData.length - 172].DATATIME
                 ]);
             }
-
-            this.setUploadedFileList(this.fileList);
+            this.setExistedFileList(this.fileList);
         }, 
         startLoading() {
             this.loadingInstance = Loading.service({
