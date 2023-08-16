@@ -61,7 +61,7 @@ export default {
                 { name: '01.csv', startTime: '2021/11/01 00:00:00', endTime: '2022/06/30 23:45:00', filesize: 1777, status: 'success', uploadTime: '2023-08-10 15:13:56' },
                 { name: '20.csv', startTime: '2020/10/01 00:00:00', endTime: '2021/10/31 23:45:00', filesize: 2549, status: 'success', uploadTime: '2023-08-10 15:16:02' },
                 { name: '16.csv', startTime: '2020/10/02 00:00:00', endTime: '2021/10/31 23:45:00', filesize: 2418, status: 'success', uploadTime: '2023-08-10 15:19:08' },
-                { name: '17.csv', startTime: '2021/04/02 00:00:00', endTime: '20220/4/30 23:45:00', filesize: 7877, status: 'success', uploadTime: '2023-08-10 15:22:14' }
+                { name: '17.csv', startTime: '2021/04/02 00:00:00', endTime: '2022/04/30 23:45:00', filesize: 7877, status: 'success', uploadTime: '2023-08-10 15:22:14' }
             ]
         }
     },
