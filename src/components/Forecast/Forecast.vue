@@ -1,6 +1,6 @@
 <template>
   <div class="forecastContainer _forecastContainer" ref="forecast">
-    <WPFGPT @custom-event="PreviewFile"></WPFGPT>
+    <WPFGPT ref="wpfgpt" @custom-event="PreviewFile"></WPFGPT>
     <NavTop/>
     <div id="tabBox">
       <el-tabs v-model="activeName" type="border-card"
@@ -22,7 +22,7 @@
         <el-button class="tabButton" @click="showPredictSettings">预测</el-button>
     </el-row> -->
     <Footer/>
-    <el-dialog :visible.sync="dialogVisible" top="10vh" width="60%" class="filebox">
+    <el-dialog :visible.sync="dialogVisible" top="10vh" width="60%" class="filebox" @close="panelSwitch">
       <a id="dl" @click="downloadDocxFile">下载<i class="iconfont">&#xe602;</i></a>
       <div ref="childRef" class="childRef" v-if="wordShow"></div>
     </el-dialog>
@@ -60,6 +60,9 @@ export default {
     this.$on('update-table-data', this.updateTableData);
   },
   methods: {
+    panelSwitch() {
+      this.$refs.wpfgpt.panelSwitch();
+    },
     downloadDocxFile() {
       window.open(this.docxFile)
     },

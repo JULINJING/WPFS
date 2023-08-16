@@ -37,7 +37,8 @@
                   </template>
 
                   <template v-else-if="message.isReport">
-                    <div style="margin-top:10px;display: flex;flex-direction:column;justify-content: center;cursor: pointer;">
+                    <div
+                        style="margin-top:10px;display: flex;flex-direction:column;justify-content: center;cursor: pointer;">
                       <img @click="PreviewFile(message.docxFile)" src="@/assets/images/word文档.png">
                       <el-button type="text" @click="PreviewFile(message.docxFile)">报表预览</el-button>
                     </div>
@@ -76,6 +77,8 @@
 import MarkdownIt from 'markdown-it';
 import {mapState} from 'vuex';
 import Upload from '../Upload/Upload.vue'
+import {serverIp} from "@/../public/config.js"
+
 
 export default {
   name: 'wpfGPT',
@@ -105,9 +108,9 @@ export default {
       // 面板状态
       isMax: false,
       // test: '## 我是'
-      thumbnail: 'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+      thumbnail: `http://${serverIp}:7070/wpfgpt/api/images/20.png`,
       masterImg: [
-        'http://10.101.240.60:7070/wpfgpt/api/images/20.png',
+        `http://${serverIp}:7070/wpfgpt/api/images/20.png`,
       ],
       radio: '文字模式'
     }
@@ -123,7 +126,7 @@ export default {
   methods: {
     PreviewFile(docxFile) {//点击预览事件的时候拿到当前对应的一个文件属性
       this.panelSwitch();
-      this.$emit('custom-event', { docxFile: docxFile });
+      this.$emit('custom-event', {docxFile: docxFile});
     },
     // 科大讯飞
     recordReady() {
@@ -163,9 +166,9 @@ export default {
         if (res.code === "200") {
           this.isImage = res.image
           this.isReport = res.report
-          this.thumbnail = "http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time) + ".png"
-          this.masterImg = ["http://10.101.240.60:7070/wpfgpt/api/images/" + (res.time) + ".png"]
-          this.docxFile = "http://10.101.240.60:7070/wpfgpt/docx/" + processParams.fileName.replace(".csv", "") + "_" + (res.time) + ".docx";
+          this.thumbnail = "http://" + serverIp + ":7070/wpfgpt/api/images/" + (res.time) + ".png"
+          this.masterImg = ["http://" + serverIp + ":7070/wpfgpt/api/images/" + (res.time) + ".png"]
+          this.docxFile = "http://" + serverIp + ":7070/wpfgpt/docx/" + processParams.fileName.replace(".csv", "") + "_" + (res.time) + ".docx";
           console.log(res.msg)
           this.generatedText = res.msg;
         } else {

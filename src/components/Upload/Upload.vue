@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/valid-template-root -->
 <template>
   <div class="uploadContainer _uploadContainer">
-    <WPFGPT @custom-event="PreviewFile"></WPFGPT>
+    <WPFGPT ref="wpfgpt" @custom-event="PreviewFile"></WPFGPT>
     <NavTop/>
     <br>
     <UploadFile @update-table-data="updateTableData"/>
     <DataAnalysis v-if="isChartVisible"/>
     <Footer></Footer>
-    <el-dialog :visible.sync="dialogVisible" top="10vh" width="60%" class="filebox">
+    <el-dialog :visible.sync="dialogVisible" @close="panelSwitch" top="10vh" width="60%" class="filebox">
       <a id="dl" @click="downloadDocxFile">下载<i class="iconfont">&#xe602;</i></a>
       <div ref="childRef" class="childRef" v-if="wordShow"></div>
     </el-dialog>
@@ -40,6 +40,9 @@ export default {
   },
 
   methods: {
+    panelSwitch() {
+      this.$refs.wpfgpt.panelSwitch();
+    },
     downloadDocxFile(){
       window.open(this.docxFile)
     },
