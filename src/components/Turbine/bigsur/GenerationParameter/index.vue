@@ -24,7 +24,7 @@ export default {
 				{
 					cn: "总发电量",
 					value: 38419.41,
-					unit: "MWh",
+					unit: "kWh",
 				},
 				{
 					cn: "有功功率",
@@ -34,7 +34,7 @@ export default {
 				{
 					cn: "无功功率",
 					value: 1049.09,
-					unit: "kVar",
+					unit: "kW",
 				},
 				{
 					cn: "功率因数",
@@ -44,12 +44,12 @@ export default {
 				{
 					cn: "日累计发电量",
 					value: 1682.82,
-					unit: "MWh",
+					unit: "kWh",
 				},
 				{
 					cn: "总消耗电量",
 					value: 876.19,
-					unit: "KWh",
+					unit: "kWh",
 				},
 			],
 		};

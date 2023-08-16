@@ -14,7 +14,7 @@
 					<li>
 						<span>年发电量:</span>
 						<span>{{ generationData.yearGeneration }}</span>
-						<span>万kWh</span>
+						<span>kWh</span>
 					</li>
 					<li>
 						<span>负荷率:</span>
@@ -34,7 +34,7 @@
 					<li>
 						<span>日发电量:</span>
 						<span>{{ generationData.dayGeneration }}</span>
-						<span>万kWh</span>
+						<span>kWh</span>
 					</li>
 					<li>
 						<span>最大风速:</span>
@@ -76,11 +76,11 @@ export default {
 				cn: "统计参数",
 			},
 			generationData: {
-				yearGeneration: 8398.86,
+				yearGeneration: 83918.86,
 				loadRate: 34.33,
-				monthGeneration: 288.08,
+				monthGeneration: 6818.08,
 				averageWindSpeed: 14.2,
-				dayGeneration: 48.62,
+				dayGeneration: 148.62,
 				maxWindSpeed: 19.95,
 			},
 		};
