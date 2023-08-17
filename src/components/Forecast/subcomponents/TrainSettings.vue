@@ -108,7 +108,7 @@ export default {
     },
     mounted() {
         // const uploadedFileNames = this.$store.state.global.uploadedFileList.map(item => item.name);
-        // this.fileList = [...this.fileList, ...uploadedFileNames];    
+        // this.fileList = [...this.fileList, ...uploadedFileNames];
     },
 
     computed: {
@@ -232,11 +232,11 @@ export default {
                 this.form.selectedModel === "TimesNet" ||
                 this.form.selectedModel === "PatchTST") {
                 // TODO
-                time_out = 600;
+                time_out = 600000;
             } else if (this.form.selectedModel === "LightGBM" ||
                 this.form.selectedModel === "XgBoost") {
 
-                time_out = 1200;
+                time_out = 120000;
             }
 
             return time_out;
